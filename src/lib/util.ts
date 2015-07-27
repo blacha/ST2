@@ -46,7 +46,7 @@ export function loadGameData(printMessages) {
         }
         var codeName = d.name.replace(/ /g, '_');
 
-        var gameObject:GameDataObject = CODE_MAP[codeName];
+        var gameObject:GameDataObject = ID_MAP[d.id];
         if (gameObject == undefined) {
             if (printMessages) {
                 console.log('Missing', pad(10, d.faction), pad(4, d.id), pad(30, d.display), ' ', ' ', codeName);
@@ -86,32 +86,27 @@ export function getImportantBuildings(base:Base):{[key:string] : BaseNode} {
     return output;
 }
 
-export var CODE_MAP = {};
-
 export function createTechMap(obj) {
-    var nodMap = obj.MAP[Faction.NOD.code] = {};
-    var gdiMap = obj.MAP[Faction.GDI.code] = {};
-    var forMap = obj.MAP[Faction.Forgotten.code] = {};
-
-
     Object.keys(obj.NOD).forEach(function (key) {
         var o = obj.NOD[key];
-        nodMap[o.getCode()] = o;
         ID_MAP[o.getID()] = o;
-        CODE_MAP[o.getCodeName()] = o;
     });
 
     Object.keys(obj.GDI).forEach(function (key) {
         var o = obj.GDI[key];
-        gdiMap[o.getCode()] = o;
         ID_MAP[o.getID()] = o;
-        CODE_MAP[o.getCodeName()] = o;
     });
 
     Object.keys(obj.Forgotten).forEach(function (key) {
         var o = obj.Forgotten[key];
-        forMap[o.getCode()] = o;
         ID_MAP[o.getID()] = o;
-        CODE_MAP[o.getCodeName()] = o;
     });
+
+    if (obj.Fortress){
+        Object.keys(obj.Fortress).forEach(function(key){
+            var o = obj.Fortress[key];
+            ID_MAP[o.getID()] = o;
+        });
+    }
+
 }

@@ -104,7 +104,25 @@ export class DUnitType extends UnitType {
         Bowler: new DUnitType(188), //, Faction.Forgotten, 'Bowler', 'o', 'FOR_Veh_VS_Inf'),
         ScrapBus: new DUnitType(189), //, Faction.Forgotten, 'Scrap Bus', 'u', 'FOR_Veh_VS_Air'),
         Mammoth: new DUnitType(208), //, Faction.Forgotten, 'Mammoth', 'y', 'FOR_Mammoth')
+    };
 
+    static Fortress = {
+        Flak: new DUnitType(211),
+        MGNest: new DUnitType(214),
+        Buster: new DUnitType(215),
+        Cannon: new DUnitType(221),
+
+        SniperTeam: new DUnitType(212),
+        Forgotten: new DUnitType(213),
+        RocketFist: new DUnitType(222),
+
+        Mammoth: new DUnitType(216),
+        ScrapBus: new DUnitType(217),
+        Colossus: new DUnitType(234),
+
+        SAMSite: new DUnitType(218),
+        Reaper: new DUnitType(219),
+        Demolisher: new DUnitType(220),
     };
 
 
