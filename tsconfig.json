@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "outDir": "target/src/",
+        "module": "commonjs",
+        "sourceMap": false
+    },
+    "files": [
+        "src/main.ts"
+    ]
+}
