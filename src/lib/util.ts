@@ -34,9 +34,11 @@ export function loadGameData(printMessages) {
     };
 
 
-    GAMEDATA.sort(function (a, b) {
-        return a.id - b.id;
-    });
+    if (printMessages){
+        GAMEDATA.sort(function (a, b) {
+            return a.id - b.id;
+        });
+    }
 
     for (var i = 0; i < GAMEDATA.length; i++) {
         var d = GAMEDATA[i];
