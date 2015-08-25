@@ -30,7 +30,7 @@ export function loadGameData(printMessages) {
     var factionMap = {
         'GDI': Faction.GDI,
         'NOD': Faction.NOD,
-        'Forgotten': Faction.Forgotten
+        'FOR': Faction.Forgotten
     };
 
 
@@ -88,27 +88,23 @@ export function getImportantBuildings(base:Base):{[key:string] : BaseNode} {
     return output;
 }
 
-export function createTechMap(obj) {
-    Object.keys(obj.NOD).forEach(function (key) {
-        var o = obj.NOD[key];
-        ID_MAP[o.getID()] = o;
-    });
-
-    Object.keys(obj.GDI).forEach(function (key) {
-        var o = obj.GDI[key];
-        ID_MAP[o.getID()] = o;
-    });
-
-    Object.keys(obj.Forgotten).forEach(function (key) {
-        var o = obj.Forgotten[key];
-        ID_MAP[o.getID()] = o;
-    });
-
-    if (obj.Fortress){
-        Object.keys(obj.Fortress).forEach(function(key){
-            var o = obj.Fortress[key];
-            ID_MAP[o.getID()] = o;
-        });
+function mapIDs(obj) {
+    if (obj == null) {
+        return;
     }
+
+    var keys = Object.keys(obj);
+    for(var i =0; i < keys.length; i++) {
+        var key = keys[i];
+        var o = obj[key];
+        ID_MAP[o.getID()] = o;
+    }
+}
+
+export function createTechMap(obj) {
+    mapIDs(obj.NOD);
+    mapIDs(obj.GDI);
+    mapIDs(obj.Forgotten);
+    mapIDs(obj.Fortress);
 
 }

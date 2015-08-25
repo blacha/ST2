@@ -25,6 +25,7 @@ export class BuildingType extends GameDataObject {
         FalconSupport: new BuildingType(200), //, 'GDI_Support_Air', 'Falcon Support', 'x'),
         IonCannonSupport: new BuildingType(201), //, 'GDI_Support_Ion', 'Ion Cannon', 'i')
     };
+
     static NOD = {
         Silo: new BuildingType(154), //, 'NOD_Silo', 'Silo', 's'),
         CrystalHarvester: new BuildingType(176, [Tile.Crystal]), //, 'NOD_Harvester_Crystal', 'Crystal Harvester', 'n', [Tile.Crystal], ['s']),
@@ -67,7 +68,7 @@ export class BuildingType extends GameDataObject {
         ParticleCannon:new BuildingType(229),
         Wall:new BuildingType(230),
         Barbwire:new BuildingType(231),
-        Antitankbarrier:new BuildingType(232),
+        AntitankBarrier:new BuildingType(232),
         TacitusEnclosure:new BuildingType(233),
         HeavyMGNest:new BuildingType(235),
     };

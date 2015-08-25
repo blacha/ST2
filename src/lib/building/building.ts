@@ -1,5 +1,6 @@
 import {BuildingType} from './buildingtype';
 import {Buildable} from '../base/buildable';
+import {Tile} from '../base/tile';
 
 export class Building implements Buildable {
 

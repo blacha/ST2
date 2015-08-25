@@ -101,6 +101,9 @@ function getWeapons(w) {
     output.armorType = ARMOR_TYPE[w.tat];
 
     output.damage = w.d;
+    output.id = w.i;
+    output.type = w.t;
+    output.health = w.h;
     return output;
 }
 
