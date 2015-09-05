@@ -1,0 +1,50 @@
+body {
+    font-family: Arimo;
+}
+
+.BaseHead {
+    font-size: 200%;
+    margin-bottom: 50px;
+}
+
+.BaseTitle {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.BaseTiles {
+    border: 1px solid #ddd;
+    width: 560px;
+}
+
+.BaseTileRow {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.BaseTile {
+    width: 65px;
+    /*height: 75px;*/
+    border-right: 1px solid #ddd;
+    position: relative;
+}
+
+.BaseTile:last-child,
+.BaseTileRow:last-child {
+    border: none;
+}
+
+.BaseTile img {
+    width: 55px;
+}
+
+.BaseTileLevel {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 0.8em;
+    background-color: #ddd;
+    color: black;
+    padding: 2px;
+    outline: 1px solid black;
+}

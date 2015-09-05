@@ -7,6 +7,7 @@ import * as Util from '../util';
 
 export class BuildingType extends GameDataObject {
 
+    static ID_MAP:{[key:number]: BuildingType} = [];
     static GDI = {
         Silo: new BuildingType(120), //, 'GDI_Silo', 'Silo', 's'),
         CrystalHarvester: new BuildingType(175, [Tile.Crystal]), //, 'GDI_Harvester_Crystal', 'Crystal Harvester', 'n', [Tile.Crystal], ['s']),
@@ -76,9 +77,6 @@ export class BuildingType extends GameDataObject {
 
     static MAP:{[key:string] : { [key:string]: BuildingType} } = {};
 
-    private code:string;
-    private name:string;
-
     constructor(id:number,
                 private tiles:Tile[] = [Tile.Empty],
                 private supports:string[] = []) {
@@ -97,16 +95,12 @@ export class BuildingType extends GameDataObject {
         return this.tiles.indexOf(tile) != -1;
     }
 
-    getCode() {
-        return this.code;
-    }
-
     getName() {
-        return this.name;
+        return this.data.display;
     }
 
     toString() {
-        return '<Building:' + this.name + '>';
+        return '<Building:' + this.getName() + '>';
     }
 
     static make(faction:Faction, char:string):BuildingType {
@@ -117,5 +111,9 @@ export class BuildingType extends GameDataObject {
             return b;
         }
         return null;
+    }
+
+    static fromID(id:number) {
+        return BuildingType.ID_MAP[id];
     }
 }

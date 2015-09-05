@@ -14,6 +14,23 @@ export class Faction {
         return this.name;
     }
 
+    static fromID(id:number) {
+        if (id == 7 || id == 4) {
+            return Faction.Forgotten;
+        }
+
+        if (id == 1) {
+            return Faction.GDI
+        }
+
+        if (id == 2) {
+            return Faction.NOD;
+        }
+
+        console.log('Unknown faction', id);
+    }
+
+
     static make(char:string) {
         char = (char || '').toUpperCase();
         if (char == 'N') {

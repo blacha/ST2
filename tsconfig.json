@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES5",
-        "outDir": "target/src/",
+        "outDir": "build/src/",
         "module": "commonjs",
         "sourceMap": false
     },

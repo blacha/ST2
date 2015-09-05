@@ -8,8 +8,6 @@ export interface Buildable {
     getHealth(): number;
     canBuildOn(x:number, y:number, tile:Tile) : boolean;
     getID(): number;
-    getCodeName(): string;
-    getCode(): string;
     getName():string;
     getClassName():string;
 

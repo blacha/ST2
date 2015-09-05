@@ -26,7 +26,21 @@ CityData.getCityData = function(city) {
     output.units = CityData.getUnits(city);
     output.research = CityData.getResearch(city);
 
+    output.resources = CityData.getResources(city);
+
     return output;
+};
+
+CityData.getResources = function(city) {
+    var data = [];
+
+    for (var x = 0; x < 9; x++) {
+        for (var y = 0; y < 17; y++) {
+            var type = city.GetResourceType(x, y);
+            data.push(type);
+        }
+    }
+    return data.join('');
 };
 
 CityData.getResearch = function(city) {
@@ -90,6 +104,11 @@ CityData.getBuildings = function(city) {
     var output = [];
     return Object.keys(buildingD).map(function(key) {
         var building = buildingD[key];
+        console.log(building.get_MdbBuildingId(), building.get_TechGameData_Obj().dn);
+        //window.b = building;
+        if (building.get_MdbBuildingId() == 79) {
+            window.b = building;
+        }
         return {
             x: building.get_CoordX(),
             y: building.get_CoordY(),
@@ -101,7 +120,9 @@ CityData.getBuildings = function(city) {
     });
 };
 
-CityData.getCurrentCity();
+console.log(JSON.stringify(
+    CityData.getCurrentCity()
+));
 //
 //var bS = ClientLib.Data.MainData.GetInstance().get_CurrentCity();
 //if (bS.IsOwnBase()) {

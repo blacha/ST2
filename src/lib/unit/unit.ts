@@ -3,7 +3,7 @@ import {GameDataJSON} from '../data/gamedata';
 import {Tile} from '../base/tile';
 import {Buildable} from '../base/buildable';
 import {Constants} from '../constants';
-import {UnitType} from '../unittype';
+import {UnitType} from './unittype';
 
 export class Unit implements Buildable {
 
@@ -34,14 +34,6 @@ export class Unit implements Buildable {
         return this.unit.getID();
     }
 
-    getCode():string {
-        return this.unit.getCode();
-    }
-
-    getCodeName():string {
-        return this.unit.getCodeName();
-    }
-
     getClassName():string {
         return this.unit.getClassName();
     }
@@ -62,5 +54,9 @@ export class Unit implements Buildable {
         return this.unit.getGameData();
     }
 
+
+    toString() {
+        return `[Unit: ${this.unit.toString()}: ${this.level}]`;
+    }
 }
 

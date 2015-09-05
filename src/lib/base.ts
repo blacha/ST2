@@ -3,41 +3,35 @@ import {Faction} from './data/faction';
 import {Tile} from './base/tile';
 import {BaseNode} from './base/node';
 import {BuildingType} from './building/buildingtype';
+import {Building} from './building/building';
 
 import {DUnitType} from './unit/dunittype';
 import {OUnitType} from './unit/ounittype';
+import {Unit} from './unit/unit';
+
+import {CNCBase, CNCUnit} from '../client/client.base';
+
+import {ID_MAP, TECH_MAP} from './util';
 
 export class Base {
+    private tiles:Tile[];
+    private base:Building[];
+    private off:Unit[];
+    private def:Unit[];
 
-    constructor(private name?:string, private faction?:Faction, private tiles?:BaseNode[]) {
+    constructor(private name?:string, private faction?:Faction) {
         this.name = this.name || 'Base';
 
         if (faction == null) {
             this.faction = Faction.GDI;
         }
 
-        if (this.tiles == null) {
-            this.tiles = [];
-        }
-
-        // not enough tiles add extra ones!
-        for (var i = this.tiles.length; i < Constants.TILE_COUNT; i++) {
-            var x = i % Constants.MAX_BASE_X;
-            var y = Math.floor(i / Constants.MAX_BASE_X);
-            this.tiles.push({
-                x: x,
-                y: y,
-                tile: Tile.Empty
-            });
-        }
-
+        this.base = [];
+        this.off = [];
+        this.def = [];
+        this.tiles = [];
     }
 
-    getBuilding(name:string) {
-        return this.tiles.filter(function (tile) {
-            return (tile.obj != null && tile.obj.getName() == name);
-        });
-    }
 
     getName():string {
         return this.name;
@@ -47,108 +41,131 @@ export class Base {
         return this.faction;
     }
 
+    getBaseTiles(): Building[] {
+        return this.base;
+    }
 
-    getTile(x:number, y?:number):BaseNode {
-        if (y == undefined) {
-            return this.tiles[x];
+    getTile(x:number, y:number) {
+        return this.tiles[x * Constants.MAX_BASE_X + y] || Tile.Empty;
+
+    }
+
+    getBaseTile(x:number, y:number) {
+        return this.base[x * Constants.MAX_BASE_X + y];
+    }
+
+    getOffTile(x:number, y:number) {
+        return this.off[x * Constants.MAX_BASE_X + y];
+    }
+
+    getDefTile(x:number, y:number) {
+        return this.def[x * Constants.MAX_BASE_X + y];
+    }
+
+    setTile(x:number, y:number, tile:Tile) {
+        this.tiles[x * Constants.MAX_BASE_X + y] = tile;
+    }
+
+    setBuilding(x:number, y:number, building:Building) {
+        if (x > Constants.MAX_BASE_X) {
+            return null;
         }
+
+        if (y > Constants.MAX_BASE_Y) {
+            console.error('Invalid Y on unit', y, building);
+
+            return null;
+        }
+
+        this.base[x * Constants.MAX_BASE_X + y] = building;
+    }
+
+    setOUnit(x:number, y:number, unit:Unit) {
 
         if (x > Constants.MAX_BASE_X) {
             return null;
         }
+
         if (y > Constants.MAX_OFF_Y) {
+            console.error('Invalid Y on unit', y, unit);
+
+            return null;
+        }
+        this.off[x * Constants.MAX_BASE_X + y] = unit;
+    }
+
+    setDUnit(x:number, y:number, unit:Unit) {
+
+        if (x > Constants.MAX_BASE_X) {
             return null;
         }
 
-        return this.tiles[(x + y * Constants.MAX_BASE_X)];
-    }
-
-    getTiles():BaseNode[] {
-        return this.tiles;
-    }
-
-    /**
-     * parse the base layout string into a base
-     *
-     *
-     * @param faction string representation of base faction.
-     * @param layout string representation of the base.
-     * @param tech string representation of the base tech.
-     * @param name string name of the base.
-     */
-    static parse(factionChar:string, layout:string, tech:string, name?:string):{status:boolean; base?:Base; message?:string} {
-        var faction = Faction.make(factionChar);
-
-        if (faction == null) {
-            return {
-                status: false,
-                message: 'Invalid faction "' + faction + '"'
-            };
+        if (y > Constants.MAX_DEF_Y) {
+            console.error('Invalid Y on unit', y, unit);
+            return null;
         }
 
-        var level = 0;
-        var tiles = [];
+        this.def[x * Constants.MAX_BASE_X + y] = unit;
+    }
 
-        var X = 0;
-        var Y = 0;
 
-        for (var i = 0; i < layout.length; i++) {
-            if (X == Constants.MAX_BASE_X) {
-                X = 0;
-                Y++;
-            }
-            if (Y > Constants.MAX_OFF_Y) {
-                break;
-            }
-            var char = layout[i];
-            if ('0123456789'.indexOf(char) > -1) {
-                level = level * 10 + parseInt(char, 10);
-                continue;
+    static load(cncbase:CNCBase):Base {
+        var output = new Base(cncbase.name, Faction.fromID(cncbase.faction));
+
+        cncbase.buildings.forEach(function (building:CNCUnit) {
+            var buildingType = TECH_MAP[building.id];
+            if (buildingType == null) {
+                console.error('Unkown building', building.id);
+                return;
             }
 
-            X++;
-            // reset the level counter
-            var currentLevel = level;
-            level = 0;
-            var tile = Tile.Empty;
-            if (currentLevel === 0) {
-                var tile = Tile.make(char);
-                if (tile !== null) {
-                    tiles.push({obj: null, tile: tile, x: X - 1, y: Y});
-                    continue;
-                }
+            output.setBuilding(building.x, building.y, new Building(buildingType, building.level));
+        });
+
+        function getUnit(setFunc:Function, unit:CNCUnit) {
+            var unitType = ID_MAP[unit.id];
+            if (unitType == null) {
+                console.error('Unkown unit', unitType.id);
+
+                return;
             }
 
-            if (Y < Constants.MAX_BASE_Y) {
-                var obj = BuildingType.make(faction, char);
-
-                if (char == BuildingType[faction.name].CrystalHarvester.getCode()) {
-                    tile = Tile.Crystal;
-                }
-
-                if (obj == BuildingType[faction.name].TiberiumHarvester.getCode()) {
-                    tile = Tile.Tiberium;
-                }
-
-                tiles.push({obj: obj, tile: tile, level: currentLevel, x: X - 1, y: Y});
-
-            } else if (Y < Constants.MAX_DEF_Y) {
-                var unit = DUnitType.make(faction, char);
-                tiles.push({obj: unit, tile: tile, level: currentLevel, x: X - 1, y: Y});
-
-            } else if (Y < Constants.MAX_OFF_Y) {
-                var unit = OUnitType.make(faction, char);
-                tiles.push({obj: unit, tile: tile, level: currentLevel, x: X - 1, y: Y});
-            }
-
+            setFunc.call(output, unit.x, unit.y, new Unit(unitType, unit.level));
         }
 
-        var base = new Base(name, faction, tiles);
+        cncbase.units.d.forEach(getUnit.bind(null, output.setDUnit));
+        cncbase.units.o.forEach(getUnit.bind(null, output.setOUnit));
 
-        return {
-            status: true,
-            base: base
-        };
+        for (var y = 0; y < Constants.MAX_BASE_Y + Constants.MAX_DEF_Y; y ++) {
+            for (var x = 0; x< Constants.MAX_BASE_X; x ++) {
+                var tileStr = cncbase.resources.charAt(y * Constants.MAX_BASE_X + x);
+                var tileID = parseInt(tileStr, 10);
+                var tile = Tile.ID[tileID];
 
+                output.setTile(x, y, tile);
+            }
+        }
+        cncbase.resources.split('').forEach(function(tileStr, i) {
+            var tileID = parseInt(tileStr, 10);
+            var tile = Tile.ID[tileID];
+        });
+
+        return output;
+    }
+
+    toString() {
+        function toStr(u) {
+            return u.toString();
+        }
+
+        function removeEmpty(o) {
+            return o != null;
+        }
+
+        return `[Base ${this.name}:${this.faction}
+    buildings: [${ this.base.filter(removeEmpty).map(toStr).join('\n\t') })}]
+    off: [${ this.off.filter(removeEmpty).map(toStr).join('\n\t') })}]
+    def: [${ this.def.filter(removeEmpty).map(toStr).join('\n\t') })}]
+        ]`;
     }
 }

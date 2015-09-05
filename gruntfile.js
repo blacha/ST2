@@ -8,11 +8,11 @@ module.exports = function(grunt) {
     config.watch = {
         test: {
             files: ['test/**/*.ts', 'typings/**/*.ts'],
-            tasks: ['typescript', 'mochaTest:test', 'package']
+            tasks: ['typescript', 'package']
         },
         src: {
             files: ['src/**/*.ts'],
-            tasks: ['typescript', 'mochaTest:test', 'package']
+            tasks: ['typescript', 'package']
         }
     };
 
@@ -31,12 +31,12 @@ module.exports = function(grunt) {
 
     config.webpack = {
         default: {
-            entry: ['./target/src/main.js'],
+            entry: ['./build/main.js'],
             module: {
                 loaders: []
             },
             output: {
-                path: './target/',
+                path: './build/',
                 filename: 'bundle.js',
                 libraryTarget: 'umd',
             },
@@ -78,7 +78,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['build', 'package', 'watch']);
 
-    grunt.registerTask('typescript', ['ts', 'tslint']);
+    grunt.registerTask('typescript', ['ts']);
 
     grunt.registerTask('build', ['typescript']);
     grunt.registerTask('package', ['webpack', 'copy']);

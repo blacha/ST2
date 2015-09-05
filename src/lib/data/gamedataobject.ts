@@ -10,9 +10,6 @@ export class GameDataObject {
     constructor(private id:number) {
     }
 
-    getCodeName() {
-        return this.codeName;
-    }
 
     getClassName() {
         return this.className;

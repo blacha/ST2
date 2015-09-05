@@ -1,12 +1,12 @@
 export class Tile {
-    static Tiberium:Tile = new Tile('Tiberium', 't');
-    static Crystal:Tile = new Tile('Crystal', 'c');
-    static Empty:Tile = new Tile('Empty', '.');
+    static Tiberium:Tile = new Tile('Tiberium', 't', 2);
+    static Crystal:Tile = new Tile('Crystal', 'c', 1);
+    static Empty:Tile = new Tile('Empty', '.', 0);
 
-    static Woods:Tile = new Tile('Woods', 'j');
-    static Scrub:Tile = new Tile('Scrub', 'h');
-    static Oil:Tile = new Tile('Oil', 'l');
-    static Swamp:Tile = new Tile('Swamp', 'k');
+    static Woods:Tile = new Tile('Woods', 'j', 4);
+    static Scrub:Tile = new Tile('Scrub', 'h', 5);
+    static Oil:Tile = new Tile('Oil', 'l', 6);
+    static Swamp:Tile = new Tile('Swamp', 'k', 7);
 
     static MAP = {
         't': Tile.Tiberium,
@@ -18,7 +18,18 @@ export class Tile {
         'k': Tile.Swamp
     };
 
-    constructor(private name:string, private code:string) {
+    static ID = [
+        Tile.Empty,
+        Tile.Crystal,
+        Tile.Tiberium,
+        null,
+        Tile.Woods,
+        Tile.Scrub,
+        Tile.Oil,
+        Tile.Swamp
+    ];
+
+    constructor(private name:string, private code:string, private id:number) {
     }
 
     getCode():string {

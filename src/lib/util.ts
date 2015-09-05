@@ -9,6 +9,7 @@ import {BaseNode} from './base/node';
 
 
 export var ID_MAP = [];
+export var TECH_MAP = [];
 
 export function pad(width, string) {
     return (width <= string.length) ? string : pad(width, string + ' ')
@@ -55,38 +56,37 @@ export function loadGameData(printMessages) {
             }
         } else {
             gameObject.setGameData(d);
-
-            //console.log(gameObject.getCodeName(), gameObject.getHealth(23));
+            TECH_MAP[d.tech] = gameObject;
         }
     }
 }
 
 
-export function getImportantBuildings(base:Base):{[key:string] : BaseNode} {
-    var IMPORTANT = [
-        BuildingType.GDI.ConstructionYard.getName(),
-        BuildingType.GDI.DefenseFacility.getName(),
-        BuildingType.GDI.DefenseHQ.getName()
-    ];
-
-    var tiles = base.getTiles();
-    var output:{[key:string] : BaseNode} = {};
-
-    tiles.forEach(function (tile:BaseNode) {
-        if (tile.obj == null) {
-            return;
-        }
-        var name = tile.obj.getName();
-
-        if (IMPORTANT.indexOf(name) == -1) {
-            return;
-        }
-
-        output[name] = tile;
-    });
-
-    return output;
-}
+//export function getImportantBuildings(base:Base):{[key:string] : BaseNode} {
+//    var IMPORTANT = [
+//        BuildingType.GDI.ConstructionYard.getName(),
+//        BuildingType.GDI.DefenseFacility.getName(),
+//        BuildingType.GDI.DefenseHQ.getName()
+//    ];
+//
+//    var tiles = base.getTiles();
+//    var output:{[key:string] : BaseNode} = {};
+//
+//    tiles.forEach(function (tile:BaseNode) {
+//        if (tile.obj == null) {
+//            return;
+//        }
+//        var name = tile.obj.getName();
+//
+//        if (IMPORTANT.indexOf(name) == -1) {
+//            return;
+//        }
+//
+//        output[name] = tile;
+//    });
+//
+//    return output;
+//}
 
 function mapIDs(obj) {
     if (obj == null) {
@@ -97,7 +97,7 @@ function mapIDs(obj) {
     for(var i =0; i < keys.length; i++) {
         var key = keys[i];
         var o = obj[key];
-        ID_MAP[o.getID()] = o;
+        ID_MAP[o.getID()] = o;;
     }
 }
 
@@ -106,5 +106,4 @@ export function createTechMap(obj) {
     mapIDs(obj.GDI);
     mapIDs(obj.Forgotten);
     mapIDs(obj.Fortress);
-
 }

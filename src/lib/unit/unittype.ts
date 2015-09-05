@@ -5,20 +5,16 @@ import {Constants} from '../constants';
 
 export class UnitType extends GameDataObject {
 
-    code: string;
-    name: string;
     faction:Faction;
 
     constructor(id:number) {
         super(id);
     }
 
-    getCode() {
-        return this.code;
-    }
+
 
     getName() {
-        return this.name;
+        return this.data.display;
     }
 
     getFaction():Faction {
@@ -36,6 +32,6 @@ export class UnitType extends GameDataObject {
     }
 
     toString() {
-        return '<Unit:' + this.name + '>'
+        return '<Unit:' + this.data.display + '>'
     }
 }

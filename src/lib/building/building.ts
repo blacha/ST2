@@ -23,14 +23,6 @@ export class Building implements Buildable {
         return this.building.getID();
     }
 
-    getCode():string {
-        return this.building.getCode();
-    }
-
-    getCodeName():string {
-        return this.building.getCodeName();
-    }
-
     getClassName():string {
         return this.building.getClassName();
     }
@@ -53,5 +45,9 @@ export class Building implements Buildable {
 
     getGameData() {
         return this.building.getGameData();
+    }
+
+    toString() {
+        return `[Building: ${this.building.toString()}: ${this.level}]`;
     }
 }
