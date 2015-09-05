@@ -50,6 +50,8 @@ CityData.getResearch = function(city) {
 
         return output;
     }
+
+    return city.get_ActiveModules();
 };
 
 CityData.getUnits = function(city) {
@@ -100,46 +102,46 @@ CityData.getBuildings = function(city) {
 };
 
 CityData.getCurrentCity();
-
-var bS = ClientLib.Data.MainData.GetInstance().get_CurrentCity();
-if (bS.IsOwnBase()) {
-    var cb = ClientLib.Base.Unit.GetUpgrade(bR.get_MdbUnitId());
-    bW = cb != null && cb.get_CurrentLevel() > 1;
-    if (bW) {
-        ca = cb.get_GameDataTech_Obj();
-    }
-}
-else {
-    var bT = ClientLib.Base.Unit.GetTechIdFromUpgrade(bR.get_MdbUnitId(), bS.get_ActiveModules());
-    bW = bT > -1;
-    if (bW) {
-        ca = ClientLib.Res.ResMain.GetInstance().GetTech_Obj(bT);
-    }
-}
-
-var b = [69, 70, 71, 72, 73, 74, 75, 76, 77, 89, 90, 99, 469, 489, 502, 507];
-function GetTechIdFromUpgrade(a, ActiveModules) {
-    var $createHelper;
-    if (b == null) {
-        return -1;
-    }
-    //var c = $I.NINWDO.PAXPTM().IKKDTI(a);
-    var c = GAMEDATA.units[81];
-    var e = c.m; // modifiers?
-    var d;
-    for (var f = 0; f < e.length; f++) {
-        d = e[f];
-        if (d.t != 1) {
-            for (var i = 0; i < ActiveModules.length; i++) {
-                var g = ActiveModules[i];
-                if ((g == d.i) && (d.r.length > 0)) {
-                    return d.r[0].i;
-                }
-            }
-        }
-
-    }
-
-    return -1;
-}
+//
+//var bS = ClientLib.Data.MainData.GetInstance().get_CurrentCity();
+//if (bS.IsOwnBase()) {
+//    var cb = ClientLib.Base.Unit.GetUpgrade(bR.get_MdbUnitId());
+//    bW = cb != null && cb.get_CurrentLevel() > 1;
+//    if (bW) {
+//        ca = cb.get_GameDataTech_Obj();
+//    }
+//}
+//else {
+//    var bT = ClientLib.Base.Unit.GetTechIdFromUpgrade(bR.get_MdbUnitId(), bS.get_ActiveModules());
+//    bW = bT > -1;
+//    if (bW) {
+//        ca = ClientLib.Res.ResMain.GetInstance().GetTech_Obj(bT);
+//    }
+//}
+//
+//var b = [69, 70, 71, 72, 73, 74, 75, 76, 77, 89, 90, 99, 469, 489, 502, 507];
+//function GetTechIdFromUpgrade(a, ActiveModules) {
+//    var $createHelper;
+//    if (b == null) {
+//        return -1;
+//    }
+//    //var c = $I.NINWDO.PAXPTM().IKKDTI(a);
+//    var c = GAMEDATA.units[81];
+//    var e = c.m; // modifiers?
+//    var d;
+//    for (var f = 0; f < e.length; f++) {
+//        d = e[f];
+//        if (d.t != 1) {
+//            for (var i = 0; i < ActiveModules.length; i++) {
+//                var g = ActiveModules[i];
+//                if ((g == d.i) && (d.r.length > 0)) {
+//                    return d.r[0].i;
+//                }
+//            }
+//        }
+//
+//    }
+//
+//    return -1;
+//}
 

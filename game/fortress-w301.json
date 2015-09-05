@@ -6,7 +6,8 @@
     "faction": 7,
     "owner": "The Forgotten",
     "version": 104,
-    "buildings": [{
+    "buildings": [
+        {
         "x": 0,
         "y": 0,
         "id": 75,
