@@ -18,6 +18,7 @@ export class Base {
     private base:Building[];
     private off:Unit[];
     private def:Unit[];
+    private upgrades:number[];
 
     constructor(private name?:string, private faction?:Faction) {
         this.name = this.name || 'Base';
@@ -30,6 +31,7 @@ export class Base {
         this.off = [];
         this.def = [];
         this.tiles = [];
+        this.upgrades = [];
     }
 
 
@@ -41,7 +43,7 @@ export class Base {
         return this.faction;
     }
 
-    getBaseTiles(): Building[] {
+    getBaseTiles():Building[] {
         return this.base;
     }
 
@@ -108,6 +110,13 @@ export class Base {
         this.def[x * Constants.MAX_BASE_X + y] = unit;
     }
 
+    setUpgrades(upgrades:number[]) {
+        this.upgrades = upgrades;
+    }
+
+    hasUpgrade(unitID:number) {
+        return this.upgrades.indexOf(unitID) !== -1;
+    }
 
     static load(cncbase:CNCBase):Base {
         var output = new Base(cncbase.name, Faction.fromID(cncbase.faction));
@@ -136,19 +145,12 @@ export class Base {
         cncbase.units.d.forEach(getUnit.bind(null, output.setDUnit));
         cncbase.units.o.forEach(getUnit.bind(null, output.setOUnit));
 
-        for (var y = 0; y < Constants.MAX_BASE_Y + Constants.MAX_DEF_Y; y ++) {
-            for (var x = 0; x< Constants.MAX_BASE_X; x ++) {
-                var tileStr = cncbase.resources.charAt(y * Constants.MAX_BASE_X + x);
-                var tileID = parseInt(tileStr, 10);
-                var tile = Tile.ID[tileID];
-
-                output.setTile(x, y, tile);
-            }
-        }
-        cncbase.resources.split('').forEach(function(tileStr, i) {
-            var tileID = parseInt(tileStr, 10);
-            var tile = Tile.ID[tileID];
+        cncbase.resources.forEach(function (resource) {
+            var tile = Tile.ID[resource.type];
+            output.setTile(resource.y, resource.x, tile);
         });
+
+        output.setUpgrades(cncbase.upgrades);
 
         return output;
     }

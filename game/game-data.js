@@ -1,4 +1,5 @@
 var OUTPUT = [];
+var MODULES = {};
 
 function getFaction(name) {
 
@@ -91,7 +92,7 @@ function addResource(data, output) {
     output[name] = count;
 }
 
-function getWeapons(w) {
+function getModules(id, w) {
     var output = {};
     output.range = {
         min: w.rmin,
@@ -104,6 +105,7 @@ function getWeapons(w) {
     output.id = w.i;
     output.type = w.t;
     output.health = w.h;
+    MODULES[w.i] = id;
     return output;
 }
 
@@ -152,10 +154,10 @@ Object.keys(units).forEach(function(id) {
     obj.health = unit.lp;
     obj.movement = MOVEMENT_TYPE[unit.mt];
 
-    console.log('get-faction', obj.name, obj.faction)
+    console.log('get-faction', obj.name, obj.faction);
     obj.resources = unit.r.map(getResourceCost.bind(null, 'rr'));
     obj.repair = unit.r.map(getResourceCost.bind(null, 'rer'));
-    obj.weapons = unit.m.map(getWeapons);
+    obj.weapons = unit.m.map(getModules.bind(null, id));
     if (obj.weapons.length === 0) {
         delete obj.weapons;
     }

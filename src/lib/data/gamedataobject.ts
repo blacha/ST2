@@ -4,8 +4,8 @@ import {GameDataJSON} from './gamedata';
 
 export class GameDataObject {
     public data:GameDataJSON;
-    private className: string;
-    private codeName: string; // cncopt code
+    private className:string;
+    private codeName:string; // cncopt code
 
     constructor(private id:number) {
     }

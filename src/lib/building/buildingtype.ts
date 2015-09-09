@@ -62,16 +62,16 @@ export class BuildingType extends GameDataObject {
     static Fortress = {
         CamouflagedFlak: new BuildingType(223),
         OverchargedMGNest: new BuildingType(224),
-        Buster:new BuildingType(225),
-        AdvancedSAM:new BuildingType(226),
-        AdvancedReaper:new BuildingType(227),
-        AdvancedDemolisher:new BuildingType(228),
-        ParticleCannon:new BuildingType(229),
-        Wall:new BuildingType(230),
-        Barbwire:new BuildingType(231),
-        AntitankBarrier:new BuildingType(232),
-        TacitusEnclosure:new BuildingType(233),
-        HeavyMGNest:new BuildingType(235),
+        Buster: new BuildingType(225),
+        AdvancedSAM: new BuildingType(226),
+        AdvancedReaper: new BuildingType(227),
+        AdvancedDemolisher: new BuildingType(228),
+        ParticleCannon: new BuildingType(229),
+        Wall: new BuildingType(230),
+        Barbwire: new BuildingType(231),
+        AntitankBarrier: new BuildingType(232),
+        TacitusEnclosure: new BuildingType(233),
+        HeavyMGNest: new BuildingType(235),
     };
 
 

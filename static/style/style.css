@@ -1,20 +1,26 @@
 body {
-    font-family: Arimo;
+    font-family: 'Roboto';
+}
+
+.Container {
+    width: 600px;
+    margin: auto;
 }
 
 .BaseHead {
     font-size: 200%;
-    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9px;
 }
 
 .BaseTitle {
     font-size: 120%;
-    font-weight: bold;
+    padding: 10px 5px;
 }
 
 .BaseTiles {
     border: 1px solid #ddd;
-    width: 560px;
 }
 
 .BaseTileRow {
@@ -23,8 +29,11 @@ body {
 }
 
 .BaseTile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 65px;
-    /*height: 75px;*/
+    height: 50px;
     border-right: 1px solid #ddd;
     position: relative;
 }
@@ -36,15 +45,26 @@ body {
 
 .BaseTile img {
     width: 55px;
+    max-width: 55px;
+    max-height: 55px;
+}
+
+.UnitUpgrade .BaseTileLevel {
+    background-image: url('../images/star.png');
+    background-size: 12px;
+    background-position: 2px 1px;
+    background-repeat: no-repeat;
+    padding-left: 15px;
+    padding-right: 3px;
 }
 
 .BaseTileLevel {
     position: absolute;
-    top: 2px;
+    bottom: 4px;
     left: 2px;
     font-size: 0.8em;
     background-color: #ddd;
     color: black;
-    padding: 2px;
-    outline: 1px solid black;
+    padding: 0 2px;
+    border: 1px solid black;
 }

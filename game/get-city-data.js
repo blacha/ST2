@@ -24,7 +24,7 @@ CityData.getCityData = function(city) {
 
     output.buildings = CityData.getBuildings(city);
     output.units = CityData.getUnits(city);
-    output.research = CityData.getResearch(city);
+    output.upgrades = CityData.getUpgrades(city);
 
     output.resources = CityData.getResources(city);
 
@@ -37,13 +37,20 @@ CityData.getResources = function(city) {
     for (var x = 0; x < 9; x++) {
         for (var y = 0; y < 17; y++) {
             var type = city.GetResourceType(x, y);
-            data.push(type);
+            if (type == 0) {
+                continue;
+            }
+            data.push({
+                x: x,
+                y: y,
+                type: type
+            });
         }
     }
-    return data.join('');
+    return data;
 };
 
-CityData.getResearch = function(city) {
+CityData.getUpgrades = function(city) {
     if (city.IsOwnBase()) {
         var player = ClientLib.Data.MainData.GetInstance().get_Player();
         var research = player.get_PlayerResearch();
@@ -53,19 +60,37 @@ CityData.getResearch = function(city) {
             var list = research.GetResearchItemListByType(type);
 
             list.l.forEach(function(rt) {
-                if (rt.get_CurrentLevel() > 0) {
-                    output.push({
-                        tech: rt.get_MdbId(),
-                        level: rt.get_CurrentLevel()
-                    });
+                if (rt.get_CurrentLevel() < 2) {
+                    return;
                 }
+                var unit = rt.get_GameDataUnit_Obj();
+                if (unit == null) {
+                    return;
+                }
+                var tech = rt.get_GameDataTech_Obj();
+
+                output.push( tech.c );
             });
         });
 
         return output;
     }
 
-    return city.get_ActiveModules();
+    var activeModules = city.get_ActiveModules();
+    var MODULES = CityData.getModuleMap();
+
+    var upgradeMap = {};
+    activeModules.forEach(function(id) {
+        var unitID = MODULES[id];
+        if (unitID == null) {
+            return;
+        }
+        upgradeMap[unitID] = true;
+    });
+
+    return Object.keys(upgradeMap).map(function(i) {
+        return parseInt(i, 10);
+    });
 };
 
 CityData.getUnits = function(city) {
@@ -80,8 +105,8 @@ CityData.getUnits = function(city) {
             x: unit.get_CoordX(),
             y: unit.get_CoordY(),
             id: unit.get_MdbUnitId(),
-            level: unit.get_CurrentLevel(),
-            hp: unit.get_Health()
+            level: unit.get_CurrentLevel()
+            //hp: unit.get_Health()
         }
     }
 
@@ -104,65 +129,57 @@ CityData.getBuildings = function(city) {
     var output = [];
     return Object.keys(buildingD).map(function(key) {
         var building = buildingD[key];
-        console.log(building.get_MdbBuildingId(), building.get_TechGameData_Obj().dn);
-        //window.b = building;
-        if (building.get_MdbBuildingId() == 79) {
-            window.b = building;
-        }
         return {
             x: building.get_CoordX(),
             y: building.get_CoordY(),
             id: building.get_MdbBuildingId(),
-            level: building.get_CurrentLevel(),
-            hp: building.get_Health(),
-            type: building.get_Type()
+            level: building.get_CurrentLevel()
         }
     });
 };
 
-console.log(JSON.stringify(
-    CityData.getCurrentCity()
-));
-//
-//var bS = ClientLib.Data.MainData.GetInstance().get_CurrentCity();
-//if (bS.IsOwnBase()) {
-//    var cb = ClientLib.Base.Unit.GetUpgrade(bR.get_MdbUnitId());
-//    bW = cb != null && cb.get_CurrentLevel() > 1;
-//    if (bW) {
-//        ca = cb.get_GameDataTech_Obj();
-//    }
-//}
-//else {
-//    var bT = ClientLib.Base.Unit.GetTechIdFromUpgrade(bR.get_MdbUnitId(), bS.get_ActiveModules());
-//    bW = bT > -1;
-//    if (bW) {
-//        ca = ClientLib.Res.ResMain.GetInstance().GetTech_Obj(bT);
-//    }
-//}
-//
-//var b = [69, 70, 71, 72, 73, 74, 75, 76, 77, 89, 90, 99, 469, 489, 502, 507];
-//function GetTechIdFromUpgrade(a, ActiveModules) {
-//    var $createHelper;
-//    if (b == null) {
-//        return -1;
-//    }
-//    //var c = $I.NINWDO.PAXPTM().IKKDTI(a);
-//    var c = GAMEDATA.units[81];
-//    var e = c.m; // modifiers?
-//    var d;
-//    for (var f = 0; f < e.length; f++) {
-//        d = e[f];
-//        if (d.t != 1) {
-//            for (var i = 0; i < ActiveModules.length; i++) {
-//                var g = ActiveModules[i];
-//                if ((g == d.i) && (d.r.length > 0)) {
-//                    return d.r[0].i;
-//                }
-//            }
-//        }
-//
-//    }
-//
-//    return -1;
-//}
+CityData.getModuleMap = function() {
+    if (CityData.$MM != null) {
+        return CityData.$MM;
+    }
+    var units = GAMEDATA.units;
+    var MODULES = [];
+    Object.keys(units).forEach(function(id) {
+        var unit = units[id];
+        var i = parseInt(id, 10);
+        unit.m.forEach(function(module) {
+            if (module.t == 1) {
+                return;
+            }
+            MODULES[module.i] = i;
+        });
+    });
+    CityData.$MM = MODULES;
+    return MODULES;
+};
 
+CityData.saveToParse = function(data) {
+    var http = new XMLHttpRequest();
+
+    var url = 'https://api.parse.com/1/classes/Layout';
+
+    http.open('POST', url, true);
+    http.setRequestHeader('X-Parse-Application-Id', 'p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ');
+    http.setRequestHeader('X-Parse-REST-API-Key', 'UdPxMf4bww3S5KSUe9qAFYMaZ1mfEGYE2TGePGTU');
+    http.setRequestHeader('Content-Type', 'application/json');
+
+    http.onreadystatechange = function() {
+        console.log(http.readyState, http.status);
+        if(http.readyState == 4 && http.status == 201) {
+            console.log(http.responseText);
+        }
+    };
+
+    http.send(JSON.stringify(data));
+};
+
+
+CityData.saveToParse(CityData.getCurrentCity());
+//console.log(JSON.stringify(
+//    CityData.getCurrentCity()
+//));

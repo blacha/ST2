@@ -12,7 +12,6 @@ export class UnitType extends GameDataObject {
     }
 
 
-
     getName() {
         return this.data.display;
     }

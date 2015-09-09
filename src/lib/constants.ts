@@ -154,4 +154,4 @@ export var Constants = {
     }
 };
 
-Constants.TILE_COUNT =  Constants.MAX_BASE_X * Constants.MAX_OFF_Y;
+Constants.TILE_COUNT = Constants.MAX_BASE_X * Constants.MAX_OFF_Y;

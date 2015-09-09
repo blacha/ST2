@@ -35,7 +35,7 @@ export function loadGameData(printMessages) {
     };
 
 
-    if (printMessages){
+    if (printMessages) {
         GAMEDATA.sort(function (a, b) {
             return a.id - b.id;
         });
@@ -94,10 +94,11 @@ function mapIDs(obj) {
     }
 
     var keys = Object.keys(obj);
-    for(var i =0; i < keys.length; i++) {
+    for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         var o = obj[key];
-        ID_MAP[o.getID()] = o;;
+        ID_MAP[o.getID()] = o;
+        ;
     }
 }
 
