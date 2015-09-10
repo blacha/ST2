@@ -6,8 +6,13 @@ export var Constants = {
 
     MAX_BASE_X: 9, // Width of bases.
     MAX_BASE_Y: 8, // Max Y for Base buildings
-    MAX_OFF_Y: 4, // Max Y for O units
-    MAX_DEF_Y: 8, // Max Y for D units
+    MAX_DEF_Y: 16, // Max Y for D units
+    MAX_OFF_Y: 20, // Max Y for O units
+
+    MAX_Y: 20,
+
+    UNIT: 'unit',
+    BASE: 'base',
 
     TILE_COUNT: -1, // Calculated
 

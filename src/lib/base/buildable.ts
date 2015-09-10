@@ -2,6 +2,8 @@ import {Tile} from './tile';
 import {GameDataJSON} from '../data/gamedata';
 
 export interface Buildable {
+    id:string;
+
     getLevel(): number;
     setLevel(level:number);
     getCost(): number;
@@ -10,6 +12,8 @@ export interface Buildable {
     getID(): number;
     getName():string;
     getClassName():string;
+
+    getType():string;
 
     getGameData():GameDataJSON;
 }

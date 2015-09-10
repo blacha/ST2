@@ -116,4 +116,8 @@ export class BuildingType extends GameDataObject {
     static fromID(id:number) {
         return BuildingType.ID_MAP[id];
     }
+
+    getType() {
+        return Constants.BASE;
+    }
 }

@@ -19,4 +19,5 @@ export interface CNCUnit {
 
 export interface CNCTile extends CNCUnit {
     u: CNCUnit
+    t?: number;
 }

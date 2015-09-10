@@ -5,9 +5,14 @@ import {Buildable} from '../base/buildable';
 import {Constants} from '../constants';
 import {UnitType} from './unittype';
 
+var ID = 0;
+
 export class Unit implements Buildable {
 
+    public id:string;
+
     constructor(private unit:UnitType, private level:number) {
+        this.id = 'unit-' + ID++;
     }
 
     setLevel(level:number) {
@@ -54,6 +59,9 @@ export class Unit implements Buildable {
         return this.unit.getGameData();
     }
 
+    getType() {
+        return Constants.UNIT;
+    }
 
     toString() {
         return `[Unit: ${this.unit.toString()}: ${this.level}]`;

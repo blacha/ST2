@@ -2,9 +2,11 @@ import {BuildingType} from './buildingtype';
 import {Buildable} from '../base/buildable';
 import {Tile} from '../base/tile';
 
+var ID = 0;
 export class Building implements Buildable {
-
+    public id:string;
     constructor(private building:BuildingType, private level:number) {
+        this.id = 'building-' + ID++;
     }
 
     getLevel():number {
@@ -49,5 +51,9 @@ export class Building implements Buildable {
 
     toString() {
         return `[Building: ${this.building.toString()}: ${this.level}]`;
+    }
+
+    getType() {
+        return this.building.getType()
     }
 }

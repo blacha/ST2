@@ -12,6 +12,7 @@ export class UnitType extends GameDataObject {
     }
 
 
+
     getName() {
         return this.data.display;
     }
@@ -28,6 +29,10 @@ export class UnitType extends GameDataObject {
         if (tile !== Tile.Empty) {
             return false;
         }
+    }
+
+    getType() {
+        return Constants.UNIT
     }
 
     toString() {
