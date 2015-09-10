@@ -11,7 +11,8 @@ export var Constants = {
 
     MAX_Y: 20,
 
-    UNIT: 'unit',
+    BASE_O: 'unit',
+    BASE_D: 'unit',
     BASE: 'base',
 
     TILE_COUNT: -1, // Calculated

@@ -44,13 +44,24 @@ export class Base {
         return x + y * Constants.MAX_BASE_X;
     }
 
-    baseForEach(callback:(x:number, y:number, building:Buildable, tile:Tile) => void) {
+    baseForEach(callback:(x:number, y:number, building:Buildable, tile:Tile, base:Base) => void) {
         for (var x = 0; x < Constants.MAX_BASE_X; x++) {
             for (var y = 0; y < Constants.MAX_Y; y++) {
                 var index = Base.$index(x, y);
-                callback(x, y, this.base[index], this.tiles[index]);
+                callback(x, y, this.base[index], this.tiles[index], this);
             }
         }
+    }
+
+    buildingsForEach(callback:(x:number, y:number, building:Building, tile:Tile, base:Base) => any):any[] {
+        var output = [];
+        for (var x = 0; x < Constants.MAX_BASE_X; x++) {
+            for (var y = 0; y < Constants.MAX_BASE_Y; y++) {
+                var index = Base.$index(x, y);
+                output.push(callback(x, y, <Building>this.base[index], this.tiles[index], this));
+            }
+        }
+        return output;
     }
 
     getTile(x:number, y:number) {
@@ -86,9 +97,9 @@ export class Base {
             var x = parseInt(keyParts[0], 10);
             var y = parseInt(keyParts[1], 10);
 
-
             var unit = cncbase.tiles[key];
             var tile:Tile;
+
             // Give just a number so just a tile
             if (typeof unit === 'number') {
                 tile = Tile.ID[<number>unit];
@@ -109,11 +120,13 @@ export class Base {
             }
 
             if (unitType.getType() === Constants.BASE) {
-                output.setBase(x, y, new Building(unitType, actualUnit.l));
+                output.setBase(x, y, new Building(<BuildingType>unitType, actualUnit.l));
+            } else if (unitType.getType() === Constants.BASE_O) {
+                output.setBase(x, y, new Unit(<OUnitType>unitType, actualUnit.l));
             } else {
-                output.setBase(x, y, new Unit(unitType, actualUnit.l));
+                output.setBase(x, y, new Unit(<DUnitType>unitType, actualUnit.l));
             }
-            output.setBase(x, y, unitType);
+
         });
 
 

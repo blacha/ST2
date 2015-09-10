@@ -42,4 +42,8 @@ export class GameDataObject {
         return Util.getGrowthValue(this.data.resources, level,
             Constants.RESOURCE_COST_GROWTH);
     }
+
+    getType() {
+        return null;
+    }
 }
