@@ -1,27 +1,22 @@
-export interface CNCLocation {
+export interface CNCBase {
     x: number;
     y: number;
-}
-
-export interface CNCBase extends CNCLocation {
     level: number;
     name: string;
     faction: number;
     version: number;
-    buildings: CNCUnit[];
-    units: {
-        d: CNCUnit[];
-        o: CNCUnit[];
-    },
+    world:number;
+    owner:string;
+    player:string;
+    tiles: {[key:string]: CNCTile|number };
     upgrades:number[];
-    resources:CNCTile[];
 }
 
-export interface CNCUnit extends CNCLocation {
-    id: number;
-    level: number;
+export interface CNCUnit {
+    i: number;
+    l: number;
 }
 
-export interface CNCTile extends CNCLocation {
-    type: number;
+export interface CNCTile extends CNCUnit {
+    u: CNCUnit
 }

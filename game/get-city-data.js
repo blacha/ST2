@@ -1,5 +1,14 @@
 var CityData = {};
 
+CityData.BASE_OFFSET_Y = 0;
+CityData.DEF_OFFSET_Y = 8;
+CityData.OFF_OFFSET_Y = CityData.DEF_OFFSET_Y + 8;
+
+CityData.scan = function() {
+    var base = CityData.getCurrentCity();
+    return CityData.saveToParse(base);
+};
+
 CityData.getCurrentCity = function() {
     var MD = ClientLib.Data.MainData.GetInstance();
     var cities = MD.get_Cities();
@@ -13,29 +22,74 @@ CityData.getCityData = function(city) {
     if (city == null) {
         return {};
     }
+    var MD = ClientLib.Data.MainData.GetInstance();
+    var player = MD.get_Player();
+    var server = MD.get_Server();
 
     output.level = city.get_LvlBase();
     output.name = city.get_Name();
     output.x = city.get_PosX();
     output.y = city.get_PosY();
     output.faction = city.get_CityFaction();
-    output.owner = city.get_OwnerName();
+    output.owner = city.get_OwnerName() || player.get_Name();
     output.version = city.get_Version();
+    output.player = player.get_Name();
+    output.world = server.get_WorldId();
 
-    output.buildings = CityData.getBuildings(city);
-    output.units = CityData.getUnits(city);
+    output.tiles = CityData.getLayout(city);
     output.upgrades = CityData.getUpgrades(city);
 
-    output.resources = CityData.getResources(city);
-
     return output;
+};
+
+CityData.getLayout = function(city) {
+    var xYMap = {};
+
+    function mapUnit(unit) {
+        var key = unit.x + '-' + unit.y;
+        delete unit.x;
+        delete unit.y;
+
+        // Units can be inside other units
+        if (xYMap[key]) {
+            xYMap[key].u = unit;
+            return;
+        }
+        xYMap[key] = unit;
+    }
+
+    CityData.getBuildings(city).forEach(mapUnit);
+
+    var units = CityData.getUnits(city);
+    units.d.forEach(mapUnit);
+    units.o.forEach(mapUnit);
+
+    for (var y = 0; y <= CityData.OFF_OFFSET_Y; y++) {
+        for (var x = 0; x < 9; x++) {
+            var type = city.GetResourceType(x, y);
+            if (type == 0) {
+                continue;
+            }
+            var key = x + '-' + y;
+
+            var tileObj = xYMap[key];
+            if (tileObj == null) {
+                xYMap[key] = type;
+                continue;
+            }
+
+            tileObj.t = type;
+        }
+    }
+
+    return xYMap;
 };
 
 CityData.getResources = function(city) {
     var data = [];
 
-    for (var x = 0; x < 9; x++) {
-        for (var y = 0; y < 17; y++) {
+    for (var y = 0; y <= CityData.OFF_OFFSET_Y; y++) {
+        for (var x = 0; x < 9; x++) {
             var type = city.GetResourceType(x, y);
             if (type == 0) {
                 continue;
@@ -48,6 +102,16 @@ CityData.getResources = function(city) {
         }
     }
     return data;
+};
+
+function GameToJSON(offset, obj, key) {
+    var unit = obj[key];
+    return {
+        x: unit.get_CoordX(),
+        y: unit.get_CoordY() + offset,
+        id: unit.get_MdbUnitId(),
+        l: unit.get_CurrentLevel()
+    };
 };
 
 CityData.getUpgrades = function(city) {
@@ -69,7 +133,7 @@ CityData.getUpgrades = function(city) {
                 }
                 var tech = rt.get_GameDataTech_Obj();
 
-                output.push( tech.c );
+                output.push(tech.c);
             });
         });
 
@@ -99,43 +163,20 @@ CityData.getUnits = function(city) {
     var defUnits = units.get_DefenseUnits();
     var offUnits = units.get_OffenseUnits();
 
-    function getUnit(obj, key) {
-        var unit = obj[key];
-        return {
-            x: unit.get_CoordX(),
-            y: unit.get_CoordY(),
-            id: unit.get_MdbUnitId(),
-            level: unit.get_CurrentLevel()
-            //hp: unit.get_Health()
-        }
-    }
-
-    var dUnitOutput = Object.keys(defUnits.d).map(getUnit.bind(null, defUnits.d));
-    var oUnitOutput = Object.keys(offUnits.d).map(getUnit.bind(null, offUnits.d));
-
     return {
-        d: dUnitOutput,
-        o: oUnitOutput
+        d: Object.keys(defUnits.d).map(GameToJSON.bind(null, CityData.DEF_OFFSET_Y, defUnits.d)),
+        o: Object.keys(offUnits.d).map(GameToJSON.bind(null, CityData.OFF_OFFSET_Y, offUnits.d))
     }
 };
 
 CityData.getBuildings = function(city) {
     var buildings = city.get_Buildings();
     if (buildings.c == 0) {
-        return;
+        return [];
     }
     var buildingD = buildings.d;
 
-    var output = [];
-    return Object.keys(buildingD).map(function(key) {
-        var building = buildingD[key];
-        return {
-            x: building.get_CoordX(),
-            y: building.get_CoordY(),
-            id: building.get_MdbBuildingId(),
-            level: building.get_CurrentLevel()
-        }
-    });
+    return Object.keys(buildingD).map(GameToJSON.bind(null, CityData.BASE_OFFSET_Y, buildingD));
 };
 
 CityData.getModuleMap = function() {
@@ -169,17 +210,16 @@ CityData.saveToParse = function(data) {
     http.setRequestHeader('Content-Type', 'application/json');
 
     http.onreadystatechange = function() {
-        console.log(http.readyState, http.status);
-        if(http.readyState == 4 && http.status == 201) {
-            console.log(http.responseText);
+        if (http.readyState == 4 && http.status == 201) {
+            var response = JSON.parse(http.responseText);
+            var id = response.objectId;
         }
     };
 
     http.send(JSON.stringify(data));
 };
 
-
-CityData.saveToParse(CityData.getCurrentCity());
+//CityData.saveToParse(CityData.getCurrentCity());
 //console.log(JSON.stringify(
-//    CityData.getCurrentCity()
+CityData.scan();
 //));
