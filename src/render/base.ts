@@ -1,6 +1,7 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
 
+import {CNCBase} from '../client/client.base';
 import {Base} from '../lib/base';
 import {Tile} from '../lib/base/tile';
 import {Building} from '../lib/building/building';
@@ -13,16 +14,16 @@ function ParseConfig(http, opts) {
     return http;
 }
 
-function getParseData(layout) {
-    var url = 'https://api.parse.com/1/classes/Layout/' + layout;
+function getParseData(id) {
+    var url = 'https://api.parse.com/1/classes/Layout/' + id;
     return m.request({
         method: 'GET',
         url: url,
         config: ParseConfig
-    }).then(function (data) {
-        console.log('got-data', layout, data);
+    }).then(function (data:CNCBase) {
+        console.log('got-data', id, data);
         return data;
-    }).then(function (data) {
+    }).then(function (data:CNCBase) {
         return Base.load(data);
     })
 }
@@ -30,7 +31,7 @@ function getParseData(layout) {
 
 export var BaseRender = {
     controller: function () {
-        var baseID = (<any>m.route).param('baseID');
+        var baseID = m.route.param('baseID');
         var baseProp = m.prop();
 
         getParseData(baseID).then(function (base) {
