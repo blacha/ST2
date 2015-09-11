@@ -11,10 +11,6 @@ export var Constants = {
 
     MAX_Y: 20,
 
-    BASE_O: 'unit',
-    BASE_D: 'unit',
-    BASE: 'base',
-
     TILE_COUNT: -1, // Calculated
 
     RESOURCE_COST_GROWTH: 1.32,

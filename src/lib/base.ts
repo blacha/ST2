@@ -9,8 +9,7 @@ import {DUnitType} from './unit/dunittype';
 import {OUnitType} from './unit/ounittype';
 import {Unit} from './unit/unit';
 
-
-import {GameDataObject} from './data/gamedata'
+import {GameDataObject} from './data/gamedataobject';
 import {CNCBase, CNCUnit, CNCTile} from '../client/client.base';
 
 import {ID_MAP, TECH_MAP} from './util';
@@ -77,7 +76,7 @@ export class Base {
     }
 
     setBase(x:number, y:number, buildable:Buildable) {
-        this.base[Base.$index(x,y)] = buildable;
+        this.base[Base.$index(x, y)] = buildable;
     }
 
     setUpgrades(upgrades:number[]) {
@@ -110,7 +109,7 @@ export class Base {
             var actualUnit:CNCTile = <CNCTile>unit;
             var unitType:GameDataObject = ID_MAP[actualUnit.i];
             if (unitType == null) {
-                console.error('Unkown unit', actualUnit.i);
+                console.error('Unknown unit', actualUnit.i);
                 return;
             }
 
@@ -119,19 +118,19 @@ export class Base {
                 output.setTile(x, y, tile);
             }
 
-            if (unitType.getType() === Constants.BASE) {
+            if (unitType instanceof BuildingType) {
                 output.setBase(x, y, new Building(<BuildingType>unitType, actualUnit.l));
-            } else if (unitType.getType() === Constants.BASE_O) {
+            } else if (unitType instanceof OUnitType) {
                 output.setBase(x, y, new Unit(<OUnitType>unitType, actualUnit.l));
-            } else {
+            } else if (unitType instanceof DUnitType) {
                 output.setBase(x, y, new Unit(<DUnitType>unitType, actualUnit.l));
+            } else {
+                console.error('Unknown unitType', unitType);
             }
 
         });
 
-
         output.setUpgrades(cncbase.upgrades);
-
         return output;
     }
 
@@ -146,8 +145,6 @@ export class Base {
 
         return `[Base ${this.name}:${this.faction}
     buildings: [${ this.base.filter(removeEmpty).map(toStr).join('\n\t') })}]
-    off: [${ this.off.filter(removeEmpty).map(toStr).join('\n\t') })}]
-    def: [${ this.def.filter(removeEmpty).map(toStr).join('\n\t') })}]
         ]`;
     }
 }

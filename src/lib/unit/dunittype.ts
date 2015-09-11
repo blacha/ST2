@@ -137,8 +137,4 @@ export class DUnitType extends UnitType {
 
         return null;
     }
-
-    getType() {
-        return Constants.BASE_D;
-    }
 }

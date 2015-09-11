@@ -59,10 +59,6 @@ export class Unit implements Buildable {
         return this.unit.getGameData();
     }
 
-    getType() {
-        return Constants.UNIT;
-    }
-
     toString() {
         return `[Unit: ${this.unit.toString()}: ${this.level}]`;
     }

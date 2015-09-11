@@ -13,7 +13,5 @@ export interface Buildable {
     getName():string;
     getClassName():string;
 
-    getType():string;
-
     getGameData():GameDataJSON;
 }

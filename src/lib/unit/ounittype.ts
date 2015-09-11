@@ -94,8 +94,4 @@ export class OUnitType extends UnitType {
         return null;
     }
 
-
-    getType() {
-        return Constants.BASE_D;
-    }
 }

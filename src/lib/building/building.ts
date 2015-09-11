@@ -52,8 +52,4 @@ export class Building implements Buildable {
     toString() {
         return `[Building: ${this.building.toString()}: ${this.level}]`;
     }
-
-    getType() {
-        return this.building.getType()
-    }
 }
