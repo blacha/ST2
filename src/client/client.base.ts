@@ -13,7 +13,7 @@ export interface CNCBase {
 }
 
 export interface CNCUnit {
-    i: number;
+    id: number;
     l: number;
 }
 

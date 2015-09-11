@@ -7,11 +7,6 @@ import {Building} from '../lib/building/building';
 import {Buildable} from '../lib/base/buildable';
 import {Constants} from '../lib/constants';
 
-//import {FORTRESS, NODBASE, GDIBASE, CAMP_2} from '../client/client.base';
-//import {GDI_BASE} from '../client/gdi.base';
-//import {FORTRESS} from '../client/fortress.w301';
-
-
 function ParseConfig(http, opts) {
     http.setRequestHeader('X-Parse-Application-Id', 'p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ');
     http.setRequestHeader('X-Parse-REST-API-Key', 'UdPxMf4bww3S5KSUe9qAFYMaZ1mfEGYE2TGePGTU');
@@ -33,18 +28,12 @@ function getParseData(layout) {
 }
 
 
-var BASE_ID = {
-    fortress: 'D5alGNhME0',
-    nod: 'TgNPCrzyAJ'
-};
-
-var url = 'https://api.parse.com/1/classes/Layout/' + BASE_ID.fortress;
-
 export var BaseRender = {
     controller: function () {
+        var baseID = (<any>m.route).param('baseID');
         var baseProp = m.prop();
 
-        getParseData(BASE_ID.fortress).then(function(base) {
+        getParseData(baseID).then(function (base) {
             baseProp(base);
         });
 
@@ -83,7 +72,12 @@ export var BaseRender = {
 };
 
 function RenderBuildingTile(x:number, y:number, building:Building, tile:Tile, base:Base) {
-    var className = ['BaseTile'];
+    var className = [
+        'BaseTile',
+        `BaseRow-${y}`,
+        `BaseCol-${x}`,
+        `BaseTile-${x}-${y}`];
+    console.log(x, y, tile);
     if (tile !== Tile.Empty) {
         className.push('BaseTile-' + tile.getName())
     }

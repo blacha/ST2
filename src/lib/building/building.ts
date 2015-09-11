@@ -5,6 +5,7 @@ import {Tile} from '../base/tile';
 var ID = 0;
 export class Building implements Buildable {
     public id:string;
+
     constructor(private building:BuildingType, private level:number) {
         this.id = 'building-' + ID++;
     }

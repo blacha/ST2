@@ -44,8 +44,8 @@ export class Base {
     }
 
     baseForEach(callback:(x:number, y:number, building:Buildable, tile:Tile, base:Base) => void) {
-        for (var x = 0; x < Constants.MAX_BASE_X; x++) {
-            for (var y = 0; y < Constants.MAX_Y; y++) {
+        for (var y = 0; y < Constants.MAX_Y; y++) {
+            for (var x = 0; x < Constants.MAX_BASE_X; x++) {
                 var index = Base.$index(x, y);
                 callback(x, y, this.base[index], this.tiles[index], this);
             }
@@ -54,10 +54,10 @@ export class Base {
 
     buildingsForEach(callback:(x:number, y:number, building:Building, tile:Tile, base:Base) => any):any[] {
         var output = [];
-        for (var x = 0; x < Constants.MAX_BASE_X; x++) {
-            for (var y = 0; y < Constants.MAX_BASE_Y; y++) {
+        for (var y = 0; y < Constants.MAX_BASE_Y; y++) {
+            for (var x = 0; x < Constants.MAX_BASE_X; x++) {
                 var index = Base.$index(x, y);
-                output.push(callback(x, y, <Building>this.base[index], this.tiles[index], this));
+                output.push(callback(x, y, <Building>this.base[index], this.getTile(x, y), this));
             }
         }
         return output;
@@ -107,9 +107,9 @@ export class Base {
             }
 
             var actualUnit:CNCTile = <CNCTile>unit;
-            var unitType:GameDataObject = ID_MAP[actualUnit.i];
+            var unitType:GameDataObject = ID_MAP[actualUnit.id];
             if (unitType == null) {
-                console.error('Unknown unit', actualUnit.i);
+                console.error('Unknown unit', actualUnit.id, '@', x, y);
                 return;
             }
 

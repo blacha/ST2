@@ -20,12 +20,16 @@ body {
 }
 
 .BaseTiles {
-    border: 1px solid #ddd;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.BaseTileRow {
-    display: flex;
-    border-bottom: 1px solid #ddd;
+.BaseCol-0 {
+    border-left: 1px solid #ddd;
+}
+
+.BaseRow-0 {
+    border-top: 1px solid #ddd;
 }
 
 .BaseTile {
@@ -35,12 +39,8 @@ body {
     width: 65px;
     height: 50px;
     border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     position: relative;
-}
-
-.BaseTile:last-child,
-.BaseTileRow:last-child {
-    border: none;
 }
 
 .BaseTile img {
@@ -67,4 +67,13 @@ body {
     color: black;
     padding: 0 2px;
     border: 1px solid black;
+}
+
+.BaseTile-Tiberium {
+    background-image: url('../images/tiberium.png');
+    background-size: contain;
+}
+.BaseTile-Crystal {
+    background-image: url('../images/crystal.png');
+    background-size: contain;
 }

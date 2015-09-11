@@ -1,7 +1,7 @@
 export class Tile {
-    static Tiberium:Tile = new Tile('Tiberium', 't', 2);
-    static Crystal:Tile = new Tile('Crystal', 'c', 1);
     static Empty:Tile = new Tile('Empty', '.', 0);
+    static Crystal:Tile = new Tile('Crystal', 'c', 1);
+    static Tiberium:Tile = new Tile('Tiberium', 't', 2);
 
     static Woods:Tile = new Tile('Woods', 'j', 4);
     static Scrub:Tile = new Tile('Scrub', 'h', 5);
