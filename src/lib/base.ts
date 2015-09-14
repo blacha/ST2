@@ -13,6 +13,10 @@ import {GameDataObject} from './data/gamedataobject';
 import {CNCBase, CNCUnit, CNCTile} from '../client/client.base';
 
 import {ID_MAP, TECH_MAP} from './util';
+interface CNCLocation {
+    x: number;
+    y: number;
+}
 
 export class Base {
     private tiles:Tile[];
@@ -37,6 +41,28 @@ export class Base {
 
     getFaction():Faction {
         return this.faction;
+    }
+
+    static getSurroundingXY(x:number, y:number): CNCLocation[] {
+        var output = [];
+        for(var dx = -1; dx < 2; dx ++) {
+            for (var dy = -1; dy < 2; dy ++) {
+                var offX = x + dx;
+                var offY = y + dy;
+                if (offX < 0 || offX > Constants.MAX_BASE_X) {
+                    continue;
+                }
+                if (offY < 0 || offY > Constants.MAX_BASE_Y) {
+                    continue;
+                }
+                if (offY === y && offX === x) {
+                    continue;
+                }
+                output.push({x: offX, y:offY});
+            }
+        }
+
+        return output;
     }
 
     static $index(x:number, y:number) {
@@ -90,45 +116,47 @@ export class Base {
     static load(cncbase:CNCBase):Base {
         var output = new Base(cncbase.name, Faction.fromID(cncbase.faction));
 
-        var baseKeys = Object.keys(cncbase.tiles);
-        baseKeys.forEach(function (key) {
-            var keyParts = key.split('-');
-            var x = parseInt(keyParts[0], 10);
-            var y = parseInt(keyParts[1], 10);
+        for (var y = 0; y < Constants.MAX_Y; y++) {
+            for (var x = 0; x < Constants.MAX_BASE_X; x++) {
+                var index = x + '-' + y; // Base.$index(x, y);
+                var unit = cncbase.tiles[index];
+                var tile:Tile;
 
-            var unit = cncbase.tiles[key];
-            var tile:Tile;
+                if (unit == null) {
+                    continue;
+                }
 
-            // Give just a number so just a tile
-            if (typeof unit === 'number') {
-                tile = Tile.ID[<number>unit];
-                output.setTile(x, y, tile);
-                return;
+                // Give just a number so just a tile
+                if (typeof unit === 'number') {
+                    tile = Tile.ID[<number>unit];
+                    output.setTile(x, y, tile);
+                    continue;
+                }
+
+                var actualUnit:CNCTile = <CNCTile>unit;
+                var unitType:GameDataObject = ID_MAP[actualUnit.id];
+                if (unitType == null) {
+                    console.error('Unknown unit', actualUnit.id, '@', x, y);
+                    continue;
+                }
+
+                if (actualUnit.t) {
+                    tile = Tile.ID[actualUnit.t];
+                    output.setTile(x, y, tile);
+                }
+
+                if (unitType instanceof BuildingType) {
+                    output.setBase(x, y, new Building(<BuildingType>unitType, actualUnit.l));
+                } else if (unitType instanceof OUnitType) {
+                    output.setBase(x, y, new Unit(<OUnitType>unitType, actualUnit.l));
+                } else if (unitType instanceof DUnitType) {
+                    output.setBase(x, y, new Unit(<DUnitType>unitType, actualUnit.l));
+                } else {
+                    console.error('Unknown unitType', unitType);
+                }
+
             }
-
-            var actualUnit:CNCTile = <CNCTile>unit;
-            var unitType:GameDataObject = ID_MAP[actualUnit.id];
-            if (unitType == null) {
-                console.error('Unknown unit', actualUnit.id, '@', x, y);
-                return;
-            }
-
-            if (actualUnit.t) {
-                tile = Tile.ID[actualUnit.t];
-                output.setTile(x, y, tile);
-            }
-
-            if (unitType instanceof BuildingType) {
-                output.setBase(x, y, new Building(<BuildingType>unitType, actualUnit.l));
-            } else if (unitType instanceof OUnitType) {
-                output.setBase(x, y, new Unit(<OUnitType>unitType, actualUnit.l));
-            } else if (unitType instanceof DUnitType) {
-                output.setBase(x, y, new Unit(<DUnitType>unitType, actualUnit.l));
-            } else {
-                console.error('Unknown unitType', unitType);
-            }
-
-        });
+        }
 
         output.setUpgrades(cncbase.upgrades);
         return output;

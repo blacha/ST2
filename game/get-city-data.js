@@ -3,6 +3,11 @@ var CityData = {};
 CityData.BASE_OFFSET_Y = 0;
 CityData.DEF_OFFSET_Y = 8;
 CityData.OFF_OFFSET_Y = CityData.DEF_OFFSET_Y + 8;
+CityData.MAX_BASE_X = 9;
+
+CityData.$index = function(x, y) {
+    return x + y * CityData.MAX_BASE_X;
+};
 
 CityData.scan = function() {
     var base = CityData.getCurrentCity();
@@ -43,19 +48,19 @@ CityData.getCityData = function(city) {
 };
 
 CityData.getLayout = function(city) {
-    var xYMap = {};
+    var xYMap = [];
 
     function mapUnit(unit) {
-        var key = unit.x + '-' + unit.y;
+        var index = CityData.$index(unit.x, unit.y);
         delete unit.x;
         delete unit.y;
 
         // Units can be inside other units
-        if (xYMap[key]) {
-            xYMap[key].u = unit;
+        if (xYMap[index]) {
+            xYMap[index].u = unit;
             return;
         }
-        xYMap[key] = unit;
+        xYMap[index] = unit;
     }
 
     CityData.getBuildings(city).forEach(mapUnit);
@@ -70,11 +75,11 @@ CityData.getLayout = function(city) {
             if (type == 0) {
                 continue;
             }
-            var key = x + '-' + y;
+            var index = CityData.$index(x, y);
 
-            var tileObj = xYMap[key];
+            var tileObj = xYMap[index];
             if (tileObj == null) {
-                xYMap[key] = type;
+                xYMap[index] = type;
                 continue;
             }
 

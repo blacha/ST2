@@ -14,6 +14,7 @@ export var Constants = {
     TILE_COUNT: -1, // Calculated
 
     RESOURCE_COST_GROWTH: 1.32,
+    RESOURCE_PRODUCTION_GROWTH: 1.25,
     RESOURCE_PLUNDER_GROWTH: 1.32,
     HEALTH_GROWTH: 1.1,
 

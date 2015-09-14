@@ -8,7 +8,7 @@ export interface CNCBase {
     world:number;
     owner:string;
     player:string;
-    tiles: {[key:string]: CNCTile|number };
+    tiles: Array<CNCUnit|number>;
     upgrades:number[];
 }
 

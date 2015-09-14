@@ -7,6 +7,10 @@ import {Tile} from '../lib/base/tile';
 import {Building} from '../lib/building/building';
 import {Buildable} from '../lib/base/buildable';
 import {Constants} from '../lib/constants';
+import {RenderBuildingTile} from './base/tile';
+
+
+import {BaseProduction} from '../lib/production';
 
 function ParseConfig(http, opts) {
     http.setRequestHeader('X-Parse-Application-Id', 'p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ');
@@ -35,14 +39,21 @@ export var BaseRender = {
         var baseProp = m.prop();
 
         getParseData(baseID).then(function (base) {
+            console.log('set-prop', base);
             baseProp(base);
+
+            return base;
+        }).then(function(base) {
+            var production = BaseProduction.getOutput(base);
+            console.log(production);
         });
 
         return {
             base: baseProp,
             ready: function () {
                 return !!baseProp();
-            }
+            },
+            selected: m.prop()
         }
     },
 
@@ -64,7 +75,7 @@ export var BaseRender = {
             className: 'Container'
         }, [
             makeBaseHeader(base),
-            makeBaseTiles(base)
+            makeBaseTiles(ctrl, base)
         ]);
         console.timeEnd('base-render');
 
@@ -72,44 +83,11 @@ export var BaseRender = {
     }
 };
 
-function RenderBuildingTile(x:number, y:number, building:Building, tile:Tile, base:Base) {
-    var className = [
-        'BaseTile',
-        `BaseRow-${y}`,
-        `BaseCol-${x}`,
-        `BaseTile-${x}-${y}`];
-    console.log(x, y, tile);
-    if (tile !== Tile.Empty) {
-        className.push('BaseTile-' + tile.getName())
-    }
-
-    if (building == null) {
-        return m('div', {className: className.join(' ')});
-    }
-
-    var hasUpgrade = base.hasUpgrade(building.getID());
-    if (hasUpgrade) {
-        className.push('UnitUpgrade');
-    }
-
-    className.push('BaseTile-' + building.getID());
-
-    return m('div', {
-        className: className.join(' '),
-        title: building.getName()
-    }, [
-        m('img', {
-            src: './images/' + building.getID() + '.png',
-        }),
-        m('span', {
-            className: 'BaseTileLevel'
-        }, building.getLevel())
-    ]);
-}
-
-function makeBaseTiles(base:Base) {
+function makeBaseTiles(ctrl, base:Base) {
     var tiles = base.buildingsForEach(RenderBuildingTile);
-    return m('div', {className: 'BaseTiles'}, tiles);
+    return m('div', { className: 'BaseTiles', onclick: function(evt){
+        console.log('base-click', evt);
+    }}, tiles);
 }
 
 function makeBaseHeader(base:Base) {
