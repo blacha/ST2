@@ -1,3 +1,7 @@
+declare function require(name:string);
+require('source-map-support').install();
+
+
 import {BaseProduction} from '../../src/lib/production';
 import {Base} from '../../src/lib/base';
 import {Tile} from '../../src/lib/base/tile';
@@ -19,10 +23,16 @@ var base = new Base();
 base.setTile(1, 1, Tile.Tiberium);
 base.setTile(1, 2, Tile.Tiberium);
 base.setTile(1, 3, Tile.Tiberium);
+base.setTile(1, 4, Tile.Tiberium);
+base.setTile(1, 5, Tile.Tiberium);
+base.setTile(1, 6, Tile.Tiberium);
 
-base.setBase(1, 1, new Building(BuildingType.GDI.TiberiumHarvester, 1));
-base.setBase(1, 2, new Building(BuildingType.GDI.TiberiumHarvester, 2));
-base.setBase(1, 3, new Building(BuildingType.GDI.TiberiumHarvester, 3));
+base.setBase(1, 1, new Building(BuildingType.GDI.TiberiumHarvester, 12));
+base.setBase(1, 2, new Building(BuildingType.GDI.TiberiumHarvester, 13));
+base.setBase(1, 3, new Building(BuildingType.GDI.TiberiumHarvester, 14));
+base.setBase(1, 4, new Building(BuildingType.GDI.TiberiumHarvester, 15));
+base.setBase(1, 5, new Building(BuildingType.GDI.TiberiumHarvester, 20));
+base.setBase(1, 6, new Building(BuildingType.GDI.TiberiumHarvester, 40));
 base.setBase(1, 0, new Building(BuildingType.GDI.Silo, 1));
 
 

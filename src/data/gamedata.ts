@@ -1977,59 +1977,59 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
     "modifiers": [{}, {
         "TiberiumPackage": 4,
         "CrystalPackage": 4,
-        "TiberiumContinous": 60,
-        "CrystalContinous": 60
+        "TiberiumPackageTime": 60,
+        "CrystalPackageTime": 60
     }, {
         "TiberiumPackage": 10,
         "CrystalPackage": 10,
-        "TiberiumContinous": 120,
-        "CrystalContinous": 120
+        "TiberiumPackageTime": 120,
+        "CrystalPackageTime": 120
     }, {
         "TiberiumPackage": 24,
         "CrystalPackage": 24,
-        "TiberiumContinous": 200,
-        "CrystalContinous": 200
+        "TiberiumPackageTime": 200,
+        "CrystalPackageTime": 200
     }, {
         "TiberiumPackage": 95,
         "CrystalPackage": 95,
-        "TiberiumContinous": 600,
-        "CrystalContinous": 600
+        "TiberiumPackageTime": 600,
+        "CrystalPackageTime": 600
     }, {
         "TiberiumPackage": 245,
         "CrystalPackage": 245,
-        "TiberiumContinous": 1200,
-        "CrystalContinous": 1200
+        "TiberiumPackageTime": 1200,
+        "CrystalPackageTime": 1200
     }, {
         "TiberiumPackage": 460,
         "CrystalPackage": 460,
-        "TiberiumContinous": 1800,
-        "CrystalContinous": 1800
+        "TiberiumPackageTime": 1800,
+        "CrystalPackageTime": 1800
     }, {
         "TiberiumPackage": 1120,
         "CrystalPackage": 1120,
-        "TiberiumContinous": 3600,
-        "CrystalContinous": 3600
+        "TiberiumPackageTime": 3600,
+        "CrystalPackageTime": 3600
     }, {
         "TiberiumPackage": 2660,
         "CrystalPackage": 2660,
-        "TiberiumContinous": 7200,
-        "CrystalContinous": 7200
+        "TiberiumPackageTime": 7200,
+        "CrystalPackageTime": 7200
     }, {
         "TiberiumPackage": 3900,
         "CrystalPackage": 3900,
-        "TiberiumContinous": 9000,
-        "CrystalContinous": 9000
+        "TiberiumPackageTime": 9000,
+        "CrystalPackageTime": 9000
     }, {
         "TiberiumPackage": 5400,
         "CrystalPackage": 5400,
-        "TiberiumContinous": 10800,
-        "CrystalContinous": 10800
+        "TiberiumPackageTime": 10800,
+        "CrystalPackageTime": 10800
     }, {
         "TiberiumPackage": 8200,
         "CrystalPackage": 8200,
-        "TiberiumContinous": 14400,
-        "CrystalContinous": 14400
-    }, {"TiberiumPackage": 14160, "CrystalPackage": 14160, "TiberiumContinous": 21600, "CrystalContinous": 21600}]
+        "TiberiumPackageTime": 14400,
+        "CrystalPackageTime": 14400
+    }, {"TiberiumPackage": 14160, "CrystalPackage": 14160, "TiberiumPackageTime": 21600, "CrystalPackageTime": 21600}]
 }, {
     "id": 116,
     "speed": 0,
@@ -2074,22 +2074,22 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
         "tiberium": 1572,
         "RepairBase": 240
     }],
-    "modifiers": [{}, {"PowerPackage": 2, "PowerContinous": 60}, {
+    "modifiers": [{}, {"PowerPackage": 2, "PowerPackageTime": 60}, {
         "PowerPackage": 5,
-        "PowerContinous": 120
-    }, {"PowerPackage": 11, "PowerContinous": 200}, {"PowerPackage": 45, "PowerContinous": 600}, {
+        "PowerPackageTime": 120
+    }, {"PowerPackage": 11, "PowerPackageTime": 200}, {"PowerPackage": 45, "PowerPackageTime": 600}, {
         "PowerPackage": 120,
-        "PowerContinous": 1200
-    }, {"PowerPackage": 230, "PowerContinous": 1800}, {
+        "PowerPackageTime": 1200
+    }, {"PowerPackage": 230, "PowerPackageTime": 1800}, {
         "PowerPackage": 560,
-        "PowerContinous": 3600
-    }, {"PowerPackage": 1320, "PowerContinous": 7200}, {
+        "PowerPackageTime": 3600
+    }, {"PowerPackage": 1320, "PowerPackageTime": 7200}, {
         "PowerPackage": 1950,
-        "PowerContinous": 9000
-    }, {"PowerPackage": 2700, "PowerContinous": 10800}, {
+        "PowerPackageTime": 9000
+    }, {"PowerPackage": 2700, "PowerPackageTime": 10800}, {
         "PowerPackage": 4100,
-        "PowerContinous": 14400
-    }, {"PowerPackage": 7000, "PowerContinous": 21600}]
+        "PowerPackageTime": 14400
+    }, {"PowerPackage": 7000, "PowerPackageTime": 21600}]
 }, {
     "id": 118,
     "speed": 0,
@@ -2134,22 +2134,22 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
         "tiberium": 1210,
         "RepairBase": 240
     }],
-    "modifiers": [{}, {"CreditPackage": 2, "CreditContinous": 60}, {
+    "modifiers": [{}, {"CreditPackage": 2, "CreditPackageTime": 60}, {
         "CreditPackage": 5,
-        "CreditContinous": 120
-    }, {"CreditPackage": 10, "CreditContinous": 200}, {
+        "CreditPackageTime": 120
+    }, {"CreditPackage": 10, "CreditPackageTime": 200}, {
         "CreditPackage": 40,
-        "CreditContinous": 600
-    }, {"CreditPackage": 105, "CreditContinous": 1200}, {
+        "CreditPackageTime": 600
+    }, {"CreditPackage": 105, "CreditPackageTime": 1200}, {
         "CreditPackage": 200,
-        "CreditContinous": 1800
-    }, {"CreditPackage": 485, "CreditContinous": 3600}, {
+        "CreditPackageTime": 1800
+    }, {"CreditPackage": 485, "CreditPackageTime": 3600}, {
         "CreditPackage": 1150,
-        "CreditContinous": 7200
-    }, {"CreditPackage": 1700, "CreditContinous": 9000}, {
+        "CreditPackageTime": 7200
+    }, {"CreditPackage": 1700, "CreditPackageTime": 9000}, {
         "CreditPackage": 2370,
-        "CreditContinous": 10800
-    }, {"CreditPackage": 3700, "CreditContinous": 14400}, {"CreditPackage": 6480, "CreditContinous": 21600}]
+        "CreditPackageTime": 10800
+    }, {"CreditPackage": 3700, "CreditPackageTime": 14400}, {"CreditPackage": 6480, "CreditPackageTime": 21600}]
 }, {
     "id": 120,
     "speed": 0,
@@ -3655,22 +3655,22 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
         "tiberium": 1572,
         "RepairBase": 240
     }],
-    "modifiers": [{}, {"PowerPackage": 2, "PowerContinous": 60}, {
+    "modifiers": [{}, {"PowerPackage": 2, "PowerPackageTime": 60}, {
         "PowerPackage": 5,
-        "PowerContinous": 120
-    }, {"PowerPackage": 11, "PowerContinous": 200}, {"PowerPackage": 45, "PowerContinous": 600}, {
+        "PowerPackageTime": 120
+    }, {"PowerPackage": 11, "PowerPackageTime": 200}, {"PowerPackage": 45, "PowerPackageTime": 600}, {
         "PowerPackage": 120,
-        "PowerContinous": 1200
-    }, {"PowerPackage": 230, "PowerContinous": 1800}, {
+        "PowerPackageTime": 1200
+    }, {"PowerPackage": 230, "PowerPackageTime": 1800}, {
         "PowerPackage": 560,
-        "PowerContinous": 3600
-    }, {"PowerPackage": 1320, "PowerContinous": 7200}, {
+        "PowerPackageTime": 3600
+    }, {"PowerPackage": 1320, "PowerPackageTime": 7200}, {
         "PowerPackage": 1950,
-        "PowerContinous": 9000
-    }, {"PowerPackage": 2700, "PowerContinous": 10800}, {
+        "PowerPackageTime": 9000
+    }, {"PowerPackage": 2700, "PowerPackageTime": 10800}, {
         "PowerPackage": 4100,
-        "PowerContinous": 14400
-    }, {"PowerPackage": 7000, "PowerContinous": 21600}]
+        "PowerPackageTime": 14400
+    }, {"PowerPackage": 7000, "PowerPackageTime": 21600}]
 }, {
     "id": 153,
     "speed": 0,
@@ -3703,22 +3703,22 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
         "tiberium": 1210,
         "RepairBase": 240
     }],
-    "modifiers": [{}, {"CreditPackage": 2, "CreditContinous": 60}, {
+    "modifiers": [{}, {"CreditPackage": 2, "CreditPackageTime": 60}, {
         "CreditPackage": 5,
-        "CreditContinous": 120
-    }, {"CreditPackage": 10, "CreditContinous": 200}, {
+        "CreditPackageTime": 120
+    }, {"CreditPackage": 10, "CreditPackageTime": 200}, {
         "CreditPackage": 40,
-        "CreditContinous": 600
-    }, {"CreditPackage": 105, "CreditContinous": 1200}, {
+        "CreditPackageTime": 600
+    }, {"CreditPackage": 105, "CreditPackageTime": 1200}, {
         "CreditPackage": 200,
-        "CreditContinous": 1800
-    }, {"CreditPackage": 485, "CreditContinous": 3600}, {
+        "CreditPackageTime": 1800
+    }, {"CreditPackage": 485, "CreditPackageTime": 3600}, {
         "CreditPackage": 1150,
-        "CreditContinous": 7200
-    }, {"CreditPackage": 1700, "CreditContinous": 9000}, {
+        "CreditPackageTime": 7200
+    }, {"CreditPackage": 1700, "CreditPackageTime": 9000}, {
         "CreditPackage": 2370,
-        "CreditContinous": 10800
-    }, {"CreditPackage": 3700, "CreditContinous": 14400}, {"CreditPackage": 6480, "CreditContinous": 21600}]
+        "CreditPackageTime": 10800
+    }, {"CreditPackage": 3700, "CreditPackageTime": 14400}, {"CreditPackage": 6480, "CreditPackageTime": 21600}]
 }, {
     "id": 154,
     "speed": 0,
@@ -3802,59 +3802,59 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
     "modifiers": [{}, {
         "TiberiumPackage": 4,
         "CrystalPackage": 4,
-        "TiberiumContinous": 60,
-        "CrystalContinous": 60
+        "TiberiumPackageTime": 60,
+        "CrystalPackageTime": 60
     }, {
         "TiberiumPackage": 10,
         "CrystalPackage": 10,
-        "TiberiumContinous": 120,
-        "CrystalContinous": 120
+        "TiberiumPackageTime": 120,
+        "CrystalPackageTime": 120
     }, {
         "TiberiumPackage": 24,
         "CrystalPackage": 24,
-        "TiberiumContinous": 200,
-        "CrystalContinous": 200
+        "TiberiumPackageTime": 200,
+        "CrystalPackageTime": 200
     }, {
         "TiberiumPackage": 95,
         "CrystalPackage": 95,
-        "TiberiumContinous": 600,
-        "CrystalContinous": 600
+        "TiberiumPackageTime": 600,
+        "CrystalPackageTime": 600
     }, {
         "TiberiumPackage": 245,
         "CrystalPackage": 245,
-        "TiberiumContinous": 1200,
-        "CrystalContinous": 1200
+        "TiberiumPackageTime": 1200,
+        "CrystalPackageTime": 1200
     }, {
         "TiberiumPackage": 460,
         "CrystalPackage": 460,
-        "TiberiumContinous": 1800,
-        "CrystalContinous": 1800
+        "TiberiumPackageTime": 1800,
+        "CrystalPackageTime": 1800
     }, {
         "TiberiumPackage": 1120,
         "CrystalPackage": 1120,
-        "TiberiumContinous": 3600,
-        "CrystalContinous": 3600
+        "TiberiumPackageTime": 3600,
+        "CrystalPackageTime": 3600
     }, {
         "TiberiumPackage": 2660,
         "CrystalPackage": 2660,
-        "TiberiumContinous": 7200,
-        "CrystalContinous": 7200
+        "TiberiumPackageTime": 7200,
+        "CrystalPackageTime": 7200
     }, {
         "TiberiumPackage": 3900,
         "CrystalPackage": 3900,
-        "TiberiumContinous": 9000,
-        "CrystalContinous": 9000
+        "TiberiumPackageTime": 9000,
+        "CrystalPackageTime": 9000
     }, {
         "TiberiumPackage": 5400,
         "CrystalPackage": 5400,
-        "TiberiumContinous": 10800,
-        "CrystalContinous": 10800
+        "TiberiumPackageTime": 10800,
+        "CrystalPackageTime": 10800
     }, {
         "TiberiumPackage": 8200,
         "CrystalPackage": 8200,
-        "TiberiumContinous": 14400,
-        "CrystalContinous": 14400
-    }, {"TiberiumPackage": 14160, "CrystalPackage": 14160, "TiberiumContinous": 21600, "CrystalContinous": 21600}]
+        "TiberiumPackageTime": 14400,
+        "CrystalPackageTime": 14400
+    }, {"TiberiumPackage": 14160, "CrystalPackage": 14160, "TiberiumPackageTime": 21600, "CrystalPackageTime": 21600}]
 }, {
     "id": 156,
     "speed": 0,

@@ -15,26 +15,42 @@ export function pad(width, string) {
     return (width <= string.length) ? string : pad(width, string + ' ')
 }
 
-export function getModifierValue(gdo:GameDataJSON, modifier:string, level:number) {
+export function getGrowthValue(values:number[], level:number, growth = Constants.RESOURCE_PRODUCTION_GROWTH):number {
+    if (level <= Constants.GROWTH_LEVEL) {
+        return values[level];
+    }
+    if (growth === 1) {
+        return values[Constants.GROWTH_LEVEL];
+    }
+
+    return values[Constants.GROWTH_LEVEL] * Math.pow(Constants.RESOURCE_PRODUCTION_GROWTH, level - Constants.GROWTH_LEVEL);
+}
+
+
+export function getModifierValue(gdo:GameDataJSON, modifier:string, level:number, growth = Constants.RESOURCE_PRODUCTION_GROWTH) {
     var values = gdo.modifiers;
-    if (level < Constants.GROWTH_LEVEL) {
+    if (level <= Constants.GROWTH_LEVEL) {
         return values[level][modifier];
     }
+
     var val = values[Constants.GROWTH_LEVEL][modifier];
-
-    return val *  Math.pow(level - Constants.GROWTH_LEVEL, Constants.RESOURCE_PRODUCTION_GROWTH);
-}
-
-export function getGrowthValue(values:GameDataRepair[], level:number, growth:number) {
-    if (level < Constants.GROWTH_LEVEL) {
-        return values[level].tiberium;
+    if (growth == 1) {
+        return val;
     }
-    var val = values[Constants.GROWTH_LEVEL].tiberium;
-    return val * Math.pow(level - Constants.GROWTH_LEVEL, growth);
+
+    return val * Math.pow(growth, level - Constants.GROWTH_LEVEL);
 }
 
-export function getSingleGrowthValue(value:number, level:number, growth:number) {
-    return value * Math.pow(level, growth);
+var Formats = ['', 'K', 'M', 'G', 'T'];
+
+export function formatNumber(num:number):string {
+    var current = 0;
+    while (num > 1000 && current < Formats.length) {
+        current++;
+        num /= 1000;
+    }
+
+    return num.toFixed(2) + Formats[current];
 }
 
 export function loadGameData(printMessages) {

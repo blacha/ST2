@@ -2,7 +2,7 @@ import * as Util from './util';
 
 export var Constants = {
     // level before values increment at growth rate
-    GROWTH_LEVEL: 13,
+    GROWTH_LEVEL: 12,
 
     MAX_BASE_X: 9, // Width of bases.
     MAX_BASE_Y: 8, // Max Y for Base buildings

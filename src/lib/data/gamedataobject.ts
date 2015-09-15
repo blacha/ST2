@@ -29,17 +29,20 @@ export class GameDataObject {
     }
 
     getHealth(level:number) {
-        return Util.getSingleGrowthValue(this.data.health, level,
-            Constants.HEALTH_GROWTH);
+        return 0;
+        //return Util.getSingleGrowthValue(this.data.health, level,
+        //    Constants.HEALTH_GROWTH);
     }
 
     getPlunder(level:number) {
-        return Util.getGrowthValue(this.data.repair, level,
-            Constants.RESOURCE_PLUNDER_GROWTH);
+        return 0;
+        //return Util.getGrowthValue(this.data.repair, level,
+        //    Constants.RESOURCE_PLUNDER_GROWTH);
     }
 
     getCost(level:number) {
-        return Util.getGrowthValue(this.data.resources, level,
-            Constants.RESOURCE_COST_GROWTH);
+        return 0;
+        //return Util.getGrowthValue(this.data.resources, level,
+        //    Constants.RESOURCE_COST_GROWTH);
     }
 }
