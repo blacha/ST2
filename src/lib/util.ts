@@ -15,6 +15,16 @@ export function pad(width, string) {
     return (width <= string.length) ? string : pad(width, string + ' ')
 }
 
+export function getModifierValue(gdo:GameDataJSON, modifier:string, level:number) {
+    var values = gdo.modifiers;
+    if (level < Constants.GROWTH_LEVEL) {
+        return values[level][modifier];
+    }
+    var val = values[Constants.GROWTH_LEVEL][modifier];
+
+    return val *  Math.pow(level - Constants.GROWTH_LEVEL, Constants.RESOURCE_PRODUCTION_GROWTH);
+}
+
 export function getGrowthValue(values:GameDataRepair[], level:number, growth:number) {
     if (level < Constants.GROWTH_LEVEL) {
         return values[level].tiberium;

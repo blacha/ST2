@@ -13,8 +13,11 @@ Util.createTechMap(BuildingType);
 Util.loadGameData(true);
 
 
-window.addEventListener('load', function () {
-    console.log('starting...');
-    Render.start();
-});
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', function () {
+        console.log('starting...');
+        Render.start();
+    });
+}
+
 

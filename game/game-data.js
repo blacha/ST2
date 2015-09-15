@@ -16,11 +16,12 @@ function getFaction(name) {
 var MODIFIERS = {
     2: 'TiberiumStorage',
     25: 'TiberiumPackage',
-    33: 'TiberiumContinous',
+
+    33: 'TiberiumContinous', // TiberiumPackageTime
 
     5: 'CrystalStorage',
     26: 'CrystalPackage',
-    34: 'CrystalContinous',
+    34: 'CrystalContinous', // CrystalPackageTime
 
     32: 'CreditPackage',
     36: 'CreditContinous',

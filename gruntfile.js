@@ -73,12 +73,16 @@ module.exports = function(grunt) {
         }
     };
 
-
+    config.mochaTest = {
+        test: {
+            src: ['build/test/**/*.spec.js']
+        }
+    };
     grunt.initConfig(config);
 
     grunt.registerTask('default', ['build', 'package', 'watch']);
 
-    grunt.registerTask('typescript', ['ts']);
+    grunt.registerTask('typescript', ['ts', 'mochaTest']);
 
     grunt.registerTask('build', ['typescript']);
     grunt.registerTask('package', ['webpack', 'copy']);
