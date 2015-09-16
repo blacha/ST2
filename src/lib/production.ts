@@ -23,14 +23,17 @@ var LinkValues = [
 ]
 
 /*
+
+ ClientLib.Base.ELinkType.PowerplantCreditBonus = 36;
+ ClientLib.Base.ELinkType.CrystalCreditProduction = 38;
+ ClientLib.Base.ELinkType.TiberiumCreditProduction = 37;
+
+
  Links:
  ClientLib.Base.ELinkType.None = 0;
  ClientLib.Base.ELinkType.AccumulatorPowerBonus = 29;
  ClientLib.Base.ELinkType.SiloTiberiumProduction = 34;
  ClientLib.Base.ELinkType.SiloCrystalProduction = 35;
- ClientLib.Base.ELinkType.PowerplantCreditBonus = 36;
- ClientLib.Base.ELinkType.TiberiumCreditProduction = 37;
- ClientLib.Base.ELinkType.CrystalCreditProduction = 38;
  ClientLib.Base.ELinkType.HarvesterTiberiumProduction = 39;
  ClientLib.Base.ELinkType.HarvesterCrystalProduction = 40;
  ClientLib.Base.ELinkType.PowerPlantAccumulatorBonus = 41;
@@ -54,7 +57,7 @@ var LinkValues = [
  5: 20:00
  */
 var Links = {
-    AccumPower: {buildings: [], values: [0, 72, 90, 120, 160, 215, 275, 335, 400, 460, 530, 610, 700]},
+    Accumulator: {buildings: [], values: [0, 72, 90, 120, 160, 215, 275, 335, 400, 460, 530, 610, 700]},
     Silo: {
         buildings: [
             BuildingType.GDI.TiberiumHarvester.getID(),
@@ -69,9 +72,22 @@ var Links = {
         ],
         values: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710]
     },
-    PowerAccum: {buildings: [], values: [0, 48, 60, 80, 110, 145, 185, 225, 265, 310, 355, 405, 465]},
-    RefineryPower: {buildings: [], values: [0, 48, 60, 75, 100, 125, 160, 195, 230, 270, 315, 370, 430]},
-    PowerRefiniery: {buildings: [], values: [0, 72, 90, 110, 145, 190, 240, 290, 345, 410, 475, 555, 650]}
+    PowerPlant: {
+        buildings: [],
+        values: [0, 48, 60, 80, 110, 145, 185, 225, 265, 310, 355, 405, 465],
+        tiles: [Tile.Crystal],
+        tileValues: []
+    },
+    //PowerAccum: {buildings: [], values: [0, 48, 60, 80, 110, 145, 185, 225, 265, 310, 355, 405, 465]},
+    Refinery: {
+        buildings: [
+            BuildingType.GDI.PowerPlant.getID(),
+            BuildingType.NOD.PowerPlant.getID()
+        ],
+        values: [0, 48, 60, 75, 100, 125, 160, 195, 230, 270, 315, 370, 430],
+        tiles: [Tile.Tiberium]
+    },
+    //PowerRefiniery: {buildings: [], values: [0, 72, 90, 110, 145, 190, 240, 290, 345, 410, 475, 555, 650]}
 };
 
 
