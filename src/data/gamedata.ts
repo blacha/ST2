@@ -2006,7 +2006,7 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
     }, {
         "TiberiumPackage": 8200,
         "TiberiumPackageTime": 14400,
-    }, {"TiberiumPackage": 14160,  "TiberiumPackageTime": 21600}]
+    }, {"TiberiumPackage": 14160, "TiberiumPackageTime": 21600}]
 }, {
     "id": 116,
     "speed": 0,
@@ -3809,7 +3809,7 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
     }, {
         "TiberiumPackage": 8200,
         "TiberiumPackageTime": 14400,
-    }, {"TiberiumPackage": 14160,  "TiberiumPackageTime": 21600}]
+    }, {"TiberiumPackage": 14160, "TiberiumPackageTime": 21600}]
 }, {
     "id": 156,
     "speed": 0,

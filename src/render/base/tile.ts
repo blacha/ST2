@@ -40,8 +40,6 @@ export function RenderBuildingTile(x:number, y:number, building:Building, tile:T
         m('span', {
             className: 'BaseTileLevel'
         }, building.getLevel()),
-        m('span', {
-
-        }, [JSON.stringify(Base.getSurroundingXY(x, y))])
+        m('span', {}, [JSON.stringify(Base.getSurroundingXY(x, y))])
     ]);
 }

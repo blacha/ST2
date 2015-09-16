@@ -43,7 +43,7 @@ export var BaseRender = {
             baseProp(base);
 
             return base;
-        }).then(function(base) {
+        }).then(function (base) {
             var production = BaseProduction.getOutput(base);
             console.log(production);
         });
@@ -85,9 +85,11 @@ export var BaseRender = {
 
 function makeBaseTiles(ctrl, base:Base) {
     var tiles = base.buildingsForEach(RenderBuildingTile);
-    return m('div', { className: 'BaseTiles', onclick: function(evt){
-        console.log('base-click', evt);
-    }}, tiles);
+    return m('div', {
+        className: 'BaseTiles', onclick: function (evt) {
+            console.log('base-click', evt);
+        }
+    }, tiles);
 }
 
 function makeBaseHeader(base:Base) {
