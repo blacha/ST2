@@ -1,19 +1,20 @@
 import {Base} from './base';
 import {Building} from './building/building';
+import {BuildingType} from './building/buildingtype';
 import {Tile} from './base/tile';
 import * as Util from './util';
 import {Constants} from './constants';
 
 interface RawProduction {
     cont: number;
-    pkg: number;
+    pkg?: number;
 }
 
 interface BaseOutput {
-    tiberium: RawProduction;
-    crystal: RawProduction;
-    power: RawProduction;
-    credit: RawProduction;
+    tiberium?: RawProduction;
+    crystal?: RawProduction;
+    power?: RawProduction;
+    credit?: RawProduction;
 }
 
 
@@ -52,17 +53,48 @@ var LinkValues = [
  4: 10:00
  5: 20:00
  */
-var LinkBonus = {
-    AccumPower: [0, 72, 90, 120, 160, 215, 275, 335, 400, 460, 530, 610, 700],
-    Silo: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710],
-    Harvester: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710],
-    PowerAccum: [0, 48, 60, 80, 110, 145, 185, 225, 265, 310, 355, 405, 465],
-    RefineryPower: [0, 48, 60, 75, 100, 125, 160, 195, 230, 270, 315, 370, 430],
-    PowerRefiniery: [0, 72, 90, 110, 145, 190, 240, 290, 345, 410, 475, 555, 650]
-}
+var Links = {
+    AccumPower: {buildings: [], values: [0, 72, 90, 120, 160, 215, 275, 335, 400, 460, 530, 610, 700]},
+    Silo: {
+        buildings: [
+            BuildingType.GDI.TiberiumHarvester.getID(),
+            BuildingType.NOD.TiberiumHarvester.getID()
+        ],
+        values: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710]
+    },
+    Harvester: {
+        buildings: [
+            BuildingType.GDI.Silo.getID(),
+            BuildingType.NOD.Silo.getID()
+        ],
+        values: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710]
+    },
+    PowerAccum: {buildings: [], values: [0, 48, 60, 80, 110, 145, 185, 225, 265, 310, 355, 405, 465]},
+    RefineryPower: {buildings: [], values: [0, 48, 60, 75, 100, 125, 160, 195, 230, 270, 315, 370, 430]},
+    PowerRefiniery: {buildings: [], values: [0, 72, 90, 110, 145, 190, 240, 290, 345, 410, 475, 555, 650]}
+};
+
 
 export class BaseProduction {
-    static getOutput(base:Base) {
+    static getOutput(base:Base):BaseOutput {
+        var output = {
+            tiberium: {
+                cont: 0,
+                pkg: 0
+            },
+            crystal: {
+                cont: 0,
+                pkg: 0
+            },
+            credit: {
+                cont: 0,
+                pkg: 0
+            },
+            power: {
+                cont: 0,
+                pkg: 0
+            }
+        };
         var tiberium = [];
         var crystal = [];
         base.buildingsForEach(function (x, y, building, tile, base) {
@@ -70,42 +102,112 @@ export class BaseProduction {
                 return;
             }
 
-            if (building.getClassName() === 'harvester') {
+            var className = building.getClassName();
+            var production;
+            if (className === 'harvester') {
+                production = BaseProduction.getHavesterProduction(base, x, y, building);
                 if (tile == Tile.Tiberium) {
-                    tiberium.push(building);
+                    output.tiberium.cont += production.cont;
+                    output.tiberium.pkg += production.pkg;
                 } else if (tile == Tile.Crystal) {
-                    crystal.push(building);
+                    output.crystal.cont += production.cont;
+                    output.crystal.pkg += production.pkg;
                 }
+                return;
+            }
+
+            if (className === 'silo') {
+                production = BaseProduction.getSiloProduction(base, x, y, building);
+                if (production.tiberium.cont > 0) {
+                    output.tiberium.cont += production.tiberium.cont;
+                    output.tiberium.pkg += production.tiberium.pkg;
+                }
+                if (production.crystal.cont > 0) {
+                    output.crystal.cont += production.crystal.cont;
+                    output.crystal.pkg += production.crystal.pkg;
+                }
+                return;
+            }
+
+            if (className === 'power-plant') {
+                production = BaseProduction.getPowerPlantProduction(base, x, y, building);
+                output.power.cont += production.cont;
+                output.power.pkg += production.pkg;
             }
         });
 
+        console.log('tiberium', tiberium);
+        console.log('crystal', crystal);
 
-
-        return tiberium.map(function (building:Building) {
-            var GD = building.getGameData();
-            var output = BaseProduction.getProductionValue(building);
-            //console.log(output);
-        })
+        return output;
     }
 
-    static getProductionValue(building:Building, productionType?:string):RawProduction {
-        var tiberium = [];
+    static getSiloProduction(base:Base, x:number, y:number, building:Building):BaseOutput {
+        var output = {
+            crystal: {
+                cont: 0,
+                pkg: 0
+            },
+            tiberium: {
+                cont: 0,
+                pkg: 0
+            }
+        };
         var gd = building.getGameData();
 
-        var modifiers = gd.modifiers;
-        var maxMod = modifiers[modifiers.length - 1];
-        if (maxMod.TiberiumPackageTime == null) {
-            return null;
+        var nearBy = base.getSurroundingBuildings(x, y, Links.Silo.buildings);
+        var perHarvester = Util.getGrowthValue(Links.Silo.values, building.getLevel());
+        for (var i = 0; i < nearBy.length; i++) {
+            var nearBuilding = nearBy[i];
+            var tile = base.getTile(nearBuilding.x, nearBuilding.y);
+            if (tile === Tile.Tiberium) {
+                output.tiberium.cont += perHarvester;
+            } else if (tile === Tile.Crystal) {
+                output.crystal.cont += perHarvester
+            }
         }
+
+        return output;
+    }
+
+    static getPowerPlantProduction(base:Base, x:number, y:number, building:Building):RawProduction {
+        var output = {
+            cont: 0,
+            pkg: 0
+        };
+        var gd = building.getGameData();
+
+        var nearBy = base.getSurroundingBuildings(x, y, Links.PowerPlant.buildings, Links.PowerPlant.tiles);
+        var perHarvester = Util.getGrowthValue(Links.Silo.values, building.getLevel());
+        for (var i = 0; i < nearBy.length; i++) {
+            var nearBuilding = nearBy[i];
+            var tile = base.getTile(nearBuilding.x, nearBuilding.y);
+            if (tile === Tile.Tiberium) {
+                output.tiberium.cont += perHarvester;
+            } else if (tile === Tile.Crystal) {
+                output.crystal.cont += perHarvester
+            }
+        }
+
+        return output;
+    }
+
+    static getHavesterProduction(base:Base, x:number, y:number, building:Building):RawProduction {
+        var gd = building.getGameData();
 
         // Package amount is per minute
         var packTime = Util.getModifierValue(gd, 'TiberiumPackageTime', building.getLevel(), 1);
         var packAmount = Util.getModifierValue(gd, 'TiberiumPackage', building.getLevel());
         var outputPackage = (packAmount / packTime) * 3600;
-        console.log(building.getLevel(), Util.formatNumber(outputPackage));
+
+        var nearBy = base.getSurroundingBuildings(x, y, Links.Harvester.buildings);
+        var outputCont = 0;
+        if (nearBy.length > 0) {
+            outputCont = Util.getGrowthValue(Links.Harvester.values, building.getLevel());
+        }
 
         return {
-            cont: 0,
+            cont: outputCont,
             pkg: outputPackage
         };
     }

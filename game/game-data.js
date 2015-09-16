@@ -16,19 +16,18 @@ function getFaction(name) {
 var MODIFIERS = {
     2: 'TiberiumStorage',
     25: 'TiberiumPackage',
-
-    33: 'TiberiumContinous', // TiberiumPackageTime
+    33: 'TiberiumPackageTime', // TiberiumPackageTime
 
     5: 'CrystalStorage',
-    26: 'CrystalPackage',
-    34: 'CrystalContinous', // CrystalPackageTime
+    //26: 'TiberiumPackage',// these numbers are the same so ignore them
+    //34: 'TiberiumPackageTime', // CrystalPackageTime
 
     32: 'CreditPackage',
-    36: 'CreditContinous',
+    36: 'CreditTime',
 
     29: 'PowerStorage',
     28: 'PowerPackage',
-    35: 'PowerContinous',
+    35: 'PowerTime',
 
     37: 'RepairEfficiencyBase',
     39: 'RepairEfficiencyAir',

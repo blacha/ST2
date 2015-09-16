@@ -1,5 +1,4 @@
 import {GameDataJSON} from '../lib/data/gamedata';
-
 export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
 {
     "id": 81,
@@ -1976,60 +1975,38 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
     }],
     "modifiers": [{}, {
         "TiberiumPackage": 4,
-        "CrystalPackage": 4,
         "TiberiumPackageTime": 60,
-        "CrystalPackageTime": 60
     }, {
         "TiberiumPackage": 10,
-        "CrystalPackage": 10,
         "TiberiumPackageTime": 120,
-        "CrystalPackageTime": 120
     }, {
         "TiberiumPackage": 24,
-        "CrystalPackage": 24,
         "TiberiumPackageTime": 200,
-        "CrystalPackageTime": 200
     }, {
         "TiberiumPackage": 95,
-        "CrystalPackage": 95,
         "TiberiumPackageTime": 600,
-        "CrystalPackageTime": 600
     }, {
         "TiberiumPackage": 245,
-        "CrystalPackage": 245,
         "TiberiumPackageTime": 1200,
-        "CrystalPackageTime": 1200
     }, {
         "TiberiumPackage": 460,
-        "CrystalPackage": 460,
         "TiberiumPackageTime": 1800,
-        "CrystalPackageTime": 1800
     }, {
         "TiberiumPackage": 1120,
-        "CrystalPackage": 1120,
         "TiberiumPackageTime": 3600,
-        "CrystalPackageTime": 3600
     }, {
         "TiberiumPackage": 2660,
-        "CrystalPackage": 2660,
         "TiberiumPackageTime": 7200,
-        "CrystalPackageTime": 7200
     }, {
         "TiberiumPackage": 3900,
-        "CrystalPackage": 3900,
         "TiberiumPackageTime": 9000,
-        "CrystalPackageTime": 9000
     }, {
         "TiberiumPackage": 5400,
-        "CrystalPackage": 5400,
         "TiberiumPackageTime": 10800,
-        "CrystalPackageTime": 10800
     }, {
         "TiberiumPackage": 8200,
-        "CrystalPackage": 8200,
         "TiberiumPackageTime": 14400,
-        "CrystalPackageTime": 14400
-    }, {"TiberiumPackage": 14160, "CrystalPackage": 14160, "TiberiumPackageTime": 21600, "CrystalPackageTime": 21600}]
+    }, {"TiberiumPackage": 14160,  "TiberiumPackageTime": 21600}]
 }, {
     "id": 116,
     "speed": 0,
@@ -3801,60 +3778,38 @@ export var GAMEDATA:GameDataJSON[] = [<GameDataJSON>
     }],
     "modifiers": [{}, {
         "TiberiumPackage": 4,
-        "CrystalPackage": 4,
         "TiberiumPackageTime": 60,
-        "CrystalPackageTime": 60
     }, {
         "TiberiumPackage": 10,
-        "CrystalPackage": 10,
         "TiberiumPackageTime": 120,
-        "CrystalPackageTime": 120
     }, {
         "TiberiumPackage": 24,
-        "CrystalPackage": 24,
         "TiberiumPackageTime": 200,
-        "CrystalPackageTime": 200
     }, {
         "TiberiumPackage": 95,
-        "CrystalPackage": 95,
         "TiberiumPackageTime": 600,
-        "CrystalPackageTime": 600
     }, {
         "TiberiumPackage": 245,
-        "CrystalPackage": 245,
         "TiberiumPackageTime": 1200,
-        "CrystalPackageTime": 1200
     }, {
         "TiberiumPackage": 460,
-        "CrystalPackage": 460,
         "TiberiumPackageTime": 1800,
-        "CrystalPackageTime": 1800
     }, {
         "TiberiumPackage": 1120,
-        "CrystalPackage": 1120,
         "TiberiumPackageTime": 3600,
-        "CrystalPackageTime": 3600
     }, {
         "TiberiumPackage": 2660,
-        "CrystalPackage": 2660,
         "TiberiumPackageTime": 7200,
-        "CrystalPackageTime": 7200
     }, {
         "TiberiumPackage": 3900,
-        "CrystalPackage": 3900,
         "TiberiumPackageTime": 9000,
-        "CrystalPackageTime": 9000
     }, {
         "TiberiumPackage": 5400,
-        "CrystalPackage": 5400,
         "TiberiumPackageTime": 10800,
-        "CrystalPackageTime": 10800
     }, {
         "TiberiumPackage": 8200,
-        "CrystalPackage": 8200,
         "TiberiumPackageTime": 14400,
-        "CrystalPackageTime": 14400
-    }, {"TiberiumPackage": 14160, "CrystalPackage": 14160, "TiberiumPackageTime": 21600, "CrystalPackageTime": 21600}]
+    }, {"TiberiumPackage": 14160,  "TiberiumPackageTime": 21600}]
 }, {
     "id": 156,
     "speed": 0,

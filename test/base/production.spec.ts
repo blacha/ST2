@@ -20,23 +20,42 @@ Util.loadGameData(false);
 
 var base = new Base();
 
-base.setTile(1, 1, Tile.Tiberium);
-base.setTile(1, 2, Tile.Tiberium);
-base.setTile(1, 3, Tile.Tiberium);
-base.setTile(1, 4, Tile.Tiberium);
-base.setTile(1, 5, Tile.Tiberium);
-base.setTile(1, 6, Tile.Tiberium);
+base.setTile(0, 1, Tile.Tiberium);
+base.setTile(0, 2, Tile.Tiberium);
+base.setTile(0, 3, Tile.Tiberium);
 
-base.setBase(1, 1, new Building(BuildingType.GDI.TiberiumHarvester, 12));
-base.setBase(1, 2, new Building(BuildingType.GDI.TiberiumHarvester, 13));
-base.setBase(1, 3, new Building(BuildingType.GDI.TiberiumHarvester, 14));
-base.setBase(1, 4, new Building(BuildingType.GDI.TiberiumHarvester, 15));
-base.setBase(1, 5, new Building(BuildingType.GDI.TiberiumHarvester, 20));
-base.setBase(1, 6, new Building(BuildingType.GDI.TiberiumHarvester, 40));
-base.setBase(1, 0, new Building(BuildingType.GDI.Silo, 1));
+base.setTile(0, 5, Tile.Tiberium);
+base.setTile(0, 6, Tile.Tiberium);
+base.setTile(0, 7, Tile.Tiberium);
+
+base.setTile(2, 1, Tile.Crystal);
+base.setTile(2, 2, Tile.Crystal);
+base.setTile(2, 3, Tile.Crystal);
+
+
+base.setBase(0, 1, new Building(BuildingType.GDI.TiberiumHarvester, 12));
+base.setBase(0, 2, new Building(BuildingType.GDI.TiberiumHarvester, 13));
+base.setBase(0, 3, new Building(BuildingType.GDI.TiberiumHarvester, 14));
+
+base.setBase(1, 1, new Building(BuildingType.GDI.Silo, 12));
+base.setBase(1, 2, new Building(BuildingType.GDI.Silo, 13));
+base.setBase(1, 3, new Building(BuildingType.GDI.Silo, 14));
+
+base.setBase(1, 5, new Building(BuildingType.GDI.Refinery, 12));
+base.setBase(1, 6, new Building(BuildingType.GDI.Refinery, 13));
+base.setBase(1, 7, new Building(BuildingType.GDI.Refinery, 14));
+
+base.setBase(2, 1, new Building(BuildingType.GDI.TiberiumHarvester, 12));
+base.setBase(2, 2, new Building(BuildingType.GDI.TiberiumHarvester, 13));
+base.setBase(2, 3, new Building(BuildingType.GDI.TiberiumHarvester, 14));
+
+base.setBase(3, 1, new Building(BuildingType.GDI.PowerPlant, 12));
+base.setBase(3, 2, new Building(BuildingType.GDI.PowerPlant, 13));
+base.setBase(3, 3, new Building(BuildingType.GDI.PowerPlant, 14));
 
 
 console.log(base.toString());
 var output = BaseProduction.getOutput(base);
 
-console.log('output', output);
+console.log('tiberium', Util.formatNumber(output.tiberium.pkg), Util.formatNumber(output.tiberium.cont));
+console.log('crystal', Util.formatNumber(output.crystal.pkg), Util.formatNumber(output.crystal.cont));

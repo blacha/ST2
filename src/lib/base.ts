@@ -17,6 +17,9 @@ interface CNCLocation {
     x: number;
     y: number;
 }
+interface BuildingLocation extends CNCLocation {
+    building: Buildable;
+}
 
 export class Base {
     private tiles:Tile[];
@@ -41,6 +44,49 @@ export class Base {
 
     getFaction():Faction {
         return this.faction;
+    }
+
+    getSurroundingBuildings(x:number, y:number, filter?:number[]):BuildingLocation[] {
+        var output = [];
+        for(var dx = -1; dx < 2; dx ++) {
+            for (var dy = -1; dy < 2; dy ++) {
+                var offX = x + dx;
+                var offY = y + dy;
+                if (offX < 0 || offX > Constants.MAX_BASE_X) {
+                    continue;
+                }
+                if (offY < 0 || offY > Constants.MAX_BASE_Y) {
+                    continue;
+                }
+                if (offY === y && offX === x) {
+                    continue;
+                }
+
+                var building = this.getBase(offX, offY);
+                if (building == null) {
+                    continue;
+                }
+
+                if (filter != null) {
+                    console.log(building.getID(), building.getName(), filter);
+                    if (filter.indexOf(building.getID()) > -1) {
+                        output.push({
+                            x: offX,
+                            y: offY,
+                            building: building
+                        });
+                    }
+                } else {
+
+                    output.push({
+                        x: offX,
+                        y: offY,
+                        building: building
+                    })
+                }
+            }
+        }
+        return output;
     }
 
     static getSurroundingXY(x:number, y:number): CNCLocation[] {
@@ -175,4 +221,6 @@ export class Base {
     buildings: [${ this.base.filter(removeEmpty).map(toStr).join('\n\t') })}]
         ]`;
     }
+
+
 }
