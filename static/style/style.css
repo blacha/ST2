@@ -103,6 +103,10 @@ body {
     background-image: url('../images/scrub.png');
 }
 
+.BaseTile-Swamp {
+    background-image: url('../images/swamp.png');
+}
+
 .BaseProduction--Group {
     display: flex;
     justify-content: space-between;
