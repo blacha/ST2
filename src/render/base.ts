@@ -10,6 +10,7 @@ import {Constants} from '../lib/constants';
 import {RenderBuildingTile} from './base/tile';
 
 
+
 import {BaseProduction} from '../lib/production';
 
 function ParseConfig(http, opts) {
@@ -44,6 +45,7 @@ export var BaseRender = {
 
             return base;
         }).then(function (base) {
+            console.log('get-production')
             var production = BaseProduction.getOutput(base);
             console.log(production);
         });

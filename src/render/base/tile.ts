@@ -14,7 +14,7 @@ export function RenderBuildingTile(x:number, y:number, building:Building, tile:T
         `BaseRow-${y}`,
         `BaseCol-${x}`,
         `BaseTile-${x}-${y}`];
-    //console.log(x, y, tile);
+
     if (tile !== Tile.Empty) {
         className.push('BaseTile-' + tile.getName())
     }
@@ -39,7 +39,6 @@ export function RenderBuildingTile(x:number, y:number, building:Building, tile:T
         }),
         m('span', {
             className: 'BaseTileLevel'
-        }, building.getLevel()),
-        m('span', {}, [JSON.stringify(Base.getSurroundingXY(x, y))])
+        }, building.getLevel())
     ]);
 }

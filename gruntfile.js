@@ -31,7 +31,7 @@ module.exports = function(grunt) {
 
     config.webpack = {
         default: {
-            entry: ['./build/main.js'],
+            entry: ['./build/src/main.js'],
             module: {
                 loaders: []
             },
