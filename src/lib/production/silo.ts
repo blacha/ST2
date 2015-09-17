@@ -14,7 +14,7 @@ export var SiloCalculator:OutputCalculator = {
     ],
 
     links: {
-        buildings: {
+        Harvester: {
             buildings: [
                 BuildingType.GDI.TiberiumHarvester.getID(),
                 BuildingType.NOD.TiberiumHarvester.getID()
@@ -35,9 +35,9 @@ export var SiloCalculator:OutputCalculator = {
             }
         };
 
-        var Links = SiloCalculator.links.buildings;
-        var nearBy = base.getSurroundings(x, y, Links.buildings);
-        var perHarvester = Util.getGrowthValue(Links.values, building.getLevel());
+        var HarvesterLink = SiloCalculator.links.Harvester;
+        var nearBy = base.getSurroundings(x, y, HarvesterLink.buildings);
+        var perHarvester = Util.getGrowthValue(HarvesterLink.values, building.getLevel());
         for (var i = 0; i < nearBy.length; i++) {
             var nearBuilding = nearBy[i];
             var tile = base.getTile(nearBuilding.x, nearBuilding.y);

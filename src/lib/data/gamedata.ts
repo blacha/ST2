@@ -20,13 +20,20 @@ export interface GameDataWeapon {
     }
     armorType: string;
     damage: number;
+    id: number;
+    type: any;
+    health: number;
 }
 
 export interface GameDataRepair {
     crystal?: number;
     RepairInf?: number;
+    RepairVeh?: number;
+    RepairAir?: number;
+    RepairBase?: number;
     ResearchPoints?: number;
     tiberium?: number;
+    credits?: number;
 }
 
 export interface GameDataResource {

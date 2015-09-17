@@ -8,6 +8,11 @@ import {BuildingType} from './building/buildingtype';
 import {BaseNode} from './base/node';
 
 
+export function random(prefix?:string): string {
+
+    return null;
+}
+
 export var ID_MAP = [];
 export var TECH_MAP = [];
 

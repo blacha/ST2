@@ -1,6 +1,4 @@
-export interface CNCBase {
-    x: number;
-    y: number;
+export interface CNCBase extends CNCLocation{
     level: number;
     name: string;
     faction: number;
@@ -20,4 +18,9 @@ export interface CNCUnit {
 export interface CNCTile extends CNCUnit {
     u: CNCUnit
     t?: number;
+}
+
+export interface CNCLocation {
+    x: number;
+    y: number;
 }

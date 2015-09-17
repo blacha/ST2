@@ -18,19 +18,5 @@ export interface OutputCalculator {
     name: string;
     buildings: number[];
     calculate: (base:Base, x:number, y:number, building:Building) => BaseOutput;
-    links: {
-        buildings: BuildingLink;
-        tiles?: TileLink;
-    }
+    links: any;
 }
-
-export interface BuildingLink {
-    buildings: number[];
-    values: number[];
-}
-
-export interface TileLink {
-    tiles: Tile[];
-    values: number[];
-}
-
