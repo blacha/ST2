@@ -36,7 +36,7 @@ module.exports = function(grunt) {
                 loaders: []
             },
             output: {
-                path: './build/',
+                path: './static/lib/',
                 filename: 'bundle.js',
                 libraryTarget: 'umd',
             },

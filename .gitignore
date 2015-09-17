@@ -3,3 +3,5 @@ target/
 .tscache/
 node_modules/
 build/
+static/lib/bundle.js
+static/lib/bundle.min.js
