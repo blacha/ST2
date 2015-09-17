@@ -218,6 +218,7 @@ CityData.saveToParse = function(data) {
         if (http.readyState == 4 && http.status == 201) {
             var response = JSON.parse(http.responseText);
             var id = response.objectId;
+            console.log(id);
         }
     };
 

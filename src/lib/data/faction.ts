@@ -14,8 +14,12 @@ export class Faction {
         return this.name;
     }
 
+    getClassName() {
+        return this.name.toLowerCase();
+    }
+
     static fromID(id:number) {
-        if (id == 7 || id == 4) {
+        if (id == 7 || id == 4 || id == 6) {
             return Faction.Forgotten;
         }
 
@@ -27,6 +31,7 @@ export class Faction {
             return Faction.NOD;
         }
 
+        return Faction.Forgotten;
         console.log('Unknown faction', id);
     }
 

@@ -8,7 +8,7 @@ import {Building} from '../../lib/building/building';
 import {Buildable} from '../../lib/base/buildable';
 import {Constants} from '../../lib/constants';
 
-export function RenderBuildingTile(x:number, y:number, building:Building, tile:Tile, base:Base) {
+export function RenderBuildingTile(x:number, y:number, building:Buildable, tile:Tile, base:Base) {
     var className = [
         'BaseTile',
         `BaseRow-${y}`,

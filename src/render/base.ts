@@ -7,9 +7,9 @@ import {Tile} from '../lib/base/tile';
 import {Building} from '../lib/building/building';
 import {Buildable} from '../lib/base/buildable';
 import {Constants} from '../lib/constants';
+
 import {RenderBuildingTile} from './base/tile';
-
-
+import {RenderBaseHeader} from './base/header';
 
 import {BaseProduction} from '../lib/production';
 
@@ -40,14 +40,8 @@ export var BaseRender = {
         var baseProp = m.prop();
 
         getParseData(baseID).then(function (base) {
-            console.log('set-prop', base);
             baseProp(base);
-
             return base;
-        }).then(function (base) {
-            console.log('get-production')
-            var production = BaseProduction.getOutput(base);
-            console.log(production);
         });
 
         return {
@@ -64,19 +58,17 @@ export var BaseRender = {
             console.log('not-ready');
             return;
         }
-        console.log('base-data', ctrl.base);
 
         var base = ctrl.base();
         if (base == null) {
             console.log('no-base');
             return;
         }
-        console.log(base.getName());
         console.time('base-render');
         var output = m('div', {
-            className: 'Container'
+            className: 'BaseContainer'
         }, [
-            makeBaseHeader(base),
+            RenderBaseHeader(base),
             makeBaseTiles(ctrl, base)
         ]);
         console.timeEnd('base-render');
@@ -86,23 +78,17 @@ export var BaseRender = {
 };
 
 function makeBaseTiles(ctrl, base:Base) {
-    var tiles = base.buildingsForEach(RenderBuildingTile);
+    var baseTiles =  m('div.BuildingTiles', base.buildingsForEach(RenderBuildingTile));
+    var defTiles = m('div.DefTiles', base.defForEach(RenderBuildingTile));
+    var offTiles = m('div.OffTiles', base.offForEach(RenderBuildingTile));
+
     return m('div', {
         className: 'BaseTiles', onclick: function (evt) {
             console.log('base-click', evt);
         }
-    }, tiles);
-}
-
-function makeBaseHeader(base:Base) {
-    return m('div', {
-        className: 'BaseHead'
     }, [
-        m('span', {
-            className: 'BaseName',
-        }, base.getName()),
-        m('span', {
-            className: 'BaseFaction'
-        }, base.getFaction().getName())
-    ])
+        baseTiles,
+        defTiles,
+        offTiles
+    ]);
 }

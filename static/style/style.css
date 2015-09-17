@@ -1,10 +1,13 @@
 body {
     font-family: 'Roboto';
+    letter-spacing: 0.02em;
 }
 
 .Container {
+    width: 1440px;
+}
+.BaseContainer {
     width: 600px;
-    margin: auto;
 }
 
 .BaseHead {
@@ -19,9 +22,14 @@ body {
     padding: 10px 5px;
 }
 
-.BaseTiles {
+.BaseTiles, .BuildingTiles, .OffTiles, .DefTiles {
     display: flex;
     flex-wrap: wrap;
+}
+
+.OffTiles, .DefTiles {
+    margin-top: 27px;
+    border-top: 1px solid #ddd;
 }
 
 .BaseCol-0 {
@@ -69,11 +77,86 @@ body {
     border: 1px solid black;
 }
 
+.BaseTile {
+    background-size: contain;
+}
+
 .BaseTile-Tiberium {
     background-image: url('../images/tiberium.png');
-    background-size: contain;
 }
+
 .BaseTile-Crystal {
     background-image: url('../images/crystal.png');
-    background-size: contain;
 }
+
+.BaseTile-Woods {
+    background-image: url('../images/woods.png');
+}
+
+.BaseTile-Oil {
+    background-image: url('../images/oil.png');
+}
+
+.BaseTile-Scrub {
+    background-image: url('../images/scrub.png');
+}
+
+.BaseProduction--Group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.BaseProduction {
+    line-height: 24px;
+    padding: 4px;
+    display: flex;
+}
+
+.BaseProduction--Value {
+    padding-left: 9px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+i {
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+}
+
+/**
+    Icons
+**/
+i.icon-tiberium {
+    background-image: url('../images/icon_tiberium.png');
+}
+
+i.icon-crystal {
+    background-image: url('../images/icon_crystal.png');
+}
+
+i.icon-power {
+    background-image: url('../images/icon_power.png');
+}
+
+i.icon-credit {
+    background-image: url('../images/icon_credits.png');
+}
+
+i.icon-gdi {
+    background-image: url('../images/icon_gdi.png');
+}
+
+i.icon-nod {
+    background-image: url('../images/icon_nod.png');
+}
+
+i.icon-forgotten {
+    background-image: url('../images/icon_for.png');
+}
+
+/**
+    End Icons
+**/

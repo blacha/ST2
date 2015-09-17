@@ -26,6 +26,8 @@ export class Base {
     private tiles:Tile[];
     private base:Buildable[];
     private upgrades:number[];
+    private x:number;
+    private y:number;
 
     constructor(private name?:string, private faction?:Faction) {
         this.name = this.name || 'Base';
@@ -164,6 +166,28 @@ export class Base {
         return output;
     }
 
+    defForEach(callback:(x:number, y:number, unit:Unit, tile:Tile, base:Base) => any):any[] {
+        var output = [];
+        for (var y = Constants.MAX_BASE_Y; y < Constants.MAX_DEF_Y; y++) {
+            for (var x = 0; x < Constants.MAX_BASE_X; x++) {
+                var index = Base.$index(x, y);
+                output.push(callback(x, y, <Unit>this.base[index], this.getTile(x, y), this));
+            }
+        }
+        return output;
+    }
+
+    offForEach(callback:(x:number, y:number, unit:Unit, tile:Tile, base:Base) => any):any[] {
+        var output = [];
+        for (var y = Constants.MAX_DEF_Y; y < Constants.MAX_OFF_Y; y++) {
+            for (var x = 0; x < Constants.MAX_BASE_X; x++) {
+                var index = Base.$index(x, y);
+                output.push(callback(x, y, <Unit>this.base[index], this.getTile(x, y), this));
+            }
+        }
+        return output;
+    }
+
     getTile(x:number, y:number) {
         return this.tiles[Base.$index(x, y)] || Tile.Empty;
     }
@@ -190,10 +214,11 @@ export class Base {
 
     static load(cncbase:CNCBase):Base {
         var output = new Base(cncbase.name, Faction.fromID(cncbase.faction));
+        output.setLocation(cncbase.x, cncbase.y);
 
         for (var y = 0; y < Constants.MAX_Y; y++) {
             for (var x = 0; x < Constants.MAX_BASE_X; x++) {
-                var index = x + '-' + y; // Base.$index(x, y);
+                var index = Base.$index(x, y);
                 var unit = cncbase.tiles[index];
                 var tile:Tile;
 
@@ -252,4 +277,15 @@ export class Base {
     }
 
 
+    setLocation(x:number, y:number):void {
+        this.x = x;
+        this.y = y;
+    }
+
+    getLocation():CNCLocation {
+        return {
+            x: this.x,
+            y: this.y
+        }
+    }
 }
