@@ -13,6 +13,10 @@ module.exports = function(grunt) {
         src: {
             files: ['src/**/*.ts'],
             tasks: ['typescript', 'package']
+        },
+        sass: {
+            files: ['src/**/*.cscc'],
+            tasks: ['sass']
         }
     };
 
@@ -78,6 +82,19 @@ module.exports = function(grunt) {
             src: ['build/test/**/*.spec.js']
         }
     };
+
+    config.sass = {
+        options: {
+            sourceMap: true
+        },
+        dist: {
+            files: [{
+                src: 'src/**/*.scss',
+                dest: './static/lib/style.css'
+            }]
+        }
+    };
+
     grunt.initConfig(config);
 
     grunt.registerTask('default', ['build', 'package', 'watch']);
