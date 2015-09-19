@@ -1,0 +1,117 @@
+
+.BaseContainer {
+  width: 600px;
+  margin: auto;
+}
+
+.BaseHead {
+  font-size: 200%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+
+.BaseTitle {
+  font-size: 120%;
+  padding: 10px 5px;
+}
+
+.BaseTiles, .BuildingTiles, .OffTiles, .DefTiles {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.OffTiles, .DefTiles {
+  margin-top: 27px;
+  border-top: 1px solid #ddd;
+}
+
+.BaseCol-0 {
+  border-left: 1px solid #ddd;
+}
+
+.BaseRow-0 {
+  border-top: 1px solid #ddd;
+}
+
+.BaseTile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 65px;
+  height: 50px;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+.BaseTile img {
+  width: 55px;
+  max-width: 55px;
+  max-height: 55px;
+}
+
+.UnitUpgrade .BaseTileLevel {
+  background-image: url('../images/star.png');
+  background-size: 12px;
+  background-position: 2px 1px;
+  background-repeat: no-repeat;
+  padding-left: 15px;
+  padding-right: 3px;
+}
+
+.BaseTileLevel {
+  position: absolute;
+  bottom: 4px;
+  left: 2px;
+  font-size: 0.8em;
+  background-color: #ddd;
+  color: black;
+  padding: 0 2px;
+  border: 1px solid black;
+}
+
+.BaseTile {
+  background-size: contain;
+}
+
+.BaseTile-Tiberium {
+  background-image: url('../images/tiberium.png');
+}
+
+.BaseTile-Crystal {
+  background-image: url('../images/crystal.png');
+}
+
+.BaseTile-Woods {
+  background-image: url('../images/woods.png');
+}
+
+.BaseTile-Oil {
+  background-image: url('../images/oil.png');
+}
+
+.BaseTile-Scrub {
+  background-image: url('../images/scrub.png');
+}
+
+.BaseTile-Swamp {
+  background-image: url('../images/swamp.png');
+}
+
+.BaseProduction--Group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.BaseProduction {
+  line-height: 24px;
+  padding: 4px;
+  display: flex;
+}
+
+.BaseProduction--Value {
+  padding-left: 9px;
+  font-weight: 500;
+  letter-spacing: 0;
+}

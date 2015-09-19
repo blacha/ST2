@@ -1,13 +1,14 @@
-var LAYOUT_ICON = m('i.icon-logo');
+var LAYOUT_ICON = m('div.', m('i.icon-logo'));
 
 export function LayoutHeader(config) {
 
-    return m('header.LayoutHeader', [
-        m('div.row', [
-            m('div.col-lg-2'),
-            m('div.col-lg-1', LAYOUT_ICON),
-            m('div.col-lg-5', LayoutNavigation(config))
-        ])
+    return m('header.LayoutHeader.Wrapper.Grid', [
+        m('div.Cell--1.Cell--offset-2', LAYOUT_ICON),
+        m('div.Cell--9', LayoutNavigation(config)),
+        //m('div.Grid-cell.content-1of1'),
+        //m('div.Grid-cell.content-1of1'),
+        //m('div.Grid-cell.content-1of1')
+
     ]);
 }
 
@@ -36,6 +37,6 @@ export function createLayout(config, content) {
     config = config || {page: 'Base'};
     return [
         LayoutHeader(config),
-        m('div.Content', content)
+        m('div', {className: 'Wrapper Grid'}, content)
     ];
 }

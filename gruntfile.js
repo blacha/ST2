@@ -15,7 +15,7 @@ module.exports = function(grunt) {
             tasks: ['typescript', 'package']
         },
         sass: {
-            files: ['src/**/*.cscc'],
+            files: ['src/**/*.scss'],
             tasks: ['sass']
         }
     };
@@ -89,7 +89,7 @@ module.exports = function(grunt) {
         },
         dist: {
             files: [{
-                src: 'src/**/*.scss',
+                src: 'src/render/style.scss',
                 dest: './static/lib/style.css'
             }]
         }
