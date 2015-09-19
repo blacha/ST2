@@ -5,16 +5,20 @@ import * as Util from '../../lib/util';
 
 
 var ORDER = ['tiberium', 'crystal', 'power', 'credit'];
-export function RenderBaseHeader(base:Base) {
-    return m('div', {
-        className: 'BaseHeader'
-    }, [
-        makeTitle(base),
-        makeProduction(base)
-    ])
+//export function RenderBaseHeader(base:Base) {
+//    return m('div', {
+//        className: 'BaseHeader'
+//    }, [
+//        makeTitle(base),
+//        makeProduction(base)
+//    ])
+//}
+
+export function makeSideInfo(base:Base) {
+    return makeProduction(base);
 }
 
-function makeProduction(base:Base) {
+export function makeProduction(base:Base) {
     var production = BaseProduction.getOutput(base);
 
     var productionLists = ORDER.map(function (key) {
@@ -24,32 +28,39 @@ function makeProduction(base:Base) {
             className: 'BaseProduction BaseProduction--' + key
         }, [
             m('i.icon-' + key),
-            m('span.BaseProduction--Value', Util.formatNumber(output.cont + output.pkg) + '/h')
+            m('span.BaseProduction-Value', Util.formatNumber(output.cont + output.pkg) + '/h')
         ]);
     });
 
     return m('div', {
-        className: 'BaseProduction--Group'
-    }, productionLists);
+        className: 'BaseProduction--Group BoxShadow'
+    }, [
+        m('span.BaseProduction-Title', 'Production'),
+        productionLists
+    ]);
 }
 
 
-function makeTitle(base:Base) {
+export function makeTitle(base:Base) {
     var location = base.getLocation();
     return m('div', {
-        className: 'BaseHead'
+        className: 'BaseInfo BoxShadow'
     }, [
         m('span', {
             className: 'BaseName',
-        }, base.getName()),
-        m('span', {
-            className: 'BaseLocation'
-        }, `${location.x}:${location.y}`),
-        m('span', {
-            className: 'BaseFaction'
         }, [
             m('i.icon-' + base.getFaction().getClassName()),
-            m('span.BaseFaction--name', base.getFaction().getName())
-        ])
+            m('div.BaseName-Name', base.getName())
+        ]),
+        m('span', {
+            className: 'BaseLocation'
+        }, `${location.x}:${location.y}`)
+
+        //m('span', {
+        //    className: 'BaseFaction'
+        //}, [
+        //    m('i.icon-' + base.getFaction().getClassName()),
+        //    m('span.BaseFaction--name', base.getFaction().getName())
+        //])
     ])
 }

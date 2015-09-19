@@ -4,16 +4,16 @@
 import {CNCBase} from '../client/client.base';
 import {Base} from '../lib/base';
 import {Tile} from '../lib/base/tile';
+import {Faction} from '../lib/data/faction';
 import {Building} from '../lib/building/building';
 import {Buildable} from '../lib/base/buildable';
 import {Constants} from '../lib/constants';
 
 import {RenderBuildingTile} from './base/tile';
-import {RenderBaseHeader} from './base/header';
+import * as Header from './base/header';
+import * as Layout from './layout/layout';
 
 import {BaseProduction} from '../lib/production';
-
-import * as Layout from './layout/layout';
 
 
 function ParseConfig(http, opts) {
@@ -67,23 +67,25 @@ export var BaseRender = {
             console.log('no-base');
             return;
         }
-        console.time('base-render');
-        var baseOutput = m('div', {
-            className: 'BaseContainer'
-        }, [
-            RenderBaseHeader(base),
-            makeBaseTiles(ctrl, base)
-        ]);
-        console.timeEnd('base-render');
 
-        return Layout.createLayout(null, baseOutput);
+
+        return Layout.createLayout(null, [
+            m('div.Cell--2', Header.makeTitle(base)),
+            m('div.Cell--8', makeBaseTiles(ctrl, base)),
+            m('div.Cell--2', Header.makeSideInfo(base))
+        ]);
     }
 };
 
+
 function makeBaseTiles(ctrl, base:Base) {
-    var baseTiles =  m('div.BuildingTiles', base.buildingsForEach(RenderBuildingTile));
+    var baseTiles = m('div.BuildingTiles', base.buildingsForEach(RenderBuildingTile));
     var defTiles = m('div.DefTiles', base.defForEach(RenderBuildingTile));
-    var offTiles = m('div.OffTiles', base.offForEach(RenderBuildingTile));
+
+    var offTiles;
+    if (base.getFaction() !== Faction.Forgotten){
+        offTiles = m('div.OffTiles', base.offForEach(RenderBuildingTile));
+    }
 
     return m('div', {
         className: 'BaseTiles', onclick: function (evt) {

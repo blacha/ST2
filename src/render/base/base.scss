@@ -1,9 +1,4 @@
 
-.BaseContainer {
-  width: 600px;
-  margin: auto;
-}
-
 .BaseHead {
   font-size: 200%;
   display: flex;
@@ -11,9 +6,19 @@
   margin-bottom: 9px;
 }
 
+.BaseInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
 .BaseTitle {
   font-size: 120%;
   padding: 10px 5px;
+}
+
+.BaseTiles {
+  width: 639px;
 }
 
 .BaseTiles, .BuildingTiles, .OffTiles, .DefTiles {
@@ -38,11 +43,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 65px;
-  height: 50px;
+  width: 70px;
+  height: 45px;
   border-right: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   position: relative;
+  background-color: #f5f5f5;
 }
 
 .BaseTile img {
@@ -73,6 +79,7 @@
 
 .BaseTile {
   background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .BaseTile-Tiberium {
@@ -102,6 +109,9 @@
 .BaseProduction--Group {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  height: 200px;
+  padding: 8px;
 }
 
 .BaseProduction {
@@ -114,4 +124,18 @@
   padding-left: 9px;
   font-weight: 500;
   letter-spacing: 0;
+}
+
+.BaseName, .BaseFaction-Name {
+  text-overflow: ellipsis;
+}
+
+.BaseName {
+  height: 32px;
+  display: flex;
+  align-content: center;
+}
+
+.BaseName-Name {
+  padding: 4px;
 }

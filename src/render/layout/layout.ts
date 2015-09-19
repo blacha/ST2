@@ -2,13 +2,9 @@ var LAYOUT_ICON = m('div.', m('i.icon-logo'));
 
 export function LayoutHeader(config) {
 
-    return m('header.LayoutHeader.Wrapper.Grid', [
+    return m('header.Wrapper.Grid.LayoutHeader', [
         m('div.Cell--1.Cell--offset-2', LAYOUT_ICON),
-        m('div.Cell--9', LayoutNavigation(config)),
-        //m('div.Grid-cell.content-1of1'),
-        //m('div.Grid-cell.content-1of1'),
-        //m('div.Grid-cell.content-1of1')
-
+        m('div.Cell--9', LayoutNavigation(config))
     ]);
 }
 
@@ -37,6 +33,6 @@ export function createLayout(config, content) {
     config = config || {page: 'Base'};
     return [
         LayoutHeader(config),
-        m('div', {className: 'Wrapper Grid'}, content)
+        m('div', {className: 'Content Wrapper Grid'}, content)
     ];
 }
