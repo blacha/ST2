@@ -13,6 +13,9 @@ import {RenderBaseHeader} from './base/header';
 
 import {BaseProduction} from '../lib/production';
 
+import * as Layout from './layout/layout';
+
+
 function ParseConfig(http, opts) {
     http.setRequestHeader('X-Parse-Application-Id', 'p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ');
     http.setRequestHeader('X-Parse-REST-API-Key', 'UdPxMf4bww3S5KSUe9qAFYMaZ1mfEGYE2TGePGTU');
@@ -65,7 +68,7 @@ export var BaseRender = {
             return;
         }
         console.time('base-render');
-        var output = m('div', {
+        var baseOutput = m('div', {
             className: 'BaseContainer'
         }, [
             RenderBaseHeader(base),
@@ -73,7 +76,7 @@ export var BaseRender = {
         ]);
         console.timeEnd('base-render');
 
-        return output;
+        return Layout.createLayout(null, baseOutput);
     }
 };
 

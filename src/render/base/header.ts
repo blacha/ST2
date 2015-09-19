@@ -14,7 +14,6 @@ export function RenderBaseHeader(base:Base) {
     ])
 }
 
-
 function makeProduction(base:Base) {
     var production = BaseProduction.getOutput(base);
 
