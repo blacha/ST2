@@ -5,6 +5,9 @@ CityData.DEF_OFFSET_Y = 8;
 CityData.OFF_OFFSET_Y = CityData.DEF_OFFSET_Y + 8;
 CityData.MAX_BASE_X = 9;
 
+CityData.FACTION_GDI = 1;
+CityData.FACTION_NOD = 2;
+
 CityData.$index = function(x, y) {
     return x + y * CityData.MAX_BASE_X;
 };
@@ -168,11 +171,19 @@ CityData.getUnits = function(city) {
     var defUnits = units.get_DefenseUnits();
     var offUnits = units.get_OffenseUnits();
 
+    var faction = city.get_CityFaction();
+    if (faction === CityData.FACTION_NOD || faction === CityData.FACTION_GDI) {
+        return {
+            d: Object.keys(defUnits.d).map(GameToJSON.bind(null, CityData.DEF_OFFSET_Y, defUnits.d)),
+            o: Object.keys(offUnits.d).map(GameToJSON.bind(null, CityData.OFF_OFFSET_Y, offUnits.d))
+        }
+    }
+
     return {
         d: Object.keys(defUnits.d).map(GameToJSON.bind(null, CityData.DEF_OFFSET_Y, defUnits.d)),
-        o: Object.keys(offUnits.d).map(GameToJSON.bind(null, CityData.OFF_OFFSET_Y, offUnits.d))
-    }
-};
+        o: []
+    };
+}
 
 CityData.getBuildings = function(city) {
     var buildings = city.get_Buildings();
