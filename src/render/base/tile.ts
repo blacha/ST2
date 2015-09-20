@@ -15,6 +15,10 @@ export function RenderBuildingTile(x:number, y:number, building:Buildable, tile:
         `BaseCol-${x}`,
         `BaseTile-${x}-${y}`];
 
+    if (x == 4 && y == 1) {
+        className.push('BaseTile--Selected');
+    }
+
     if (tile !== Tile.Empty) {
         className.push('BaseTile-' + tile.getName())
     }
