@@ -14,36 +14,15 @@ import * as Header from './base/header';
 import * as Layout from './layout/layout';
 
 import {BaseProduction} from '../lib/production';
-
-
-function ParseConfig(http, opts) {
-    http.setRequestHeader('X-Parse-Application-Id', 'p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ');
-    http.setRequestHeader('X-Parse-REST-API-Key', 'UdPxMf4bww3S5KSUe9qAFYMaZ1mfEGYE2TGePGTU');
-    return http;
-}
-
-function getParseData(id) {
-    var url = 'https://api.parse.com/1/classes/Layout/' + id;
-    return m.request({
-        method: 'GET',
-        url: url,
-        config: ParseConfig
-    }).then(function (data:CNCBase) {
-        console.log('got-data', id, data);
-        return data;
-    }).then(function (data:CNCBase) {
-        return Base.load(data);
-    })
-}
-
+import {ParseUtil} from './parse';
 
 export var BaseRender = {
     controller: function () {
         var baseID = m.route.param('baseID');
         var baseProp = m.prop();
 
-        getParseData(baseID).then(function (base) {
-            baseProp(base);
+        ParseUtil.getData('Layout', baseID).then(function (base) {
+            baseProp(Base.load(base));
             return base;
         });
 
@@ -68,7 +47,6 @@ export var BaseRender = {
             return;
         }
 
-
         return Layout.createLayout(null, [
             m('div.Cell--2', Header.makeTitle(base)),
             m('div.Cell--8', makeBaseTiles(ctrl, base)),
@@ -83,7 +61,7 @@ function makeBaseTiles(ctrl, base:Base) {
     var defTiles = m('div.DefTiles', base.defForEach(RenderBuildingTile));
 
     var offTiles;
-    if (base.getFaction() !== Faction.Forgotten){
+    if (base.getFaction() !== Faction.Forgotten) {
         offTiles = m('div.OffTiles', base.offForEach(RenderBuildingTile));
     }
 
