@@ -3,15 +3,15 @@
 import {ParseUtil} from '../parse';
 import {FormUtil, FormInputState} from '../form';
 
-export class LoginRender {
+export class RegisterRender {
     static LOGO = m('div.STLogo');
     static CSS = {
-        ERROR: 'is-invalid',
-        LOADING: 'LoginForm--Loading'
+        LOADING: 'LoginForm--Loading',
+        ERROR: 'is-invalid'
     };
 
     private username:FormInputState;
-    private password:FormInputState;
+    private world:FormInputState;
     private loading:_mithril.MithrilProperty<boolean>;
 
     private error:_mithril.MithrilProperty<boolean>;
@@ -19,8 +19,7 @@ export class LoginRender {
 
     constructor() {
         this.username = new FormInputState();
-        this.password = new FormInputState();
-        this.password.type('password');
+        this.world = new FormInputState();
 
         this.loading = m.prop(false);
 
@@ -31,18 +30,19 @@ export class LoginRender {
     view() {
         var loginClass = ['LoginForm'];
         if (this.error()) {
-            loginClass.push(LoginRender.CSS.ERROR);
+            loginClass.push(RegisterRender.CSS.ERROR);
         }
         if (this.loading()) {
-            loginClass.push(LoginRender.CSS.LOADING);
+            loginClass.push(RegisterRender.CSS.LOADING);
         }
 
-        var boundLogin = this.login.bind(this);
+        var boundRegister = this.register.bind(this);
 
         var formInput = m('div.Card-SupportingText', [
+            m('div', 'Please enter your CNC:TA player name.'),
             m('div.LoginForm-ErrorMessage', this.errorMessage()),
-            FormUtil.input('Username', this.username),
-            FormUtil.input('Password', this.password)
+            FormUtil.input('Player Name', this.username),
+            FormUtil.input('World', this.world)
         ]);
 
         var formAction = m('div.Card-Actions', [
@@ -51,25 +51,25 @@ export class LoginRender {
                 disabled: this.loading(),
                 type: 'button',
                 onclick: function () {
-                    return m.route('/register');
+                    return m.route('/login');
                 }
-            }, 'Register'),
+            }, 'Login'),
 
             m('button', {
                 className: 'Button Button--primary',
                 disabled: this.loading(),
                 type: 'submit',
-                onclick: boundLogin
-            }, 'Login')
+                onclick: boundRegister
+            }, 'Register')
         ]);
 
         return m('div', {
             className: loginClass.join(' ')
         }, [
-            LoginRender.LOGO,
+            RegisterRender.LOGO,
             m('div.Card.BoxShadow', [
                 m('form', {
-                    onsubmit: boundLogin
+                    onsubmit: boundRegister
                 }, [
                     formInput,
                     formAction
@@ -78,7 +78,7 @@ export class LoginRender {
         ])
     }
 
-    login() {
+    register() {
         this.clearErrors();
         this.loading(true);
         if (this.username.value().trim() === '') {
@@ -86,12 +86,12 @@ export class LoginRender {
             return;
         }
 
-        if (this.password.value().trim() === '') {
-            this.setError(this.password.error, 'Password is required');
+        if (this.world.value().trim() === '') {
+            this.setError(this.world.error, 'Password is required');
             return;
         }
 
-        ParseUtil.login(this.username.value(), this.password.value()).then(function loginGood(data) {
+        ParseUtil.login(this.username.value(), this.world.value()).then(function loginGood(data) {
             console.log('login-good', data);
             m.route('/');
         }, () => {
@@ -113,15 +113,15 @@ export class LoginRender {
         this.error(false);
         this.loading(false);
         this.username.error('');
-        this.password.error('');
+        this.world.error('');
         this.errorMessage('');
     }
 
     static controller() {
-        return new LoginRender();
+        return new RegisterRender();
     }
 
-    static view(ctrl:LoginRender) {
+    static view(ctrl:RegisterRender) {
         return ctrl.view();
     }
 

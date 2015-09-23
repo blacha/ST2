@@ -9,7 +9,7 @@ export var ParseUtil = {
 
     login: (user:string, pass:string):_mithril.MithrilPromise<any> => {
         return m.request({
-            method: 'GET',
+            method: 'POST',
             url: ParseUtil.URL.LOGIN,
             data: {
                 username: user,

@@ -2,6 +2,7 @@
 
 import {BaseRender} from './base';
 import {LoginRender} from './login/login';
+import {RegisterRender} from './register/register';
 
 export var Render = {
     start: function () {
@@ -10,7 +11,7 @@ export var Render = {
             '/b/:baseID': BaseRender,
             '/layout': null,
             '/login': LoginRender,
-            '/register': LoginRender
+            '/register': RegisterRender
         });
     }
 };

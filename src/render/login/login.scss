@@ -9,4 +9,17 @@
 .LoginForm-ErrorMessage {
   color: $input-text-error-color;
   padding: $padding;
+  display: none;
+}
+
+.LoginForm.is-invalid .LoginForm-ErrorMessage{
+  display: block;
+}
+
+.LoginForm .STLogo {
+  width: 100%;
+}
+
+.LoginForm .Card-Actions {
+  text-align: right;
 }
