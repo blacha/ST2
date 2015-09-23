@@ -12,7 +12,8 @@ interface LoginErrors {
 export class LoginRender {
     static LOGO = m('div.LoginForm-Logo');
     static CSS = {
-        ERROR: 'LoginForm--Error'
+        ERROR: 'LoginForm--Error',
+        LOADING: 'LoginForm--Loading'
     };
 
     private username:_mithril.MithrilProperty<string>;
@@ -37,21 +38,35 @@ export class LoginRender {
     }
 
     view() {
-        var errorClass = '';
-        if (this.error()) {
-            errorClass = '.' + LoginRender.CSS.ERROR;
-        }
+        console.log('login:view');
 
-        return m(`div.LoginForm${errorClass}`, [
+        var loginClass = ['LoginForm'];
+        if (this.error()) {
+            loginClass.push(LoginRender.CSS.ERROR);
+        }
+        if (this.loading()) {
+            loginClass.push(LoginRender.CSS.LOADING);
+        }
+        var boundLogin = this.login.bind(this);
+
+        return m('div', {
+            className: loginClass.join(' ')
+        }, [
             LoginRender.LOGO,
             m('div.Card.BoxShadow', [
-                FormUtil.input('Username', this.username, this.errors.username),
-                FormUtil.password('Password', this.password, this.errors.password),
-                m('button', {
-                    className: 'Input-Button',
-                    disabled: this.loading(),
-                    onclick: this.login.bind(this)
-                }, 'Login')
+                m('form', {
+                    onsubmit: boundLogin
+                }, [
+                    m('div.Login-ErrorMessage', this.errors.general()),
+                    FormUtil.input('Username', this.username, this.errors.username),
+                    FormUtil.password('Password', this.password, this.errors.password),
+                    m('button', {
+                        className: 'Input-Button',
+                        disabled: this.loading(),
+                        type: 'submit',
+                        onclick: boundLogin
+                    }, 'Login')
+                ])
             ])
         ])
     }
@@ -69,12 +84,16 @@ export class LoginRender {
             return;
         }
 
-        ParseUtil.login(this.username(), this.password()).then(function loginGood() {
+        ParseUtil.login(this.username(), this.password()).then(function loginGood(data) {
+            console.log('login-good', data);
             m.route('/');
-        }, function loginBad() {
+        }, () => {
             this.clearErrors();
             this.setError('general', 'Invalid Username or Password.');
         });
+
+        m.redraw();
+        return false;
     }
 
     setError(field, text) {
@@ -85,8 +104,10 @@ export class LoginRender {
 
     clearErrors() {
         this.error(false);
+        this.loading(false);
         this.errors.username('');
         this.errors.password('');
+        this.errors.general('');
     }
 
     static controller() {
@@ -95,5 +116,16 @@ export class LoginRender {
 
     static view(ctrl:LoginRender) {
         return ctrl.view();
+    }
+
+    static wrap(ctrl) {
+        return {
+            controller() {
+                return new ctrl.controller()
+            },
+            view(ctrl) {
+                return ctrl.view(ctrl)
+            }
+        }
     }
 }

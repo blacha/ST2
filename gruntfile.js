@@ -101,6 +101,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('typescript', ['ts', 'mochaTest']);
 
-    grunt.registerTask('build', ['typescript']);
+    grunt.registerTask('build', ['typescript', 'sass']);
     grunt.registerTask('package', ['webpack', 'copy']);
 };
