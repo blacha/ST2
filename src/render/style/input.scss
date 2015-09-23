@@ -56,7 +56,7 @@
 }
 
 // Styling for the input element.
-.TextInput--input {
+.TextInput-Input {
   border: none;
   border-bottom: 1px solid $input-text-bottom-border-color;
   display: block;
@@ -85,7 +85,7 @@
   }
 }
 
-.TextInput textarea.TextInput--input {
+.TextInput textarea.TextInput-Input {
   display: block;
 }
 

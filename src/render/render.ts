@@ -7,9 +7,10 @@ export var Render = {
     start: function () {
         m.route.mode = 'hash';
         m.route(document.body, '/74yQsZtTL2', {
-            '/:baseID': BaseRender,
+            '/b/:baseID': BaseRender,
             '/layout': null,
-            '/login': LoginRender
+            '/login': LoginRender,
+            '/register': LoginRender
         });
     }
 };

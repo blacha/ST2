@@ -1,40 +1,31 @@
 /// <reference path="../../../typings/mithril/mithril.d.ts" />
 
 import {ParseUtil} from '../parse';
-import {FormUtil} from '../form';
-
-interface LoginErrors {
-    password : _mithril.MithrilProperty<string>,
-    username : _mithril.MithrilProperty<string>,
-    general : _mithril.MithrilProperty<string>
-}
+import {FormUtil, FormInputState} from '../form';
 
 export class LoginRender {
     static LOGO = m('div.LoginForm-Logo');
     static CSS = {
-        ERROR: 'LoginForm--Error',
+        ERROR: 'is-invalid',
         LOADING: 'LoginForm--Loading'
     };
 
-    private username:_mithril.MithrilProperty<string>;
-    private password:_mithril.MithrilProperty<string>;
+    private username:FormInputState;
+    private password:FormInputState;
     private loading:_mithril.MithrilProperty<boolean>;
 
     private error:_mithril.MithrilProperty<boolean>;
-    private errors:LoginErrors;
+    private errorMessage:_mithril.MithrilProperty<string>;
 
     constructor() {
-        this.username = m.prop('');
-        this.password = m.prop('');
+        this.username = new FormInputState();
+        this.password = new FormInputState();
+        this.password.type('password');
 
         this.loading = m.prop(false);
 
         this.error = m.prop(false);
-        this.errors = {
-            general: m.prop(''),
-            username: m.prop(''),
-            password: m.prop('')
-        };
+        this.errorMessage = m.prop('')
     }
 
     view() {
@@ -47,7 +38,32 @@ export class LoginRender {
         if (this.loading()) {
             loginClass.push(LoginRender.CSS.LOADING);
         }
+
         var boundLogin = this.login.bind(this);
+
+        var formInput = m('div.Card-SupportingText', [
+            m('div.LoginForm-ErrorMessage', this.errorMessage()),
+            FormUtil.input('Username', this.username),
+            FormUtil.input('Password', this.password)
+        ]);
+
+        var formAction = m('div.Card-Actions', [
+            m('button', {
+                className: 'Button Button--secondary',
+                disabled: this.loading(),
+                type: 'button',
+                onclick: function () {
+                    return m.route('/register');
+                }
+            }, 'Register'),
+
+            m('button', {
+                className: 'Button Button--primary',
+                disabled: this.loading(),
+                type: 'submit',
+                onclick: boundLogin
+            }, 'Login')
+        ]);
 
         return m('div', {
             className: loginClass.join(' ')
@@ -57,15 +73,9 @@ export class LoginRender {
                 m('form', {
                     onsubmit: boundLogin
                 }, [
-                    m('div.Login-ErrorMessage', this.errors.general()),
-                    FormUtil.input('Username', this.username, this.errors.username),
-                    FormUtil.password('Password', this.password, this.errors.password),
-                    m('button', {
-                        className: 'Input-Button',
-                        disabled: this.loading(),
-                        type: 'submit',
-                        onclick: boundLogin
-                    }, 'Login')
+                    m('div.Card-Title', 'Login'),
+                    formInput,
+                    formAction
                 ])
             ])
         ])
@@ -74,40 +84,40 @@ export class LoginRender {
     login() {
         this.clearErrors();
         this.loading(true);
-        if (this.username().trim() === '') {
-            this.setError('username', 'Username is required');
+        if (this.username.value().trim() === '') {
+            this.setError(this.username.error, 'Username is required');
             return;
         }
 
-        if (this.password().trim() === '') {
-            this.setError('password', 'Password is required');
+        if (this.password.value().trim() === '') {
+            this.setError(this.password.error, 'Password is required');
             return;
         }
 
-        ParseUtil.login(this.username(), this.password()).then(function loginGood(data) {
+        ParseUtil.login(this.username.value(), this.password.value()).then(function loginGood(data) {
             console.log('login-good', data);
             m.route('/');
         }, () => {
             this.clearErrors();
-            this.setError('general', 'Invalid Username or Password.');
+            this.setError(this.errorMessage, 'Invalid Username or Password.');
         });
 
         m.redraw();
         return false;
     }
 
-    setError(field, text) {
+    setError(field:_mithril.MithrilProperty<string>, text) {
         this.error(true);
         this.loading(false);
-        this.errors[field](text);
+        field(text);
     }
 
     clearErrors() {
         this.error(false);
         this.loading(false);
-        this.errors.username('');
-        this.errors.password('');
-        this.errors.general('');
+        this.username.error('');
+        this.password.error('');
+        this.errorMessage('');
     }
 
     static controller() {
