@@ -1,33 +1,69 @@
 /// <reference path="../../../typings/mithril/mithril.d.ts" />
 
 import {ParseUtil} from '../parse';
-import {FormUtil, FormInputState} from '../form';
+import {FormUtil, FormInputState, SelectFormInputState} from '../form';
+
+export interface ParseObject {
+    createdAt: Date;
+    updatedAt: Date;
+    id: string;
+}
+
+export interface WorldObj extends ParseObject {
+    world:number;
+    name:string;
+    hasBot:boolean;
+}
 
 export class RegisterRender {
-    static LOGO = m('div.STLogo');
+    static LOGO = m('div.STLogo.BoxShadow');
     static CSS = {
         LOADING: 'LoginForm--Loading',
         ERROR: 'is-invalid'
     };
 
-    private username:FormInputState;
-    private world:FormInputState;
+    private player:FormInputState;
+    private world:SelectFormInputState;
+
+    private loadingWorlds:_mithril.MithrilProperty<boolean>;
     private loading:_mithril.MithrilProperty<boolean>;
 
     private error:_mithril.MithrilProperty<boolean>;
     private errorMessage:_mithril.MithrilProperty<string>;
+    private worlds:WorldObj[];
 
     constructor() {
-        this.username = new FormInputState();
-        this.world = new FormInputState();
+        this.player = new FormInputState();
+        this.world = new SelectFormInputState();
 
+        this.loadingWorlds = m.prop(true);
         this.loading = m.prop(false);
 
         this.error = m.prop(false);
-        this.errorMessage = m.prop('')
+        this.errorMessage = m.prop('');
+
+        ParseUtil.query('World', {hasBot: true}).then((result) => {
+            this.loadingWorlds(false);
+            this.worlds = result.results;
+
+            this.world.options(this.worlds.map((world) => {
+                return {
+                    key: world.name,
+                    value: world.world + ''
+                }
+            }));
+
+            m.redraw();
+        });
     }
 
     view() {
+        if (this.loadingWorlds()) {
+            return m('div.LoginForm.LoginForm--Loading', [
+                RegisterRender.LOGO,
+                m('div.Card.BoxShadow')
+            ]);
+        }
         var loginClass = ['LoginForm'];
         if (this.error()) {
             loginClass.push(RegisterRender.CSS.ERROR);
@@ -41,8 +77,8 @@ export class RegisterRender {
         var formInput = m('div.Card-SupportingText', [
             m('div', 'Please enter your CNC:TA player name.'),
             m('div.LoginForm-ErrorMessage', this.errorMessage()),
-            FormUtil.input('Player Name', this.username),
-            FormUtil.input('World', this.world)
+            FormUtil.input('Player Name', this.player),
+            FormUtil.selectList('World', this.world)
         ]);
 
         var formAction = m('div.Card-Actions', [
@@ -81,8 +117,8 @@ export class RegisterRender {
     register() {
         this.clearErrors();
         this.loading(true);
-        if (this.username.value().trim() === '') {
-            this.setError(this.username.error, 'Username is required');
+        if (this.player.value().trim() === '') {
+            this.setError(this.player.error, 'Player name is required');
             return;
         }
 
@@ -91,7 +127,7 @@ export class RegisterRender {
             return;
         }
 
-        ParseUtil.login(this.username.value(), this.world.value()).then(function loginGood(data) {
+        ParseUtil.login(this.player.value(), this.world.value()).then(function loginGood(data) {
             console.log('login-good', data);
             m.route('/');
         }, () => {
@@ -112,7 +148,7 @@ export class RegisterRender {
     clearErrors() {
         this.error(false);
         this.loading(false);
-        this.username.error('');
+        this.player.error('');
         this.world.error('');
         this.errorMessage('');
     }

@@ -1,5 +1,13 @@
 /// <reference path="../../typings/mithril/mithril.d.ts" />
 
+
+function logoutFunction(err) {
+    console.log('http:error', err);
+    if (m.route() === '/login') {
+        return;
+    }
+    m.route('/logout');
+}
 export var ParseUtil = {
     URL: {
         LOGIN: 'https://api.parse.com/1/login'
@@ -25,6 +33,19 @@ export var ParseUtil = {
         m.route('/login');
     },
 
+    query: (name:string, query:any):_mithril.MithrilPromise<any> => {
+        var url = `https://api.parse.com/1/classes/${name}`;
+        return m.request({
+            method: 'GET',
+            url: url,
+            config: ParseConfig,
+            data: {
+                where: JSON.stringify(query)
+            },
+        }).then(function (data) {
+            return data;
+        }, logoutFunction);
+    },
 
     getData: (name:string, id:string):_mithril.MithrilPromise<any> => {
         var url = `https://api.parse.com/1/classes/${name}/${id}`;
@@ -32,15 +53,10 @@ export var ParseUtil = {
             method: 'GET',
             url: url,
             config: ParseConfig
+
         }).then(function (data) {
             return data;
-        }, function (err) {
-            console.log('http:error', err);
-            if (m.route() === '/login') {
-                return;
-            }
-            m.route('/logout');
-        });
+        }, logoutFunction);
     }
 };
 
