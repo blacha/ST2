@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "CACNZ": {
+      "applicationId": "p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ"
+    },
+    "_default": {
+      "link": "CACNZ"
+    }
+  }
+}
