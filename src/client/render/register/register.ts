@@ -1,11 +1,11 @@
-/// <reference path="../../../typings/mithril/mithril.d.ts" />
+/// <reference path="../../../../typings/mithril/mithril.d.ts" />
 
 import {ParseUtil} from '../parse';
 import {FormUtil, FormInputState, SelectFormInputState} from '../form';
 
 export interface ParseObject {
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     id: string;
 }
 
@@ -46,6 +46,10 @@ export class RegisterRender {
             this.loadingWorlds(false);
             this.worlds = result.results;
 
+            this.worlds = this.worlds.sort(function (a, b) {
+                return (+new Date(b.createdAt)) - (+new Date(a.createdAt));
+            });
+
             this.world.options(this.worlds.map((world) => {
                 return {
                     key: world.name,
@@ -75,7 +79,6 @@ export class RegisterRender {
         var boundRegister = this.register.bind(this);
 
         var formInput = m('div.Card-SupportingText', [
-            m('div', 'Please enter your CNC:TA player name.'),
             m('div.LoginForm-ErrorMessage', this.errorMessage()),
             FormUtil.input('Player Name', this.player),
             FormUtil.selectList('World', this.world)
@@ -107,6 +110,7 @@ export class RegisterRender {
                 m('form', {
                     onsubmit: boundRegister
                 }, [
+                    m('div.Card-SupportingText', 'Please enter your CNC:TA player name.'),
                     formInput,
                     formAction
                 ])
@@ -123,16 +127,20 @@ export class RegisterRender {
         }
 
         if (this.world.value().trim() === '') {
-            this.setError(this.world.error, 'Password is required');
+            this.setError(this.world.error, 'world is required');
             return;
         }
 
-        ParseUtil.login(this.player.value(), this.world.value()).then(function loginGood(data) {
+        var object = {
+            player: this.player.value(),
+            world: this.world.value()
+        };
+
+        ParseUtil.create('Verify', object).then(function loginGood(data) {
             console.log('login-good', data);
-            m.route('/');
+            m.route('/register/' + data.id);
         }, () => {
             this.clearErrors();
-            this.setError(this.errorMessage, 'Invalid Username or Password.');
         });
 
         m.redraw();

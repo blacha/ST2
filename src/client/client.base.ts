@@ -1,4 +1,4 @@
-export interface CNCBase extends CNCLocation{
+export interface CNCBase extends CNCLocation {
     level: number;
     name: string;
     faction: number;

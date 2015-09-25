@@ -1,4 +1,4 @@
-/// <reference path="../../typings/mithril/mithril.d.ts" />
+/// <reference path="../../../typings/mithril/mithril.d.ts" />
 
 
 function logoutFunction(err) {
@@ -23,9 +23,21 @@ export var ParseUtil = {
                 username: user,
                 password: pass
             }
-        }).then(function(data) {
+        }).then(function (data) {
             console.log(data);
         });
+    },
+
+    create: (name:string, values:any):_mithril.MithrilPromise<any> => {
+        var url = `https://api.parse.com/1/classes/${name}`;
+        return m.request({
+            method: 'POST',
+            url: url,
+            config: ParseConfig,
+            data: values,
+        }).then(function (data) {
+            return data;
+        }, logoutFunction);
     },
 
     logout: () => {

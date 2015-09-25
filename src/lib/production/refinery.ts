@@ -46,7 +46,7 @@ export var RefineryCalculator:OutputCalculator = {
 
         var outputCont = 0;
         var firstPower = true;
-        for(var i = 0; i < nearBy.length; i ++) {
+        for (var i = 0; i < nearBy.length; i++) {
             if (nearBy[i].tile === Tile.Tiberium) {
                 outputCont += tibCont;
                 continue;

@@ -1,12 +1,12 @@
-/// <reference path="../../../typings/tsd.d.ts" />
+/// <reference path="../../../../typings/tsd.d.ts" />
 
 
-import {CNCBase} from '../../client/client.base';
-import {Base} from '../../lib/base';
-import {Tile} from '../../lib/base/tile';
-import {Building} from '../../lib/building/building';
-import {Buildable} from '../../lib/base/buildable';
-import {Constants} from '../../lib/constants';
+import {CNCBase} from '../../../client/client.base';
+import {Base} from '../../../lib/base';
+import {Tile} from '../../../lib/base/tile';
+import {Building} from '../../../lib/building/building';
+import {Buildable} from '../../../lib/base/buildable';
+import {Constants} from '../../../lib/constants';
 
 export function RenderBuildingTile(x:number, y:number, building:Buildable, tile:Tile, base:Base) {
     var className = [

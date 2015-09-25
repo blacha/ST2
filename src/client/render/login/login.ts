@@ -1,4 +1,4 @@
-/// <reference path="../../../typings/mithril/mithril.d.ts" />
+/// <reference path="../../../../typings/mithril/mithril.d.ts" />
 
 import {ParseUtil} from '../parse';
 import {FormUtil, FormInputState} from '../form';

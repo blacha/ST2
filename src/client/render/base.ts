@@ -1,19 +1,19 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../../../typings/tsd.d.ts" />
 
 
-import {CNCBase} from '../client/client.base';
-import {Base} from '../lib/base';
-import {Tile} from '../lib/base/tile';
-import {Faction} from '../lib/data/faction';
-import {Building} from '../lib/building/building';
-import {Buildable} from '../lib/base/buildable';
-import {Constants} from '../lib/constants';
+import {CNCBase} from '../../client/client.base';
+import {Base} from '../../lib/base';
+import {Tile} from '../../lib/base/tile';
+import {Faction} from '../../lib/data/faction';
+import {Building} from '../../lib/building/building';
+import {Buildable} from '../../lib/base/buildable';
+import {Constants} from '../../lib/constants';
 
 import {RenderBuildingTile} from './base/tile';
 import * as Header from './base/header';
 import * as Layout from './layout/layout';
 
-import {BaseProduction} from '../lib/production';
+import {BaseProduction} from '../../lib/production';
 import {ParseUtil} from './parse';
 
 export var BaseRender = {

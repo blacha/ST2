@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @import "mdl/variables";
 @import "mdl/mixins";
 
@@ -122,13 +121,13 @@
   .TextInput--floating-label.is-focused &,
   .TextInput--floating-label.is-dirty & {
     color: $input-text-highlight-color;
-    font-size : $input-text-floating-label-fontsize;
+    font-size: $input-text-floating-label-fontsize;
     top: $input-text-vertical-spacing - ($input-text-floating-label-fontsize + $input-text-padding);
     visibility: visible;
   }
 
   .TextInput--floating-label.is-focused .TextInput--expandable-holder &,
-  .TextInput--floating-label.is-dirty .TextInput--expandable-holder &{
+  .TextInput--floating-label.is-dirty .TextInput--expandable-holder & {
     top: -($input-text-floating-label-fontsize + $input-text-padding);
   }
 
@@ -255,9 +254,14 @@ $selectfield-error-color: unquote("rgb(222, 50, 38)") !default;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  overflow: visible;
 
   .SelectInput.is-focused & {
     outline: none;
+  }
+
+  & .material-icons {
+    float: right;
   }
 
   .SelectInput.is-invalid & {
@@ -305,7 +309,7 @@ $selectfield-error-color: unquote("rgb(222, 50, 38)") !default;
   .SelectInput--floating-label.is-focused &,
   .SelectInput--floating-label.is-dirty & {
     color: $selectfield-highlight-color;
-    font-size : $selectfield-floating-label-fontsize;
+    font-size: $selectfield-floating-label-fontsize;
     top: $selectfield-vertical-spacing - ($selectfield-floating-label-fontsize + $selectfield-padding);
     visibility: visible;
   }

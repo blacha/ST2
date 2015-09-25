@@ -1,7 +1,7 @@
-import {Base} from '../../lib/base';
-import {BaseProduction} from '../../lib/production';
+import {Base} from '../../../lib/base';
+import {BaseProduction} from '../../../lib/production';
 
-import * as Util from '../../lib/util';
+import * as Util from '../../../lib/util';
 
 
 var ORDER = ['tiberium', 'crystal', 'power', 'credit'];

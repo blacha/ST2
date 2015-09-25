@@ -48,6 +48,7 @@ export class BaseProduction {
             output.power.pkg += production.power.pkg;
         }
     }
+
     static getOutput(base:Base):BaseOutput {
         var output = {
             tiberium: {

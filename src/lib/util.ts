@@ -8,7 +8,7 @@ import {BuildingType} from './building/buildingtype';
 import {BaseNode} from './base/node';
 
 
-export function random(prefix?:string): string {
+export function random(prefix?:string):string {
 
     return null;
 }

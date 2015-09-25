@@ -1,4 +1,4 @@
-/// <reference path="../../typings/mithril/mithril.d.ts" />
+/// <reference path="../../../typings/mithril/mithril.d.ts" />
 
 export class FormInputState {
     public focused:_mithril.MithrilProperty<boolean>;
@@ -23,10 +23,12 @@ export interface SelectOptions {
 }
 export class SelectFormInputState extends FormInputState {
     public options:_mithril.MithrilProperty<Array<SelectOptions>>;
+    public open:_mithril.MithrilProperty<boolean>;
 
     constructor() {
         super();
         this.options = m.prop([]);
+        this.open = m.prop(false);
     }
 }
 export var FormUtil = {
@@ -68,6 +70,7 @@ export var FormUtil = {
             className: FormUtil._textInputClassList(state)
         }, [
             m('input.TextInput-Input', {
+                onkeyup: m.withAttr('value', state.value),
                 onchange: m.withAttr('value', state.value),
                 value: state.value(),
                 onfocus: state.focused.bind(null, true),
@@ -80,23 +83,48 @@ export var FormUtil = {
     },
 
     selectList: (label:string, state:SelectFormInputState) => {
-        var classList = [];
+        var classList = ['SelectInput', 'SelectInput--floating-label'];
         FormUtil._stateClassList(state, classList);
+        if (state.open()) {
+            classList.push('Menu--Visible');
+        }
+
+        var current = '';
+        var currentValue = state.value();
+        var options = state.options().map(function (option) {
+            if (option.value === currentValue) {
+                current = option.key;
+            }
+            return m('li.Menu-Item', {
+                value: option.value,
+                onclick: function () {
+                    state.value(option.value);
+                    state.open(false);
+                }
+            }, option.key);
+        });
+
+        if (current === '' && options.length > 0) {
+            current = state.options()[0].key;
+            state.value(state.options()[0].value);
+        }
 
         return m('div', {
             className: classList.join(' ')
         }, [
-            m('select.SelectInput-Input', {
+            m('button.SelectInput-Input', {
+                name: label,
                 onchange: m.withAttr('value', state.value),
                 value: state.value(),
                 onfocus: state.focused.bind(null, true),
                 onblur: state.focused.bind(null, false),
-                type: state.type()
-            }, state.options().map(function (option) {
-                return m('option', {
-                    value: option.value
-                }, option.key);
-            })),
+                onclick: state.open.bind(null, true),
+                type: 'button'
+            }, [
+                current,
+                m('i.material-icons', 'arrow_drop_down')
+            ]),
+            m('ul.Menu.BoxShadow', options),
             m('label.SelectInput-Label', label),
             m('span.SelectInput-Error', state.error())
         ])
