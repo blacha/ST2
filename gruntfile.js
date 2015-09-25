@@ -34,8 +34,8 @@ module.exports = function(grunt) {
     };
 
     config.webpack = {
-        default: {
-            entry: ['./build/src/main.js'],
+        client: {
+            entry: ['./build/src/client/main.js'],
             module: {
                 loaders: []
             },
@@ -47,6 +47,18 @@ module.exports = function(grunt) {
             externals: [{
                 'moment': true
             }]
+        },
+        cloud: {
+            entry: ['./build/src/cloud/main.js'],
+            module: {
+                loaders: []
+            },
+            output: {
+                path: './cloud/',
+                filename: 'main.js',
+                libraryTarget: 'umd'
+            },
+            externals: []
         }
     };
 
