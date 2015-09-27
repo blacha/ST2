@@ -11,7 +11,8 @@ export var Render = {
             '/b/:baseID': BaseRender,
             '/layout': null,
             '/login': LoginRender,
-            '/register': RegisterRender
+            '/register': RegisterRender,
+            '/register/:id': RegisterRender
         });
     }
 };

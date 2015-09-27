@@ -68,6 +68,24 @@ export class RegisterRender {
                 m('div.Card.BoxShadow')
             ]);
         }
+        console.log(this.player.value());
+        if (m.route.param('id')) {
+            return m('div.LoginForm', [
+                RegisterRender.LOGO,
+                m('div.Card.BoxShadow', [
+                    m('div.Card-SupportingText', 'Thank you for registering, a message containing your login details will be sent to you in CNC:TA.'),
+                    m('div.Card-SupportingText', 'This process may take up to a hour.'),
+                ])
+            ])
+        } else {
+            return this.viewRegister();
+        }
+
+
+    }
+
+    viewRegister() {
+
         var loginClass = ['LoginForm'];
         if (this.error()) {
             loginClass.push(RegisterRender.CSS.ERROR);
@@ -136,8 +154,8 @@ export class RegisterRender {
             world: this.world.value()
         };
 
-        ParseUtil.create('Verify', object).then(function loginGood(data) {
-            console.log('login-good', data);
+        ParseUtil.func('verify_create', object).then(function loginGood(data) {
+            console.log('verify-created', data);
             m.route('/register/' + data.id);
         }, () => {
             this.clearErrors();

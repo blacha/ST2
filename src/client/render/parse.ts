@@ -6,7 +6,7 @@ function logoutFunction(err) {
     if (m.route() === '/login') {
         return;
     }
-    m.route('/logout');
+    ParseUtil.logout();
 }
 export var ParseUtil = {
     URL: {
@@ -20,12 +20,24 @@ export var ParseUtil = {
             method: 'POST',
             url: ParseUtil.URL.LOGIN,
             data: {
-                username: user,
+                username: user.toLowerCase(),
                 password: pass
             }
         }).then(function (data) {
             console.log(data);
         });
+    },
+
+    func: (name:string, values:any):_mithril.MithrilPromise<any> => {
+        var url = `https://api.parse.com/1/functions/${name}`;
+        return m.request({
+            method: 'POST',
+            url: url,
+            config: ParseConfig,
+            data: values,
+        }).then(function (data:any) {
+            return data.result;
+        }, logoutFunction);
     },
 
     create: (name:string, values:any):_mithril.MithrilPromise<any> => {
@@ -35,8 +47,8 @@ export var ParseUtil = {
             url: url,
             config: ParseConfig,
             data: values,
-        }).then(function (data) {
-            return data;
+        }).then(function (data:any) {
+            return data.result;
         }, logoutFunction);
     },
 
