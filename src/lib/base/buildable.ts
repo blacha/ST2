@@ -1,5 +1,5 @@
 import {Tile} from './tile';
-import {GameDataJSON} from '../data/gamedata';
+import {GameDataJSON, GameDataRepair} from '../data/gamedata';
 
 export interface Buildable {
     id:string;
@@ -13,5 +13,6 @@ export interface Buildable {
     getName():string;
     getClassName():string;
 
+    getPlunder():GameDataRepair;
     getGameData():GameDataJSON;
 }

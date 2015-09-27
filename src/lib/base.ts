@@ -10,7 +10,7 @@ import {OUnitType} from './unit/ounittype';
 import {Unit} from './unit/unit';
 
 import {GameDataObject} from './data/gamedataobject';
-import {CNCBase, CNCUnit, CNCTile} from '../client/client.base';
+import {CNCBase, CNCUnit, CNCTile} from '../client/client.base.ts';
 
 import {ID_MAP, TECH_MAP} from './util';
 interface CNCLocation {
@@ -47,6 +47,10 @@ export class Base {
 
     getFaction():Faction {
         return this.faction;
+    }
+
+    getBaseTiles():Buildable[] {
+        return this.base;
     }
 
     getSurroundings(x:number, y:number, buildings?:number[], tiles?:Tile[]):CNCBaseObject[] {

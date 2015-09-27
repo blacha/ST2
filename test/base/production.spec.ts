@@ -16,10 +16,14 @@ import {OUnitType} from '../../src/lib/unit/ounittype';
 import {BuildingType} from '../../src/lib/building/buildingtype';
 import {Building} from '../../src/lib/building/building';
 
+
 Util.createTechMap(DUnitType);
 Util.createTechMap(OUnitType);
 Util.createTechMap(BuildingType);
 Util.loadGameData(false);
+
+import '../../src/cli/main';
+
 
 var base = new Base();
 
@@ -76,6 +80,36 @@ var output = BaseProduction.getOutput(base);
     );
 });
 
+
+describe('BasePlunder', () => {
+    var base:Base;
+    var NO_OUTPUT = {
+        cont: 0,
+        pkg: 0
+    };
+
+    beforeEach(() => {
+        base = new Base();
+    });
+
+    it('should plunder buildings', () => {
+        //  silo : 15 11,478
+        // harv 15, 11,478
+        var building = new Building(BuildingType.Forgotten.CrystalSilo, 15);
+        var plunder = building.getPlunder();
+
+        expect(Math.floor(plunder.crystal)).to.equal(11478);
+
+        building = new Building(BuildingType.Forgotten.TiberiumSilo, 15);
+        plunder = building.getPlunder();
+
+        expect(Math.floor(plunder.tiberium)).to.equal(11478);
+
+        console.log('plunder', JSON.stringify(plunder, null, 4))
+
+
+    })
+});
 
 describe('BaseProduction', () => {
 

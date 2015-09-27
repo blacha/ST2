@@ -1,4 +1,4 @@
-import {CNCLocation, CNCUnit} from './client.base';
+import {CNCLocation, CNCUnit} from './client.base.ts';
 
 export interface CNCPlayer {
     faction: number;

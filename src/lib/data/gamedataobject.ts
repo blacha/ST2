@@ -1,6 +1,6 @@
 import * as Util from '../util';
 import {Constants} from '../constants';
-import {GameDataJSON} from './gamedata';
+import {GameDataJSON,GameDataRepair} from './gamedata';
 
 export class GameDataObject {
     public data:GameDataJSON;
@@ -34,10 +34,8 @@ export class GameDataObject {
         //    Constants.HEALTH_GROWTH);
     }
 
-    getPlunder(level:number) {
-        return 0;
-        //return Util.getGrowthValue(this.data.repair, level,
-        //    Constants.RESOURCE_PLUNDER_GROWTH);
+    getPlunder(level:number):GameDataRepair {
+        return Util.getRepairValue(this.data, level);
     }
 
     getCost(level:number) {

@@ -92,32 +92,45 @@ export function loadGameData(printMessages) {
     }
 }
 
+var RESOURCE_BOOST = true;
 
-//export function getImportantBuildings(base:Base):{[key:string] : BaseNode} {
-//    var IMPORTANT = [
-//        BuildingType.GDI.ConstructionYard.getName(),
-//        BuildingType.GDI.DefenseFacility.getName(),
-//        BuildingType.GDI.DefenseHQ.getName()
-//    ];
-//
-//    var tiles = base.getTiles();
-//    var output:{[key:string] : BaseNode} = {};
-//
-//    tiles.forEach(function (tile:BaseNode) {
-//        if (tile.obj == null) {
-//            return;
-//        }
-//        var name = tile.obj.getName();
-//
-//        if (IMPORTANT.indexOf(name) == -1) {
-//            return;
-//        }
-//
-//        output[name] = tile;
-//    });
-//
-//    return output;
-//}
+export function getRepairValue(gdo:GameDataJSON, level:number, growth = Constants.RESOURCE_PLUNDER_GROWTH):GameDataRepair {
+    var values = gdo.repair;
+
+    var maxLevel = values[Constants.GROWTH_LEVEL];
+    var keys = Object.keys(maxLevel);
+    var output = {};
+    for (var i = 0; i < keys.length; i++) {
+
+        var key = keys[i];
+        if (level <= Constants.GROWTH_LEVEL) {
+            output[key] = values[level][key];
+            if (RESOURCE_BOOST) {
+                output[key] = Math.ceil(output[key] * 1.25);
+            }
+            continue;
+        }
+
+        var val = values[Constants.GROWTH_LEVEL][key];
+        if (RESOURCE_BOOST) {
+            val = Math.ceil(val * 1.25);
+        }
+        //var outputKey = toOutputKey(key);
+        output[key] = val * Math.pow(growth, level - Constants.GROWTH_LEVEL) ;
+    }
+
+    return output;
+}
+
+export function addObject(from, to) {
+    var addKeys = Object.keys(from);
+    for (var i = 0; i < addKeys.length; i++) {
+        var key = addKeys[i];
+
+        to[key] = (to[key] || 0) + from[key];
+    }
+}
+
 
 function mapIDs(obj) {
     if (obj == null) {

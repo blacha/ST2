@@ -237,6 +237,7 @@ CityData.saveToParse = function(data) {
 };
 
 //CityData.saveToParse(CityData.getCurrentCity());
-//console.log(JSON.stringify(
-CityData.scan();
-//));
+console.log(JSON.stringify(
+    CityData.getCurrentCity()
+//CityData.scan();
+));
