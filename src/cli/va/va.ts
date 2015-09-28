@@ -87,63 +87,13 @@ export class BaseAttack {
         this.def = [];
     }
 
-    //
-    //getAttackVector() {
-    //    var tiles = this.base.get
-    //    var possibles = [];
-    //
-    //    var CY_X = this.CY.x;
-    //    var biggestDistance = -1;
-    //    var biggestTile:BaseNode = null;
-    //
-    //    var toCheck = tiles.slice(OFFSET_MAX - MAXX, OFFSET_MAX);
-    //    for (var i = 0; i < toCheck.length; i++) {
-    //        var tile = toCheck[i];
-    //        if (tile.obj == null) {
-    //            if (tile.y - 1 < MINY) {
-    //                continue;
-    //            }
-    //            toCheck.push(this.base.getTile(tile.x, tile.y - 1));
-    //            continue;
-    //        }
-    //
-    //        var block = BLOCKERS[tile.obj.getCodeName()];
-    //        if (block == undefined) {
-    //            continue;
-    //        }
-    //
-    //        var distance = Math.abs(tile.x - CY_X);
-    //        if (distance > biggestDistance) {
-    //            biggestTile = tile;
-    //            biggestDistance = distance;
-    //        }
-    //
-    //        possibles.push(tile);
-    //    }
-    //
-    //    if (biggestDistance > 0) {
-    //        console.log({x: tile.x, y: tile.y}, 'Pulling');
-    //
-    //        var x = biggestTile.x;
-    //        var block = BLOCKERS[biggestTile.obj.getCodeName()];
-    //        this.setVector(block, x, x, x, x);
-    //        if (block == 'veh') {
-    //            block = 'inf'
-    //        } else {
-    //            block = 'veh';
-    //        }
-    //
-    //        this.setVector(block, -1, x, x, x);
-    //    }
-    //}
-    //
+
     setVector(type, wave0 = -1, wave1 = -1, wave2 = -1, wave3 = -1) {
         this.attackVector[type] = [wave0, wave1, wave2, wave3];
     }
 
 
     getCYTotal() {
-
         var cyTotal = 0;
         for (var i = 0; i < Constants.MAX_DEF_Y; i++) {
             var index = Base.$index(this.CY.x, i);
@@ -157,12 +107,7 @@ export class BaseAttack {
         return cyTotal;
     }
 
-    //
     attack() {
-        //if (this.tryPull) {
-        //    this.getAttackVector();
-        //}
-        //
         console.log({attack: this.attackVector}, 'Attack Vector');
 
         var startTime = +new Date();
@@ -285,10 +230,6 @@ export class BaseAttack {
                         }
                         var distance = calcDistance(wX, wY, x, y);
                         if (distance < attackMax && distance >= attackMin) {
-                            //console.log('adding weapon to ', {
-                            //    x: wX,
-                            //    y: wY
-                            //}, 'distance', distance, 'weapon', weapon.armorType);
                             this.addWeapon(wX, wY, weapon);
                         }
                     }
