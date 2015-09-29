@@ -118,10 +118,9 @@ export class BaseAttack {
         this.calculate();
         console.log({duration: +new Date() - startTime}, 'Calculate');
 
-        console.log(this.print());
+        //console.log(this.print());
         return this.getCYTotal();
     }
-
 
     // Move all the units that can move towards the attack vectors
     moveUnits(count = 0) {
@@ -209,6 +208,7 @@ export class BaseAttack {
                 return;
             }
 
+            //console.log(unit.getClassName(), data.weapons);
             data.weapons.forEach((weapon:GameDataWeapon) => {
                 if (weapon.damage == 0) {
                     return;
@@ -229,8 +229,12 @@ export class BaseAttack {
                             continue;
                         }
                         var distance = calcDistance(wX, wY, x, y);
+                        //console.log(x, y, '=>', wX, wY, distance, attackMax, attackMin);
                         if (distance < attackMax && distance >= attackMin) {
-                            this.addWeapon(wX, wY, weapon);
+                            this.addWeapon(wX, wY, weapon, unit.getLevel());
+                        } else if (distance < attackMax + 0.5 && distance >= attackMin) {
+                            this.addWeapon(wX, wY, weapon, unit.getLevel(), 0.5);
+                            //console.log(distance - attackMaxRound)
                         }
                     }
                 }
@@ -240,14 +244,14 @@ export class BaseAttack {
         });
     }
 
-    addWeapon(x:number, y:number, weapon:GameDataWeapon) {
+    addWeapon(x:number, y:number, weapon:GameDataWeapon, level:number, modifier = 1) {
         var index = Base.$index(x, y);
         var defTile = this.def[index] = this.def[index] || {
                 MediumArmorAir: 0,
                 LightArmorInfantry: 0,
                 HeavyArmorVehicles: 0
             };
-        defTile[weapon.armorType] = (defTile[weapon.armorType] || 0) + weapon.damage;
+        defTile[weapon.armorType] = (defTile[weapon.armorType] || 0) +  modifier * Math.ceil(weapon.damage * Math.pow(1.1, level));
     }
 
     print() {

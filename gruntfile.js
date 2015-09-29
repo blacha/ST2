@@ -59,6 +59,18 @@ module.exports = function(grunt) {
                 libraryTarget: 'umd'
             },
             externals: []
+        },
+        cli: {
+            entry: ['./build/src/cli/main.js'],
+            module: {
+                loaders: []
+            },
+            output: {
+                path: './build/',
+                filename: 'cli.js',
+                libraryTarget: 'umd'
+            },
+            externals: []
         }
     };
 

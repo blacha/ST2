@@ -1,12 +1,60 @@
 import {BaseAttack} from './va/va';
 import {Base} from '../lib/base';
-import './city/city.data';
+//import './city/city.data';
 var data;
 
-data = {"level":18.538367508695632,"name":"Outpost","x":500,"y":201,"faction":6,"owner":"The Forgotten","version":3,"player":"shockrNZ","world":325,"tiles":[null,null,null,{"id":206,"l":18},null,null,{"id":177,"l":19},null,{"id":196,"l":19},null,2,{"id":198,"l":19,"t":2},null,null,null,null,null,null,null,{"id":193,"l":18},{"id":193,"l":18},{"id":193,"l":18},2,null,null,{"id":199,"l":19,"t":1},null,null,2,2,{"id":197,"l":19},null,null,{"id":194,"l":19},null,null,null,null,null,null,null,{"id":199,"l":19,"t":1},null,1,null,{"id":195,"l":18},null,{"id":199,"l":18,"t":1},{"id":194,"l":19},{"id":194,"l":18},{"id":194,"l":19},{"id":194,"l":18},null,null,null,null,{"id":199,"l":19,"t":1},null,{"id":207,"l":19},{"id":199,"l":19,"t":1},null,2,null,null,{"id":207,"l":18},null,null,null,null,null,null,null,null,{"id":180,"l":18},null,null,{"id":188,"l":18},null,null,null,5,null,null,{"id":184,"l":19},null,7,{"id":188,"l":19},null,null,5,{"id":187,"l":18},null,6,null,null,null,{"id":186,"l":19},null,{"id":189,"l":18},4,4,{"id":210,"l":19},null,{"id":210,"l":19},7,null,{"id":185,"l":18},5,null,{"id":180,"l":19},null,{"id":191,"l":18},{"id":191,"l":18},{"id":191,"l":18},4,null,{"id":180,"l":19},null,{"id":186,"l":19},6,6,null,{"id":210,"l":19},{"id":180,"l":19},null,null,4,null,null,{"id":185,"l":19},null,null,null,5,5,4,null,null,null,6,6,6,null,{"id":189,"l":19}],"upgrades":[]}
+function AttackAll(data) {
+    var output = [];
 
-var base  = Base.load(data);
-var BA = new BaseAttack(base);
-//BaseAttack.attack(base);
+    data.forEach(function (baseData) {
+        if (baseData == null) {
+            return;
+        }
+        if (baseData.level < 17) {
+        //|| baseData.x != 496 || baseData.y != 202) {
+            return;
+        }
+        console.log(baseData.name, baseData.x, baseData.y, baseData.level);
+        var base = Base.load(baseData);
+        var BA = new BaseAttack(base);
+        output.push({
+            BA: BA,
+            attack: BA.attack(),
+            data: baseData,
+            base: base
+        });
+    });
 
-console.log(BA.attack());
+
+    var ab = output.sort(function (a, b) {
+        return a.attack - b.attack
+    });
+
+    console.log('ATTACK DATA');
+    for (var i = 0; i < ab.length; i++) {
+        var obj = ab[i];
+        console.log(obj.data.name, obj.data.level.toFixed(1), obj.data.x, obj.data.y, obj.attack);
+    }
+}
+
+import * as Util from './../lib/util';
+
+import {DUnitType} from './../lib/unit/dunittype';
+import {OUnitType} from './../lib/unit/ounittype';
+import {BuildingType} from './../lib/building/buildingtype';
+
+Util.createTechMap(DUnitType);
+Util.createTechMap(OUnitType);
+Util.createTechMap(BuildingType);
+Util.loadGameData(true);
+
+if (typeof window !== 'undefined') {
+    (<any>window).AA = AttackAll;
+}
+
+
+//var base  = Base.load(data);
+//var BA = new BaseAttack(base);
+////BaseAttack.attack(base);
+//
+//console.log(BA.attack());
