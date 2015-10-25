@@ -31,11 +31,9 @@ export class ParseObject {
         if (master) {
             Parse.Cloud.useMasterKey();
         }
-        return query.first().then((value)  => {
-            if (value == null) {
-                return Parse.Promise.error(this.getCode(ParseErrorCode.NOT_FOUND))
-            }
-            return value;
+        return query.first().then((output)  => {
+            console.log('get-first ' + this.name + ':' +  JSON.stringify(output));
+            return output;
         })
     }
 

@@ -70,7 +70,9 @@ module.exports = function(grunt) {
                 filename: 'cli.js',
                 libraryTarget: 'umd'
             },
-            externals: []
+            externals: [{
+                ClientLib: true
+            }]
         }
     };
 

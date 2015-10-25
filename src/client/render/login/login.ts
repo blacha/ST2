@@ -18,9 +18,15 @@ export class LoginRender {
     private errorMessage:_mithril.MithrilProperty<string>;
 
     constructor() {
+        if (ParseUtil.token()) {
+            m.route('/');
+            return;
+        }
         this.username = new FormInputState();
         this.password = new FormInputState();
         this.password.type('password');
+
+        this.username.value(m.route.param('username') || '');
 
         this.loading = m.prop(false);
 

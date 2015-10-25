@@ -1,4 +1,5 @@
 /// <reference path="../../../typings/mithril/mithril.d.ts" />
+import {ParseConfig} from '../../parse.config';
 
 
 function logoutFunction(err) {
@@ -7,13 +8,17 @@ function logoutFunction(err) {
         return;
     }
     ParseUtil.logout();
+    return err;
 }
+
+var TOKEN_KEY = 'token';
+
 export var ParseUtil = {
     URL: {
         LOGIN: 'https://api.parse.com/1/login'
     },
 
-    token: m.prop((<any>localStorage).token),
+    token: m.prop(localStorage.getItem(TOKEN_KEY)),
 
     login: (user:string, pass:string):_mithril.MithrilPromise<any> => {
         return m.request({
@@ -21,10 +26,14 @@ export var ParseUtil = {
             url: ParseUtil.URL.LOGIN,
             data: {
                 username: user.toLowerCase(),
-                password: pass
+                password: pass,
+                _method: 'GET',
+                _ApplicationId: ParseConfig.APP,
+                _JavaScriptKey: ParseConfig.JS
             }
-        }).then(function (data) {
-            console.log(data);
+        }).then(function (data:any) {
+            ParseUtil.token(data.sessionToken);
+            localStorage.setItem(TOKEN_KEY, data.sessionToken);
         });
     },
 
@@ -33,19 +42,19 @@ export var ParseUtil = {
         return m.request({
             method: 'POST',
             url: url,
-            config: ParseConfig,
+            config: ParseConfigFunc,
             data: values,
         }).then(function (data:any) {
             return data.result;
-        }, logoutFunction);
+        });
     },
 
     create: (name:string, values:any):_mithril.MithrilPromise<any> => {
         var url = `https://api.parse.com/1/classes/${name}`;
         return m.request({
-            method: 'POST',
+            method: 'GET',
             url: url,
-            config: ParseConfig,
+            config: ParseConfigFunc,
             data: values,
         }).then(function (data:any) {
             return data.result;
@@ -53,6 +62,7 @@ export var ParseUtil = {
     },
 
     logout: () => {
+        localStorage.setItem(TOKEN_KEY, null);
         ParseUtil.token(null);
         m.route('/login');
     },
@@ -62,7 +72,7 @@ export var ParseUtil = {
         return m.request({
             method: 'GET',
             url: url,
-            config: ParseConfig,
+            config: ParseConfigFunc,
             data: {
                 where: JSON.stringify(query)
             },
@@ -76,7 +86,7 @@ export var ParseUtil = {
         return m.request({
             method: 'GET',
             url: url,
-            config: ParseConfig
+            config: ParseConfigFunc
 
         }).then(function (data) {
             return data;
@@ -84,9 +94,9 @@ export var ParseUtil = {
     }
 };
 
-function ParseConfig(http, opts) {
-    http.setRequestHeader('X-Parse-Application-Id', 'p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ');
-    http.setRequestHeader('X-Parse-REST-API-Key', 'UdPxMf4bww3S5KSUe9qAFYMaZ1mfEGYE2TGePGTU');
+function ParseConfigFunc(http, opts) {
+    http.setRequestHeader('X-Parse-Application-Id', ParseConfig.APP);
+    http.setRequestHeader('X-Parse-REST-API-Key', ParseConfig.REST);
     if (ParseUtil.token()) {
         http.setRequestHeader('X-Parse-Session-Token', ParseUtil.token());
     }

@@ -16,8 +16,11 @@ import * as Layout from './layout/layout';
 import {BaseProduction} from '../../lib/production';
 import {ParseUtil} from './parse';
 
-export var BaseRender = {
-    controller: function () {
+export class BaseRender {
+    private base;
+    private ready;
+    private selected;
+    constructor () {
         var baseID = m.route.param('baseID');
         var baseProp = m.prop();
 
@@ -26,22 +29,21 @@ export var BaseRender = {
             return base;
         });
 
-        return {
-            base: baseProp,
-            ready: function () {
-                return !!baseProp();
-            },
-            selected: m.prop()
-        }
-    },
 
-    view: function (ctrl) {
-        if (ctrl.ready() == false) {
+        this.base = baseProp;
+        this.ready = function () {
+            return !!baseProp();
+        };
+        this.selected = m.prop()
+    }
+
+    view () {
+        if (this.ready() == false) {
             console.log('not-ready');
             return;
         }
 
-        var base = ctrl.base();
+        var base = this.base();
         if (base == null) {
             console.log('no-base');
             return;
@@ -49,9 +51,17 @@ export var BaseRender = {
 
         return Layout.createLayout(null, [
             m('div.Cell--2', Header.makeTitle(base)),
-            m('div.Cell--8', makeBaseTiles(ctrl, base)),
+            m('div.Cell--8', makeBaseTiles(this, base)),
             m('div.Cell--2', Header.makeSideInfo(base))
         ]);
+    }
+
+    static controller() {
+        return new BaseRender();
+    }
+
+    static view(ctrl:BaseRender) {
+        return ctrl.view();
     }
 };
 

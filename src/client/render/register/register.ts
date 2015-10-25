@@ -32,7 +32,11 @@ export class RegisterRender {
     private errorMessage:_mithril.MithrilProperty<string>;
     private worlds:WorldObj[];
 
-    constructor() {
+    constructor()  {
+        if (ParseUtil.token()) {
+            m.route('/');
+            return;
+        }
         this.player = new FormInputState();
         this.world = new SelectFormInputState();
 
@@ -68,7 +72,6 @@ export class RegisterRender {
                 m('div.Card.BoxShadow')
             ]);
         }
-        console.log(this.player.value());
         if (m.route.param('id')) {
             return m('div.LoginForm', [
                 RegisterRender.LOGO,
@@ -85,7 +88,6 @@ export class RegisterRender {
     }
 
     viewRegister() {
-
         var loginClass = ['LoginForm'];
         if (this.error()) {
             loginClass.push(RegisterRender.CSS.ERROR);
@@ -154,11 +156,12 @@ export class RegisterRender {
             world: this.world.value()
         };
 
-        ParseUtil.func('verify_create', object).then(function loginGood(data) {
-            console.log('verify-created', data);
+        ParseUtil.func('verify_create', object).then((data) => {
             m.route('/register/' + data.id);
-        }, () => {
+        }, (err) => {
+            console.log(err);
             this.clearErrors();
+            this.setError(this.player.error, (<any>err).error);
         });
 
         m.redraw();
