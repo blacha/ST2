@@ -194,11 +194,9 @@ export class PlayerInfo {
                     air: c.get_CityUnitsData().GetRepairTimeFromEUnitGroup(ClientLib.Data.EUnitGroup.Aircraft, false),
                     time: c.GetResourceCount(ClientLib.Base.EResourceType.RepairChargeInf)
             }
-        }
+        };
 
-
-
-        PlayerInfo.versions[city.name] = city.v;
+        PlayerInfo.versions[city.id] = city.v;
 
         return city;
     }

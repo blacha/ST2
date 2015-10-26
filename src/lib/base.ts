@@ -10,7 +10,7 @@ import {OUnitType} from './unit/ounittype';
 import {Unit} from './unit/unit';
 
 import {GameDataObject} from './data/gamedataobject';
-import {CNCBase, CNCUnit, CNCTile} from '../client/client.base.ts';
+import {CNCBase, CNCUnit, CNCTile} from '../web/client.base.ts';
 
 import {ID_MAP, TECH_MAP} from './util';
 interface CNCLocation {

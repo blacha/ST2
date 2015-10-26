@@ -1,3 +1,3 @@
-import './client/main';
+import 'web/main';
 import './cloud/main';
-import './cli/main';
+import 'extension/main';

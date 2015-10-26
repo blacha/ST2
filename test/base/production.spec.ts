@@ -22,7 +22,7 @@ Util.createTechMap(OUnitType);
 Util.createTechMap(BuildingType);
 Util.loadGameData(false);
 
-import '../../src/cli/main';
+import '../../src/extension/main';
 
 
 var base = new Base();

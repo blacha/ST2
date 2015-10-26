@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 
     config.webpack = {
         client: {
-            entry: ['./build/src/client/main.js'],
+            entry: ['./build/src/web/main.js'],
             module: {
                 loaders: []
             },
@@ -61,7 +61,7 @@ module.exports = function(grunt) {
             externals: []
         },
         cli: {
-            entry: ['./build/src/cli/main.js'],
+            entry: ['./build/src/extension/main.js'],
             module: {
                 loaders: []
             },
@@ -115,7 +115,7 @@ module.exports = function(grunt) {
         },
         dist: {
             files: [{
-                src: 'src/client/render/style.scss',
+                src: 'src/web/render/style.scss',
                 dest: './static/lib/style.css'
             }]
         }
