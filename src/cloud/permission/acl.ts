@@ -1,8 +1,6 @@
-/// <reference path="../parse.d.ts" />
-
 export class ACL {
 
-    create() {
+    static create() {
         var acl = new Parse.ACL();
 
         acl.setPublicReadAccess(false);

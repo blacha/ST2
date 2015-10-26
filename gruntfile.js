@@ -42,7 +42,7 @@ module.exports = function(grunt) {
             output: {
                 path: './static/lib/',
                 filename: 'bundle.js',
-                libraryTarget: 'umd',
+                libraryTarget: 'umd'
             },
             externals: [{
                 'moment': true
@@ -60,15 +60,16 @@ module.exports = function(grunt) {
             },
             externals: []
         },
-        cli: {
+        extension: {
             entry: ['./build/src/extension/main.js'],
             module: {
                 loaders: []
             },
             output: {
                 path: './build/',
-                filename: 'cli.js',
-                libraryTarget: 'umd'
+                filename: 'extension.js',
+                libraryTarget: 'umd',
+                library: ['ST2']
             },
             externals: [{
                 ClientLib: true

@@ -2,7 +2,8 @@ import {ParseObject} from './parse.object';
 
 export class WorldObject extends ParseObject {
     schema = {
-        WORLD: 'world'
+        WORLD: 'world',
+        NAME: 'name'
     };
 
     constructor() {

@@ -24,6 +24,22 @@ export class ParseObject {
         return new Parse.Query(Parse.Object.extend(this.name));
     }
 
+    firstQuery(args, master = false) {
+        var query = this.query();
+        Object.keys(args).forEach(function(key) {
+            query.equalTo(key, args[key]);
+        });
+
+        if (master) {
+            Parse.Cloud.useMasterKey();
+        }
+
+        return query.first().then((output)  => {
+            console.log('get-first-query: ' + this.name + ':' +  JSON.stringify(args));
+            return output;
+        });
+    }
+
 
     first(key:string, value:any, master = false) {
         var query = this.query();
@@ -32,7 +48,7 @@ export class ParseObject {
             Parse.Cloud.useMasterKey();
         }
         return query.first().then((output)  => {
-            console.log('get-first ' + this.name + ':' +  JSON.stringify(output));
+            console.log('get-first: ' + this.name + ':' +  JSON.stringify(output));
             return output;
         })
     }

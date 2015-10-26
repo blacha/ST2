@@ -1,7 +1,9 @@
-import {ACL} from './../util/acl';
+import {ACL} from './../permission/acl';
+import {ParseRole} from './../permission/role';
 import {User} from '../objects/user';
 import {World} from '../objects/world';
 import {Verify} from '../objects/verify';
+import {PlayerObject} from '../objects/player';
 
 import {UUID} from '../../lib/uuid';
 
@@ -10,6 +12,7 @@ export function define() {
         if (req.params.uuid == null) {
             return res.error('Invalid UUID');
         }
+
         if (req.params.username == null) {
             return res.error('Invalid Username');
         }
@@ -32,11 +35,15 @@ export function define() {
             user.setUsername(verifyObj.get(Verify.schema.PLAYER));
             user.setPassword(req.params.password);
             user.setEmail(req.params.username);
-            user.set('player', verifyObj.get(Verify.schema.PLAYER));
 
             return user.save();
         }).then(function (user) {
             userObj = user;
+            return ParseRole.getOrCreate(PlayerObject.RoleName(verifyObj.get(Verify.schema.PLAYER)));
+        }).then(function(role) {
+            role.getUsers().add(userObj);
+            return role.save();
+        }).then(function() {
             return Parse.Object.destroyAll([verifyObj]);
         }).then(function() {
             res.success({

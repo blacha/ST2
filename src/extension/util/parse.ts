@@ -1,6 +1,9 @@
 import {ParseConfig} from '../../parse.config';
+import {Log} from '../log/log';
+
 declare var Promise:any;
 
+var INSTANCE:ParseUtil;
 export class ParseUtil {
 
     private queue;
@@ -12,12 +15,25 @@ export class ParseUtil {
         defer.resolve();
     }
 
+    static GetInstance():ParseUtil {
+        if (INSTANCE == null) {
+            INSTANCE = new ParseUtil();
+        }
+        return INSTANCE;
+    }
 
-    send(name, data) {
+    static send(name:string, data:Object, log:Log) {
+        return ParseUtil.GetInstance().send(name, data, log);
+    }
+
+    send(name:string, data:Object, log:Log) {
         var defer = Promise.defer();
 
+        var requestLog = log.child({func: name});
+
         this.queue.then(() => {
-            console.log('request', data);
+            requestLog.info('Request..');
+
             var queueDefer = Promise.defer();
 
             var http = new XMLHttpRequest();

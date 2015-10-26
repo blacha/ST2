@@ -1,74 +1,33 @@
-declare var ClientLib:any;
+import  * as PlayerAPI from '../../api/player.info';
+import {CityData} from './../city/city.data';
 
-interface PlayerData {
-    world: WorldInfoData;
-    player: PlayerInfoData;
-    alliance: AllianceInfoData;
-}
-
-interface WorldInfoData {
-    world: number;
-    name: string;
-}
-
-interface PlayerInfoData {
-    id: number;
-    faction: number;
-    player: string;
-    score:number;
-    rank: number;
-    sub: string;
-    rp: number;
-    credit: number;
-    command: CommandInfoData;
-    research: ResearchInfoData[];
-}
-
-interface AllianceInfoData {
-    name: string;
-    id: number;
-    players: string[];
-    bonus: {
-        power: number;
-        crystal: number;
-        tiberium: number;
-        air: number;
-        def: number;
-        vec: number;
-        inf: number;
-    }
-}
-interface ResearchInfoData {
-    tech: number;
-    level: number;
-}
-interface PlayerRepairInfo {
-    veh: number;
-    air: number;
-    inf: number;
-    time: number;
-}
-interface CommandInfoData {
-    current: number;
-    max: number;
-}
 export class PlayerInfo {
     static instance;
     static versions;
 
-    static get(): PlayerData {
-        PlayerInfo.versions = PlayerInfo.versions || {};
+    static scan(): { data: PlayerAPI.PlayerData, changes: boolean} {
+        var lastVersion = PlayerInfo.versions || {};
+        PlayerInfo.versions = {};
         PlayerInfo.instance = ClientLib.Data.MainData.GetInstance();
 
-        return {
+        var playerData = {
             world: PlayerInfo.getWorld(),
             player: PlayerInfo.getPlayerInfo(),
             alliance: PlayerInfo.getAllianceInfo()
-        }
+        };
+
+        var hasChanges = false;
+        Object.keys(PlayerInfo.versions).forEach(function(id) {
+            if (PlayerInfo.versions[id] !== lastVersion[id]) {
+                hasChanges = true;
+            }
+        });
+
+        return {data: playerData, changes: hasChanges};
     }
 
 
-    static getPlayerInfo():PlayerInfoData {
+    static getPlayerInfo():PlayerAPI.PlayerInfoData {
         var player = PlayerInfo.instance.get_Player();
 
         var sub = PlayerInfo.instance.get_PlayerSubstitution().getOutgoing();
@@ -78,20 +37,21 @@ export class PlayerInfo {
         }
 
         return {
-            id: player.get_Id(),
+            player: player.get_Id(),
             faction: player.get_Faction(),
-            player: player.get_Name(),
+            name: player.get_Name(),
             score: player.get_ScorePoints(),
             rank: player.get_OverallRank(),
             sub: subName,
             rp: player.get_ResearchPoints(),
             credit: player.get_Credits().Base,
             command: PlayerInfo.getCommandInfo(),
-            research: PlayerInfo.getResearchInfo()
+            research: PlayerInfo.getResearchInfo(),
+            cities: PlayerInfo.getCities()
         }
     }
 
-    static getCommandInfo():CommandInfoData {
+    static getCommandInfo():PlayerAPI.CommandInfoData {
         var player = PlayerInfo.instance.get_Player();
 
         return {
@@ -100,14 +60,11 @@ export class PlayerInfo {
         }
     }
 
-    static getAllianceInfo():AllianceInfoData {
+    static getAllianceInfo():PlayerAPI.AllianceInfoData {
         var alliance = PlayerInfo.instance.get_Alliance();
-        if (alliance == null) {
-            return null;
-        }
 
         return {
-            id: alliance.get_Id(),
+            alliance: alliance.get_Id() || -1,
             name: alliance.get_Name(),
             bonus: {
                 power: alliance.get_POIPowerBonus(),
@@ -124,11 +81,11 @@ export class PlayerInfo {
         };
     }
 
-    static getResearchInfo():ResearchInfoData[] {
+    static getResearchInfo():PlayerAPI.ResearchInfoData {
         var player = ClientLib.Data.MainData.GetInstance().get_Player();
         var research = player.get_PlayerResearch();
 
-        var output = [];
+        var output:PlayerAPI.ResearchInfoData = {};
         [1, 2, 5].forEach(function(type) {
             var list = research.GetResearchItemListByType(type);
 
@@ -142,7 +99,7 @@ export class PlayerInfo {
                 }
                 var tech = rt.get_GameDataTech_Obj();
 
-                output.push({ tech: tech.c, level: rt.get_CurrentLevel() });
+                output[tech.c] = rt.get_CurrentLevel();
             });
         });
 
@@ -150,11 +107,17 @@ export class PlayerInfo {
     }
 
     static getCities() {
+        var output = [];
+        var allCities = ClientLib.Data.MainData.GetInstance().get_Cities().get_AllCities().d;
+        Object.keys(allCities).forEach(function(cityID) {
+            var selectedBase = allCities[cityID];
+            output.push(PlayerInfo.getCity(selectedBase));
+        });
 
-
+        return output;
     }
 
-    static getCity(c) {
+    static getCity(c):PlayerAPI.CityInfoData {
         var city = {
             defense : c.get_LvlDefense(),
             offense : c.get_LvlOffense(),
@@ -166,20 +129,21 @@ export class PlayerInfo {
             y : c.get_PosY(),
             v : c.get_Version(),
             name: c.get_Name(),
-            tiles: null,
+            tiles: CityData.getLayout(c),
 
-            power : c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Power, false, false) +
-            c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Power),
+            production: {
+                power: c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Power, false, false) +
+                    c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Power),
 
-            tiberium : c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Tiberium, false, false) +
-            c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Tiberium),
+                tiberium: c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Tiberium, false, false) +
+                    c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Tiberium),
 
-            crystal : c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Crystal, false, false) +
-            c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Crystal),
+                crystal: c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Crystal, false, false) +
+                    c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Crystal),
 
-            credits : ClientLib.Base.Resource.GetResourceGrowPerHour(c.get_CityCreditsProduction(), false) +
-            ClientLib.Base.Resource.GetResourceBonusGrowPerHour(c.get_CityCreditsProduction(), false),
-
+                credits: ClientLib.Base.Resource.GetResourceGrowPerHour(c.get_CityCreditsProduction(), false) +
+                    ClientLib.Base.Resource.GetResourceBonusGrowPerHour(c.get_CityCreditsProduction(), false),
+            },
             health : c.GetBuildingsConditionInPercent(),
 
             current : {
@@ -190,9 +154,9 @@ export class PlayerInfo {
 
             repair: {
                 inf: c.get_CityUnitsData().GetRepairTimeFromEUnitGroup(ClientLib.Data.EUnitGroup.Infantry, false),
-                    veh: c.get_CityUnitsData().GetRepairTimeFromEUnitGroup(ClientLib.Data.EUnitGroup.Vehicle, false),
-                    air: c.get_CityUnitsData().GetRepairTimeFromEUnitGroup(ClientLib.Data.EUnitGroup.Aircraft, false),
-                    time: c.GetResourceCount(ClientLib.Base.EResourceType.RepairChargeInf)
+                veh: c.get_CityUnitsData().GetRepairTimeFromEUnitGroup(ClientLib.Data.EUnitGroup.Vehicle, false),
+                air: c.get_CityUnitsData().GetRepairTimeFromEUnitGroup(ClientLib.Data.EUnitGroup.Aircraft, false),
+                time: c.GetResourceCount(ClientLib.Base.EResourceType.RepairChargeInf)
             }
         };
 
@@ -202,12 +166,11 @@ export class PlayerInfo {
     }
 
 
-    static getWorld():WorldInfoData {
+    static getWorld():PlayerAPI.WorldInfoData {
         return {
             world:PlayerInfo.instance.get_Server().get_WorldId(),
-            name: PlayerInfo.instance.get_Server().get_Name()
+            name: PlayerInfo.instance.get_Server().get_Name().trim()
         }
     }
-
 
 }
