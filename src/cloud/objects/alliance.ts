@@ -2,6 +2,7 @@ import {ParseObject} from './parse.object';
 import {ParseRole} from '../permission/role';
 import {ACL} from '../permission/acl';
 import {Player, PlayerObject} from './player';
+import {AllianceInfoData} from '../../api/player.info';
 
 export class AllianceObject extends ParseObject {
     static schema = {
@@ -23,10 +24,9 @@ export class AllianceObject extends ParseObject {
     }
 
 
-    create(obj, master) {
+    create(obj:AllianceInfoData, master) {
         var allianceObj;
-        return super.create(obj, master)
-            .then((alliance) => {
+        return super.create(obj, master).then((alliance) => {
 
             allianceObj = alliance;
             console.log('alliance-created' + alliance.get('name'));
@@ -41,26 +41,36 @@ export class AllianceObject extends ParseObject {
         });
     }
 
+    update(to, from:AllianceInfoData, master = false) {
+        to.set(AllianceObject.schema.BONUS, from.bonus);
+        to.set(AllianceObject.schema.PLAYERS, from.players);
+        to.set(AllianceObject.schema.NAME, from.name);
+        if (master) {
+            Parse.Cloud.useMasterKey();
+        }
+        return to.save();
+    }
+
     updateACL(alliance) {
         console.log('update-acl: ' + alliance.get('name'));
         var roleName = AllianceObject.RoleName(alliance);
         var allianceRole;
-        return ParseRole.get(roleName).then(function(role) {
+        return ParseRole.get(roleName).then(function (role) {
             allianceRole = role;
             if (role == null) {
                 return Parse.Promise.error('Invalid alliance');
             }
 
             return allianceRole.getRoles().query().find();
-        }).then(function(roleList) {
+        }).then(function (roleList) {
             var roleMap = {};
-            roleList.forEach(function(role) {
+            roleList.forEach(function (role) {
                 roleMap[role.get('name')] = role;
             });
 
             var toAdd = [];
 
-            var playerRoles = alliance.get(Alliance.schema.PLAYERS).map(function(player) {
+            var playerRoles = alliance.get(Alliance.schema.PLAYERS).map(function (player) {
                 var playerRole = PlayerObject.RoleName(player);
                 if (roleMap[playerRole] == null) {
                     toAdd.push(playerRole);
@@ -69,7 +79,7 @@ export class AllianceObject extends ParseObject {
                 return playerRole
             });
 
-            roleList.forEach(function(role) {
+            roleList.forEach(function (role) {
                 var roleName = role.get('name');
                 if (roleName.indexOf('player-') != 0) {
                     return;
@@ -80,12 +90,12 @@ export class AllianceObject extends ParseObject {
                 }
             });
 
-            return Parse.Promise.when(toAdd.map(function(roleName) {
+            return Parse.Promise.when(toAdd.map(function (roleName) {
                 return ParseRole.getOrCreate(roleName);
             }));
 
-        }).then(function(data) {
-            for(var i = 0; i < arguments.length; i ++) {
+        }).then(function (data) {
+            for (var i = 0; i < arguments.length; i++) {
                 var role = arguments[i];
                 allianceRole.getRoles().add(role);
             }

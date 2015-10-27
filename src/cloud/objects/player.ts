@@ -3,6 +3,8 @@ import {ParseRole} from '../permission/role';
 import {ACL} from '../permission/acl';
 import {AllianceObject} from './alliance';
 
+import {PlayerInfoData} from '../../api/player.info';
+
 export class PlayerObject extends ParseObject {
     static schema = {
         PLAYER: 'player',
@@ -19,8 +21,6 @@ export class PlayerObject extends ParseObject {
         RESEARCH: 'research'
     };
 
-    schema = PlayerObject.schema;
-
     constructor() {
         super('Player');
     }
@@ -30,7 +30,7 @@ export class PlayerObject extends ParseObject {
         Object.keys(PlayerObject.schema).forEach(function(keyID) {
             var key = PlayerObject.schema[keyID];
             output[key] = obj[key];
-        })
+        });
         return output;
     }
 
@@ -41,6 +41,19 @@ export class PlayerObject extends ParseObject {
         player.setACL(acl);
 
         return player.save();
+    }
+
+    update(to, from:PlayerInfoData, master = false) {
+        if (master) {
+            Parse.Cloud.useMasterKey();
+        }
+
+        Object.keys(PlayerObject.schema).forEach(function(keyID) {
+            var key = PlayerObject.schema[keyID];
+            to.set(key, from[key]);
+        });
+
+        return to.save();
     }
 
     static RoleName(playerName:string) {
