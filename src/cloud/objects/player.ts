@@ -5,6 +5,8 @@ import {AllianceObject} from './alliance';
 
 import {PlayerInfoData} from '../../api/player.info';
 
+import {Log} from '../../lib/log/log';
+
 export class PlayerObject extends ParseObject {
     static schema = {
         PLAYER: 'player',
@@ -25,16 +27,7 @@ export class PlayerObject extends ParseObject {
         super('Player');
     }
 
-    getObject(obj) {
-        var output = {};
-        Object.keys(PlayerObject.schema).forEach(function (keyID) {
-            var key = PlayerObject.schema[keyID];
-            output[key] = obj[key];
-        });
-        return output;
-    }
-
-    updateACL(player, alliance) {
+    updateACL(player, alliance, $log:Log) {
         console.log('set-player-acl:' + AllianceObject.RoleName(alliance));
         var acl = ACL.create();
         acl.setRoleReadAccess(AllianceObject.RoleName(alliance), true);
@@ -43,7 +36,7 @@ export class PlayerObject extends ParseObject {
         return player.save();
     }
 
-    update(to, from:PlayerInfoData, master = false) {
+    update(to, from:PlayerInfoData, master, $log:Log) {
         if (master) {
             Parse.Cloud.useMasterKey();
         }

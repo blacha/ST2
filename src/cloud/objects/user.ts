@@ -1,4 +1,4 @@
-import {ParseObject, ParseErrorCode} from './parse.object';
+import {ParseObject} from './parse.object';
 
 class UserObject extends ParseObject {
     schema = {

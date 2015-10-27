@@ -1,5 +1,5 @@
 import {ParseConfig} from '../../parse.config';
-import {Log} from '../log/log';
+import {Log} from '../../lib/log/log';
 
 declare var Promise:any;
 

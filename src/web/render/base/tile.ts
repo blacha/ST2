@@ -1,7 +1,5 @@
 /// <reference path="../../../../typings/tsd.d.ts" />
-
-
-import {CNCBase} from '../../client.base.ts';
+import {CNCBase} from '../../client.base';
 import {Base} from '../../../lib/base';
 import {Tile} from '../../../lib/base/tile';
 import {Building} from '../../../lib/building/building';

@@ -1,14 +1,16 @@
 import {ACL} from './acl';
 
+import {Log} from '../../lib/log/log';
+
 export class ParseRole {
 
-    static getOrCreate(name) {
+    static getOrCreate(name, $log:Log) {
         return ParseRole.get(name).then(function (role) {
             if (role) {
                 return role;
             }
 
-            return ParseRole.create(name);
+            return ParseRole.create(name, $log);
         })
     }
 
@@ -18,9 +20,11 @@ export class ParseRole {
         return query.first();
     }
 
-    static create(name) {
+    static create(name, $log:Log) {
         var acl = ACL.create();
         var role = new Parse.Role(name, acl);
+
+        $log.trace({action: 'role-create', role: name}, 'Create');
         return role.save();
     }
 }

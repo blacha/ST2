@@ -50,6 +50,14 @@ export class Log {
         this.log(Log.INFO, data, msg);
     }
 
+    public error(data:Object|string, msg?:string) {
+        this.log(Log.ERROR, data, msg);
+    }
+
+    public trace(data:Object|string, msg?:string) {
+        this.log(Log.TRACE, data, msg);
+    }
+
     private log(level:number, data:Object|string, msg?:string) {
         if (level < INSTANCE.level) {
             return;

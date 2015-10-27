@@ -4,6 +4,8 @@ import {ACL} from '../permission/acl';
 import {Player, PlayerObject} from './player';
 import {AllianceInfoData} from '../../api/player.info';
 
+import {Log} from '../../lib/log/log';
+
 export class AllianceObject extends ParseObject {
     static schema = {
         WORLD: 'world',
@@ -24,14 +26,12 @@ export class AllianceObject extends ParseObject {
     }
 
 
-    create(obj:AllianceInfoData, master) {
+    create(obj:AllianceInfoData, master:boolean, $log:Log) {
         var allianceObj;
-        return super.create(obj, master).then((alliance) => {
-
+        return super.create(obj, master, $log).then((alliance) => {
             allianceObj = alliance;
-            console.log('alliance-created' + alliance.get('name'));
-
-            return ParseRole.getOrCreate(AllianceObject.RoleName(allianceObj))
+            $log.debug('Alliance created');
+            return ParseRole.getOrCreate(AllianceObject.RoleName(allianceObj), $log)
         }).then(() => {
             var acl = ACL.create();
             acl.setRoleReadAccess(AllianceObject.RoleName(allianceObj), true);
@@ -41,7 +41,7 @@ export class AllianceObject extends ParseObject {
         });
     }
 
-    update(to, from:AllianceInfoData, master = false) {
+    update(to, from:AllianceInfoData, master:boolean, $log:Log) {
         to.set(AllianceObject.schema.BONUS, from.bonus);
         to.set(AllianceObject.schema.PLAYERS, from.players);
         to.set(AllianceObject.schema.NAME, from.name);
@@ -51,8 +51,11 @@ export class AllianceObject extends ParseObject {
         return to.save();
     }
 
-    updateACL(alliance) {
-        console.log('update-acl: ' + alliance.get('name'));
+    updateACL(alliance, $log:Log) {
+        $log = $log.child({
+            alliance: alliance.get('name')
+        });
+
         var roleName = AllianceObject.RoleName(alliance);
         var allianceRole;
         return ParseRole.get(roleName).then(function (role) {
@@ -74,6 +77,7 @@ export class AllianceObject extends ParseObject {
                 var playerRole = PlayerObject.RoleName(player);
                 if (roleMap[playerRole] == null) {
                     toAdd.push(playerRole);
+                    $log.debug({role: playerRole}, 'Add');
                 }
 
                 return playerRole
@@ -86,12 +90,13 @@ export class AllianceObject extends ParseObject {
                 }
 
                 if (playerRoles.indexOf(roleName) == -1) {
+                    $log.debug({role: roleName}, 'Remove');
                     allianceRole.getRoles().remove(role);
                 }
             });
 
             return Parse.Promise.when(toAdd.map(function (roleName) {
-                return ParseRole.getOrCreate(roleName);
+                return ParseRole.getOrCreate(roleName, $log);
             }));
 
         }).then(function (data) {

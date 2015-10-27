@@ -1,3 +1,3 @@
-import 'web/main';
+import './web/main';
 import './cloud/main';
-import 'extension/main';
+import './extension/main';

@@ -6,6 +6,12 @@ import {Player} from '../objects/player';
 
 import {PlayerData} from '../../api/player.info';
 
+import {Log} from '../../lib/log/log';
+
+var PlayerLog = Log.child({
+    func: 'player_info'
+});
+
 function PlayerInfo(req, res) {
     var playerData = <PlayerData>req.params;
     var worldInfo = playerData.world;
@@ -17,11 +23,20 @@ function PlayerInfo(req, res) {
 
     var worldObj, playerObj, allianceObj;
 
-    return World.first(World.schema.WORLD, worldInfo.world)
+    var $log = PlayerLog.child({
+        player: playerInfo.name,
+        world: worldInfo.world,
+        alliance: allianceInfo.name
+    });
+
+    $log.debug('Player Update');
+
+    return World.first(World.schema.WORLD, worldInfo.world, true, $log)
         // check if world exists
         .then(function (world) {
             if (world == null) {
-                return World.create(worldInfo, true);
+                $log.info({worldName: worldInfo.name}, 'Create World');
+                return World.create(worldInfo, true, $log);
             }
             return world;
         })
@@ -32,21 +47,22 @@ function PlayerInfo(req, res) {
             return Alliance.firstQuery({
                 world: allianceInfo.world,
                 alliance: allianceInfo.alliance
-            }, true);
+            }, true, $log);
         })
 
         // create the alliance if it doesnt exist
         .then(function (alliance) {
             if (alliance == null) {
-                return Alliance.create(allianceInfo, true);
+                $log.info('Create alliance');
+                return Alliance.create(allianceInfo, true, $log);
             }
-            return alliance.update(alliance, allianceInfo, true);
+            return alliance.update(alliance, allianceInfo, true, $log);
         })
 
         // Update the alliance ACL so the players can see it
         .then(function (alliance) {
             allianceObj = alliance;
-            return Alliance.updateACL(alliance);
+            return Alliance.updateACL(alliance, $log);
         })
 
         // find the player
@@ -54,27 +70,29 @@ function PlayerInfo(req, res) {
             return Player.firstQuery({
                 world: playerInfo.world,
                 player: playerInfo.player
-            }, true);
+            }, true, $log);
         })
 
         .then(function (player) {
             if (player == null) {
-                return Player.create(playerInfo, true)
+                $log.info('Create player');
+                return Player.create(playerInfo, true, $log)
             }
 
-            return Player.update(player, playerInfo, true);
+            return Player.update(player, playerInfo, true, $log);
 
         })
 
         .then(function (player) {
             playerObj = player;
 
-            return Player.updateACL(playerObj, allianceObj);
+            return Player.updateACL(playerObj, allianceObj, $log);
         })
 
         .then(function () {
             res.success('Player Updated');
         }, function (err) {
+            $log.error({error: err}, 'Error');
             res.error(err);
         })
 }

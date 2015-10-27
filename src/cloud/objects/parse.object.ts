@@ -1,7 +1,5 @@
 /// <reference path="../parse.d.ts" />
-export enum ParseErrorCode {
-    NOT_FOUND
-}
+import {Log} from '../../lib/log/log';
 
 export class ParseObject {
     name:string;
@@ -12,10 +10,6 @@ export class ParseObject {
         this.code = [];
     }
 
-    getCode(code) {
-        return this.name.toUpperCase() + '_' + ParseErrorCode[code];
-    }
-
     getSchema() {
         return {};
     }
@@ -24,7 +18,7 @@ export class ParseObject {
         return new Parse.Query(Parse.Object.extend(this.name));
     }
 
-    firstQuery(args, master = false) {
+    firstQuery(args, master:boolean, $log:Log) {
         var query = this.query();
         Object.keys(args).forEach(function (key) {
             query.equalTo(key, args[key]);
@@ -35,36 +29,57 @@ export class ParseObject {
         }
 
         return query.first().then((output)  => {
-            console.log('get-first-query: ' + this.name + ':' + JSON.stringify(args));
+            $log.trace({
+                schema: this.name,
+                action: 'get-first-query',
+                hasResult: output != null,
+                args: args
+            }, 'get-first-query');
+
             return output;
         });
     }
 
 
-    first(key:string, value:any, master = false) {
+    first(key:string, value:any, master:boolean, $log:Log) {
         var query = this.query();
         query.equalTo(key, value);
         if (master) {
             Parse.Cloud.useMasterKey();
         }
         return query.first().then((output)  => {
-            console.log('get-first: ' + this.name + ':' + JSON.stringify(output));
+            $log.trace({
+                schema: this.name,
+                action: 'get-first',
+                hasResult: output != null,
+                args: {
+                    key: key,
+                    value: value
+                }
+            }, 'get-first');
+
             return output;
         })
     }
 
-    create(obj, master = false) {
+    create(obj, master:boolean, $log:Log) {
         var ParseObj = Parse.Object.extend(this.name);
         var schema = this.getSchema();
 
         var newObj = new ParseObj();
-        console.log('create-schema :' + this.name + '-' + JSON.stringify(Object.keys(schema)));
+        var childLog = Log.child({
+            schema: this.name,
+            action: 'create',
+        });
 
         Object.keys(schema).forEach(function (key) {
             var keyVal = schema[key];
             var value = obj[keyVal];
             if (value) {
-                console.log('create ' + key + '=' + value);
+                childLog.trace({
+                    key: key,
+                    value: value
+                }, 'Key');
                 newObj.set(keyVal, value);
             }
         });

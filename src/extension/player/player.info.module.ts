@@ -1,5 +1,5 @@
 import {PlayerInfo} from './player.info';
-import {Log} from '../log/log';
+import {Log} from '../../lib/log/log';
 
 import {ParseUtil} from '../util/parse';
 
