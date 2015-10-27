@@ -46,7 +46,7 @@ export class ParseUtil {
             http.setRequestHeader('Content-Type', 'application/json');
             var timedOut = false;
             var resolved = false;
-            http.onreadystatechange = function() {
+            http.onreadystatechange = function () {
                 if (http.readyState !== 4) {
                     return;
                 }
@@ -62,7 +62,7 @@ export class ParseUtil {
 
             http.send(JSON.stringify(data));
 
-            setTimeout(function() {
+            setTimeout(function () {
                 if (resolved) {
                     return;
                 }

@@ -1,4 +1,3 @@
-
 export interface PlayerData {
     world: WorldInfoData;
     player: PlayerInfoData;

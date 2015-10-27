@@ -15,7 +15,7 @@ export var Render = {
         m.route(document.body, '/b/74yQsZtTL2', {
             '/b/:baseID': BaseRender,
             '/layout/:world/:player': BaseLayoutRender,
-            '/layout/:world':  AuthWrapper.wrap(BaseLayoutRender),
+            '/layout/:world': AuthWrapper.wrap(BaseLayoutRender),
             //'/alliance/:world':AllianceRender
             '/login': LoginRender,
             '/login/:username': LoginRender,

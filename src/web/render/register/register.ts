@@ -32,7 +32,7 @@ export class RegisterRender {
     private errorMessage:_mithril.MithrilProperty<string>;
     private worlds:WorldObj[];
 
-    constructor()  {
+    constructor() {
         if (ParseUtil.token()) {
             m.route('/');
             return;

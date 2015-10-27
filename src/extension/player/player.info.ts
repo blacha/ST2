@@ -5,7 +5,7 @@ export class PlayerInfo {
     static instance;
     static versions;
 
-    static scan(): { data: PlayerAPI.PlayerData, changes: boolean} {
+    static scan():{ data: PlayerAPI.PlayerData, changes: boolean} {
         var lastVersion = PlayerInfo.versions || {};
         PlayerInfo.versions = {};
         PlayerInfo.instance = ClientLib.Data.MainData.GetInstance();
@@ -17,7 +17,7 @@ export class PlayerInfo {
         };
 
         var hasChanges = false;
-        Object.keys(PlayerInfo.versions).forEach(function(id) {
+        Object.keys(PlayerInfo.versions).forEach(function (id) {
             if (PlayerInfo.versions[id] !== lastVersion[id]) {
                 hasChanges = true;
             }
@@ -75,7 +75,7 @@ export class PlayerInfo {
                 vec: alliance.get_POIVehicleBonus(),
                 inf: alliance.get_POIInfantryBonus()
             },
-            players: alliance.get_MemberDataAsArray().map(function(member) {
+            players: alliance.get_MemberDataAsArray().map(function (member) {
                 return member.Name;
             })
         };
@@ -86,7 +86,7 @@ export class PlayerInfo {
         var research = player.get_PlayerResearch();
 
         var output:PlayerAPI.ResearchInfoData = {};
-        [1, 2, 5].forEach(function(type) {
+        [1, 2, 5].forEach(function (type) {
             var list = research.GetResearchItemListByType(type);
 
             list.l.forEach(function (rt) {
@@ -109,7 +109,7 @@ export class PlayerInfo {
     static getCities() {
         var output = [];
         var allCities = ClientLib.Data.MainData.GetInstance().get_Cities().get_AllCities().d;
-        Object.keys(allCities).forEach(function(cityID) {
+        Object.keys(allCities).forEach(function (cityID) {
             var selectedBase = allCities[cityID];
             output.push(PlayerInfo.getCity(selectedBase));
         });
@@ -119,37 +119,37 @@ export class PlayerInfo {
 
     static getCity(c):PlayerAPI.CityInfoData {
         var city = {
-            defense : c.get_LvlDefense(),
-            offense : c.get_LvlOffense(),
-            level : c.get_LvlBase(),
+            defense: c.get_LvlDefense(),
+            offense: c.get_LvlOffense(),
+            level: c.get_LvlBase(),
 
-            id : c.get_Id(),
+            id: c.get_Id(),
 
-            x : c.get_PosX(),
-            y : c.get_PosY(),
-            v : c.get_Version(),
+            x: c.get_PosX(),
+            y: c.get_PosY(),
+            v: c.get_Version(),
             name: c.get_Name(),
             tiles: CityData.getLayout(c),
 
             production: {
                 power: c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Power, false, false) +
-                    c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Power),
+                c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Power),
 
                 tiberium: c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Tiberium, false, false) +
-                    c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Tiberium),
+                c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Tiberium),
 
                 crystal: c.GetResourceGrowPerHour(ClientLib.Base.EResourceType.Crystal, false, false) +
-                    c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Crystal),
+                c.GetResourceBonusGrowPerHour(ClientLib.Base.EResourceType.Crystal),
 
                 credits: ClientLib.Base.Resource.GetResourceGrowPerHour(c.get_CityCreditsProduction(), false) +
-                    ClientLib.Base.Resource.GetResourceBonusGrowPerHour(c.get_CityCreditsProduction(), false),
+                ClientLib.Base.Resource.GetResourceBonusGrowPerHour(c.get_CityCreditsProduction(), false),
             },
-            health : c.GetBuildingsConditionInPercent(),
+            health: c.GetBuildingsConditionInPercent(),
 
-            current : {
-                power : c.GetResourceCount(ClientLib.Base.EResourceType.Power),
-                tiberium : c.GetResourceCount(ClientLib.Base.EResourceType.Tiberium),
-                crystal : c.GetResourceCount(ClientLib.Base.EResourceType.Crystal)
+            current: {
+                power: c.GetResourceCount(ClientLib.Base.EResourceType.Power),
+                tiberium: c.GetResourceCount(ClientLib.Base.EResourceType.Tiberium),
+                crystal: c.GetResourceCount(ClientLib.Base.EResourceType.Crystal)
             },
 
             repair: {
@@ -168,7 +168,7 @@ export class PlayerInfo {
 
     static getWorld():PlayerAPI.WorldInfoData {
         return {
-            world:PlayerInfo.instance.get_Server().get_WorldId(),
+            world: PlayerInfo.instance.get_Server().get_WorldId(),
             name: PlayerInfo.instance.get_Server().get_Name().trim()
         }
     }

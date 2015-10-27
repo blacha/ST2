@@ -8,7 +8,7 @@ import {PlayerObject} from '../objects/player';
 import {UUID} from '../../lib/uuid';
 
 export function define() {
-    Parse.Cloud.define('verify_done', function(req, res) {
+    Parse.Cloud.define('verify_done', function (req, res) {
         if (req.params.uuid == null) {
             return res.error('Invalid UUID');
         }
@@ -23,7 +23,7 @@ export function define() {
 
         var verifyObj = null;
         var userObj = null;
-        return Verify.first(Verify.schema.UUID, req.params.uuid, true).then(function(data) {
+        return Verify.first(Verify.schema.UUID, req.params.uuid, true).then(function (data) {
             if (data == null) {
                 return Parse.Promise.error('Invalid UUID');
             }
@@ -40,12 +40,12 @@ export function define() {
         }).then(function (user) {
             userObj = user;
             return ParseRole.getOrCreate(PlayerObject.RoleName(verifyObj.get(Verify.schema.PLAYER)));
-        }).then(function(role) {
+        }).then(function (role) {
             role.getUsers().add(userObj);
             return role.save();
-        }).then(function() {
+        }).then(function () {
             return Parse.Object.destroyAll([verifyObj]);
-        }).then(function() {
+        }).then(function () {
             res.success({
                 id: userObj.id
             });
@@ -55,12 +55,12 @@ export function define() {
         })
     });
 
-    Parse.Cloud.define('verify_get', function(req, res) {
+    Parse.Cloud.define('verify_get', function (req, res) {
         if (req.params.uuid == null) {
             return res.error('Invalid UUID');
         }
 
-        return Verify.first(Verify.schema.UUID, req.params.uuid, true).then(function(data) {
+        return Verify.first(Verify.schema.UUID, req.params.uuid, true).then(function (data) {
             if (data) {
                 res.success(data);
                 return;
@@ -84,7 +84,7 @@ export function define() {
         var uuid = UUID.v4();
 
         User.first(User.schema.PLAYER, player, true)
-            .then(function(player) {
+            .then(function (player) {
                 if (player == null) {
                     return World.first(World.schema.WORLD, worldID);
                 }

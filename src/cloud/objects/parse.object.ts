@@ -26,7 +26,7 @@ export class ParseObject {
 
     firstQuery(args, master = false) {
         var query = this.query();
-        Object.keys(args).forEach(function(key) {
+        Object.keys(args).forEach(function (key) {
             query.equalTo(key, args[key]);
         });
 
@@ -35,7 +35,7 @@ export class ParseObject {
         }
 
         return query.first().then((output)  => {
-            console.log('get-first-query: ' + this.name + ':' +  JSON.stringify(args));
+            console.log('get-first-query: ' + this.name + ':' + JSON.stringify(args));
             return output;
         });
     }
@@ -48,7 +48,7 @@ export class ParseObject {
             Parse.Cloud.useMasterKey();
         }
         return query.first().then((output)  => {
-            console.log('get-first: ' + this.name + ':' +  JSON.stringify(output));
+            console.log('get-first: ' + this.name + ':' + JSON.stringify(output));
             return output;
         })
     }

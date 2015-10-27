@@ -20,7 +20,8 @@ export class BaseRender {
     private base;
     private ready;
     private selected;
-    constructor () {
+
+    constructor() {
         var baseID = m.route.param('baseID');
         var baseProp = m.prop();
 
@@ -37,7 +38,7 @@ export class BaseRender {
         this.selected = m.prop()
     }
 
-    view () {
+    view() {
         if (this.ready() == false) {
             console.log('not-ready');
             return;
@@ -63,7 +64,8 @@ export class BaseRender {
     static view(ctrl:BaseRender) {
         return ctrl.view();
     }
-};
+}
+;
 
 
 function makeBaseTiles(ctrl, base:Base) {

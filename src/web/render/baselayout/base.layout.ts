@@ -20,7 +20,7 @@ export class BaseLayoutRender {
         ParseUtil.query('Layout', {world: this.worldID()}).then((result) => {
             console.log('Layout', result.results);
             var layout = result.results;
-            this.layouts(layout.map(function(layout) {
+            this.layouts(layout.map(function (layout) {
                 return Base.load(layout);
             }));
         })
@@ -56,7 +56,7 @@ export class BaseLayoutRender {
 
     static renderLayout(layout:Base) {
         var output = [];
-        layout.baseForEach((x,y,building,tile, base) => {
+        layout.baseForEach((x, y, building, tile, base) => {
             output.push(m(`div.BaseTile.BaseTile-`));
             console.log(x, y, tile)
         });

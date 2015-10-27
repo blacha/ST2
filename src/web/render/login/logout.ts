@@ -8,7 +8,7 @@ export class LogoutRender {
     }
 
     static view() {
-         return null;
+        return null;
     }
 
 }

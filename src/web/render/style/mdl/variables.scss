@@ -98,11 +98,11 @@ $color-accent-contrast: $color-dark-contrast !default;
 
 // Replace all colors with placeholders if we're generating a template.
 @if $styleguide-generate-template == true {
-  $color-primary: '$color-primary';
-  $color-primary-dark: '$color-primary-dark';
-  $color-accent: '$color-accent';
-  $color-primary-contrast: '$color-primary-contrast';
-  $color-accent-contrast: '$color-accent-contrast';
+    $color-primary: '$color-primary';
+    $color-primary-dark: '$color-primary-dark';
+    $color-accent: '$color-accent';
+    $color-primary-contrast: '$color-primary-contrast';
+    $color-accent-contrast: '$color-accent-contrast';
 }
 
 /* ==========  Typography  ========== */

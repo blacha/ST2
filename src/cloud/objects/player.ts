@@ -27,7 +27,7 @@ export class PlayerObject extends ParseObject {
 
     getObject(obj) {
         var output = {};
-        Object.keys(PlayerObject.schema).forEach(function(keyID) {
+        Object.keys(PlayerObject.schema).forEach(function (keyID) {
             var key = PlayerObject.schema[keyID];
             output[key] = obj[key];
         });
@@ -48,7 +48,7 @@ export class PlayerObject extends ParseObject {
             Parse.Cloud.useMasterKey();
         }
 
-        Object.keys(PlayerObject.schema).forEach(function(keyID) {
+        Object.keys(PlayerObject.schema).forEach(function (keyID) {
             var key = PlayerObject.schema[keyID];
             to.set(key, from[key]);
         });

@@ -14,17 +14,17 @@ function GameToJSON(offset, obj, key) {
 };
 
 export class CityData {
-    static BASE_OFFSET_Y =  0;
-    static DEF_OFFSET_Y =  8;
-    static OFF_OFFSET_Y =   CityData.DEF_OFFSET_Y + 8;
-    static MAX_BASE_X =  9;
+    static BASE_OFFSET_Y = 0;
+    static DEF_OFFSET_Y = 8;
+    static OFF_OFFSET_Y = CityData.DEF_OFFSET_Y + 8;
+    static MAX_BASE_X = 9;
 
-    static FACTION_GDI =  1;
-    static FACTION_NOD =  2;
+    static FACTION_GDI = 1;
+    static FACTION_NOD = 2;
 
     static $MM;
 
-    static $index(x:number, y: number) {
+    static $index(x:number, y:number) {
         return x + y * CityData.MAX_BASE_X;
     }
 
@@ -129,10 +129,10 @@ export class CityData {
             var research = player.get_PlayerResearch();
 
             var output = [];
-            [1, 2, 5].forEach(function(type) {
+            [1, 2, 5].forEach(function (type) {
                 var list = research.GetResearchItemListByType(type);
 
-                list.l.forEach(function(rt) {
+                list.l.forEach(function (rt) {
                     if (rt.get_CurrentLevel() < 2) {
                         return;
                     }
@@ -153,7 +153,7 @@ export class CityData {
         var MODULES = CityData.getModuleMap();
 
         var upgradeMap = {};
-        activeModules.forEach(function(id) {
+        activeModules.forEach(function (id) {
             var unitID = MODULES[id];
             if (unitID == null) {
                 return;
@@ -161,7 +161,7 @@ export class CityData {
             upgradeMap[unitID] = true;
         });
 
-        return Object.keys(upgradeMap).map(function(i) {
+        return Object.keys(upgradeMap).map(function (i) {
             return parseInt(i, 10);
         });
     }
@@ -188,7 +188,7 @@ export class CityData {
         //};
     }
 
-    static getBuildings = function(city) {
+    static getBuildings = function (city) {
         var buildings = city.get_Buildings();
         if (buildings.c == 0) {
             return [];
@@ -204,10 +204,10 @@ export class CityData {
         }
         var units = GAMEDATA.units;
         var MODULES = [];
-        Object.keys(units).forEach(function(id) {
+        Object.keys(units).forEach(function (id) {
             var unit = units[id];
             var i = parseInt(id, 10);
-            unit.m.forEach(function(module) {
+            unit.m.forEach(function (module) {
                 if (module.t == 1) {
                     return;
                 }

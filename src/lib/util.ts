@@ -116,7 +116,7 @@ export function getRepairValue(gdo:GameDataJSON, level:number, growth = Constant
             val = Math.ceil(val * 1.25);
         }
         //var outputKey = toOutputKey(key);
-        output[key] = val * Math.pow(growth, level - Constants.GROWTH_LEVEL) ;
+        output[key] = val * Math.pow(growth, level - Constants.GROWTH_LEVEL);
     }
 
     return output;

@@ -9,7 +9,7 @@ export class AuthWrapper {
 
     controller() {
         console.log('check auth', ParseUtil.token());
-        if (ParseUtil.token() == null){
+        if (ParseUtil.token() == null) {
             m.route('/login');
             return;
         }

@@ -9,8 +9,8 @@ export class Log {
     static FATAL = 60;
 
     private keys;
-    private parent: Log;
-    public level: number;
+    private parent:Log;
+    public level:number;
 
     constructor(parent:Log, keys?) {
         this.keys = keys;
@@ -20,7 +20,7 @@ export class Log {
 
     static child(keys) {
         if (INSTANCE == null) {
-            INSTANCE = new Log(null, { name: 'ST' });
+            INSTANCE = new Log(null, {name: 'ST'});
             INSTANCE.level = Log.DEBUG;
         }
 
@@ -28,7 +28,7 @@ export class Log {
     }
 
     child(keys) {
-       return new Log(this, keys);
+        return new Log(this, keys);
     }
 
     protected addKeys(obj) {
@@ -36,16 +36,17 @@ export class Log {
             this.parent.addKeys(obj);
         }
         var keys = this.keys;
-        Object.keys(keys).forEach(function(key) {
+        Object.keys(keys).forEach(function (key) {
             obj[key] = keys[key];
         });
         return obj;
     }
 
-    public debug(data:Object|string, msg?: string) {
+    public debug(data:Object|string, msg?:string) {
         this.log(Log.DEBUG, data, msg);
     }
-    public info(data:Object|string, msg?: string) {
+
+    public info(data:Object|string, msg?:string) {
         this.log(Log.INFO, data, msg);
     }
 

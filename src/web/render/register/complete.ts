@@ -8,9 +8,9 @@ var EMAIL_REGEX = /.+@.+\..+/;
 
 export class RegistrationCompleteRender {
 
-    private email: FormInputState;
-    private password: FormInputState;
-    private passwordAgain: FormInputState;
+    private email:FormInputState;
+    private password:FormInputState;
+    private passwordAgain:FormInputState;
 
     private loading:_mithril.MithrilProperty<boolean>;
     private invalid:_mithril.MithrilProperty<boolean>;
@@ -37,7 +37,7 @@ export class RegistrationCompleteRender {
         this.invalid = m.prop(false);
         this.registering = m.prop(false);
 
-        ParseUtil.func('verify_get', {uuid: m.route.param('uuid') }).then((data) => {
+        ParseUtil.func('verify_get', {uuid: m.route.param('uuid')}).then((data) => {
             this.loading(false);
             console.log('verify-data', data);
             this.verify(data);
@@ -79,8 +79,8 @@ export class RegistrationCompleteRender {
         }, (err:any) => {
             this.registering(false);
             try {
-                 err = JSON.parse(err.error);
-            } catch(e) {
+                err = JSON.parse(err.error);
+            } catch (e) {
 
             }
             this.error(true);
