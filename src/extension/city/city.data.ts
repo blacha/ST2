@@ -170,22 +170,21 @@ export class CityData {
         var units = city.get_CityUnitsData();
         return {d: [], o: []};
 
-        // TODO xxPATCH get_DefenseUnits, get_OffenseUnits
-        //var defUnits = units.get_DefenseUnits();
-        //var offUnits = units.get_OffenseUnits();
-        //
-        //var faction = city.get_CityFaction();
-        //if (faction === CityData.FACTION_NOD || faction === CityData.FACTION_GDI) {
-        //    return {
-        //        d: Object.keys(defUnits.d).map(GameToJSON.bind(null, CityData.DEF_OFFSET_Y, defUnits.d)),
-        //        o: Object.keys(offUnits.d).map(GameToJSON.bind(null, CityData.OFF_OFFSET_Y, offUnits.d))
-        //    }
-        //}
-        //
-        //return {
-        //    d: Object.keys(defUnits.d).map(GameToJSON.bind(null, CityData.DEF_OFFSET_Y, defUnits.d)),
-        //    o: []
-        //};
+        var defUnits = units.get_DefenseUnits();
+        var offUnits = units.get_OffenseUnits();
+
+        var faction = city.get_CityFaction();
+        if (faction === CityData.FACTION_NOD || faction === CityData.FACTION_GDI) {
+            return {
+                d: Object.keys(defUnits.d).map(GameToJSON.bind(null, CityData.DEF_OFFSET_Y, defUnits.d)),
+                o: Object.keys(offUnits.d).map(GameToJSON.bind(null, CityData.OFF_OFFSET_Y, offUnits.d))
+            }
+        }
+
+        return {
+            d: Object.keys(defUnits.d).map(GameToJSON.bind(null, CityData.DEF_OFFSET_Y, defUnits.d)),
+            o: []
+        };
     }
 
     static getBuildings = function (city) {

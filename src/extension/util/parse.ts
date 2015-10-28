@@ -1,11 +1,10 @@
 import {ParseConfig} from '../../parse.config';
 import {Log} from '../../lib/log/log';
 
-declare var Promise:any;
-
 var INSTANCE:ParseUtil;
 export class ParseUtil {
 
+    static TIMEOUT = 5000;
     private queue;
 
     constructor() {
@@ -15,7 +14,7 @@ export class ParseUtil {
         defer.resolve();
     }
 
-    static GetInstance():ParseUtil {
+    static getInstance():ParseUtil {
         if (INSTANCE == null) {
             INSTANCE = new ParseUtil();
         }
@@ -23,7 +22,7 @@ export class ParseUtil {
     }
 
     static send(name:string, data:Object, log:Log) {
-        return ParseUtil.GetInstance().send(name, data, log);
+        return ParseUtil.getInstance().send(name, data, log);
     }
 
     send(name:string, data:Object, log:Log) {
@@ -69,7 +68,7 @@ export class ParseUtil {
                 timedOut = true;
 
                 defer.reject('Timeout');
-            }, 2000);
+            }, ParseUtil.TIMEOUT);
 
             return queueDefer.promise;
         });
@@ -77,26 +76,3 @@ export class ParseUtil {
         return defer.promise;
     }
 }
-//function parseFunction(func, args) {
-//    var defer = Promise.defer();
-//
-//
-//    var http = new XMLHttpRequest();
-//
-//    var url = 'https://api.parse.com/1/classes/Layout';
-//
-//    http.open('POST', url, true);
-//    http.setRequestHeader('X-Parse-Application-Id', 'p1tXYbkTHiz7KuX9BiGG5LtJEe0EOqegIl6F1XhJ');
-//    http.setRequestHeader('X-Parse-REST-API-Key', 'UdPxMf4bww3S5KSUe9qAFYMaZ1mfEGYE2TGePGTU');
-//    http.setRequestHeader('Content-Type', 'application/json');
-//
-//    http.onreadystatechange = function() {
-//        if (http.readyState == 4 && http.status == 201) {
-//            var response = JSON.parse(http.responseText);
-//            var id = response.objectId;
-//            console.log(id);
-//        }
-//    };
-//
-//    http.send(JSON.stringify(data));
-//}

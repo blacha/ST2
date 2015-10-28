@@ -4,4 +4,6 @@
 
 
 declare var ClientLib;
+declare var qx;
+declare var Promise;
 declare var GAMEDATA;
