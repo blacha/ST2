@@ -2,10 +2,9 @@ import {PlayerInfo} from './player.info';
 import {Log} from '../../lib/log/log';
 
 import {ParseUtil} from '../util/parse';
-import {PatchUtil} from '../util/patch';
 
 export class PlayerInfoModule {
-    static INTERVAL_TIME = 5000;
+    static INTERVAL_TIME = 30000;
     static $interval;
     static log:Log;
 
@@ -28,13 +27,13 @@ export class PlayerInfoModule {
         return PlayerInfo;
     }
 
-    static run() {
+    static run(force = false) {
         if (PlayerInfoModule.log == null) {
             PlayerInfoModule.start();
         }
 
         var data = PlayerInfo.scan();
-        if (data.changes == false) {
+        if (data.changes == false && force === false) {
             PlayerInfoModule.log.debug('No changes');
             return;
         }
@@ -46,23 +45,4 @@ export class PlayerInfoModule {
             console.log('err', err);
         })
     }
-
-    static patch() {
-        PatchUtil.addPatch({
-            name: 'ClientLib.Data.CityUnits.get_DefenseUnits',
-            str: ClientLib.Data.CityUnits.prototype.HasUnitMdbId.toString(),
-            proto: ClientLib.Data.CityUnits.prototype,
-            re: /for \(var c in \{d:this\.(.{6})/,
-            func: 'get_DefenseUnits'
-        });
-
-        PatchUtil.addPatch({
-            name: 'ClientLib.Data.CityUnits.get_OffenseUnits',
-            str: ClientLib.Data.CityUnits.prototype.HasUnitMdbId.toString(),
-            proto: ClientLib.Data.CityUnits.prototype,
-            re: /for \(var b in \{d:this\.(.{6})/,
-            func: 'get_OffenseUnits'
-        });
-    }
-
 }

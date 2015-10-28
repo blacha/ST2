@@ -7,3 +7,5 @@ declare var ClientLib;
 declare var qx;
 declare var Promise;
 declare var GAMEDATA;
+
+declare var ST2;

@@ -168,10 +168,8 @@ export class CityData {
 
     static getUnits(city) {
         var units = city.get_CityUnitsData();
-        return {d: [], o: []};
-
-        var defUnits = units.get_DefenseUnits();
-        var offUnits = units.get_OffenseUnits();
+        var defUnits = units.$get_DefenseUnits();
+        var offUnits = units.$get_OffenseUnits();
 
         var faction = city.get_CityFaction();
         if (faction === CityData.FACTION_NOD || faction === CityData.FACTION_GDI) {
