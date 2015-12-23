@@ -14,4 +14,21 @@ export interface ParsePlayerObject extends ParseBaseObject {
     command: CommandInfoData;
     research: ResearchInfoData;
     cities: CityInfoData[]
+
+    $stats?: PlayerStats;
+}
+
+export interface Resources {
+    power: number,
+    tiberium: number,
+    crystal: number,
+    credits: number
+}
+
+export interface PlayerStats {
+    main: CityInfoData,
+    total: {
+        production: Resources;
+        resources: Resources;
+    }
 }

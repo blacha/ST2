@@ -21,12 +21,12 @@ function LayoutNavLink(config, link) {
 }
 
 function LayoutNavigation(config) {
-    return null;
-    //  m('ul.NavLink-Group', [
-    //    LayoutNavLink(config, 'Base'),
-    //    LayoutNavLink(config, 'Layout'),
-    //    LayoutNavLink(config, 'Players')
-    //]);
+    //return null;
+      return m('ul.NavLink-Group', [
+        LayoutNavLink(config, 'Base'),
+        LayoutNavLink(config, 'Layout'),
+        LayoutNavLink(config, 'Alliance'),
+    ]);
 }
 
 export function createLayout(config, content) {

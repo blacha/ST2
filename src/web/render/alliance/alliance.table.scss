@@ -1,0 +1,84 @@
+//.TableHead-Cell {
+//    font-weight: normal;
+//    line-height: 24px;
+//    height: 48px;
+//    padding-bottom: 9px;
+//    box-sizing: border-box;
+//    color: $data-table-header-color;
+//    font-size: 12px;
+//    letter-spacing: 0;
+//    vertical-align: bottom;
+//    position: relative;
+//}
+
+.Table-Cell--Sort-Up {
+    background-color: green;
+}
+
+.Table-Cell--Sort-Down {
+    background-color: orange;
+}
+
+.Table {
+    width: 100%;
+    position: relative;
+    border: $data-table-dividers;
+    border-collapse: collapse;
+    white-space: nowrap;
+    font-size: $data-table-font-size;
+    background-color: unquote("rgb(#{$color-white})");
+    thead {
+        padding-bottom: 3px;
+    }
+
+    tbody {
+        tr {
+            position: relative;
+            height: $data-table-row-height;
+
+            &.is-selected {
+                background-color: $data-table-selection-color;
+            }
+
+            &:hover {
+                background-color: $data-table-hover-color;
+            }
+        }
+    }
+
+    td, th {
+        padding: 0 $data-table-column-padding 0 $data-table-column-padding;
+        text-align: right;
+        font-weight: normal;
+        font-size: 12px;
+
+        &:first-of-type {
+            padding-left: 24px;
+        }
+
+        &:last-of-type {
+            padding-right: 24px;
+        }
+    }
+    td {
+        position: relative;
+        vertical-align: top;
+        height: $data-table-row-height;
+        border-top: $data-table-dividers;
+        border-bottom: $data-table-dividers;
+        box-sizing: border-box;
+        font-size: 10px;
+        line-height: 48px;
+    }
+
+    th {
+        position: relative;
+        vertical-align: bottom;
+        text-overflow: ellipsis;
+        height: $data-table-row-height;
+        font-size: $data-table-header-font-size;
+        color: $data-table-header-color;
+        padding-bottom: 8px;
+        box-sizing: border-box;
+    }
+}
