@@ -42,7 +42,8 @@ module.exports = function(grunt) {
             output: {
                 path: './static/lib/',
                 filename: 'bundle.js',
-                libraryTarget: 'umd'
+                libraryTarget: 'umd',
+                sourceMap: true
             },
             externals: [{
                 'moment': true

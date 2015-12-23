@@ -1,11 +1,13 @@
 /// <reference path="../../../../typings/mithril/mithril.d.ts" />
 
-import {ParseUtil} from '../parse';
+import {ParseWebUtil} from '../parse';
 import {FormUtil, FormInputState} from '../form';
 import {RegisterRender} from './register';
+import {Log} from "../../../lib/log/log";
 
 var EMAIL_REGEX = /.+@.+\..+/;
 
+var $log = Log.child({route: 'RegistrationComplete'});
 export class RegistrationCompleteRender {
 
     private email:FormInputState;
@@ -37,7 +39,7 @@ export class RegistrationCompleteRender {
         this.invalid = m.prop(false);
         this.registering = m.prop(false);
 
-        ParseUtil.func('verify_get', {uuid: m.route.param('uuid')}).then((data) => {
+        ParseWebUtil.func('verify_get', {uuid: m.route.param('uuid')}, $log).then((data) => {
             this.loading(false);
             console.log('verify-data', data);
             this.verify(data);
@@ -69,11 +71,11 @@ export class RegistrationCompleteRender {
         this.registering(true);
         m.redraw();
 
-        ParseUtil.func('verify_done', {
+        ParseWebUtil.func('verify_done', {
             uuid: m.route.param('uuid'),
             username: email,
-            password: password
-        }).then((data) => {
+            password: password,
+        }, $log).then((data) => {
             this.registering(false);
             m.route(`/login/${this.verify().player}`);
         }, (err:any) => {

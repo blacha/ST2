@@ -8,7 +8,7 @@ export class StorageUtil {
     static getItem(key:string) {
         var realKey = StorageUtil.makeKey(key);
         var data = localStorage.getItem(realKey);
-        if (data == null){
+        if (data == null) {
             return null;
         }
         var dataObj = JSON.parse(data);

@@ -1,6 +1,9 @@
-import {ParseUtil} from '../parse';
+import {ParseWebUtil} from '../parse';
 import {Base} from '../../../lib/base';
 import {Tile} from '../../../lib/base/tile';
+import {Log} from "../../../lib/log/log";
+
+var $log = Log.child({route: 'BaseLayout'});
 
 export class BaseLayoutRender {
     private worldID;
@@ -12,12 +15,12 @@ export class BaseLayoutRender {
         this.world = m.prop();
         this.layouts = m.prop([]);
 
-        ParseUtil.query('World', {world: this.worldID()}).then((result) => {
+        ParseWebUtil.query('World', {world: this.worldID()}, $log).then((result) => {
             console.log('World', result.results);
             this.world(result.results[0]);
         });
 
-        ParseUtil.query('Layout', {world: this.worldID()}).then((result) => {
+        ParseWebUtil.query('Layout', {world: this.worldID()}, $log).then((result) => {
             console.log('Layout', result.results);
             var layout = result.results;
             this.layouts(layout.map(function (layout) {

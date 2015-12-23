@@ -29,16 +29,19 @@ export interface AllianceInfoData {
     name: string;
     alliance: number;
     players: string[];
-    bonus: {
-        power: number;
-        crystal: number;
-        tiberium: number;
-        air: number;
-        def: number;
-        vec: number;
-        inf: number;
-    }
+    bonus: AllianceBonusData;
 }
+
+export interface AllianceBonusData {
+    power: number;
+    crystal: number;
+    tiberium: number;
+    air: number;
+    def: number;
+    vec: number;
+    inf: number;
+}
+
 export interface ResearchInfoData {
     [key:string]: number;
 }

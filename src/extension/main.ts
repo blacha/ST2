@@ -41,7 +41,7 @@ export function stop() {
 
 if (typeof ClientLib !== 'undefined') {
     if (typeof ST2 !== 'undefined' && ST2.stop) {
-       ST2.stop();
+        ST2.stop();
     }
     start();
 }

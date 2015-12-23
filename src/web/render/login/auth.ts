@@ -1,26 +1,36 @@
-import {ParseUtil} from '../parse';
+import {ParseWebUtil} from '../parse';
 
-export class AuthWrapper {
+export function WrapAuth(component) {
+    return {
+        controller: function() {
+            return new AuthWrapper(component);
+        },
+        view: function(ctrl) {
+            return ctrl.view();
+        }
+    }
+}
+
+class AuthWrapper {
     private ctrl;
+
+    private content;
 
     constructor(ctrl) {
         this.ctrl = ctrl;
-    }
-
-    controller() {
-        console.log('check auth', ParseUtil.token());
-        if (ParseUtil.token() == null) {
+        console.log('check auth', ParseWebUtil.token());
+        if (ParseWebUtil.token() == null) {
             m.route('/login');
             return;
         }
-        return new this.ctrl();
+        this.content = new ctrl();
     }
 
-    view(data) {
-        return this.ctrl.view(data);
+    view(ctrl) {
+        if (this.content == null) {
+            return [];
+        }
+        return this.content.view();
     }
 
-    static wrap(ctrl) {
-        return new AuthWrapper(ctrl);
-    }
 }

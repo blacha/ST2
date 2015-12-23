@@ -1,7 +1,12 @@
 /// <reference path="../../../../typings/mithril/mithril.d.ts" />
 
-import {ParseUtil} from '../parse';
+import {ParseWebUtil} from '../parse';
 import {FormUtil, FormInputState} from '../form';
+import {Log} from "../../../lib/log/log";
+
+var $log = Log.child({
+    route: 'Login'
+});
 
 export class LoginRender {
     static LOGO = m('div.STLogo');
@@ -18,7 +23,7 @@ export class LoginRender {
     private errorMessage:_mithril.MithrilProperty<string>;
 
     constructor() {
-        if (ParseUtil.token()) {
+        if (ParseWebUtil.token()) {
             m.route('/');
             return;
         }
@@ -89,15 +94,19 @@ export class LoginRender {
         this.loading(true);
         if (this.username.value().trim() === '') {
             this.setError(this.username.error, 'Username is required');
-            return;
+            return false;
         }
 
         if (this.password.value().trim() === '') {
             this.setError(this.password.error, 'Password is required');
-            return;
+            return false;
         }
 
-        ParseUtil.login(this.username.value(), this.password.value()).then(function loginGood(data) {
+        ParseWebUtil.login(
+            this.username.value(),
+            this.password.value(),
+            $log
+        ).then(function loginGood(data) {
             console.log('login-good', data);
             m.route('/');
         }, () => {

@@ -1,9 +1,9 @@
-import {ParseUtil} from '../parse';
+import {ParseWebUtil} from '../parse';
 
 export class LogoutRender {
 
     static controller() {
-        ParseUtil.logout();
+        ParseWebUtil.logout();
         return null;
     }
 

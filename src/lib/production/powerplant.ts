@@ -34,7 +34,7 @@ export var PowerPlantCalculator:OutputCalculator = {
         }
     },
 
-    calculate(base:Base, x:number, y:number, building:Building):BaseOutput {
+    calculate(base:Base, x:number, y:number, building:Building): BaseOutput {
         var output = {
             power: {
                 cont: 0,

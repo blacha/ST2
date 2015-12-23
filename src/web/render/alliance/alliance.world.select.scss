@@ -1,0 +1,22 @@
+.AllianceWorld {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    line-height: 48 - $padding;
+    padding: $padding;
+    &:hover {
+        background-color: $button-hover-color;
+    }
+}
+
+.AllianceWorldSelect-Title {
+    color: $text-color-primary;
+    line-height: 48px;
+}
+
+.AllianceWorldSelect {
+    max-width: 600px;
+    min-width: 400px;
+    margin: auto;
+    padding: $padding;
+}

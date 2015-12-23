@@ -17,10 +17,10 @@ export class ClientLibPatcher {
     }
 
     static patch() {
-        var logger = Log.child({ module: 'patch' });
+        var logger = Log.child({module: 'patch'});
 
         function makeReturn(str) {
-            return function() {
+            return function () {
                 return this[str];
             };
         }
@@ -32,7 +32,7 @@ export class ClientLibPatcher {
             var protoPath = key.split('.');
             var funcName = protoPath.pop();
 
-            logger.trace({ func: funcName }, 'Patching');
+            logger.trace({func: funcName}, 'Patching');
 
             var currentProto = ClientLibPatcher.getFromKey(protoPath);
             if (currentProto == null) {
@@ -45,17 +45,17 @@ export class ClientLibPatcher {
 
             var currentData = ClientLibPatcher.getFromKey(patch.data.split('.'));
             if (currentData == null) {
-                logger.error({func: funcName, data:patch.data}, 'Invalid data path');
+                logger.error({func: funcName, data: patch.data}, 'Invalid data path');
                 continue;
             }
 
             var matches = currentData.toString().match(patch.re);
             if (!matches) {
-                logger.error({ func: funcName }, 'Unable to map');
+                logger.error({func: funcName}, 'Unable to map');
                 continue;
             }
 
-            logger.debug({ func: patch.func, match: matches[1] }, 'patching..');
+            logger.debug({func: patch.func, match: matches[1]}, 'patching..');
             currentProto.prototype[funcName] = makeReturn(matches[1]);
 
         }

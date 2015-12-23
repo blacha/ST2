@@ -1,20 +1,11 @@
 /// <reference path="../../../../typings/mithril/mithril.d.ts" />
 
-import {ParseUtil} from '../parse';
+import {ParseWebUtil} from '../parse';
 import {FormUtil, FormInputState, SelectFormInputState} from '../form';
+import {Log} from "../../../lib/log/log";
+import {ParseWorldObject} from "../../../lib/objects/world";
 
-export interface ParseObject {
-    createdAt: string;
-    updatedAt: string;
-    id: string;
-}
-
-export interface WorldObj extends ParseObject {
-    world:number;
-    name:string;
-    hasBot:boolean;
-}
-
+var $log = Log.child({route: 'Register'});
 export class RegisterRender {
     static LOGO = m('div.STLogo.BoxShadow');
     static CSS = {
@@ -30,10 +21,10 @@ export class RegisterRender {
 
     private error:_mithril.MithrilProperty<boolean>;
     private errorMessage:_mithril.MithrilProperty<string>;
-    private worlds:WorldObj[];
+    private worlds:ParseWorldObject[];
 
     constructor() {
-        if (ParseUtil.token()) {
+        if (ParseWebUtil.token()) {
             m.route('/');
             return;
         }
@@ -46,7 +37,7 @@ export class RegisterRender {
         this.error = m.prop(false);
         this.errorMessage = m.prop('');
 
-        ParseUtil.query('World', {hasBot: true}).then((result) => {
+        ParseWebUtil.query('World', {hasBot: true}, $log).then((result) => {
             this.loadingWorlds(false);
             this.worlds = result.results;
 
@@ -156,7 +147,7 @@ export class RegisterRender {
             world: this.world.value()
         };
 
-        ParseUtil.func('verify_create', object).then((data) => {
+        ParseWebUtil.func('verify_create', object, $log).then((data) => {
             m.route('/register/' + data.id);
         }, (err) => {
             console.log(err);

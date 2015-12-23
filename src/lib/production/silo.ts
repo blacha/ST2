@@ -23,7 +23,7 @@ export var SiloCalculator:OutputCalculator = {
         }
     },
 
-    calculate(base:Base, x:number, y:number, building:Building):BaseOutput {
+    calculate(base:Base, x:number, y:number, building:Building): BaseOutput {
         var output = {
             crystal: {
                 cont: 0,

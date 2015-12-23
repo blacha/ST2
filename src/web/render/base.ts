@@ -12,7 +12,7 @@ import * as Header from './base/header';
 import * as Layout from './layout/layout';
 
 import {BaseProduction} from '../../lib/production';
-import {ParseUtil} from './parse';
+import {ParseWebUtil} from './parse';
 
 export class BaseRender {
     private base;
@@ -23,7 +23,7 @@ export class BaseRender {
         var baseID = m.route.param('baseID');
         var baseProp = m.prop();
 
-        ParseUtil.getData('Layout', baseID).then(function (base) {
+        ParseWebUtil.getData('Layout', baseID).then(function (base) {
             baseProp(Base.load(base));
             return base;
         });
