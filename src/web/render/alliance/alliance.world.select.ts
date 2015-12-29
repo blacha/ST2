@@ -2,6 +2,7 @@ import {ParseWebUtil} from '../parse';
 import {Log} from "../../../lib/log/log";
 import {ParseWorldObject} from "../../../lib/objects/world";
 import {ParseAllianceObject} from "../../../lib/objects/alliance";
+import * as Layout from '../layout/layout';
 
 var $log = Log.child({route: 'AllianceWorldSelector'});
 
@@ -20,6 +21,10 @@ export class AllianceWorldSelector {
 
 
         ParseWebUtil.query('Alliance', {}, $log).then((allianceData) => {
+            allianceData.results.forEach(function(result) {
+                result.createdAt = new Date(result.createdAt);
+                result.updatedAt = new Date(result.updatedAt);
+            });
             this.alliances(allianceData.results.sort((a, b) => {
                 return b.updatedAt - a.updatedAt;
             }));
@@ -52,10 +57,13 @@ export class AllianceWorldSelector {
 
         var alliances = this.alliances().map(this.viewAlliance, this);
 
-        return m('div.AllianceWorldSelect.BoxShadow', [
-            m('div.AllianceWorldSelect-Title', 'Select your world'),
-            m('div.AllianceWorldSelect-Alliances', alliances)
-        ])
+        return Layout.createLayout({
+                page: 'Alliance'
+            }, [m('div.AllianceWorldSelect.BoxShadow', [
+                m('div.AllianceWorldSelect-Title', 'Select your world'),
+                m('div.AllianceWorldSelect-Alliances', alliances)
+            ])
+        ]);
     }
 
     viewAlliance(alliance:ParseAllianceObject) {

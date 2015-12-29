@@ -1,7 +1,8 @@
 import {ParsePlayerObject} from "../../../lib/objects/player";
 import {PlayerStats} from "../../../lib/objects/player";
+import {ParseAllianceObject} from "../../../lib/objects/alliance";
 
-export function getStats(player:ParsePlayerObject):PlayerStats {
+export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject):PlayerStats {
     if (player.$stats) {
         return player.$stats;
     }
@@ -26,9 +27,9 @@ export function getStats(player:ParsePlayerObject):PlayerStats {
         if (city.offense > maxO) {
             mainBase = city;
         }
-        totalProduction.power += city.production.power;
-        totalProduction.tiberium += city.production.tiberium;
-        totalProduction.crystal += city.production.crystal;
+        totalProduction.power += city.production.power + alliance.bonus.power;
+        totalProduction.tiberium += city.production.tiberium + alliance.bonus.tiberium;
+        totalProduction.crystal += city.production.crystal + alliance.bonus.crystal;
         totalProduction.credits += city.production.credits;
 
         totalResources.power += city.current.power;
@@ -43,5 +44,7 @@ export function getStats(player:ParsePlayerObject):PlayerStats {
             resources: totalResources
         }
     };
+
+    console.log(player.research);
     return player.$stats;
 }

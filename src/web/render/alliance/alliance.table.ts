@@ -10,7 +10,7 @@ var NameCol = new AllianceTableCol('Player', 'name');
 var CommandCol = new AllianceTableCol('CP', 'command', {formatter: TableFormat.formatCP, sort: 'command.current'});
 var SubCol = new AllianceTableCol('Sub', 'sub');
 var FactionCol = new AllianceTableCol('F', 'faction', {formatter: TableFormat.formatFaction});
-var UpdatedAt = new AllianceTableCol('last Update', 'updatedAt', {formatter: TableFormat.formatTimeAgo});
+var UpdatedAt = new AllianceTableCol('Updated', 'updatedAt', {formatter: TableFormat.formatTimeAgo});
 
 var TibProCol = new AllianceTableCol('Tib/h', '$stats.total.production.tiberium', {formatter: Format.formatNumber});
 var CryProCol = new AllianceTableCol('Cry/h', '$stats.total.production.crystal', {formatter: Format.formatNumber});
@@ -19,7 +19,7 @@ var CreProCol = new AllianceTableCol('$/h', '$stats.total.production.credits', {
 var MainOCol = new AllianceTableCol('Off', '$stats.main.offense', {formatter: Format.formatNumber});
 var MainDCol = new AllianceTableCol('Def', '$stats.main.defense', {formatter: Format.formatNumber});
 var MainPowCol = new AllianceTableCol('Pow/h', '$stats.main.production.power', {formatter: Format.formatNumber});
-var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatTime});
+var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatHours});
 
 
 export var TABLE_COLS = [

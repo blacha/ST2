@@ -2,12 +2,21 @@ var Formats = ['', 'K', 'M', 'G', 'T'];
 
 export function formatNumber(num:number):string {
     var current = 0;
-    while (num > 1000 && current < Formats.length) {
+    while (num >= 1000 && current < Formats.length) {
         current++;
         num /= 1000;
     }
 
     return num.toFixed(2) + Formats[current];
+}
+
+export function formatPercent(x:number) {
+    return x + '%';
+}
+
+export function formatHours(seconds:number) {
+    var hours = (seconds / 60 / 60);
+    return (hours / 24).toFixed(2);
 }
 
 export function formatTime(seconds:number, decimals = 2) {

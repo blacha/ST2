@@ -1,6 +1,6 @@
 import {ParsePlayerObject} from "../../../lib/objects/player";
 interface AllianceTableColOptions {
-    formatter?: (value:any) => string;
+    formatter?: (value:any) => any;
     sortter?: (value:any, col:AllianceTableCol) => any;
     sort?: string;
 }

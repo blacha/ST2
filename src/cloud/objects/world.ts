@@ -10,6 +10,10 @@ export class WorldObject extends ParseObject {
         super('World');
     }
 
+    update() {
+
+    }
+
     getSchema() {
         return this.schema;
     }

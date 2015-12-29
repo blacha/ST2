@@ -12,6 +12,7 @@ function logoutFunction(err) {
 }
 
 var TOKEN_KEY = 'token';
+var USER_KEY = 'user';
 
 export var ParseWebUtil = {
     URL: {
@@ -19,6 +20,7 @@ export var ParseWebUtil = {
     },
 
     token: m.prop(localStorage.getItem(TOKEN_KEY)),
+    user: m.prop(localStorage.getItem(USER_KEY)),
 
     login: (user:string, pass:string, $log:Log):_mithril.MithrilPromise<any> => {
         $log.info({
@@ -35,6 +37,9 @@ export var ParseWebUtil = {
                 _JavaScriptKey: ParseConfig.JS
             }
         }).then(function (data:any) {
+            ParseWebUtil.user(data.username);
+            localStorage.setItem(USER_KEY, data.username);
+
             ParseWebUtil.token(data.sessionToken);
             localStorage.setItem(TOKEN_KEY, data.sessionToken);
         });
@@ -71,7 +76,9 @@ export var ParseWebUtil = {
 
     logout: () => {
         localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
         ParseWebUtil.token(null);
+        ParseWebUtil.user(null);
         console.log('logout-token', ParseWebUtil.token());
         m.route('/login');
     },

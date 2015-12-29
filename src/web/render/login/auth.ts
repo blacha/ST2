@@ -18,7 +18,7 @@ class AuthWrapper {
 
     constructor(ctrl) {
         this.ctrl = ctrl;
-        console.log('check auth', ParseWebUtil.token());
+        console.log('check auth', ParseWebUtil.token(), ParseWebUtil.user());
         if (ParseWebUtil.token() == null) {
             m.route('/login');
             return;

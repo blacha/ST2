@@ -56,7 +56,7 @@ function PlayerInfo(req, res) {
                 $log.info('Create alliance');
                 return Alliance.create(allianceInfo, true, $log);
             }
-            return alliance.update(alliance, allianceInfo, true, $log);
+            return Alliance.update(alliance, allianceInfo, true, $log);
         })
 
         // Update the alliance ACL so the players can see it

@@ -5,7 +5,10 @@ import {PlayerRepairInfo} from "../../../api/player.info";
 import * as Format from '../format';
 
 export function formatCP(commandPoints:CommandInfoData) {
-    return Math.floor(commandPoints.current) + '/' + commandPoints.max;
+    var current = Math.floor(commandPoints.current);
+    return m('span', {
+        title: `${current}/${commandPoints.max} `
+    }, current);
 }
 
 export function formatFaction(faction:number) {
