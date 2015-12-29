@@ -14,7 +14,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-test": "^0.12.7",
     "grunt-sass": "^1.1.0",
-    "grunt-ts-1.5": "^4.0.2",
+    "grunt-ts": "^5.2.0",
     "grunt-tsd": "^0.2.0-beta.1",
     "grunt-webpack": "^1.0.11",
     "jit-grunt": "^0.9.1",
