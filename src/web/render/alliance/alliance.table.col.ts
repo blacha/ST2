@@ -1,6 +1,6 @@
 import {ParsePlayerObject} from "../../../lib/objects/player";
 interface AllianceTableColOptions {
-    formatter?: (value:any) => any;
+    formatter?: (value:any, data?:ParsePlayerObject) => any;
     sortter?: (value:any, col:AllianceTableCol) => any;
     sort?: string;
 }
@@ -10,7 +10,7 @@ export class AllianceTableCol {
     public sortKey: string;
     private customGetter:(data:ParsePlayerObject, col:AllianceTableCol) => string;
     private customSortGetter:(data:ParsePlayerObject, col:AllianceTableCol) => any;
-    private customFormatter:(value:any) => string;
+    private customFormatter:(value:any, data?:ParsePlayerObject) => string;
 
     public enabled = true;
     public sortable = true;
@@ -45,7 +45,7 @@ export class AllianceTableCol {
         }
 
         if (this.customFormatter) {
-            return this.customFormatter(value);
+            return this.customFormatter(value, data);
         }
         return value;
     }

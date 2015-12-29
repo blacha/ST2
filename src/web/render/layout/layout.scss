@@ -6,6 +6,7 @@
     margin-bottom: 32px !important;
     display: flex;
     width: 100%;
+    font-size: 14px;
 }
 
 .Wrapper {
@@ -37,8 +38,6 @@
     line-height: 68px;
     height: 60px;
     display: inline-block;
-    font-size: 14px;
-    font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
     padding: 0 24px;
@@ -56,14 +55,24 @@
 }
 
 .UserGroup {
-    line-height: 68px;
-    height: 60px;
     text-transform: uppercase;
     display: flex;
     flex-grow: 3;
     justify-content: flex-end;
 }
 
+.UserGroup-Item {
+    border-bottom: 4px solid transparent;
+    line-height: 68px;
+    height: 60px;
+}
+
 .UserGroup-Username, .UserGroup-Logout {
     padding: 0 24px;
+}
+.UserGroup-Logout {
+    color: $primary-green;
+}
+.UserGroup-Logout:hover {
+    border-bottom: 4px solid $primary-green;
 }

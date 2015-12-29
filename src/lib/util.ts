@@ -132,7 +132,7 @@ export function addObject(from, to) {
 }
 
 
-function mapIDs(obj) {
+function mapIDs(obj, baseObj) {
     if (obj == null) {
         return;
     }
@@ -142,13 +142,13 @@ function mapIDs(obj) {
         var key = keys[i];
         var o = obj[key];
         ID_MAP[o.getID()] = o;
-        ;
+        baseObj.ID_MAP[o.getID()] = o;
     }
 }
 
 export function createTechMap(obj) {
-    mapIDs(obj.NOD);
-    mapIDs(obj.GDI);
-    mapIDs(obj.Forgotten);
-    mapIDs(obj.Fortress);
+    mapIDs(obj.NOD, obj);
+    mapIDs(obj.GDI, obj);
+    mapIDs(obj.Forgotten, obj);
+    mapIDs(obj.Fortress, obj);
 }

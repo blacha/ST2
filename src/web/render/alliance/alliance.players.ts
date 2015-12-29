@@ -21,6 +21,7 @@ export class AlliancePlayers {
     public currentSort:AllianceTableCol;
 
     constructor() {
+        console.log('controller start');
         this.currentSort = ScoreCol;
         this.alliance = <any>m.prop();
         this.world = <any>m.prop();

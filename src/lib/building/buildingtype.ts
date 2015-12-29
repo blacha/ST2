@@ -7,7 +7,6 @@ import * as Util from '../util';
 
 export class BuildingType extends GameDataObject {
 
-    static ID_MAP:{[key:number]: BuildingType} = [];
     static GDI = {
         Silo: new BuildingType(120), //, 'GDI_Silo', 'Silo', 's'),
         CrystalHarvester: new BuildingType(175, [Tile.Crystal]), //, 'GDI_Harvester_Crystal', 'Crystal Harvester', 'n', [Tile.Crystal], ['s']),
@@ -76,6 +75,8 @@ export class BuildingType extends GameDataObject {
 
 
     static MAP:{[key:string] : { [key:string]: BuildingType} } = {};
+    static ID_MAP:{[key:number] : BuildingType}  = {};
+
 
     constructor(id:number,
                 private tiles:Tile[] = [Tile.Empty],

@@ -12,8 +12,8 @@ export function LayoutHeader(config) {
 }
 function LayoutUser(config) {
     return m('div.UserGroup', [
-        m('div.UserGroup-Username', ParseWebUtil.user()),
-        m('a.UserGroup-Logout', {
+        m('div.UserGroup-Item.UserGroup-Username', ParseWebUtil.user()),
+        m('a.UserGroup-Item.UserGroup-Logout', {
             href: '#',
             onclick: m.route.bind(m.route, '/logout')
         }, 'logout')

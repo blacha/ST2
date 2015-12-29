@@ -10,11 +10,11 @@ export interface ParsePlayerObject extends ParseBaseObject {
     alliance:number;
     name: string;
     sub: string;
+    rp: number;
     credit: number;
     command: CommandInfoData;
     research: ResearchInfoData;
     cities: CityInfoData[]
-
     $stats?: PlayerStats;
 }
 

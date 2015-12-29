@@ -26,6 +26,7 @@ export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject)
     player.cities.forEach(function (city) {
         if (city.offense > maxO) {
             mainBase = city;
+            maxO = city.offense;
         }
         totalProduction.power += city.production.power + alliance.bonus.power;
         totalProduction.tiberium += city.production.tiberium + alliance.bonus.tiberium;
@@ -45,6 +46,5 @@ export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject)
         }
     };
 
-    console.log(player.research);
     return player.$stats;
 }

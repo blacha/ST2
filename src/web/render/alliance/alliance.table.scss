@@ -11,12 +11,13 @@
 //    position: relative;
 //}
 
-.Table-Cell--Sort-Up {
-    background-color: green;
-}
-
-.Table-Cell--Sort-Down {
-    background-color: orange;
+.Table-Cell--Sort i {
+    width: 13px;
+    height: 16px;
+    position: absolute;
+    right: -4px;
+    bottom: 9px;
+    font-size: 18px;
 }
 
 .Table {
@@ -47,17 +48,20 @@
     }
 
     td, th {
-        padding: 0 $data-table-column-padding 0 $data-table-column-padding;
+        padding: 0 9px 0 9px;
         text-align: right;
         font-weight: normal;
         font-size: 12px;
 
         &:first-of-type {
-            padding-left: 24px;
+            padding-left: 12px;
         }
 
         &:last-of-type {
-            padding-right: 24px;
+            i {
+                right: 4px;
+            }
+            padding-right: 16px;
         }
     }
     td {
@@ -80,5 +84,7 @@
         color: $data-table-header-color;
         padding-bottom: 8px;
         box-sizing: border-box;
+        cursor: pointer;
     }
+
 }

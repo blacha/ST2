@@ -1,3 +1,8 @@
+import {ParsePlayerObject} from "../../lib/objects/player";
+import {Faction} from "../../lib/data/faction";
+import {OUnitType} from "../../lib/unit/ounittype";
+import {DUnitType} from "../../lib/unit/dunittype";
+
 var Formats = ['', 'K', 'M', 'G', 'T'];
 
 export function formatNumber(num:number):string {
@@ -19,6 +24,26 @@ export function formatHours(seconds:number) {
     return (hours / 24).toFixed(2);
 }
 
+
+export function formatResearch(research:{[key:string] : number}, player:ParsePlayerObject) {
+    var oUpgrade = 0;
+    var dUpgrade = 0;
+    Object.keys(research).forEach(function (key) {
+        var value = research[key];
+        if (OUnitType.ID_MAP[key]) {
+            oUpgrade += value;
+        } else if (DUnitType.ID_MAP[key]) {
+            dUpgrade += value;
+        }
+    });
+
+    return m('span.AlliancePlayer-Upgrade', {
+        title: 'Number of researched upgrades Off/Def'
+    }, [
+        m('span.PlayerUpgrade-Off', `${oUpgrade}o`),
+        m('span.PlayerUpgrade-Def', `${dUpgrade}d`),
+    ]);
+}
 export function formatTime(seconds:number, decimals = 2) {
     var interval = getTimeInterval(seconds);
     if (interval.amount < 2) {

@@ -1,6 +1,10 @@
 $primary-header-color: #333333;
 $primary-green: #AEC71E;
 
+@import 'style/mdl/color-definitions';
+$color-primary: $palette-blue-700 !default;
+
+
 @import 'style/grid';
 @import 'style/icon';
 @import 'style/base';
@@ -19,7 +23,7 @@ $primary-green: #AEC71E;
 
 a {
     text-decoration: none;
-    color: $primary-green;
+    color: unquote("rgb(#{$color-primary})");
     &:hover {
         cursor: pointer;
     }
