@@ -2,8 +2,10 @@ module.exports = function(grunt) {
     var webpack = require("webpack");
     var config = {};
 
+    require('time-grunt')(grunt);
+
     // load all grunt tasks
-    require('load-grunt-tasks')(grunt);
+    require('jit-grunt')(grunt);
 
     config.watch = {
         test: {
