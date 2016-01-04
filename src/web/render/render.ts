@@ -9,7 +9,7 @@ import {RegisterRender} from './register/register';
 import {RegistrationCompleteRender} from './register/complete';
 import {AllianceWorldSelector} from "./alliance/alliance.world.select";
 import {AlliancePlayers} from "./alliance/alliance.players";
-
+import {InstallExtension} from './install/install';
 
 export var Render = {
     start: function () {
@@ -26,6 +26,8 @@ export var Render = {
             '/login': LoginRender,
             '/login/:username': LoginRender,
             '/logout': LogoutRender,
+
+            '/install': InstallExtension,
 
             // Registration
             '/register': RegisterRender,
