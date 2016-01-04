@@ -46,20 +46,33 @@ export class AllianceWorldSelector {
 
     view() {
         if (this.loading()) {
-            $log.info('loading');
             return;
         }
 
         if (this.alliances().length === 0) {
-            $log.info('No alliances found');
-            return;
+            return Layout.createLayout({
+                page: 'Alliance'
+            }, [
+                m('div.AllianceWorldSelect', [
+                m('div.AllianceWorldSelect-Title', 'No Alliances found!'),
+                m('div.AllianceWorldSelect-Info',
+                    'This is caused by not having the ST extension installed'),
+                m('div.AllianceWorldSelect-Info', [
+                        'Please install it from ',
+                        m('a', {
+                            onclick: m.route.bind(m.route, '/install')
+                        }, 'here')
+                    ])
+                ])
+            ]);
         }
 
         var alliances = this.alliances().map(this.viewAlliance, this);
 
         return Layout.createLayout({
                 page: 'Alliance'
-            }, [m('div.AllianceWorldSelect.BoxShadow', [
+            }, [
+                m('div.AllianceWorldSelect', [
                 m('div.AllianceWorldSelect-Title', 'Select your world'),
                 m('div.AllianceWorldSelect-Alliances', alliances)
             ])
