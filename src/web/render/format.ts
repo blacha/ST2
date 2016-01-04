@@ -26,24 +26,38 @@ export function formatHours(seconds:number) {
 
 
 export function formatResearch(research:{[key:string] : number}, player:ParsePlayerObject) {
-    var oUpgrade = 0;
-    var dUpgrade = 0;
-    Object.keys(research).forEach(function (key) {
-        var value = research[key];
+    var data = countResearch(player);
+
+    return m('span.AlliancePlayer-Upgrade', {
+        title: 'Number of researched upgrades Off/Def'
+    }, [
+        m('span.PlayerUpgrade-Off', `${data.offense}o`),
+        m('span.PlayerUpgrade-Def', `${data.defense}d`),
+    ]);
+}
+
+export function countResearch(player:ParsePlayerObject) {
+    let oUpgrade = 0;
+    let dUpgrade = 0;
+    Object.keys(player.research).forEach(function (key) {
+        let value = player.research[key];
         if (OUnitType.ID_MAP[key]) {
             oUpgrade += value;
         } else if (DUnitType.ID_MAP[key]) {
             dUpgrade += value;
         }
     });
-
-    return m('span.AlliancePlayer-Upgrade', {
-        title: 'Number of researched upgrades Off/Def'
-    }, [
-        m('span.PlayerUpgrade-Off', `${oUpgrade}o`),
-        m('span.PlayerUpgrade-Def', `${dUpgrade}d`),
-    ]);
+    return {
+        offense: oUpgrade,
+        defense: dUpgrade
+    }
 }
+
+export function sumResearch(player:ParsePlayerObject) {
+    let data = countResearch(player);
+    return data.offense + data.defense;
+}
+
 export function formatTime(seconds:number, decimals = 2) {
     var interval = getTimeInterval(seconds);
     if (interval.amount < 2) {

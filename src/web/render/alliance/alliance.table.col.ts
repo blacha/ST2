@@ -1,7 +1,7 @@
 import {ParsePlayerObject} from "../../../lib/objects/player";
 interface AllianceTableColOptions {
     formatter?: (value:any, data?:ParsePlayerObject) => any;
-    sortter?: (value:any, col:AllianceTableCol) => any;
+    sorter?: (value:any, col:AllianceTableCol) => any;
     sort?: string;
 }
 export class AllianceTableCol {
@@ -23,7 +23,7 @@ export class AllianceTableCol {
         this.key = key;
         if (options) {
             this.customFormatter = options.formatter;
-            this.customSortGetter = options.sortter;
+            this.customSortGetter = options.sorter;
             this.sortKey = options.sort;
         }
     }

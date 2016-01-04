@@ -4,7 +4,7 @@ import {ParsePlayerObject} from "../../../lib/objects/player";
 import {ParseWebUtil} from '../parse';
 import {Log} from "../../../lib/log/log";
 import {ParseWorldObject} from "../../../lib/objects/world";
-import {buildTable, ScoreCol} from  './alliance.table';
+import {buildTable, ScoreCol, BIGGEST_COLS} from  './alliance.table';
 import {AllianceTableCol} from "./alliance.table.col";
 import * as Layout from '../layout/layout';
 import * as PlayerUtil from './player.util';
@@ -19,9 +19,12 @@ export class AlliancePlayers {
     private worldID:number;
 
     public currentSort:AllianceTableCol;
+    private lastUpdate:Date;
+    private biggest: {[key: string]: number};
+    private destroyed = false;
+    static UPDATE_TIME = 30 * 1000;
 
     constructor() {
-        console.log('controller start');
         this.currentSort = ScoreCol;
         this.alliance = <any>m.prop();
         this.world = <any>m.prop();
@@ -33,23 +36,47 @@ export class AlliancePlayers {
             $log.info({world: this.worldID, param: m.route.param('world')}, 'invalid worldID');
         }
 
+
+        ParseWebUtil.query('World', {world: this.worldID}, $log).then((data) => {
+            this.world(data.results[0]);
+        });
+
+        this.update();
+    }
+
+    update() {
+        if (this.destroyed) {
+            return;
+        }
+        $log.info('Update');
+        this.lastUpdate = new Date();
+        this.biggest = {};
+
         ParseWebUtil.query('Alliance', {world: this.worldID}, $log).then((data) => {
             this.alliance(data.results[0]);
             if (this.alliance() == null) {
                 $log.info(data, 'Alliance not found');
+                return m.route('/');
             }
 
             return ParseWebUtil.query('Player', {world: this.worldID}, $log).then((data) => {
                 data.results.forEach(PlayerUtil.getStats.bind(null, this.alliance()));
+                this.updateBiggest(data.results);
 
                 this.players(data.results.sort(this.sortPlayers.bind(this)));
+
+                setTimeout(() => {
+                    this.update();
+                }, AlliancePlayers.UPDATE_TIME);
+            }).then(function() {
+                m.redraw();
             });
         });
+    }
 
-
-        ParseWebUtil.query('World', {world: this.worldID}, $log).then((data) => {
-            this.world(data.results[0]);
-        })
+    onunload() {
+        console.log('unload');
+        this.destroyed = true;
     }
 
     view() {
@@ -71,6 +98,31 @@ export class AlliancePlayers {
         ]);
     }
 
+    private updateBiggest(players:ParsePlayerObject[]) {
+        this.biggest = {};
+        players.forEach((player) => {
+            BIGGEST_COLS.forEach((col:AllianceTableCol) => {
+                var oldValue = this.biggest[col.key];
+                if (oldValue == null) {
+                    oldValue = 0;
+                }
+
+                var playerValue = parseFloat(col.getSortValue(player));
+                if (playerValue > oldValue) {
+                    this.biggest[col.key] = playerValue;
+                }
+            });
+        })
+    }
+
+    isBiggestValue(key:string, value: number) {
+        var bigValue = this.biggest[key];
+        if (bigValue == null) {
+            return false;
+        }
+        return value >= this.biggest[key];
+    }
+
     viewAllianceTitle() {
         return [
             m('div.AllianceInfo-Title', [
@@ -88,7 +140,6 @@ export class AlliancePlayers {
 
     viewAllianceStats() {
         var alliance = this.alliance();
-        console.log(alliance);
         return [
             m('div.AllianceStats-Production', [
                 m('div.AllianceStats-Stat.AllianceStats-Tib',
@@ -126,7 +177,6 @@ export class AlliancePlayers {
     }
 
     setSortCol(col) {
-        console.log('set-sort', col, this.currentSort);
         if (this.currentSort === col) {
             this.currentSort.swapSortOrder();
         } else {
@@ -155,6 +205,10 @@ export class AlliancePlayers {
 
     static controller() {
         return new AlliancePlayers();
+    }
+
+    static onunload() {
+        console.log('onunload');
     }
 
     static view(ctrl:AlliancePlayers) {

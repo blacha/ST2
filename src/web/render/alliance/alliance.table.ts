@@ -9,12 +9,17 @@ var RankCol = new AllianceTableCol('Rank', 'rank');
 var NameCol = new AllianceTableCol('Player', 'name', {
     formatter: function (val) {
         var currentWorld = m.route.param('world');
+        var url = `/alliance/${currentWorld}/${val}`;
         return m('a', {
             href: '#',
-            onclick: m.route.bind(m.route, `/alliance/${currentWorld}/${val}`)
+            onclick: function() {
+                m.route(url);
+                return false;
+            }
         }, val);
     }
 });
+
 var CommandCol = new AllianceTableCol('CP', 'command', {formatter: TableFormat.formatCP, sort: 'command.current'});
 var SubCol = new AllianceTableCol('Sub', 'sub');
 var FactionCol = new AllianceTableCol('F', 'faction', {formatter: TableFormat.formatFaction});
@@ -30,8 +35,20 @@ var MainPowCol = new AllianceTableCol('Pow/h', '$stats.main.production.power', {
 var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatHours});
 
 var RPCol = new AllianceTableCol('RP', 'rp', {formatter: Format.formatNumber});
-var ResearchCol = new AllianceTableCol('Research', 'research', {formatter: Format.formatResearch});
+var ResearchCol = new AllianceTableCol('Research', 'research', {formatter: Format.formatResearch, sorter: Format.sumResearch });
 
+export var BIGGEST_COLS = [
+    ScoreCol,
+    TibProCol,
+    CryProCol,
+    CreProCol,
+    MainOCol,
+    MainDCol,
+    MainPowCol,
+    MainRTCol,
+    RPCol,
+    CommandCol
+];
 
 export var TABLE_COLS = [
     ScoreCol,
@@ -54,7 +71,7 @@ export var TABLE_COLS = [
 export function buildTable(data:ParsePlayerObject[], ctrl:AlliancePlayers) {
     return m('table.Table', [
         m('thead.Table-Head', buildHeader(ctrl)),
-        m('tbody', data.map(buildRow))
+        m('tbody', data.map(buildRow.bind(null, ctrl)))
     ])
 }
 
@@ -92,15 +109,20 @@ function buildHeader(ctrl:AlliancePlayers) {
     return cells;
 }
 
-function buildRow(data:ParsePlayerObject) {
+function buildRow(ctrl:AlliancePlayers, data:ParsePlayerObject) {
     var cells = [];
     TABLE_COLS.forEach(function (col) {
         if (col.enabled == false) {
             return;
         }
 
+        var classNames = ['Table-Cell', `Table-Cell--${col.key}`];
         var value = col.getValue(data);
-        cells.push(m(`td.Table-Cell.Table-Cell--${col.key}`, [value]))
+
+        if(ctrl.isBiggestValue(col.key, parseFloat(col.getSortValue(data))) ) {
+            classNames.push('Table-Cell--Biggest');
+        }
+        cells.push(m('td', { className: classNames.join(' ') }, [value]))
     });
 
     return m(`tr.Table-Row.Table-Row--${data.player}`, cells);
