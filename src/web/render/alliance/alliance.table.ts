@@ -12,7 +12,7 @@ var NameCol = new AllianceTableCol('Player', 'name', {
         var url = `/alliance/${currentWorld}/${val}`;
         return m('a', {
             href: '#',
-            onclick: function() {
+            onclick: function () {
                 m.route(url);
                 return false;
             }
@@ -35,7 +35,10 @@ var MainPowCol = new AllianceTableCol('Pow/h', '$stats.main.production.power', {
 var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatHours});
 
 var RPCol = new AllianceTableCol('RP', 'rp', {formatter: Format.formatNumber});
-var ResearchCol = new AllianceTableCol('Research', 'research', {formatter: Format.formatResearch, sorter: Format.sumResearch });
+var ResearchCol = new AllianceTableCol('Research', 'research', {
+    formatter: Format.formatResearch,
+    sorter: Format.sumResearch
+});
 
 export var BIGGEST_COLS = [
     ScoreCol,
@@ -68,62 +71,74 @@ export var TABLE_COLS = [
     UpdatedAt
 ];
 
-export function buildTable(data:ParsePlayerObject[], ctrl:AlliancePlayers) {
-    return m('table.Table', [
-        m('thead.Table-Head', buildHeader(ctrl)),
-        m('tbody', data.map(buildRow.bind(null, ctrl)))
-    ])
-}
 
-function buildHeader(ctrl:AlliancePlayers) {
-    var cells = [];
-    TABLE_COLS.forEach(function (col) {
-        if (col.enabled == false) {
-            return;
-        }
-        var className = ['TableHead-Cell'];
-        className.push(`Table-Cell--${col.key}`);
-        var output = [];
-        output.push(m('span.TableCell-Text', col.header));
+export class AllianceTable {
 
-        if (ctrl.currentSort === col) {
-            className.push('Table-Cell--Sort');
-            if (col.order > 0) {
-                output.push(m('i.material-icons', 'keyboard_arrow_up'));
-                className.push('Table-Cell--Sort-Up');
-            } else {
-                output.push(m('i.material-icons', 'keyboard_arrow_down'));
-                className.push('Table-Cell--Sort-Down');
+    private ctrl:AlliancePlayers;
+
+    constructor(ctrl:AlliancePlayers) {
+        this.ctrl = ctrl;
+    }
+
+    view(data:ParsePlayerObject[]) {
+        return m('table.Table', [
+            m('thead.Table-Head', this.viewHeader()),
+            m('tbody', data.map(this.viewRow.bind(this)))
+        ]);
+    }
+
+    viewHeader() {
+        var cells = [];
+        TABLE_COLS.forEach((col) => {
+            if (col.enabled == false) {
+                return;
             }
-        }
+            var className = ['TableHead-Cell'];
+            className.push(`Table-Cell--${col.key}`);
+            var output = [];
+            output.push(m('span.TableCell-Text', col.header));
 
-
-        cells.push(m('th', {
-            className: className.join(' '),
-            onclick: function () {
-                ctrl.setSortCol(col)
+            if (this.ctrl.currentSort === col) {
+                className.push('Table-Cell--Sort');
+                if (col.order > 0) {
+                    output.push(m('i.material-icons', 'keyboard_arrow_up'));
+                    className.push('Table-Cell--Sort-Up');
+                } else {
+                    output.push(m('i.material-icons', 'keyboard_arrow_down'));
+                    className.push('Table-Cell--Sort-Down');
+                }
             }
-        }, output));
-    });
 
-    return cells;
-}
 
-function buildRow(ctrl:AlliancePlayers, data:ParsePlayerObject) {
-    var cells = [];
-    TABLE_COLS.forEach(function (col) {
-        if (col.enabled == false) {
-            return;
-        }
+            cells.push(m('th', {
+                className: className.join(' '),
+                onclick: function () {
+                    this.ctrl.setSortCol(col)
+                }
+            }, output));
+        });
 
-        var classNames = ['Table-Cell', `Table-Cell--${col.key}`];
-        var value = col.getValue(data);
+        return cells;
+    }
 
-        if(ctrl.isBiggestValue(col.key, parseFloat(col.getSortValue(data))) ) {
-            classNames.push('Table-Cell--Biggest');
-        }
-        cells.push(m('td', { className: classNames.join(' ') }, [value]))
-    });
+    viewRow(data:ParsePlayerObject) {
+        var cells = [];
+        TABLE_COLS.forEach((col) => {
+            if (col.enabled == false) {
+                return;
+            }
 
-    return m(`tr.Table-Row.Table-Row--${data.player}`, cells);
+            var classNames = ['Table-Cell', `Table-Cell--${col.key}`];
+            var value = col.getValue(data);
+
+            if (this.ctrl.isBiggestValue(col.key, parseFloat(col.getSortValue(data)))) {
+                classNames.push('Table-Cell--Biggest');
+            }
+            cells.push(m('td', {className: classNames.join(' ')}, [value]))
+        });
+
+        return m(`tr.Table-Row.Table-Row--${data.player}`, cells);
+    }
+
+
 }

@@ -1,0 +1,47 @@
+.PlayerResearch--Upgraded {
+    color: $text-accent-color;
+}
+
+.PlayerResearch--Disabled {
+    color: $text-divider-color;
+}
+
+.PlayerResearch--Researched {
+}
+
+.PlayerResearch-Group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.PlayerResearch-Offense, .PlayerResearch-Defense {
+    width: 50%;
+}
+
+.PlayerResearch-Research {
+    display: flex;
+    justify-content: flex-start;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.PlayerResearch-ResearchItem {
+    width: 170px;
+    font-size: 12px;
+    line-height: 32px;
+}
+
+.PlayerResearch-Title, .PlayerBases-Title, .AlliancePlayer-Name {
+    color: $text-color-primary;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.AlliancePlayer-Name {
+    font-size: 120%;
+    line-height: 48px;
+}
+
+.AlliancePlayer Table th {
+    cursor: inherit;
+}

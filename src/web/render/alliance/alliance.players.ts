@@ -4,31 +4,48 @@ import {ParsePlayerObject} from "../../../lib/objects/player";
 import {ParseWebUtil} from '../parse';
 import {Log} from "../../../lib/log/log";
 import {ParseWorldObject} from "../../../lib/objects/world";
-import {buildTable, ScoreCol, BIGGEST_COLS} from  './alliance.table';
+import {ScoreCol, BIGGEST_COLS} from  './alliance.table';
 import {AllianceTableCol} from "./alliance.table.col";
 import * as Layout from '../layout/layout';
 import * as PlayerUtil from './player.util';
 import * as Format from '../format';
+import {AllianceTable} from "./alliance.table";
+import {AlliancePlayer} from "./alliance.player";
 
 var $log = Log.child({route: 'AlliancePlayers'});
 
 export class AlliancePlayers {
     private alliance:_mithril.MithrilProperty<ParseAllianceObject>;
+    private alliances:_mithril.MithrilProperty<ParseAllianceObject[]>;
     private players:_mithril.MithrilProperty<ParsePlayerObject[]>;
+    private currentPlayerName:_mithril.MithrilProperty<string>;
     private world:_mithril.MithrilProperty<ParseWorldObject>;
     private worldID:number;
 
     public currentSort:AllianceTableCol;
     private lastUpdate:Date;
-    private biggest: {[key: string]: number};
+    private biggest:{[key: string]: number};
     private destroyed = false;
     static UPDATE_TIME = 30 * 1000;
 
+    private tableCreator:AllianceTable;
+    private playerViewer:AlliancePlayer;
+
     constructor() {
+        this.tableCreator = new AllianceTable(this);
+        this.playerViewer = new AlliancePlayer(this);
         this.currentSort = ScoreCol;
+
         this.alliance = <any>m.prop();
+        this.alliances = <any>m.prop();
         this.world = <any>m.prop();
+
+        var currentPlayer = (m.route.param('player') || '').toLowerCase();
+        this.currentPlayerName = m.prop(currentPlayer);
+        console.log('current-player', currentPlayer);
+
         this.players = m.prop([]);
+
         this.worldID = parseInt(m.route.param('world'), 10);
         $log.info({world: this.worldID, param: m.route.param('world')}, 'invalid worldID');
 
@@ -54,6 +71,7 @@ export class AlliancePlayers {
 
         ParseWebUtil.query('Alliance', {world: this.worldID}, $log).then((data) => {
             this.alliance(data.results[0]);
+            this.alliances(data.results);
             if (this.alliance() == null) {
                 $log.info(data, 'Alliance not found');
                 return m.route('/');
@@ -68,32 +86,56 @@ export class AlliancePlayers {
                 setTimeout(() => {
                     this.update();
                 }, AlliancePlayers.UPDATE_TIME);
-            }).then(function() {
+            }).then(function () {
                 m.redraw();
             });
         });
-    }
-
-    onunload() {
-        console.log('unload');
-        this.destroyed = true;
     }
 
     view() {
         if (this.alliance() == null) {
             return;
         }
+
         if (this.players().length === 0) {
             return;
         }
-        $log.info('render');
+
+        var alliance = this.alliance();
+        // Render for a specific player
+        if (this.currentPlayerName()) {
+            var currentPlayer = this.players().filter((player) => {
+                return player.name.toLowerCase() === this.currentPlayerName();
+            }).pop();
+
+            if (currentPlayer == null) {
+                this.currentPlayerName('');
+                m.route(`/alliance/${m.route.param('alliance')}`);
+                return;
+            }
+
+            return Layout.createLayout({
+                page: 'Alliance'
+            }, [
+                m('div.AllianceInfo', this.viewAllianceTitle()),
+                m('div.AlliancePlayer',
+                    this.playerViewer.view(currentPlayer)
+                )
+            ]);
+        }
+
+        console.log(this.players());
+        var players = this.players().filter(function (player) {
+            console.log(player, alliance.alliance);
+            return player.alliance === alliance.alliance;
+        });
 
         return Layout.createLayout({
             page: 'Alliance'
         }, [
             m('div.AllianceInfo', this.viewAllianceTitle()),
-            m('div.AlliancePlayer',
-                buildTable(this.players(), this)
+            m('div.AlliancePlayers',
+                this.tableCreator.view(players)
             )
         ]);
     }
@@ -115,7 +157,7 @@ export class AlliancePlayers {
         })
     }
 
-    isBiggestValue(key:string, value: number) {
+    isBiggestValue(key:string, value:number) {
         var bigValue = this.biggest[key];
         if (bigValue == null) {
             return false;
@@ -207,11 +249,11 @@ export class AlliancePlayers {
         return new AlliancePlayers();
     }
 
-    static onunload() {
-        console.log('onunload');
-    }
-
     static view(ctrl:AlliancePlayers) {
         return ctrl.view();
+    }
+
+    getCurrentAlliance():ParseAllianceObject {
+        return this.alliance();
     }
 }

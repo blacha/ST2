@@ -10,6 +10,7 @@ import {Log} from '../../lib/log/log';
 export class PlayerObject extends ParseObject {
     static schema = {
         PLAYER: 'player',
+        ALLIANCE: 'alliance',
         WORLD: 'world',
         FACTION: 'faction',
         NAME: 'name',
@@ -32,6 +33,7 @@ export class PlayerObject extends ParseObject {
         var acl = ACL.create();
         acl.setRoleReadAccess(AllianceObject.RoleName(alliance), true);
         player.setACL(acl);
+        player.set(PlayerObject.schema.ALLIANCE, alliance.alliance);
 
         return player.save();
     }

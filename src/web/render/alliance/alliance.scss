@@ -1,4 +1,5 @@
 @import './alliance.world.select';
+@import './alliance.player';
 @import 'alliance.table';
 
 .AlliancePlayer {
@@ -39,4 +40,8 @@
 .PlayerUpgrade-Off {
     margin-right: 8px;
     color: $primary-green;
+}
+
+.AlliancePlayers {
+    width: 100%;
 }

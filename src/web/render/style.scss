@@ -4,6 +4,12 @@ $primary-green: #AEC71E;
 @import 'style/mdl/color-definitions';
 $color-primary: $palette-blue-700 !default;
 
+$text-color: rgba(0, 0, 0, 0.87);
+$text-supporting-color: rgba(0, 0, 0, 0.54);
+$text-disabled-color: rgba(0, 0, 0, 0.38);
+$text-divider-color: rgba(0, 0, 0, 0.12);
+
+$text-accent-color:  unquote("rgb(#{$color-primary})");
 
 @import 'style/grid';
 @import 'style/icon';

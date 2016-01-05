@@ -7,6 +7,9 @@ import {Player} from '../objects/player';
 import {PlayerData} from '../../api/player.info';
 
 import {Log} from '../../lib/log/log';
+import {ParseAllianceObject} from "../../lib/objects/alliance";
+import {ParsePlayerObject} from "../../lib/objects/player";
+import {ParseWorldObject} from "../../lib/objects/world";
 
 var PlayerLog = Log.child({
     func: 'player_info'
@@ -21,7 +24,7 @@ function PlayerInfo(req, res) {
     playerInfo.world = worldInfo.world;
     allianceInfo.world = worldInfo.world;
 
-    var worldObj, playerObj, allianceObj;
+    var worldObj:ParseWorldObject, playerObj:ParsePlayerObject, allianceObj:ParseAllianceObject;
 
     var $log = PlayerLog.child({
         player: playerInfo.name,
