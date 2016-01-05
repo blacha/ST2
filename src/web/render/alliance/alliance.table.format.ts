@@ -12,7 +12,7 @@ export function formatCP(commandPoints:CommandInfoData) {
 }
 
 export function formatFaction(faction:number) {
-    return Faction.fromID(faction).getCode();
+    return m(`i.Faction.Faction-${Faction.fromID(faction).getName()}`);
 }
 
 export function formatRepair(repair:PlayerRepairInfo):any {

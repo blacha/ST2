@@ -18,12 +18,18 @@ class AuthWrapper {
 
     constructor(ctrl) {
         this.ctrl = ctrl;
-        console.log('check auth', ParseWebUtil.token(), ParseWebUtil.token() == null, ParseWebUtil.user());
+        //console.log('check auth', ParseWebUtil.token(), ParseWebUtil.token() == null, ParseWebUtil.user());
         if (ParseWebUtil.token() == null) {
             m.route('/login');
             return;
         }
         this.content = new ctrl();
+    }
+
+    onunload(e) {
+        if (this.content && this.content.onunload) {
+            this.content.onunload(e)
+        }
     }
 
     view(ctrl) {

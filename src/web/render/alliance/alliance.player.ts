@@ -9,7 +9,7 @@ import * as Format from '../format';
 
 export class AlliancePlayer {
     private ctrl:AlliancePlayers;
-
+    static NO_UPGRADES = [DUnitType.GDI.Wall, DUnitType.GDI.MGNest, DUnitType.NOD.Wall, DUnitType.NOD.ScorpionTank]
     constructor(ctrl:AlliancePlayers) {
         this.ctrl = ctrl;
     }
@@ -50,13 +50,14 @@ export class AlliancePlayer {
 
     viewPlayerBase(city:CityInfoData) {
         var alliance = this.ctrl.getCurrentAlliance();
+        var bonus = alliance.bonus || {tiberium: 0, crystal: 0, power: 0};
         return m('tr.PlayerBase', [
             m('td', city.name),
             m('td', this.viewPlayerBaseLayout(city)),
             m('td', Format.formatNumber(city.level)),
-            m('td', Format.formatNumber(city.production.tiberium + alliance.bonus.tiberium)),
-            m('td', Format.formatNumber(city.production.crystal + alliance.bonus.crystal)),
-            m('td', Format.formatNumber(city.production.power + alliance.bonus.power)),
+            m('td', Format.formatNumber(city.production.tiberium + bonus.tiberium)),
+            m('td', Format.formatNumber(city.production.crystal + bonus.crystal)),
+            m('td', Format.formatNumber(city.production.power + bonus.power)),
             m('td', Format.formatNumber(city.production.credits)),
             m('td', Format.formatNumber(city.offense)),
             m('td', Format.formatNumber(city.defense)),
@@ -76,6 +77,9 @@ export class AlliancePlayer {
 
         Object.keys(ounits).forEach(function (key) {
             var ounit:OUnitType = ounits[key];
+            if (AlliancePlayer.NO_UPGRADES.indexOf(ounit) > -1) {
+                return;
+            }
             var researchCount = player.research[ounit.getID()];
 
             offenseResearch.push(m('div',
@@ -85,7 +89,7 @@ export class AlliancePlayer {
 
         Object.keys(dunits).forEach(function (key) {
             var dunit:DUnitType = dunits[key];
-            if (dunit === DUnitType.GDI.Wall || dunit == DUnitType.NOD.Wall) {
+            if (AlliancePlayer.NO_UPGRADES.indexOf(dunit) > -1) {
                 return;
             }
             var researchCount = player.research[dunit.getID()];

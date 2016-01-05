@@ -11,6 +11,7 @@ import * as PlayerUtil from './player.util';
 import * as Format from '../format';
 import {AllianceTable} from "./alliance.table";
 import {AlliancePlayer} from "./alliance.player";
+import {AllianceData} from "../data/data";
 
 var $log = Log.child({route: 'AlliancePlayers'});
 
@@ -38,11 +39,10 @@ export class AlliancePlayers {
 
         this.alliance = <any>m.prop();
         this.alliances = <any>m.prop();
-        this.world = <any>m.prop();
+        this.world = <any>m.prop({name: ''});
 
         var currentPlayer = (m.route.param('player') || '').toLowerCase();
         this.currentPlayerName = m.prop(currentPlayer);
-        console.log('current-player', currentPlayer);
 
         this.players = m.prop([]);
 
@@ -54,8 +54,8 @@ export class AlliancePlayers {
         }
 
 
-        ParseWebUtil.query('World', {world: this.worldID}, $log).then((data) => {
-            this.world(data.results[0]);
+        AllianceData.getInstance().getWorld(this.worldID, $log).then((world) => {
+            this.world(world);
         });
 
         this.update();
@@ -65,31 +65,42 @@ export class AlliancePlayers {
         if (this.destroyed) {
             return;
         }
+
         $log.info('Update');
         this.lastUpdate = new Date();
         this.biggest = {};
+        var ad = AllianceData.getInstance();
 
-        ParseWebUtil.query('Alliance', {world: this.worldID}, $log).then((data) => {
-            this.alliance(data.results[0]);
-            this.alliances(data.results);
+        var getAlliance = ad.getAlliances(this.worldID, $log).then((alliances) => {
+            this.alliance(alliances[0]);
+            this.alliances(alliances);
             if (this.alliance() == null) {
-                $log.info(data, 'Alliance not found');
+                $log.error(alliances, 'Alliance not found');
                 return m.route('/');
             }
-
-            return ParseWebUtil.query('Player', {world: this.worldID}, $log).then((data) => {
-                data.results.forEach(PlayerUtil.getStats.bind(null, this.alliance()));
-                this.updateBiggest(data.results);
-
-                this.players(data.results.sort(this.sortPlayers.bind(this)));
-
-                setTimeout(() => {
-                    this.update();
-                }, AlliancePlayers.UPDATE_TIME);
-            }).then(function () {
-                m.redraw();
-            });
         });
+
+
+        var getPlayer = ad.getPlayers(this.worldID, $log).then((players) => {
+            this.players(players.sort(this.sortPlayers.bind(this)));
+        });
+
+        m.sync([getAlliance, getPlayer]).then(() => {
+            console.log('player-stats-update');
+            this.players().forEach(PlayerUtil.getStats.bind(null, this.alliance()));
+            this.updateBiggest(this.players());
+
+            setTimeout(() => {
+                this.update();
+            }, AlliancePlayers.UPDATE_TIME);
+
+            m.redraw();
+        });
+    }
+
+    onunload() {
+        this.destroyed = true;
+        $log.info('Destroy alliance-table');
     }
 
     view() {
@@ -117,16 +128,14 @@ export class AlliancePlayers {
             return Layout.createLayout({
                 page: 'Alliance'
             }, [
-                m('div.AllianceInfo', this.viewAllianceTitle()),
+                m('div.AllianceInfo', this.viewAllianceTitle(false)),
                 m('div.AlliancePlayer',
                     this.playerViewer.view(currentPlayer)
                 )
             ]);
         }
 
-        console.log(this.players());
         var players = this.players().filter(function (player) {
-            console.log(player, alliance.alliance);
             return player.alliance === alliance.alliance;
         });
 
@@ -165,19 +174,26 @@ export class AlliancePlayers {
         return value >= this.biggest[key];
     }
 
-    viewAllianceTitle() {
-        return [
+    viewAllianceTitle(showStats = true) {
+        var output =  [
             m('div.AllianceInfo-Title', [
-                    m('div.AllianceInfo-Name', this.alliance().name),
-                    m('a.AllianceInfo-World', {
-                        href: '#',
+                    m('button.AllianceInfo-Name.Button.Button--colored', {
+                        onclick: () => {
+                            m.route(`/alliance/${this.worldID}`);
+                            return false;
+                        }
+                    }, this.alliance().name),
+                    m('button.AllianceInfo-World.Button', {
                         onclick: m.route.bind(m.route, '/alliance'),
                         title: 'Change world'
                     }, this.world().name),
                 ]
-            ),
-            m('div.AllianceInfo-Stats.AllianceStats', this.viewAllianceStats())
-        ]
+            )
+        ];
+        if (showStats) {
+            output.push(m('div.AllianceInfo-Stats.AllianceStats', this.viewAllianceStats()))
+        }
+        return output;
     }
 
     viewAllianceStats() {

@@ -60,7 +60,7 @@ export class AllianceWorldSelector {
                 m('div.AllianceWorldSelect-Info', [
                         'Please install it from ',
                         m('a', {
-                            onclick: m.route.bind(m.route, '/install')
+                            href: '#/install'
                         }, 'here')
                     ])
                 ])

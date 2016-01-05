@@ -3,6 +3,10 @@ import {PlayerStats} from "../../../lib/objects/player";
 import {ParseAllianceObject} from "../../../lib/objects/alliance";
 
 export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject):PlayerStats {
+    if (alliance == null || player == null) {
+        return;
+    }
+
     if (player.$stats) {
         return player.$stats;
     }

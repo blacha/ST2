@@ -1,5 +1,6 @@
 import {ParseConfig} from '../../parse.config';
 import {Log} from '../../lib/log/log';
+declare var Promise:any;
 
 var INSTANCE:ParseUtil;
 export class ParseUtil {

@@ -112,7 +112,7 @@ export class AllianceTable {
 
             cells.push(m('th', {
                 className: className.join(' '),
-                onclick: function () {
+                onclick: () => {
                     this.ctrl.setSortCol(col)
                 }
             }, output));
