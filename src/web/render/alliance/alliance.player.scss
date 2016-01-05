@@ -45,3 +45,28 @@
 .AlliancePlayer Table th {
     cursor: inherit;
 }
+
+.Support {
+    position:relative;
+}
+
+i.Support-Icon {
+    position: absolute;
+    top:22px;
+    right: 8px!important;
+}
+.Support-Text {
+    padding-right: 24px;
+}
+
+.PlayerBases .Table td {
+    line-height: 72px;
+    height: 72px;
+}
+
+.PlayerBases .BuildingTiles {
+    position:absolute;
+    right: 0;
+    top: 3px;
+}
+

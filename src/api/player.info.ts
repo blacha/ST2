@@ -1,3 +1,4 @@
+import {Base} from "../lib/base";
 export interface PlayerData {
     world: WorldInfoData;
     player: PlayerInfoData;
@@ -82,5 +83,6 @@ export interface CityInfoData {
         veh: number;
         air: number;
         time: number;
-    }
+    },
+    $base?: Base;
 }

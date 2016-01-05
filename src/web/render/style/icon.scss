@@ -26,11 +26,11 @@ i.icon-credit {
     background-image: url('../images/icon_credits.png');
 }
 
-i.icon-gdi {
+i.icon-gdi, i.Faction-GDI {
     background-image: url('../images/icon_gdi.png');
 }
 
-i.icon-nod {
+i.icon-nod, i.Faction-NOD {
     background-image: url('../images/icon_nod.png');
 }
 
@@ -40,4 +40,20 @@ i.icon-forgotten {
 
 i.icon-fortress {
     background-image: url('../images/icon_for.png');
+}
+
+
+// People - Skystrike
+i.Support-205, i.Support-202 {
+    background-image: url('../images/icon_support_inf_white.png');
+}
+
+// Tank - Ion
+i.Support-204, i.Support-201 {
+    background-image: url('../images/icon_support_tnk_white.png');
+}
+
+// Air - Falcon
+i.Support-203, i.Support-200{
+    background-image: url('../images/icon_support_air_white.png');
 }

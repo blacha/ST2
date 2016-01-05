@@ -11,6 +11,10 @@ $text-divider-color: rgba(0, 0, 0, 0.12);
 
 $text-accent-color:  unquote("rgb(#{$color-primary})");
 
+
+$tiberium-color: #96BF48;
+$crystal-color: #4387BF;
+
 @import 'style/grid';
 @import 'style/icon';
 @import 'style/base';

@@ -26,6 +26,31 @@
     flex-wrap: wrap;
 }
 
+.BuildingTiles--Small {
+    width: 72px;
+
+    .BaseTile {
+        width: 8px;
+        height: 8px;
+        border: none;
+        background-color: rgba(0,0,0,0.05);
+    }
+
+    .BaseCol-0, .BaseCol, .BaseRow-0, .BaseRow {
+        border: none
+    }
+
+    .BaseTile-Tiberium {
+        background-image: none;
+        background-color: $tiberium-color;
+    }
+
+    .BaseTile-Crystal {
+        background-image: none;
+        background-color: $crystal-color;
+    }
+}
+
 .OffTiles, .DefTiles {
     margin-top: 27px;
     border-top: 1px solid #ddd;

@@ -67,12 +67,13 @@ export class BaseRender {
 
 
 function makeBaseTiles(ctrl, base:Base) {
-    var baseTiles = m('div.BuildingTiles', base.buildingsForEach(RenderBuildingTile));
-    var defTiles = m('div.DefTiles', base.defForEach(RenderBuildingTile));
+    var renderTile = RenderBuildingTile.bind(null, true);
+    var baseTiles = m('div.BuildingTiles', base.buildingsForEach(renderTile));
+    var defTiles = m('div.DefTiles', base.defForEach(renderTile));
 
     var offTiles;
     if (base.getFaction() !== Faction.Forgotten) {
-        offTiles = m('div.OffTiles', base.offForEach(RenderBuildingTile));
+        offTiles = m('div.OffTiles', base.offForEach(renderTile));
     }
 
     return m('div', {

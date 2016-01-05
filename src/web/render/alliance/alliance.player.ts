@@ -6,6 +6,7 @@ import {DUnitType} from "../../../lib/unit/dunittype";
 import {Faction} from "../../../lib/data/faction";
 import {CityInfoData} from "../../../api/player.info";
 import * as Format from '../format';
+import {RenderBuildingTile} from "../base/tile";
 
 export class AlliancePlayer {
     private ctrl:AlliancePlayers;
@@ -34,7 +35,7 @@ export class AlliancePlayer {
             m('table.Table', [
                 m('thead.Table-Head', [
                     m('th', 'Name'),
-                    m('th', 'Base'),
+                    m('th', 'Layout'),
                     m('th', 'Level'),
                     m('th', 'Tib/h'),
                     m('th', 'Cry/h'),
@@ -42,6 +43,7 @@ export class AlliancePlayer {
                     m('th', '$/h'),
                     m('th', 'Off'),
                     m('th', 'Def'),
+                    m('th', 'Support'),
                 ]),
                 m('tbody', player.cities.map(this.viewPlayerBase.bind(this)))
             ])
@@ -52,8 +54,12 @@ export class AlliancePlayer {
         var alliance = this.ctrl.getCurrentAlliance();
         var bonus = alliance.bonus || {tiberium: 0, crystal: 0, power: 0};
         return m('tr.PlayerBase', [
-            m('td', city.name),
-            m('td', this.viewPlayerBaseLayout(city)),
+            m('td',
+                m('a', {
+                    href: `#/alliance/${m.route.param('world')}/${m.route.param('player')}/${city.id}`
+                }, city.name)
+            ),
+            m('td', m('div.BuildingTiles.BuildingTiles--Small', city.$base.buildingsForEach(RenderBuildingTile.bind(null, false)))),
             m('td', Format.formatNumber(city.level)),
             m('td', Format.formatNumber(city.production.tiberium + bonus.tiberium)),
             m('td', Format.formatNumber(city.production.crystal + bonus.crystal)),
@@ -61,11 +67,20 @@ export class AlliancePlayer {
             m('td', Format.formatNumber(city.production.credits)),
             m('td', Format.formatNumber(city.offense)),
             m('td', Format.formatNumber(city.defense)),
+            m('td.Support', this.viewSupport(city)),
         ])
     }
 
-    viewPlayerBaseLayout(city:CityInfoData) {
-        return '';
+    viewSupport(city:CityInfoData) {
+        var support = city.$base.getSupport();
+        if (support == null) {
+            return [];
+        }
+
+        return [
+            m('div.Support-Text', support.getLevel()),
+            m(`i.Support-Icon.Support-${support.getID()}`, { title: support.getGameData().display })
+        ];
     }
 
     viewPlayerResearch(player:ParsePlayerObject) {

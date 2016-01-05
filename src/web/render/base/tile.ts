@@ -6,16 +6,12 @@ import {Building} from '../../../lib/building/building';
 import {Buildable} from '../../../lib/base/buildable';
 import {Constants} from '../../../lib/constants';
 
-export function RenderBuildingTile(x:number, y:number, building:Buildable, tile:Tile, base:Base) {
+export function RenderBuildingTile(showBuilding:boolean, x:number, y:number, building:Buildable, tile:Tile, base:Base) {
     var className = [
         'BaseTile',
         `BaseRow-${y}`,
         `BaseCol-${x}`,
         `BaseTile-${x}-${y}`];
-
-    if (x == 4 && y == 1) {
-        className.push('BaseTile--Selected');
-    }
 
     if (tile !== Tile.Empty) {
         className.push('BaseTile-' + tile.getName())
@@ -31,16 +27,19 @@ export function RenderBuildingTile(x:number, y:number, building:Buildable, tile:
     }
 
     className.push('BaseTile-' + building.getID());
-
+    var output = [];
+    if (showBuilding) {
+        output = [
+            m('img', {
+                src: './images/' + building.getID() + '.png',
+            }),
+            m('span', {
+                className: 'BaseTileLevel'
+            }, building.getLevel())
+        ]
+    }
     return m('div', {
         className: className.join(' '),
         title: building.getName()
-    }, [
-        m('img', {
-            src: './images/' + building.getID() + '.png',
-        }),
-        m('span', {
-            className: 'BaseTileLevel'
-        }, building.getLevel())
-    ]);
+    }, output);
 }

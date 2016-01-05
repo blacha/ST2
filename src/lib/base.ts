@@ -13,6 +13,8 @@ import {GameDataObject} from './data/gamedataobject';
 import {CNCBase, CNCUnit, CNCTile} from '../web/client.base';
 
 import {ID_MAP, TECH_MAP} from './util';
+import {CityInfoData} from "../api/player.info";
+import {ParsePlayerObject} from "./objects/player";
 interface CNCLocation {
     x: number;
     y: number;
@@ -150,6 +152,29 @@ export class Base {
         return x + y * Constants.MAX_BASE_X;
     }
 
+    getSupport():Building {
+        var SUPPORTS = [
+            BuildingType.NOD.EyeOfKane,
+            BuildingType.NOD.FistOfKane,
+            BuildingType.NOD.BladeOfKane,
+            BuildingType.GDI.FalconSupport,
+            BuildingType.GDI.IonCannonSupport,
+            BuildingType.GDI.SkystrikeSupport
+        ];
+
+        for( var i = 0; i < this.base.length ; i ++) {
+            var building = <Building> this.base[i];
+            if (building == null) {
+                continue;
+            }
+
+            if (SUPPORTS.indexOf(building.getBuildingType()) > -1) {
+                return building;
+            }
+        };
+        return null;
+    }
+
     baseForEach(callback:(x:number, y:number, building:Buildable, tile:Tile, base:Base) => void) {
         for (var y = 0; y < Constants.MAX_Y; y++) {
             for (var x = 0; x < Constants.MAX_BASE_X; x++) {
@@ -214,6 +239,24 @@ export class Base {
 
     hasUpgrade(unitID:number) {
         return this.upgrades.indexOf(unitID) !== -1;
+    }
+
+    static loadFromCity(player:ParsePlayerObject, city:CityInfoData):Base {
+        var cncBase:CNCBase = {
+            x: city.x,
+            y: city.y,
+            level: city.level,
+            name: city.name,
+            faction: player.faction,
+            version: 0,
+            world:player.world,
+            owner:player.name,
+            player:player.name,
+            tiles: city.tiles,
+            upgrades:[], //player.research
+        };
+
+        return Base.load(cncBase);
     }
 
     static load(cncbase:CNCBase):Base {

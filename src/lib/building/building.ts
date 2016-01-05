@@ -19,6 +19,10 @@ export class Building implements Buildable {
         this.level = level;
     }
 
+    getBuildingType() {
+        return this.building;
+    }
+
     getHealth() {
         return this.building.getHealth(this.level);
     }

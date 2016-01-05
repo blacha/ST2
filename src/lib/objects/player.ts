@@ -1,5 +1,6 @@
 import {ResearchInfoData, CommandInfoData, CityInfoData} from "../../api/player.info";
 import {ParseBaseObject} from "./base.object";
+import {Base} from "../base";
 
 export interface ParsePlayerObject extends ParseBaseObject {
     world:number;
