@@ -14,6 +14,7 @@ export var Constants = {
     TILE_COUNT: -1, // Calculated
 
     RESOURCE_COST_GROWTH: 1.32,
+    RESOURCE_COST_GROWTH_TOTAL: [],
     RESOURCE_PRODUCTION_GROWTH: 1.25,
     RESOURCE_PLUNDER_GROWTH: 1.26,
 
@@ -161,5 +162,3 @@ export var Constants = {
         '<last>': '.'
     }
 };
-
-Constants.TILE_COUNT = Constants.MAX_BASE_X * Constants.MAX_OFF_Y;

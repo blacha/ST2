@@ -27,8 +27,12 @@ export class Unit implements Buildable {
         return this.unit.getHealth(this.level);
     }
 
-    getCost() {
-        return this.unit.getCost(this.level);
+    getUpgradeCost() {
+        return this.unit.getUpgradeCost(this.level);
+    }
+
+    getTotalUpgradeCost() {
+        return this.unit.getTotalUpgradeCost(this.level);
     }
 
     getPlunder() {

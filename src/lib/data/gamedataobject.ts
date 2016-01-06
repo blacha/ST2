@@ -1,6 +1,7 @@
 import * as Util from '../util';
 import {Constants} from '../constants';
 import {GameDataJSON,GameDataRepair} from './gamedata';
+import {GameDataResource} from "./gamedata";
 
 export class GameDataObject {
     public data:GameDataJSON;
@@ -38,9 +39,11 @@ export class GameDataObject {
         return Util.getRepairValue(this.data, level);
     }
 
-    getCost(level:number) {
-        return 0;
-        //return Util.getGrowthValue(this.data.resources, level,
-        //    Constants.RESOURCE_COST_GROWTH);
+    getUpgradeCost(level:number):GameDataResource {
+        return Util.getUpgradeCost(this.data, level);
+    }
+
+    getTotalUpgradeCost(level:number):GameDataResource {
+        return Util.getTotalUpgradeCost(this.data, level);
     }
 }

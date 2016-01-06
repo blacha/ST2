@@ -6,6 +6,10 @@ import {Base} from './base';
 import {GAMEDATA} from '../data/gamedata';
 import {BuildingType} from './building/buildingtype';
 import {BaseNode} from './base/node';
+import {GameDataResource} from "./data/gamedata";
+import {GameResources} from "./game.resources";
+
+
 
 
 export function random(prefix?:string):string {
@@ -92,9 +96,57 @@ export function loadGameData(printMessages) {
     }
 }
 
+export function getTotalUpgradeCost(gdo:GameDataJSON, level:number):GameDataResource {
+    var objCache = LEVEL_CACHE.total[gdo.id];
+    if (objCache == null) {
+        objCache = LEVEL_CACHE.total[gdo.id] = [];
+    }
 
-export function getRepairValue(gdo:GameDataJSON, level:number, growth = Constants.RESOURCE_PLUNDER_GROWTH):GameDataRepair {
-    var values = gdo.repair;
+    var cache = objCache[level];
+    if (cache != null) {
+        return cache;
+    }
+
+    var totalCost = new GameResources();
+
+    // TODO optimize?
+    for (var i = 1; i <= level; i ++) {
+        var currentCost = <any>getLevelValues('cost',  gdo.id, gdo.resources, i, Constants.RESOURCE_COST_GROWTH);
+        totalCost.add(currentCost);
+        objCache[i] = totalCost.clone();
+    }
+    objCache[level] = totalCost;
+
+    return totalCost;
+}
+
+export function getUpgradeCost(gdo:GameDataJSON, level:number):GameDataResource {
+    return getLevelValues('cost', gdo.id, gdo.resources, level,  Constants.RESOURCE_COST_GROWTH)
+}
+
+export function getRepairValue(gdo:GameDataJSON, level:number):GameDataRepair {
+    return getLevelValues('repair',  gdo.id, gdo.repair, level,  Constants.RESOURCE_PLUNDER_GROWTH)
+}
+
+var LEVEL_CACHE = {
+    repair: {},
+    cost: {},
+    total: {}
+};
+if (typeof window !== 'undefined') {
+    (<any>window).LEVEL_CACHE = LEVEL_CACHE;
+}
+
+function getLevelValues(type:string, id:number, values:any, level, growth) {
+    var objCache = LEVEL_CACHE[type][id];
+    if (objCache == null) {
+        objCache = LEVEL_CACHE[type][id] = [];
+    }
+
+    var cache = objCache[level];
+    if (cache != null) {
+        return cache;
+    }
 
     var maxLevel = values[Constants.GROWTH_LEVEL];
     var keys = Object.keys(maxLevel);
@@ -111,18 +163,9 @@ export function getRepairValue(gdo:GameDataJSON, level:number, growth = Constant
         output[key] = val * Math.pow(growth, level - Constants.GROWTH_LEVEL);
     }
 
+    objCache[level] = output;
     return output;
 }
-
-export function addObject(from, to) {
-    var addKeys = Object.keys(from);
-    for (var i = 0; i < addKeys.length; i++) {
-        var key = addKeys[i];
-
-        to[key] = (to[key] || 0) + from[key];
-    }
-}
-
 
 function mapIDs(obj, baseObj) {
     if (obj == null) {

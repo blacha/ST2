@@ -39,8 +39,12 @@ export class Building implements Buildable {
         return this.building.getName();
     }
 
-    getCost() {
-        return this.building.getCost(this.level);
+    getUpgradeCost() {
+        return this.building.getUpgradeCost(this.level);
+    }
+
+    getTotalUpgradeCost() {
+        return this.building.getTotalUpgradeCost(this.level);
     }
 
     getPlunder() {

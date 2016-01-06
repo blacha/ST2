@@ -43,6 +43,9 @@ export class AlliancePlayer {
                     m('th', '$/h'),
                     m('th', 'Off'),
                     m('th', 'Def'),
+                    m('th', 'Tib'),
+                    m('th', 'Cry'),
+                    m('th', 'Pow'),
                     m('th', 'Support'),
                 ]),
                 m('tbody', player.cities.map(this.viewPlayerBase.bind(this)))
@@ -67,6 +70,9 @@ export class AlliancePlayer {
             m('td', Format.formatNumber(city.production.credits)),
             m('td', Format.formatNumber(city.offense)),
             m('td', Format.formatNumber(city.defense)),
+            m('td', Format.formatNumber(city.$cost.tiberium)),
+            m('td', Format.formatNumber(city.$cost.crystal)),
+            m('td', Format.formatNumber(city.$cost.power)),
             m('td.Support', this.viewSupport(city)),
         ])
     }

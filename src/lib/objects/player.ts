@@ -31,5 +31,6 @@ export interface PlayerStats {
     total: {
         production: Resources;
         resources: Resources;
+        cost: Resources;
     }
 }

@@ -106,9 +106,23 @@ describe('BasePlunder', () => {
         expect(Math.floor(plunder.tiberium)).to.equal(11478);
 
         console.log('plunder', JSON.stringify(plunder, null, 4))
+    });
+});
 
+describe('BaseCost', () => {
+    var base:Base;
 
-    })
+    beforeEach(() => {
+        base = new Base();
+    });
+
+    it.only('should get upgrade cost', () => {
+        //  silo : 15 11,478
+        // harv 15, 11,478
+        var building = new Building(BuildingType.GDI.Refinery, 15);
+        var cost = building.getUpgradeCost();
+        console.log('cost', cost);
+    });
 });
 
 describe('BaseProduction', () => {

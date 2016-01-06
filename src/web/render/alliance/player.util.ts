@@ -2,6 +2,7 @@ import {ParsePlayerObject} from "../../../lib/objects/player";
 import {PlayerStats} from "../../../lib/objects/player";
 import {ParseAllianceObject} from "../../../lib/objects/alliance";
 import {Base} from "../../../lib/base";
+import {GameResources} from "../../../lib/game.resources";
 
 export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject):PlayerStats {
     if (alliance == null || player == null) {
@@ -12,21 +13,10 @@ export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject)
         return player.$stats;
     }
 
-
     var maxO = 0;
-    var totalProduction = {
-        power: 0,
-        tiberium: 0,
-        crystal: 0,
-        credits: 0
-    };
-
-    var totalResources = {
-        power: 0,
-        tiberium: 0,
-        crystal: 0,
-        credits: 0
-    };
+    var totalProduction = new GameResources();
+    var totalResources = new GameResources();
+    var totalCost = new GameResources();
 
     var mainBase = null;
     console.time(player.name + ':loading-bases');
@@ -35,18 +25,29 @@ export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject)
             mainBase = city;
             maxO = city.offense;
         }
-        totalProduction.power += city.production.power + alliance.bonus.power;
-        totalProduction.tiberium += city.production.tiberium + alliance.bonus.tiberium;
-        totalProduction.crystal += city.production.crystal + alliance.bonus.crystal;
-        totalProduction.credits += city.production.credits;
 
-        totalResources.power += city.current.power;
-        totalResources.tiberium += city.current.tiberium;
-        totalResources.crystal += city.current.crystal;
+        totalProduction.add(city.production);
+        totalProduction.add(alliance.bonus);
+
+        totalResources.add(city.current);
 
         if (city.$base == null) {
             console.time(city.name);
             city.$base = Base.loadFromCity(player, city);
+            let cityCost = city.$cost = new GameResources();
+
+            var tiles = city.$base.getBaseTiles();
+            for (var i =0;i < tiles.length; i ++) {
+                var tile = tiles[i];
+                if (tile == null) {
+                    continue;
+                }
+
+                var cost = tile.getTotalUpgradeCost();
+                cityCost.add(cost);
+                totalCost.add(cost);
+            }
+
             console.timeEnd(city.name);
         }
     });
@@ -57,7 +58,8 @@ export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject)
         main: mainBase,
         total: {
             production: totalProduction,
-            resources: totalResources
+            resources: totalResources,
+            cost: totalCost
         }
     };
 
