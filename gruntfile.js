@@ -113,6 +113,21 @@ module.exports = function(grunt) {
         }
     };
 
+    config.includes = {
+        js: {
+            options: {
+                includeRegexp: /^\/\/\s*import\s+['"]?([^'"]+)['"]?\s*$/,
+                    duplicates: false,
+                    debug: true,
+                    includePath: './',
+            },
+
+            cwd: 'src/extension/package/',
+            src: 'st2.user.js',
+            dest: 'static/client/'
+        }
+    };
+
     config.sass = {
         options: {
             sourceMap: true

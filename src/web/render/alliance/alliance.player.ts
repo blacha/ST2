@@ -17,16 +17,9 @@ export class AlliancePlayer {
 
     view(player:ParsePlayerObject) {
         return [
-            this.viewPlayerInfo(player),
             this.viewPlayerResearch(player),
             this.viewPlayerBases(player)
         ]
-    }
-
-    viewPlayerInfo(player:ParsePlayerObject) {
-        return m('div.AlliancePlayer-Info', [
-            m('div.AlliancePlayer-Name', player.name)
-        ])
     }
 
     viewPlayerBases(player:ParsePlayerObject) {
@@ -43,9 +36,7 @@ export class AlliancePlayer {
                     m('th', '$/h'),
                     m('th', 'Off'),
                     m('th', 'Def'),
-                    m('th', 'Tib'),
-                    m('th', 'Cry'),
-                    m('th', 'Pow'),
+                    m('th', 'Base Cost'),
                     m('th', 'Support'),
                 ]),
                 m('tbody', player.cities.map(this.viewPlayerBase.bind(this)))
@@ -70,11 +61,15 @@ export class AlliancePlayer {
             m('td', Format.formatNumber(city.production.credits)),
             m('td', Format.formatNumber(city.offense)),
             m('td', Format.formatNumber(city.defense)),
-            m('td', Format.formatNumber(city.$cost.tiberium)),
-            m('td', Format.formatNumber(city.$cost.crystal)),
-            m('td', Format.formatNumber(city.$cost.power)),
+            m('td', this.viewBaseCost(city)),
             m('td.Support', this.viewSupport(city)),
         ])
+    }
+
+    viewBaseCost(city:CityInfoData) {
+        return m('span.BaseCost-Power', {
+                title: `T: ${Format.formatNumber(city.$cost.tiberium)} C: ${Format.formatNumber(city.$cost.crystal)} P: ${Format.formatNumber(city.$cost.power)}`
+            }, Format.formatNumber(city.$cost.power + city.$cost.tiberium + city.$cost.crystal));
     }
 
     viewSupport(city:CityInfoData) {

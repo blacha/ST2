@@ -15,7 +15,7 @@ function LayoutUser(config) {
         m('div.UserGroup-Item.UserGroup-Username', ParseWebUtil.user()),
         m('a.UserGroup-Item.UserGroup-Logout', {
             href: '#',
-            onclick: m.route.bind(m.route, '/logout')
+            onclick: m.route.bind(m.route, '/logout', null)
         }, 'logout')
     ]);
 }

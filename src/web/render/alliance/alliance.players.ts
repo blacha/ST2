@@ -175,25 +175,37 @@ export class AlliancePlayers {
     }
 
     viewAllianceTitle(showStats = true) {
-        var output =  [
-            m('div.AllianceInfo-Title', [
-                    m('button.AllianceInfo-Name.Button.Button--colored', {
+
+        var breadCrumb = [];
+        if (this.currentPlayerName()) {
+            breadCrumb.unshift(m('button.AllianceInfo-Player.Button', {
+                onclick: m.route.bind(m.route, `/alliance/${this.worldID}/${this.currentPlayerName()}`, null)
+            }, this.currentPlayerName()));
+        }
+
+        breadCrumb.unshift(m('button.AllianceInfo-Name.Button', {
                         onclick: () => {
                             m.route(`/alliance/${this.worldID}`);
                             return false;
                         }
-                    }, this.alliance().name),
-                    m('button.AllianceInfo-World.Button', {
-                        onclick: m.route.bind(m.route, '/alliance'),
+                    }, this.alliance().name));
+
+        breadCrumb.unshift(m('button.AllianceInfo-World.Button', {
+                        onclick: m.route.bind(m.route, '/alliance', null),
                         title: 'Change world'
-                    }, this.world().name),
-                ]
-            )
+                    }, this.world().name));
+
+        var lastBreadCrumb = breadCrumb[breadCrumb.length - 1];
+        lastBreadCrumb.attrs.className += ' Button--colored';
+
+        var output =  [
+            m('div.AllianceInfo-Title', breadCrumb)
         ];
+
         if (showStats) {
             output.push(m('div.AllianceInfo-Stats.AllianceStats', this.viewAllianceStats()))
         }
-        return output;
+        return [output];
     }
 
     viewAllianceStats() {

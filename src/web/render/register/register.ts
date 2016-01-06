@@ -73,7 +73,7 @@ export class RegisterRender {
                     m('div.Card-Actions', [
                         m('button', {
                             className: 'Button Button--secondary',
-                            onclick: m.route.bind(null, '/install')
+                            onclick: m.route.bind(null, '/install', null)
                         }, 'Install')
                     ]),
 
@@ -106,7 +106,7 @@ export class RegisterRender {
                 className: 'Button Button--secondary',
                 disabled: this.loading(),
                 type: 'button',
-                onclick:  m.route.bind(null, '/login')
+                onclick:  m.route.bind(null, '/login', null)
             }, 'Login'),
 
             m('button', {
