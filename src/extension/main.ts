@@ -11,7 +11,7 @@ import {StorageUtil} from './util/storage';
 var PlayerInfo = PlayerInfoModule.getInstance();
 
 export var $VERSION = '2.0.0';
-
+Log
 export var Modules = {
     PlayerInfo: PlayerInfoModule
 };

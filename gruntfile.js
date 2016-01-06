@@ -104,6 +104,19 @@ module.exports = function(grunt) {
         bower: {
             src: 'target/bundle.js',
             dest: 'target/main.js'
+        },
+        chrome: {
+            files: [{
+                flatten: true,
+                expand: true,
+                src: 'src/extension/package/chrome/*',
+                dest: 'static/client/chrome/'
+            }, {
+                flatten: true,
+                expand: true,
+                src: 'static/client/st2.user.js',
+                dest: 'static/client/chrome/'
+            }]
         }
     };
 
@@ -147,5 +160,5 @@ module.exports = function(grunt) {
     grunt.registerTask('typescript', ['ts', 'mochaTest']);
 
     grunt.registerTask('build', ['typescript', 'sass']);
-    grunt.registerTask('package', ['webpack', 'copy']);
+    grunt.registerTask('package', ['webpack','includes', 'copy']);
 };

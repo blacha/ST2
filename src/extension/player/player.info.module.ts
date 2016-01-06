@@ -40,9 +40,8 @@ export class PlayerInfoModule {
 
         PlayerInfoModule.log.debug('Changes Found');
         ParseUtil.send('player_info', data.data, PlayerInfoModule.log).then(function (resp) {
-            console.log('response', resp);
         }, function (err) {
-            console.log('err', err);
+            PlayerInfoModule.log.error({error: err}, 'Error updating player');
         })
     }
 }

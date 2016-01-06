@@ -32,7 +32,7 @@ export class ClientLibPatcher {
             var protoPath = key.split('.');
             var funcName = protoPath.pop();
 
-            logger.trace({func: funcName}, 'Patching');
+            //logger.trace({func: funcName}, `Patching ${funcName}`);
 
             var currentProto = ClientLibPatcher.getFromKey(protoPath);
             if (currentProto == null) {
@@ -55,9 +55,8 @@ export class ClientLibPatcher {
                 continue;
             }
 
-            logger.debug({func: patch.func, match: matches[1]}, 'patching..');
+            logger.debug({func: patch.func, match: matches[1]}, `patching.. ${funcName} to ${matches[1]}`);
             currentProto.prototype[funcName] = makeReturn(matches[1]);
-
         }
     }
 }

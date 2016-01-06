@@ -32,7 +32,7 @@ export class ParseUtil {
         var requestLog = log.child({func: name});
 
         this.queue.then(() => {
-            requestLog.info('Request..');
+            requestLog.info(`Parse Request.. ${name}`);
 
             var queueDefer = Promise.defer();
 
