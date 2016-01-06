@@ -34,6 +34,7 @@ export class BaseProduction {
             output.tiberium.cont += production.tiberium.cont;
             output.tiberium.pkg += production.tiberium.pkg;
         }
+
         if (production.crystal) {
             output.crystal.cont += production.crystal.cont;
             output.crystal.pkg += production.crystal.pkg;
@@ -43,6 +44,7 @@ export class BaseProduction {
             output.credit.cont += production.credit.cont;
             output.credit.pkg += production.credit.pkg;
         }
+
         if (production.power) {
             output.power.cont += production.power.cont;
             output.power.pkg += production.power.pkg;

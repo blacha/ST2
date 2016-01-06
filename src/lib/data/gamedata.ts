@@ -32,6 +32,9 @@ export interface GameDataRepair {
     RepairAir?: number;
     RepairBase?: number;
     ResearchPoints?: number;
+    SupplyPoints?:number;
+    CommandPoints?:number;
+    OnlyForRewards?:number;
     tiberium?: number;
     credits?: number;
 }

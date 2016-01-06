@@ -2053,19 +2053,19 @@ export var GAMEDATA:GameDataJSON[] = [
             "tiberium": 1572,
             "RepairBase": 240
         }],
-        "modifiers": [{}, {"PowerPackage": 2, "PowerTime": 60}, {
+        "modifiers": [{}, {"PowerPackage": 2, "PowerPackageTime": 60}, {
             "PowerPackage": 5,
-            "PowerTime": 120
-        }, {"PowerPackage": 11, "PowerTime": 200}, {"PowerPackage": 45, "PowerTime": 600}, {
+            "PowerPackageTime": 120
+        }, {"PowerPackage": 11, "PowerPackageTime": 200}, {"PowerPackage": 45, "PowerPackageTime": 600}, {
             "PowerPackage": 120,
-            "PowerTime": 1200
-        }, {"PowerPackage": 230, "PowerTime": 1800}, {"PowerPackage": 560, "PowerTime": 3600}, {
+            "PowerPackageTime": 1200
+        }, {"PowerPackage": 230, "PowerPackageTime": 1800}, {"PowerPackage": 560, "PowerPackageTime": 3600}, {
             "PowerPackage": 1320,
-            "PowerTime": 7200
-        }, {"PowerPackage": 1950, "PowerTime": 9000}, {"PowerPackage": 2700, "PowerTime": 10800}, {
+            "PowerPackageTime": 7200
+        }, {"PowerPackage": 1950, "PowerPackageTime": 9000}, {"PowerPackage": 2700, "PowerPackageTime": 10800}, {
             "PowerPackage": 4100,
-            "PowerTime": 14400
-        }, {"PowerPackage": 7000, "PowerTime": 21600}]
+            "PowerPackageTime": 14400
+        }, {"PowerPackage": 7000, "PowerPackageTime": 21600}]
     }, {
         "id": 118,
         "speed": 0,
@@ -2110,22 +2110,22 @@ export var GAMEDATA:GameDataJSON[] = [
             "tiberium": 1210,
             "RepairBase": 240
         }],
-        "modifiers": [{}, {"CreditPackage": 2, "CreditTime": 60}, {
+        "modifiers": [{}, {"CreditPackage": 2, "CreditPackageTime": 60}, {
             "CreditPackage": 5,
-            "CreditTime": 120
-        }, {"CreditPackage": 10, "CreditTime": 200}, {"CreditPackage": 40, "CreditTime": 600}, {
+            "CreditPackageTime": 120
+        }, {"CreditPackage": 10, "CreditPackageTime": 200}, {"CreditPackage": 40, "CreditPackageTime": 600}, {
             "CreditPackage": 105,
-            "CreditTime": 1200
-        }, {"CreditPackage": 200, "CreditTime": 1800}, {
+            "CreditPackageTime": 1200
+        }, {"CreditPackage": 200, "CreditPackageTime": 1800}, {
             "CreditPackage": 485,
-            "CreditTime": 3600
-        }, {"CreditPackage": 1150, "CreditTime": 7200}, {
+            "CreditPackageTime": 3600
+        }, {"CreditPackage": 1150, "CreditPackageTime": 7200}, {
             "CreditPackage": 1700,
-            "CreditTime": 9000
-        }, {"CreditPackage": 2370, "CreditTime": 10800}, {
+            "CreditPackageTime": 9000
+        }, {"CreditPackage": 2370, "CreditPackageTime": 10800}, {
             "CreditPackage": 3700,
-            "CreditTime": 14400
-        }, {"CreditPackage": 6480, "CreditTime": 21600}]
+            "CreditPackageTime": 14400
+        }, {"CreditPackage": 6480, "CreditPackageTime": 21600}]
     }, {
         "id": 120,
         "speed": 0,
@@ -3638,19 +3638,19 @@ export var GAMEDATA:GameDataJSON[] = [
             "tiberium": 1572,
             "RepairBase": 240
         }],
-        "modifiers": [{}, {"PowerPackage": 2, "PowerTime": 60}, {
+        "modifiers": [{}, {"PowerPackage": 2, "PowerPackageTime": 60}, {
             "PowerPackage": 5,
-            "PowerTime": 120
-        }, {"PowerPackage": 11, "PowerTime": 200}, {"PowerPackage": 45, "PowerTime": 600}, {
+            "PowerPackageTime": 120
+        }, {"PowerPackage": 11, "PowerPackageTime": 200}, {"PowerPackage": 45, "PowerPackageTime": 600}, {
             "PowerPackage": 120,
-            "PowerTime": 1200
-        }, {"PowerPackage": 230, "PowerTime": 1800}, {"PowerPackage": 560, "PowerTime": 3600}, {
+            "PowerPackageTime": 1200
+        }, {"PowerPackage": 230, "PowerPackageTime": 1800}, {"PowerPackage": 560, "PowerPackageTime": 3600}, {
             "PowerPackage": 1320,
-            "PowerTime": 7200
-        }, {"PowerPackage": 1950, "PowerTime": 9000}, {"PowerPackage": 2700, "PowerTime": 10800}, {
+            "PowerPackageTime": 7200
+        }, {"PowerPackage": 1950, "PowerPackageTime": 9000}, {"PowerPackage": 2700, "PowerPackageTime": 10800}, {
             "PowerPackage": 4100,
-            "PowerTime": 14400
-        }, {"PowerPackage": 7000, "PowerTime": 21600}]
+            "PowerPackageTime": 14400
+        }, {"PowerPackage": 7000, "PowerPackageTime": 21600}]
     }, {
         "id": 153,
         "speed": 0,
@@ -3683,22 +3683,22 @@ export var GAMEDATA:GameDataJSON[] = [
             "tiberium": 1210,
             "RepairBase": 240
         }],
-        "modifiers": [{}, {"CreditPackage": 2, "CreditTime": 60}, {
+        "modifiers": [{}, {"CreditPackage": 2, "CreditPackageTime": 60}, {
             "CreditPackage": 5,
-            "CreditTime": 120
-        }, {"CreditPackage": 10, "CreditTime": 200}, {"CreditPackage": 40, "CreditTime": 600}, {
+            "CreditPackageTime": 120
+        }, {"CreditPackage": 10, "CreditPackageTime": 200}, {"CreditPackage": 40, "CreditPackageTime": 600}, {
             "CreditPackage": 105,
-            "CreditTime": 1200
-        }, {"CreditPackage": 200, "CreditTime": 1800}, {
+            "CreditPackageTime": 1200
+        }, {"CreditPackage": 200, "CreditPackageTime": 1800}, {
             "CreditPackage": 485,
-            "CreditTime": 3600
-        }, {"CreditPackage": 1150, "CreditTime": 7200}, {
+            "CreditPackageTime": 3600
+        }, {"CreditPackage": 1150, "CreditPackageTime": 7200}, {
             "CreditPackage": 1700,
-            "CreditTime": 9000
-        }, {"CreditPackage": 2370, "CreditTime": 10800}, {
+            "CreditPackageTime": 9000
+        }, {"CreditPackage": 2370, "CreditPackageTime": 10800}, {
             "CreditPackage": 3700,
-            "CreditTime": 14400
-        }, {"CreditPackage": 6480, "CreditTime": 21600}]
+            "CreditPackageTime": 14400
+        }, {"CreditPackage": 6480, "CreditPackageTime": 21600}]
     }, {
         "id": 154,
         "speed": 0,

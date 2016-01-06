@@ -23,11 +23,11 @@ var MODIFIERS = {
     //34: 'TiberiumPackageTime', // CrystalPackageTime
 
     32: 'CreditPackage',
-    36: 'CreditTime',
+    36: 'CreditPackageTime',
 
     29: 'PowerStorage',
     28: 'PowerPackage',
-    35: 'PowerTime',
+    35: 'PowerPackageTime',
 
     37: 'RepairEfficiencyBase',
     39: 'RepairEfficiencyAir',

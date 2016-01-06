@@ -92,7 +92,6 @@ export function loadGameData(printMessages) {
     }
 }
 
-var RESOURCE_BOOST = true;
 
 export function getRepairValue(gdo:GameDataJSON, level:number, growth = Constants.RESOURCE_PLUNDER_GROWTH):GameDataRepair {
     var values = gdo.repair;
@@ -105,17 +104,10 @@ export function getRepairValue(gdo:GameDataJSON, level:number, growth = Constant
         var key = keys[i];
         if (level <= Constants.GROWTH_LEVEL) {
             output[key] = values[level][key];
-            if (RESOURCE_BOOST) {
-                output[key] = Math.ceil(output[key] * 1.25);
-            }
             continue;
         }
 
         var val = values[Constants.GROWTH_LEVEL][key];
-        if (RESOURCE_BOOST) {
-            val = Math.ceil(val * 1.25);
-        }
-        //var outputKey = toOutputKey(key);
         output[key] = val * Math.pow(growth, level - Constants.GROWTH_LEVEL);
     }
 
