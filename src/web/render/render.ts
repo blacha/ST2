@@ -33,7 +33,7 @@ export var Render = {
             // Registration
             '/register': RegisterRender,
             '/register/:id': RegisterRender,
-            '/register/:id/:uuid': RegistrationCompleteRender
+            '/verify/:uuid': RegistrationCompleteRender
         });
     }
 };

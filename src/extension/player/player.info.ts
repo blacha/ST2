@@ -44,10 +44,47 @@ export class PlayerInfo {
             rank: player.get_OverallRank(),
             sub: subName,
             rp: player.get_ResearchPoints(),
+            mcv: PlayerInfo.getMCVInfo(),
             credit: player.get_Credits().Base,
             command: PlayerInfo.getCommandInfo(),
             research: PlayerInfo.getResearchInfo(),
             cities: PlayerInfo.getCities()
+        }
+    }
+
+    static getMCVInfo():PlayerAPI.MCVInfoData {
+        var player = PlayerInfo.instance.get_Player();
+
+        var TechId = ClientLib.Base.Tech.GetTechIdFromTechNameAndFaction(
+            ClientLib.Base.ETechName.Research_BaseFound, player.get_Faction());
+        var PlayerResearch = player.get_PlayerResearch();
+        var ResearchItem = PlayerResearch.GetResearchItemFomMdbId(TechId);
+
+        //if (ResearchItem === null) {
+        //    return;
+        //}
+        var NextLevelInfo = ResearchItem.get_NextLevelInfo_Obj();
+
+        var resourcesNeeded = [];
+        for (var i in NextLevelInfo.rr) {
+            if (NextLevelInfo.rr[i].t > 0) {
+                resourcesNeeded[NextLevelInfo.rr[i].t] = NextLevelInfo.rr[i].c;
+            }
+        }
+        var creditsNeeded = resourcesNeeded[ClientLib.Base.EResourceType.Gold];
+        var creditsResourceData = player.get_Credits();
+        var creditsGrowthPerHour = (creditsResourceData.Delta + creditsResourceData.ExtraBonusDelta) *
+            ClientLib.Data.MainData.GetInstance().get_Time().get_StepsPerHour();
+        var creditsTimeLeftInHours = (creditsNeeded - player.GetCreditsCount()) / creditsGrowthPerHour;
+
+        var mcvTime = creditsTimeLeftInHours * 60 * 60;
+        if (mcvTime === Infinity || isNaN(mcvTime)) {
+            mcvTime = 0;
+        }
+
+        return {
+            time: mcvTime,
+            level: ResearchItem.get_CurrentLevel() + 1
         }
     }
 
@@ -149,7 +186,8 @@ export class PlayerInfo {
             current: {
                 power: c.GetResourceCount(ClientLib.Base.EResourceType.Power),
                 tiberium: c.GetResourceCount(ClientLib.Base.EResourceType.Tiberium),
-                crystal: c.GetResourceCount(ClientLib.Base.EResourceType.Crystal)
+                crystal: c.GetResourceCount(ClientLib.Base.EResourceType.Crystal),
+                credits: 0
             },
 
             repair: {

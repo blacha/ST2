@@ -1,6 +1,6 @@
 import {Base} from "../lib/base";
-import {Resources} from "../lib/objects/player";
 import {GameResources} from "../lib/game.resources";
+import {Resources} from "../lib/game.resources";
 
 export interface PlayerData {
     world: WorldInfoData;
@@ -23,10 +23,16 @@ export interface PlayerInfoData {
     sub: string;
     rp: number;
     credit: number;
+    mcv: MCVInfoData;
     command: CommandInfoData;
     research: ResearchInfoData;
     cities: CityInfoData[];
 }
+
+export interface MCVInfoData {
+    time: number;
+    level: number;
+};
 
 export interface AllianceInfoData {
     world?: number;
@@ -70,17 +76,8 @@ export interface CityInfoData {
     v: number;
     name: string;
     tiles: any;
-    production: {
-        power: number;
-        tiberium: number;
-        crystal: number;
-        credits: number;
-    },
-    current: {
-        power :number;
-        tiberium: number;
-        crystal: number;
-    },
+    production: Resources,
+    current: Resources,
     repair: {
         inf: number;
         veh: number;

@@ -1,4 +1,11 @@
-export class GameResources {
+export interface Resources {
+    power: number;
+    tiberium: number;
+    crystal: number;
+    credits: number;
+}
+
+export class GameResources implements Resources {
     static POWER = 'power';
     static CRYSTAL = 'crystal';
     static TIBERIUM = 'tiberium';

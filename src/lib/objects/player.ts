@@ -1,6 +1,7 @@
 import {ResearchInfoData, CommandInfoData, CityInfoData} from "../../api/player.info";
 import {ParseBaseObject} from "./base.object";
 import {Base} from "../base";
+import {GameResources} from "../game.resources";
 
 export interface ParsePlayerObject extends ParseBaseObject {
     world:number;
@@ -19,18 +20,11 @@ export interface ParsePlayerObject extends ParseBaseObject {
     $stats?: PlayerStats;
 }
 
-export interface Resources {
-    power: number,
-    tiberium: number,
-    crystal: number,
-    credits: number
-}
-
 export interface PlayerStats {
     main: CityInfoData,
     total: {
-        production: Resources;
-        resources: Resources;
-        cost: Resources;
+        production: GameResources;
+        resources: GameResources;
+        cost: GameResources;
     }
 }

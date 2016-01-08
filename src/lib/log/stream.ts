@@ -20,8 +20,7 @@ export class ConsoleLogStream implements LogStream {
         if (message.level < this.level) {
             return;
         }
-        console.log(message, message.msg);
-        //console.log(JSON.stringify(message));
+        console.log(JSON.stringify(message));
     }
 
 }

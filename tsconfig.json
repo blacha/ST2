@@ -6,6 +6,6 @@
         "sourceMap": false
     },
     "files": [
-        "src/main.ts"
+        "src/bot/main.ts"
     ]
 }
