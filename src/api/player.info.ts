@@ -1,5 +1,7 @@
 import {Base} from "../lib/base";
 import {Resources} from "../lib/objects/player";
+import {GameResources} from "../lib/game.resources";
+
 export interface PlayerData {
     world: WorldInfoData;
     player: PlayerInfoData;
@@ -86,5 +88,5 @@ export interface CityInfoData {
         time: number;
     },
     $base?: Base;
-    $cost?: Resources;
+    $cost?: GameResources;
 }

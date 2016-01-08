@@ -2,6 +2,7 @@ import {ParsePlayerObject} from "../../lib/objects/player";
 import {Faction} from "../../lib/data/faction";
 import {OUnitType} from "../../lib/unit/ounittype";
 import {DUnitType} from "../../lib/unit/dunittype";
+import {GameResources} from "../../lib/game.resources";
 
 var Formats = ['', 'K', 'M', 'G', 'T'];
 
@@ -13,6 +14,12 @@ export function formatNumber(num:number):string {
     }
 
     return num.toFixed(2) + Formats[current];
+}
+
+export function formatTotalResources(resources:GameResources) {
+    return m('span', {
+        title: `T: ${formatNumber(resources.tiberium)} C: ${formatNumber(resources.crystal)} P: ${formatNumber(resources.power)}`
+    }, formatNumber(resources.total()));
 }
 
 export function formatPercent(x:number) {

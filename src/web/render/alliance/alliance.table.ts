@@ -33,6 +33,12 @@ var MainOCol = new AllianceTableCol('Off', '$stats.main.offense', {formatter: Fo
 var MainDCol = new AllianceTableCol('Def', '$stats.main.defense', {formatter: Format.formatNumber});
 var MainPowCol = new AllianceTableCol('Pow/h', '$stats.main.production.power', {formatter: Format.formatNumber});
 var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatHours});
+var MainCost = new AllianceTableCol('Base Cost', '$stats.main.$cost', {
+    formatter: Format.formatTotalResources,
+    sorter: function(data:ParsePlayerObject) {
+        return data.$stats.main.$cost.total();
+    }
+});
 
 var RPCol = new AllianceTableCol('RP', 'rp', {formatter: Format.formatNumber});
 var ResearchCol = new AllianceTableCol('Research', 'research', {
@@ -49,6 +55,7 @@ export var BIGGEST_COLS = [
     MainDCol,
     MainPowCol,
     MainRTCol,
+    MainCost,
     RPCol,
     CommandCol
 ];
@@ -65,6 +72,7 @@ export var TABLE_COLS = [
     MainPowCol,
     //MainRTCol,
     //CommandCol,
+    MainCost,
     RPCol,
     ResearchCol,
     SubCol,

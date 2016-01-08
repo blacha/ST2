@@ -5,6 +5,10 @@ export class GameResources {
     public crystal = 0;
     public credits = 0;
 
+    public total() {
+        return this.power + this.tiberium + this.credits + this.credits;
+    }
+
 
     public add(obj) {
         this.power += obj.power || 0;

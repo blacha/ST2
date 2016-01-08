@@ -5,7 +5,7 @@
 // @include         http*://prodgame*.alliances.commandandconquer.com/*/index.aspx*
 // @grant           GM_updatingEnabled
 // @grant           unsafeWindow
-// @version         5.0.0
+// @version         5.0.1
 // @downloadURL     https://chard.nz/st2/client/st2.user.js
 // @icon            https://c.ac.nz/favicon.png
 // ==/UserScript==
@@ -13,7 +13,7 @@
 function setupShockrTools() {
 // import "build/extension.js"
 
-    start();
+    ST2.start();
 };
 
 

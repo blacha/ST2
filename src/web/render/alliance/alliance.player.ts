@@ -61,15 +61,9 @@ export class AlliancePlayer {
             m('td', Format.formatNumber(city.production.credits)),
             m('td', Format.formatNumber(city.offense)),
             m('td', Format.formatNumber(city.defense)),
-            m('td', this.viewBaseCost(city)),
+            m('td', Format.formatTotalResources(city.$cost)),
             m('td.Support', this.viewSupport(city)),
         ])
-    }
-
-    viewBaseCost(city:CityInfoData) {
-        return m('span.BaseCost-Power', {
-                title: `T: ${Format.formatNumber(city.$cost.tiberium)} C: ${Format.formatNumber(city.$cost.crystal)} P: ${Format.formatNumber(city.$cost.power)}`
-            }, Format.formatNumber(city.$cost.power + city.$cost.tiberium + city.$cost.crystal));
     }
 
     viewSupport(city:CityInfoData) {

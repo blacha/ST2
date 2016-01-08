@@ -6,14 +6,8 @@ import * as Layout from '../layout/layout';
 
 var $log = Log.child({route: 'AllianceWorldSelector'});
 
-const UPDATED_AT = 7 * 24 * 60 * 1000;
-function updatedAt(){
-    return {
-        updatedAt: {
-            '$gte': new Date((+new Date()) - UPDATED_AT).toISOString()
-        }
-    }
-}
+
+
 
 export class AllianceWorldSelector {
 
@@ -29,7 +23,7 @@ export class AllianceWorldSelector {
         this.worldMap = {};
 
 
-        ParseWebUtil.query('Alliance', updatedAt(), $log).then((allianceData) => {
+        ParseWebUtil.query('Alliance', ParseWebUtil.lastUpdatedAt(), $log).then((allianceData) => {
             allianceData.results.forEach(function(result) {
                 result.createdAt = new Date(result.createdAt);
                 result.updatedAt = new Date(result.updatedAt);
@@ -38,10 +32,6 @@ export class AllianceWorldSelector {
                 return b.updatedAt - a.updatedAt;
             }));
             this.loadingAlliances(false);
-
-            if (allianceData.results.length === 1) {
-                m.route(`/alliance/${allianceData.results[0].world}`);
-            }
         });
 
         ParseWebUtil.query('World', {}, $log).then((worldData) => {

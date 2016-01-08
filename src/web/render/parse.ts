@@ -85,7 +85,7 @@ export var ParseWebUtil = {
 
     query: (name:string, query:any, $log:Log):_mithril.MithrilPromise<any> => {
         $log.debug({
-            name: name,
+            query: name,
             attrs: query
         }, 'Run query');
 
@@ -111,6 +111,14 @@ export var ParseWebUtil = {
         }).then(function (data) {
             return data;
         }, logoutFunction);
+    },
+    lastUpdatedAt: () => {
+        const UPDATED_AT = 7 * 24 * 60  * 60 * 1000;
+        return {
+            updatedAt: {
+                '$gte': new Date((+new Date()) - UPDATED_AT).toISOString()
+            }
+        }
     }
 };
 

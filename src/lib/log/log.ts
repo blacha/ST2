@@ -1,5 +1,6 @@
 import {LogStream, ConsoleLogStream} from './stream';
 import {LogMessage} from './message';
+import {ConsoleLogTextStream} from "./stream";
 var INSTANCE:Log;
 
 export class Log {
@@ -35,7 +36,7 @@ export class Log {
         if (INSTANCE == null) {
             INSTANCE = new Log(null, {name: 'ST'});
             INSTANCE.hostname = typeof window === 'undefined' ? '?' : window.location.host;
-            INSTANCE.addStream(new ConsoleLogStream(Log.TRACE));
+            INSTANCE.addStream(new ConsoleLogTextStream(Log.TRACE));
         }
         return INSTANCE;
     }

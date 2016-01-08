@@ -1,15 +1,20 @@
 import {ParsePlayerObject} from "../../../lib/objects/player";
 interface AllianceTableColOptions {
     formatter?: (value:any, data?:ParsePlayerObject) => any;
-    sorter?: (value:any, col:AllianceTableCol) => any;
+    sorter?: CustomGetter;
     sort?: string;
 }
+
+interface CustomGetter {
+    (data:ParsePlayerObject, col?:AllianceTableCol): any
+}
+
 export class AllianceTableCol {
     public header:string;
     public key:string;
     public sortKey: string;
-    private customGetter:(data:ParsePlayerObject, col:AllianceTableCol) => string;
-    private customSortGetter:(data:ParsePlayerObject, col:AllianceTableCol) => any;
+    private customGetter:CustomGetter;
+    private customSortGetter:CustomGetter;
     private customFormatter:(value:any, data?:ParsePlayerObject) => string;
 
     public enabled = true;
@@ -18,13 +23,23 @@ export class AllianceTableCol {
 
     private initalSortOrder = -1;
 
-    constructor(header:string, key:string, options?:AllianceTableColOptions) {
+    constructor(header:string, key:string|CustomGetter, options?:AllianceTableColOptions) {
         this.header = header;
-        this.key = key;
         if (options) {
             this.customFormatter = options.formatter;
             this.customSortGetter = options.sorter;
             this.sortKey = options.sort;
+        }
+
+        if (typeof key === 'string') {
+            this.key = <string>key;
+        }
+
+        if (typeof key === 'function') {
+            this.customGetter = <CustomGetter>key;
+            if (this.customSortGetter == null){
+                this.customSortGetter = this.customGetter;
+            }
         }
     }
 
