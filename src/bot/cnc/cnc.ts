@@ -1,6 +1,9 @@
+declare var Promise:any;
 var r = require('request');
 var axios = require('axios');
 import {Log} from "../../lib/log/log";
+
+
 
 export class CNCClient {
     static USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36';

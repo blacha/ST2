@@ -1,3 +1,4 @@
+declare var Promise:any;
 export function promiseSeries(array, iterator) {
     var output = [];
     var current = Promise.resolve();

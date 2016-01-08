@@ -1,4 +1,5 @@
-import * as BotLogin from './bot.login';
+/// <reference path="../../typings/node/node.d.ts" />
+
 import {ParseCLIUtil} from "./db/parse";
 import {Log} from "../lib/log/log";
 import {ConsoleLogStream} from "../lib/log/stream";
@@ -10,7 +11,7 @@ import {promiseSeries} from "../extension/util/promise";
 var $log = Log.getInstance().child({
     name: 'ST:Bot'
 });
-$log.addStream(new ConsoleLogStream());
+$log.addStream(new ConsoleLogStream(Log.DEBUG));
 
 ParseCLIUtil.getAll('BotData', $log).then(function(bots) {
     $log.info(`Found #${bots.length} bots`);
