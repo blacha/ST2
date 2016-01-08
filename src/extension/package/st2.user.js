@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name            Shockr - Tiberium Alliances Tools
+// @name            ST2 - Tiberium Alliances Tools
 // @author          Shockr <shockr@c.ac.nz>
-// @description     Tools to work with Tiberium alliances http://c.ac.nz/taopt
+// @description     Tools to work with Tiberium alliances https://chard.nz/st2/
 // @include         http*://prodgame*.alliances.commandandconquer.com/*/index.aspx*
 // @grant           GM_updatingEnabled
 // @grant           unsafeWindow
 // @version         5.0.0
-// @downloadURL     https://c.ac.nz/client/st2.user.js
+// @downloadURL     https://chard.nz/st2/client/st2.user.js
 // @icon            https://c.ac.nz/favicon.png
 // ==/UserScript==
 

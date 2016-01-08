@@ -1,6 +1,10 @@
 export class ClientLibUtil {
 
     static isLoaded():boolean {
+        if (typeof ClientLib === 'undefined') {
+            return false;
+        }
+
         if (typeof qx === 'undefined') {
             return false;
         }
