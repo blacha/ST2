@@ -117,6 +117,7 @@ VerifyExport.verify_create = function (req, res) {
             if (verify) {
                 $log.debug('Update World');
                 verify.set(Verify.schema.WORLD, worldID);
+                verify.set(Verify.schema.SENT, null);
                 return verify.save();
             }
             return Verify.create({

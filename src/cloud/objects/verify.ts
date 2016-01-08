@@ -5,6 +5,7 @@ export class VerifyObject extends ParseObject {
         WORLD: 'world',
         PLAYER: 'player',
         UUID: 'uuid',
+        SENT: 'sent'
     };
 
     constructor() {

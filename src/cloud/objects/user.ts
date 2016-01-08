@@ -2,7 +2,7 @@ import {ParseObject} from './parse.object';
 
 class UserObject extends ParseObject {
     schema = {
-        PLAYER: 'player'
+        PLAYER: 'username'
     };
 
     constructor() {
