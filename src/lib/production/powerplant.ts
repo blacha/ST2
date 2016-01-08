@@ -5,6 +5,7 @@ import {Building} from '../building/building';
 
 import {Tile} from '../base/tile';
 import * as Util from '../util';
+import {GameResources} from "../game.resources";
 
 export var PowerPlantCalculator:OutputCalculator = {
     name: 'PowerPlant',
@@ -35,16 +36,9 @@ export var PowerPlantCalculator:OutputCalculator = {
     },
 
     calculate(base:Base, x:number, y:number, building:Building): BaseOutput {
-        var output = {
-            power: {
-                cont: 0,
-                pkg: 0
-            },
-            credit: {
-                cont: 0,
-                pkg: 0
-            }
-        };
+        var outputCont = new GameResources();
+        var outputPackage = new GameResources();
+
         var BuildingLink = PowerPlantCalculator.links.Accumulator;
         var TileLink = PowerPlantCalculator.links.Crystal;
         var RefineryLink = PowerPlantCalculator.links.Refinery;
@@ -52,7 +46,7 @@ export var PowerPlantCalculator:OutputCalculator = {
         var gd = building.getGameData();
         var packTime = Util.getModifierValue(gd, 'PowerPackageTime', building.getLevel(), 1);
         var packAmount = Util.getModifierValue(gd, 'PowerPackage', building.getLevel());
-        output.power.pkg = (packAmount / packTime) * 3600;
+        outputPackage.addResource(GameResources.POWER, (packAmount / packTime) * 3600)
 
         var nearBy = base.getSurroundings(x, y, BuildingLink.buildings.concat(RefineryLink.buildings), TileLink.tiles);
         var accumBonus = Util.getGrowthValue(BuildingLink.values, building.getLevel());
@@ -64,7 +58,7 @@ export var PowerPlantCalculator:OutputCalculator = {
             var near = nearBy[i];
 
             if (near.tile === Tile.Crystal) {
-                output.power.cont += crystalBonus;
+                outputCont.addResource(GameResources.POWER, crystalBonus)
                 continue;
             }
 
@@ -73,17 +67,20 @@ export var PowerPlantCalculator:OutputCalculator = {
             }
 
             if (RefineryLink.buildings.indexOf(near.building.getID()) > -1) {
-                output.credit.cont += creditBonus;
+                outputCont.addResource(GameResources.CREDIT, creditBonus)
                 continue;
             }
 
             // only the first accumulator matters
             if (firstAccum) {
                 firstAccum = false;
-                output.power.cont += accumBonus;
+                outputCont.addResource(GameResources.POWER, accumBonus)
             }
         }
 
-        return output;
+        return  {
+            cont: outputCont,
+            pkg: outputPackage
+        };
     }
 };

@@ -22,6 +22,7 @@ export var Render = {
             '/alliance': WrapAuth(AllianceWorldSelector),
             '/alliance/:world': WrapAuth(AlliancePlayers),
             '/alliance/:world/:player': WrapAuth(AlliancePlayers),
+            '/alliance/:world/:player/:city': WrapAuth(AlliancePlayers),
 
             '/login': LoginRender,
             '/login/:username': LoginRender,

@@ -1,4 +1,8 @@
 export class GameResources {
+    static POWER = 'power';
+    static CRYSTAL = 'crystal';
+    static TIBERIUM = 'tiberium';
+    static CREDIT = 'credits';
 
     public power = 0;
     public tiberium = 0;
@@ -6,9 +10,12 @@ export class GameResources {
     public credits = 0;
 
     public total() {
-        return this.power + this.tiberium + this.credits + this.credits;
+        return this.power + this.tiberium + this.crystal + this.credits;
     }
 
+    public addResource(key:string, amount:number) {
+        this[key] += amount;
+    }
 
     public add(obj) {
         this.power += obj.power || 0;

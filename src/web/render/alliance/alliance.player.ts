@@ -7,15 +7,23 @@ import {Faction} from "../../../lib/data/faction";
 import {CityInfoData} from "../../../api/player.info";
 import * as Format from '../format';
 import {RenderBuildingTile} from "../base/tile";
+import * as BaseRender from "../base/header";
+import {AlliancePlayerBase} from "./alliance.player.base";
 
 export class AlliancePlayer {
     private ctrl:AlliancePlayers;
     static NO_UPGRADES = [DUnitType.GDI.Wall, DUnitType.GDI.MGNest, DUnitType.NOD.Wall, DUnitType.NOD.ScorpionTank]
+
     constructor(ctrl:AlliancePlayers) {
         this.ctrl = ctrl;
     }
 
     view(player:ParsePlayerObject) {
+        var currentCity = this.ctrl.getCurrentCity();
+        if (currentCity) {
+            return AlliancePlayerBase.view(this.ctrl)
+        }
+
         return [
             this.viewPlayerResearch(player),
             this.viewPlayerBases(player)

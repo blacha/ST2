@@ -1,5 +1,6 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
+import {GameResources} from "../../src/lib/game.resources";
 declare function require(name:string);
 require('source-map-support').install();
 
@@ -71,22 +72,22 @@ base.setBase(3, 3, new Building(BuildingType.GDI.PowerPlant, 14));
 var output = BaseProduction.getOutput(base);
 
 
-['tiberium', 'crystal', 'power', 'credit'].forEach(function (key) {
-    var values = output[key];
+[
+    GameResources.TIBERIUM,
+    GameResources.CRYSTAL,
+    GameResources.POWER,
+    GameResources.CREDIT
+].forEach(function (key) {
     console.log(Util.pad(10, key),
-        Util.pad(5, Util.formatNumber(values.pkg)),
-        Util.pad(5, Util.formatNumber(values.cont)),
-        Util.pad(5, Util.formatNumber(values.pkg + values.cont))
+        Util.pad(5, Util.formatNumber(output.pkg[key])),
+        Util.pad(5, Util.formatNumber(output.cont[key])),
+        Util.pad(5, Util.formatNumber(output.pkg[key] + output.cont[key]))
     );
 });
 
 
 describe('BasePlunder', () => {
     var base:Base;
-    var NO_OUTPUT = {
-        cont: 0,
-        pkg: 0
-    };
 
     beforeEach(() => {
         base = new Base();
@@ -125,13 +126,13 @@ describe('BaseCost', () => {
     });
 });
 
+
+function getTotal(output, key:string) {
+    return output.pkg[key] + output.cont[key];
+}
 describe('BaseProduction', () => {
 
     var base:Base;
-    var NO_OUTPUT = {
-        cont: 0,
-        pkg: 0
-    };
 
     beforeEach(() => {
         base = new Base();
@@ -150,14 +151,13 @@ describe('BaseProduction', () => {
             base.setBase(5, 1, new Building(BuildingType.GDI.Refinery, 12));
             base.setBase(5, 2, new Building(BuildingType.GDI.Refinery, 13));
             base.setBase(5, 3, new Building(BuildingType.GDI.Refinery, 14));
-
             var output = BaseProduction.getOutput(base);
 
-            expect(output.credit.pkg).to.equal(4117.5);
-            expect(output.credit.cont).to.equal(0);
-            expect(output.power).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(output.pkg[GameResources.CREDIT]).to.equal(4117.5);
+            expect(output.cont[GameResources.CREDIT]).to.equal(0);
+            expect(getTotal(output, GameResources.POWER)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
         });
 
         it('should produce from tiberium', () => {
@@ -166,11 +166,11 @@ describe('BaseProduction', () => {
             base.setBase(1, 3, new Building(BuildingType.GDI.Refinery, 14));
 
             var output = BaseProduction.getOutput(base);
-            expect(output.credit.pkg).to.equal(4117.5);
-            expect(output.credit.cont).to.equal(4792.5);
-            expect(output.power).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(output.pkg[GameResources.CREDIT]).to.equal(4117.5);
+            expect(output.cont[GameResources.CREDIT]).to.equal(4792.5);
+            expect(getTotal(output, GameResources.POWER)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
         });
 
 
@@ -185,18 +185,15 @@ describe('BaseProduction', () => {
 
             var output = BaseProduction.getOutput(base);
 
-            expect(output.credit).to.deep.equal({
-                cont: 6294.375,
-                pkg: 4117.5
-            });
-            expect(output.power).to.deep.equal({
-                pkg: 4447.916666666666,
-                cont: 0
-            });
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
-        });
+            expect(output.cont[GameResources.CREDIT]).to.equal( 6294.375) ;
+            expect(output.pkg[GameResources.CREDIT]).to.equal( 4117.5) ;
 
+            expect(output.cont[GameResources.POWER]).to.equal( 4447.916666666666) ;
+            expect(output.pkg[GameResources.POWER]).to.equal( 0) ;
+
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
+        });
     });
 
     describe('tiberium', () => {
@@ -208,12 +205,12 @@ describe('BaseProduction', () => {
 
             var output = BaseProduction.getOutput(base);
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.power).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.POWER)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
 
-            expect(output.tiberium.cont).to.equal(0);
-            expect(output.tiberium.pkg).to.equal(8997.5);
+            expect(output.cont[GameResources.TIBERIUM]).to.equal(0);
+            expect(output.pkg[GameResources.TIBERIUM]).to.equal(8997.5);
         });
 
         it('should produce from silos', () => {
@@ -227,11 +224,11 @@ describe('BaseProduction', () => {
 
             var output = BaseProduction.getOutput(base);
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.power).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium.cont).to.equal(9008.125);
-            expect(output.tiberium.pkg).to.equal(8997.5);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.POWER)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(output.cont[GameResources.TIBERIUM]).to.equal(9008.125);
+            expect(output.pkg[GameResources.TIBERIUM]).to.equal(8997.5);
         });
     });
 
@@ -244,12 +241,12 @@ describe('BaseProduction', () => {
 
             var output = BaseProduction.getOutput(base);
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.power).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.POWER)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
 
-            expect(output.crystal.cont).to.equal(0);
-            expect(output.crystal.pkg).to.equal(8997.5);
+            expect(output.cont[GameResources.CRYSTAL]).to.equal(0);
+            expect(output.pkg[GameResources.CRYSTAL]).to.equal(8997.5);
         });
 
         it('should produce from silos', () => {
@@ -263,12 +260,12 @@ describe('BaseProduction', () => {
 
             var output = BaseProduction.getOutput(base);
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.power).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.POWER)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
 
-            expect(output.crystal.cont).to.equal(9008.125);
-            expect(output.crystal.pkg).to.equal(8997.5);
+            expect(output.cont[GameResources.CRYSTAL]).to.equal(9008.125);
+            expect(output.pkg[GameResources.CRYSTAL]).to.equal(8997.5);
         });
     });
 
@@ -280,12 +277,12 @@ describe('BaseProduction', () => {
             base.setBase(3, 3, new Building(BuildingType.GDI.PowerPlant, 14));
 
             var output = BaseProduction.getOutput(base);
-            expect(output.power.cont).to.equal(0);
-            expect(output.power.pkg.toFixed(0)).to.equal("4448");
+            expect(output.cont[GameResources.POWER]).to.equal(0);
+            expect(output.pkg[GameResources.POWER].toFixed(0)).to.equal("4448");
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
         });
 
         it('should produce cont power from crystal ', () => {
@@ -294,12 +291,12 @@ describe('BaseProduction', () => {
             base.setBase(1, 7, new Building(BuildingType.GDI.PowerPlant, 14));
 
             var output = BaseProduction.getOutput(base);
-            expect(output.power.cont).to.equal(5147.5);
-            expect(output.power.pkg.toFixed(0)).to.equal("4448");
+            expect(output.cont[GameResources.POWER]).to.equal(5147.5);
+            expect(output.pkg[GameResources.POWER].toFixed(0)).to.equal("4448");
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
         });
 
         it('should produce cont power from accumulators ', () => {
@@ -312,12 +309,12 @@ describe('BaseProduction', () => {
             base.setBase(4, 7, new Building(BuildingType.GDI.Accumulator, 14));
 
             var output = BaseProduction.getOutput(base);
-            expect(output.power.cont.toFixed(0)).to.equal("6796");
-            expect(output.power.pkg.toFixed(0)).to.equal("4448");
+            expect(output.cont[GameResources.POWER].toFixed(0)).to.equal("6796");
+            expect(output.pkg[GameResources.POWER].toFixed(0)).to.equal("4448");
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
         });
 
         it('should produce power from crystal and accumulators', () => {
@@ -330,12 +327,12 @@ describe('BaseProduction', () => {
             base.setBase(2, 7, new Building(BuildingType.GDI.Accumulator, 14));
 
             var output = BaseProduction.getOutput(base);
-            expect(output.power.cont.toFixed(0)).to.equal("11943");
-            expect(output.power.pkg.toFixed(0)).to.equal("4448");
+            expect(output.cont[GameResources.POWER].toFixed(0)).to.equal("11943");
+            expect(output.pkg[GameResources.POWER].toFixed(0)).to.equal("4448");
 
-            expect(output.credit).to.deep.equal(NO_OUTPUT);
-            expect(output.crystal).to.deep.equal(NO_OUTPUT);
-            expect(output.tiberium).to.deep.equal(NO_OUTPUT);
+            expect(getTotal(output, GameResources.CREDIT)).to.equal(0);
+            expect(getTotal(output, GameResources.CRYSTAL)).to.equal(0);
+            expect(getTotal(output, GameResources.TIBERIUM)).to.equal(0);
         });
     });
 

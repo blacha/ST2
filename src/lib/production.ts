@@ -5,7 +5,7 @@ import {Tile} from './base/tile';
 import * as Util from './util';
 import {Constants} from './constants';
 
-import {BaseOutput, RawProduction, OutputCalculator} from './production/calculator';
+import {BaseOutput, OutputCalculator} from './production/calculator';
 
 export class BaseProduction {
     static BuildingMap:{[key:string] : OutputCalculator} = {}
@@ -30,51 +30,19 @@ export class BaseProduction {
 
         var production = calculator.calculate(base, x, y, building);
 
-        if (production.tiberium) {
-            output.tiberium.cont += production.tiberium.cont;
-            output.tiberium.pkg += production.tiberium.pkg;
-        }
-
-        if (production.crystal) {
-            output.crystal.cont += production.crystal.cont;
-            output.crystal.pkg += production.crystal.pkg;
-        }
-
-        if (production.credit) {
-            output.credit.cont += production.credit.cont;
-            output.credit.pkg += production.credit.pkg;
-        }
-
-        if (production.power) {
-            output.power.cont += production.power.cont;
-            output.power.pkg += production.power.pkg;
-        }
+        output.cont.add(production.cont);
+        output.pkg.add(production.pkg);
     }
 
     static getOutput(base:Base):BaseOutput {
         var output = {
-            tiberium: {
-                cont: 0,
-                pkg: 0
-            },
-            crystal: {
-                cont: 0,
-                pkg: 0
-            },
-            credit: {
-                cont: 0,
-                pkg: 0
-            },
-            power: {
-                cont: 0,
-                pkg: 0
-            }
+            cont: new GameResources(),
+            pkg: new GameResources()
         };
 
         base.buildingsForEach(BaseProduction.getBuildingOutput.bind(null, output));
         return output;
     }
-
 
 }
 
@@ -84,6 +52,7 @@ import {SiloCalculator} from './production/silo';
 import {PowerPlantCalculator} from './production/powerplant';
 import {AccumulatorCalculator} from './production/accumulator';
 import {RefineryCalculator} from './production/refinery';
+import {GameResources} from "./game.resources";
 
 BaseProduction.registerCalculator(HarvesterCalculator);
 BaseProduction.registerCalculator(SiloCalculator);

@@ -5,6 +5,7 @@ import {Building} from '../building/building';
 
 import {Tile} from '../base/tile';
 import * as Util from '../util';
+import {GameResources} from "../game.resources";
 
 export var RefineryCalculator:OutputCalculator = {
     name: 'Refinery',
@@ -34,7 +35,8 @@ export var RefineryCalculator:OutputCalculator = {
         // Package amount is per minute
         var packTime = Util.getModifierValue(gd, 'CreditPackageTime', buildingLevel, 1);
         var packAmount = Util.getModifierValue(gd, 'CreditPackage', buildingLevel);
-        var outputPackage = (packAmount / packTime) * 3600;
+        var outputPackage = new GameResources();
+        outputPackage.addResource(GameResources.CREDIT, (packAmount / packTime) * 3600);
 
         var PowerLink = RefineryCalculator.links.PowerPlant;
         var TiberiumLink = RefineryCalculator.links.Tiberium;
@@ -44,26 +46,24 @@ export var RefineryCalculator:OutputCalculator = {
         var powerCont = Util.getGrowthValue(PowerLink.values, buildingLevel);
         var tibCont = Util.getGrowthValue(TiberiumLink.values, buildingLevel);
 
-        var outputCont = 0;
+        var outputCont = new GameResources();
         var firstPower = true;
         for (var i = 0; i < nearBy.length; i++) {
             if (nearBy[i].tile === Tile.Tiberium) {
-                outputCont += tibCont;
+                outputCont.addResource(GameResources.CREDIT, tibCont);
                 continue;
             }
 
             if (firstPower) {
                 firstPower = false;
-                outputCont += powerCont;
+                outputCont.addResource(GameResources.CREDIT, powerCont);
             }
         }
 
 
         return {
-            credit: {
-                cont: outputCont,
-                pkg: outputPackage
-            }
+            cont: outputCont,
+            pkg: outputPackage
         };
     }
 };

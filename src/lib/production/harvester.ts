@@ -5,6 +5,7 @@ import {Building} from '../building/building';
 
 import {Tile} from '../base/tile';
 import * as Util from '../util';
+import {GameResources} from "../game.resources";
 
 export var HarvesterCalculator:OutputCalculator = {
     name: 'Harvester',
@@ -27,35 +28,30 @@ export var HarvesterCalculator:OutputCalculator = {
 
     calculate: (base:Base, x:number, y:number, building:Building):BaseOutput => {
         var gd = building.getGameData();
+        var outputCont = new GameResources();
+        var outputPackage = new GameResources();
+
+        var resourceType = GameResources.TIBERIUM;
+        var tile = base.getTile(x, y);
+        if (tile === Tile.Crystal) {
+            resourceType = GameResources.CRYSTAL;
+        }
 
         // Package amount is per minute
         var packTime = Util.getModifierValue(gd, 'TiberiumPackageTime', building.getLevel(), 1);
         var packAmount = Util.getModifierValue(gd, 'TiberiumPackage', building.getLevel());
-        var outputPackage = (packAmount / packTime) * 3600;
+        outputPackage.addResource(resourceType, (packAmount / packTime) * 3600);
 
         var SlioLink = HarvesterCalculator.links.Silo;
 
         var nearBy = base.getSurroundings(x, y, SlioLink.buildings);
-        var outputCont = 0;
         if (nearBy.length > 0) {
-            outputCont = Util.getGrowthValue(SlioLink.values, building.getLevel());
-        }
-
-        var tile = base.getTile(x, y);
-        if (tile === Tile.Crystal) {
-            return {
-                crystal: {
-                    cont: outputCont,
-                    pkg: outputPackage
-                }
-            }
+            outputCont.addResource(resourceType, Util.getGrowthValue(SlioLink.values, building.getLevel()));
         }
 
         return {
-            tiberium: {
-                cont: outputCont,
-                pkg: outputPackage
-            }
+            cont: outputCont,
+            pkg: outputPackage
         };
     }
 };

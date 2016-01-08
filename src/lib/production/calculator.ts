@@ -1,17 +1,11 @@
 import {Base} from '../base';
 import {Building} from '../building/building';
 import {Tile} from '../base/tile';
-
-export interface RawProduction {
-    cont: number;
-    pkg?: number;
-}
+import {GameResources} from "../game.resources";
 
 export interface BaseOutput {
-    tiberium?: RawProduction;
-    crystal?: RawProduction;
-    power?: RawProduction;
-    credit?: RawProduction;
+    cont: GameResources;
+    pkg: GameResources;
 }
 
 export interface OutputCalculator {

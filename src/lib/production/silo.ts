@@ -5,6 +5,7 @@ import {Building} from '../building/building';
 
 import {Tile} from '../base/tile';
 import * as Util from '../util';
+import {GameResources} from "../game.resources";
 
 export var SiloCalculator:OutputCalculator = {
     name: 'Silo',
@@ -24,16 +25,8 @@ export var SiloCalculator:OutputCalculator = {
     },
 
     calculate(base:Base, x:number, y:number, building:Building): BaseOutput {
-        var output = {
-            crystal: {
-                cont: 0,
-                pkg: 0
-            },
-            tiberium: {
-                cont: 0,
-                pkg: 0
-            }
-        };
+        var outputCont = new GameResources();
+        var outputPackage = new GameResources();
 
         var HarvesterLink = SiloCalculator.links.Harvester;
         var nearBy = base.getSurroundings(x, y, HarvesterLink.buildings);
@@ -42,12 +35,15 @@ export var SiloCalculator:OutputCalculator = {
             var nearBuilding = nearBy[i];
             var tile = base.getTile(nearBuilding.x, nearBuilding.y);
             if (tile === Tile.Tiberium) {
-                output.tiberium.cont += perHarvester;
+                outputCont.addResource(GameResources.TIBERIUM, perHarvester);
             } else if (tile === Tile.Crystal) {
-                output.crystal.cont += perHarvester
+                outputCont.addResource(GameResources.CRYSTAL, perHarvester);
             }
         }
 
-        return output;
+        return {
+            cont: outputCont,
+            pkg: outputPackage
+        };
     }
 }

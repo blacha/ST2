@@ -12,6 +12,7 @@ import * as Format from '../format';
 import {AllianceTable} from "./alliance.table";
 import {AlliancePlayer} from "./alliance.player";
 import {AllianceData} from "../data/data";
+import {CityInfoData} from "../../../api/player.info";
 
 var $log = Log.child({route: 'AlliancePlayers'});
 
@@ -20,6 +21,7 @@ export class AlliancePlayers {
     private alliances:_mithril.MithrilProperty<ParseAllianceObject[]>;
     private players:_mithril.MithrilProperty<ParsePlayerObject[]>;
     private currentPlayerName:_mithril.MithrilProperty<string>;
+    private currentCityId:_mithril.MithrilProperty<number>;
     private world:_mithril.MithrilProperty<ParseWorldObject>;
     private worldID:number;
 
@@ -43,6 +45,9 @@ export class AlliancePlayers {
 
         var currentPlayer = (m.route.param('player') || '').toLowerCase();
         this.currentPlayerName = m.prop(currentPlayer);
+
+        var currentCity = parseInt(m.route.param('city'), 10);
+        this.currentCityId = m.prop(currentCity);
 
         this.players = m.prop([]);
 
@@ -174,14 +179,58 @@ export class AlliancePlayers {
         return value >= this.biggest[key];
     }
 
-    viewAllianceTitle(showStats = true) {
+    getPlayer(playerName: string):ParsePlayerObject {
+        var searchName = playerName.toLowerCase();
+        var players = this.players();
 
+        var player = players.filter(function(player:ParsePlayerObject) {
+            return player.name.toLowerCase() == searchName;
+        });
+
+        return player.pop();
+    }
+
+    getPlayerCity(playerName:string, baseId:number):CityInfoData {
+        var player = this.getPlayer(playerName);
+        if (player == null) {
+            return;
+        }
+        var cities = player.cities.filter(function(city:CityInfoData) {
+            return city.id === baseId;
+        });
+
+        return cities.pop();
+    }
+
+    getCurrentCity() {
+        if (!this.currentCityId()) {
+            return null;
+        }
+        if(!this.currentPlayerName()) {
+            return null;
+        }
+
+        return this.getPlayerCity(this.currentPlayerName(), this.currentCityId());
+    }
+
+    viewAllianceTitle(showStats = true) {
         var breadCrumb = [];
+        if (this.currentCityId()) {
+            var currentBase = this.getPlayerCity(this.currentPlayerName(), this.currentCityId());
+            if (currentBase != null) {
+                breadCrumb.unshift(m('button.AllianceInfo-Base.Button', {
+                    onclick: m.route.bind(m.route, `/alliance/${this.worldID}/${this.currentPlayerName()}/${this.currentCityId()}`, null)
+                }, currentBase.name));
+            }
+        }
+
         if (this.currentPlayerName()) {
             breadCrumb.unshift(m('button.AllianceInfo-Player.Button', {
                 onclick: m.route.bind(m.route, `/alliance/${this.worldID}/${this.currentPlayerName()}`, null)
             }, this.currentPlayerName()));
         }
+
+
 
         breadCrumb.unshift(m('button.AllianceInfo-Name.Button', {
                         onclick: () => {
