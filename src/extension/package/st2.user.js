@@ -12,6 +12,8 @@
 
 function setupShockrTools() {
 // import "build/extension.js"
+
+    start();
 };
 
 
