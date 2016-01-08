@@ -16,6 +16,8 @@ export var ParseCLIUtil = {
         var Obj = Parse.Object.extend(className);
         var query = new Parse.Query(Obj);
 
-        return query.find();
+        return query.find().then(function(data) {
+            return data;
+        });
     }
 };

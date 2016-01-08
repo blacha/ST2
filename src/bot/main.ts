@@ -4,50 +4,38 @@ import {Log} from "../lib/log/log";
 import {ConsoleLogStream} from "../lib/log/stream";
 import {CNCClient} from './cnc/cnc';
 import {VerifyTask} from './tasks/verify';
+import {promiseSeries} from "../extension/util/promise";
+
 
 var $log = Log.getInstance().child({
     name: 'ST:Bot'
 });
 $log.addStream(new ConsoleLogStream());
 
-$log.debug('Starting Bot');
+ParseCLIUtil.getAll('BotData', $log).then(function(bots) {
+    $log.info(`Found #${bots.length} bots`);
 
-//ParseCLIUtil.getAll('Verify', $log).then(function(data) {
-//    console.log('botData', data);
-//
-//    var CNC =
-//}, console.log.bind(console));
-//
-//var cnc = new CNCClient('w327@c.ac.nz', 'W327-rva9bts');
-//
-//
-//cnc.sendMail('shockrnz', 'This is a test message', makeVerificationMessage, $log).then(function() {
-//    console.log('done', arguments);
-//}, function(e) {
-//    console.log('nope', e)
-//});
-//
-//
-//
-////cnc.getAllianceInfo(150, $log).then(function() {
-////    console.log('done', arguments);
-////}).catch(function(e) {
-////    console.log('nope', e)
-////});
-//
-//
-//function
-//
-//
-//
-//
-//
-//
-//var AllianceTask = {
-//    run(world:number, cnc:CNCClient) {
-//
-//    }
-//};
+    return bots.map(function(bot) {
+        return new CNCClient(bot.get('user'), bot.get('pass'), bot.get('world'));
+    });
 
-var task = new VerifyTask(327, null);
-task.run($log);
+}).then(function(clients) {
+    function runTask(task) {
+        return task.run($log);
+    }
+
+    function runTasks(client) {
+        var tasks = [ new VerifyTask(client) ];
+
+        $log.info({
+            world: client.getWorld(),
+            tasks: tasks.length
+        }, 'Start bot');
+
+        return promiseSeries(tasks, runTask);
+    }
+
+    return promiseSeries(clients, runTasks)
+}).then(function() {
+    $log.info('Tasks done!');
+})

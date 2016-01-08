@@ -5,29 +5,34 @@ import {Log} from "../../lib/log/log";
 export class CNCClient {
     static USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36';
     static URL = {
-    LOGIN: 'https://www.tiberiumalliances.com/j_security_check',
-    AUTH: 'https://www.tiberiumalliances.com/login/auth',
-    LAUNCH: 'https://www.tiberiumalliances.com/game/launch',
-    AJAX: '/Presentation/Service.svc/ajaxEndpoint/'
-};
+        LOGIN: 'https://www.tiberiumalliances.com/j_security_check',
+        AUTH: 'https://www.tiberiumalliances.com/login/auth',
+        LAUNCH: 'https://www.tiberiumalliances.com/game/launch',
+        AJAX: '/Presentation/Service.svc/ajaxEndpoint/'
+    };
 
     private username;
     private password;
     private cookie;
 
-    private worldURL: string;
-    private session: string;
+    private worldURL:string;
+    private session:string;
     private key:string;
 
-    constructor(username:string, password:string) {
+    private world:number;
+
+    constructor(username:string, password:string, world:number) {
         this.username = username;
         this.password = password;
-        this.cookie = r.jar();
+        this.world = world;
 
-        this.session = 'df556fbb-9347-482c-9191-1414f4c37f0d';
-        this.worldURL = 'http://prodgame08.alliances.commandandconquer.com/327';
-        this.key = '6687966f-50cc-4142-b0ea-88228116dbbf';
+        this.cookie = r.jar();
     }
+
+    getWorld() {
+        return this.world;
+    }
+
 
     public connect($log) {
         var log = $log.child({
@@ -36,22 +41,18 @@ export class CNCClient {
             action: 'connect'
         });
 
-        if (this.session && this.worldURL && this.key) {
+        if (this.session != null && this.key != null && this.worldURL != null) {
             return Promise.accept();
         }
 
         return this._connect(log).then(() => {
-            console.log('connect-done');
             return this._launch(log);
         }).then(() => {
-            console.log('launch-done');
             return this._openSession(log);
         }).then(() => {
-            console.log('HERE', this.key, this.session, this.worldURL);
             log.info({
                 key: this.key,
                 session: this.session,
-                world: this.worldURL
             }, 'Connection made');
         });
     }
@@ -115,7 +116,7 @@ export class CNCClient {
                 'Referer': CNCClient.URL.AUTH
             },
             jar: this.cookie
-        },  (err, res) => {
+        }, (err, res) => {
             if (err) {
                 $log.error('Unable to launch game world');
                 return defer.reject(err);
@@ -140,7 +141,6 @@ export class CNCClient {
             this.worldURL = matches[1];
             $log.debug({
                 session: this.session,
-                world: this.worldURL
             }, 'World Launched');
 
             if (session == null || world == null) {
@@ -161,7 +161,6 @@ export class CNCClient {
         var defer = Promise.defer();
         $log.debug({
             session: this.session,
-            world: this.worldURL
         }, 'Open Session');
 
         var data = {
@@ -178,7 +177,7 @@ export class CNCClient {
             $log.debug({key: data.i}, 'Get session key');
 
             this.key = data.i;
-            if (this.key !== '00000000-0000-0000-0000-000000000000') {
+            if (this.key != null && this.key !== '00000000-0000-0000-0000-000000000000') {
                 console.log('resolve-promise');
                 return defer.resolve();
             }
@@ -188,7 +187,11 @@ export class CNCClient {
                 return defer.reject(new Error('unable to get Session key!'));
             }
 
-            return this.getData('OpenSession', data, $log).then(getKey);
+
+            setTimeout(function() {
+                return this.getData('OpenSession', data, $log).then(getKey);
+            }, 500);
+
         };
 
         this.getData('OpenSession', data, $log).then(getKey);
@@ -204,19 +207,19 @@ export class CNCClient {
         var url = this.worldURL + CNCClient.URL.AJAX + endPoint;
 
         console.log(url);
-        $log.debug({url: url, args: args}, endPoint);
+        $log.debug({url: url}, endPoint);
 
         return axios.post(url, args, {
             headers: {
                 'User-Agent': CNCClient.USER_AGENT,
                 'Content-Type': 'application/json'
             },
-        }).then(function(response) {
+        }).then(function (response) {
             if (response.status !== 200) {
                 $log.error('Error fetching data');
             }
             return response.data;
-        }).catch(function(response) {
+        }).catch(function (response) {
             console.log(response);
             $log.error('Error fetching data');
         });
@@ -229,9 +232,9 @@ export class CNCClient {
         });
 
         var messageData = {
-            players:username,
-            alliances:'',
-            subject:'Test message',
+            players: username,
+            alliances: '',
+            subject: title,
             body: `<cnc><cncs>Hello</cncs><cncd>${+new Date()}</cncd><cnct>${message}</cnct></cnc>`
         };
 
@@ -254,7 +257,7 @@ export class CNCClient {
         };
 
         return this.connect(log).then(() => {
-           return this.getData('GetPublicAllianceInfo', requestData, log);
+            return this.getData('GetPublicAllianceInfo', requestData, log);
         })
     }
 

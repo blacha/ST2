@@ -1,6 +1,8 @@
 import {CNCClient} from "../cnc/cnc";
 import {Log} from "../../lib/log/log";
 import {ParseCLIUtil} from "../db/parse";
+import {ParseObject} from "../../cloud/objects/parse.object";
+import {promiseSeries} from "../../extension/util/promise";
 
 const VERIFY_URL = 'https://chard.nz/st2/#/verify'
 function makeVerificationMessage(verifyUUID) {
@@ -10,28 +12,64 @@ function makeVerificationMessage(verifyUUID) {
     To complete the player verification process please click this link:
 
     [url]${VERIFY_URL}/${verifyUUID}[/url]
-    `
+    `;
+}
+
+export interface ParseVerifyObject extends ParseObject {
+    world: number;
+    player: string;
+    uuid : string;
+    sent: string;
 }
 
 export class VerifyTask {
-    private world;
-    private cnc;
+    private client;
 
-    constructor(world:number, cnc:CNCClient) {
-        this.world = world;
-        this.cnc = cnc;
+    constructor(cnc:CNCClient) {
+        this.client = cnc;
     }
 
     run($log:Log) {
-        var log = $log.child({task: 'Verify', world: this.world});
+        var log = $log.child({task: 'Verify', world: this.client.getWorld()});
 
-        ParseCLIUtil.getAll('Verify', log).then(function(toVerify) {
-            log.info('got-data', toVerify);
+        return ParseCLIUtil.getAll('Verify', log)
+            .then(this.filterByWorld.bind(this, log))
+            .then(this.sendAllMessages.bind(this, log))
+        .then(function() {
+            // done.
         })
     }
 
-    sendVerificationMessage(verify, $log) {
-        return this.cnc.sendMail(verify.get('username'), 'Welcome to ST2', makeVerificationMessage(verify.get('uuid')), $log);
+    filterByWorld($log, toVerify) {
+        var toRun = toVerify.filter((verify) => {
+            return verify.get('world') == this.client.getWorld()  && verify.get('sent') == null;
+        });
+
+        $log.info({ messages: toRun.map(function(verify) {
+            return verify.get('player');
+        })}, 'sending messages to users');
+
+        return toRun;
     }
 
+    sendAllMessages($log, toVerify) {
+        var sendMessage = (verify) => {
+            return this.sendVerificationMessage($log, verify).then(() => {
+                verify.set('sent', new Date());
+                return verify.save();
+            }).then(function() {
+                $log.info({
+                    player: verify.get('player')
+                }, 'VerifyDone');
+            })
+        };
+
+        return promiseSeries(toVerify, sendMessage);
+    }
+
+    sendVerificationMessage($log, verify) {
+        return this.client.sendMail(verify.get('player'), 'Welcome to ST2', makeVerificationMessage(verify.get('uuid')), $log).then(function(){
+            return verify;
+        });
+    }
 };
