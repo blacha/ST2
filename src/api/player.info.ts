@@ -2,10 +2,13 @@ import {Base} from "../lib/base";
 import {GameResources} from "../lib/game.resources";
 import {Resources} from "../lib/game.resources";
 
+
+export const PlayerDataVersion = 1;
 export interface PlayerData {
     world: WorldInfoData;
     player: PlayerInfoData;
     alliance: AllianceInfoData;
+    version: number;
 }
 
 export interface WorldInfoData {

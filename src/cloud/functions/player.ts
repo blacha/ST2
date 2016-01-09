@@ -10,6 +10,7 @@ import {Log} from '../../lib/log/log';
 import {ParsePlayerObject} from "../objects/player";
 import {ParseAllianceObject} from "../objects/alliance";
 import {ParseWorldObject} from "../objects/world";
+import {PlayerDataVersion} from "../../api/player.info";
 
 
 var PlayerLog = Log.child({
@@ -21,6 +22,10 @@ function PlayerInfo(req, res) {
     var worldInfo = playerData.world;
     var allianceInfo = playerData.alliance;
     var playerInfo = playerData.player;
+
+    if (isNaN(playerData.version) || playerData.version < PlayerDataVersion) {
+        return res.success('Version too old');
+    }
 
     playerInfo.world = worldInfo.world;
     allianceInfo.world = worldInfo.world;

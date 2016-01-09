@@ -17,159 +17,180 @@
   padding: 10px 5px;
 }
 
-.BaseTiles {
-  width: 639px;
+.BuildingTiles {
+  position: relative;
 }
 
-.BaseTiles, .BuildingTiles, .OffTiles, .DefTiles {
-  display: flex;
-  flex-wrap: wrap;
+.BuildingTiles, .OffTiles, .DefTiles  {
+  width: 588px;
 }
 
-.BuildingTiles--Small {
-  width: 72px;
+.BuildingTiles, .DefTiles {
+  height: 409px;
+}
 
-  .BaseTile {
-    width: 8px;
-    height: 8px;
-    border: none;
-    background-color: rgba(0, 0, 0, 0.05);
+.BaseTiles--OffInline {
+  position: relative;
+  .OffTiles {
+    position: absolute;
+    top: 0;
+    left: 588px + 27px;
+    margin-top: 0;
+
+  }
+}
+
+  .BuildingTiles, .OffTiles, .DefTiles {
+    display: flex;
+    flex-wrap: wrap;
   }
 
-  .BaseCol-0, .BaseCol, .BaseRow-0, .BaseRow {
-    border: none
+  .BuildingTiles--Small {
+    width: 72px;
+    height: 64px;
+
+    .BaseTile {
+      width: 8px;
+      height: 8px;
+      border: none;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .BaseCol-0, .BaseCol, .BaseRow-0, .BaseRow {
+      border: none
+    }
+
+    .BaseTile-Tiberium {
+      background-image: none;
+      background-color: $tiberium-color;
+    }
+
+    .BaseTile-Crystal {
+      background-image: none;
+      background-color: $crystal-color;
+    }
+  }
+
+  .OffTiles, .DefTiles {
+    margin-top: 27px;
+    border-top: 1px solid #ddd;
+  }
+
+  .BaseCol-0 {
+    border-left: 1px solid #ddd;
+  }
+
+  .BaseRow-0 {
+    border-top: 1px solid #ddd;
+  }
+
+  .BaseTile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 50px;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    background-color: #f5f5f5;
+  }
+
+  .BaseTile:hover {
+    //opacity: 0.6;
+  }
+
+  .BaseTile--Selected {
+    //background-color: #AEC71E;
+    //box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+  }
+
+  .BaseTile img {
+    width: 55px;
+    max-width: 55px;
+    max-height: 55px;
+  }
+
+  .UnitUpgrade .BaseTileLevel {
+    background-image: url('../images/star.png');
+    background-size: 10px;
+    background-position: 2px 4px;
+    background-repeat: no-repeat;
+    padding-left: 12px;
+    padding-right: 3px;
+  }
+
+  .BaseTileLevel {
+    position: absolute;
+    bottom: 4px;
+    left: 2px;
+    font-size: 0.8em;
+    background-color: #ddd;
+    color: black;
+    padding: 0 2px;
+    border: 1px solid black;
+    font-family: 'Roboto Condensed';
+    font-size: 13px;
+  }
+
+  .BaseTile {
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 
   .BaseTile-Tiberium {
-    background-image: none;
-    background-color: $tiberium-color;
+    background-image: url('../images/tiberium.png');
   }
 
   .BaseTile-Crystal {
-    background-image: none;
-    background-color: $crystal-color;
+    background-image: url('../images/crystal.png');
   }
-}
 
-.OffTiles, .DefTiles {
-  margin-top: 27px;
-  border-top: 1px solid #ddd;
-}
+  .BaseTile-Woods {
+    background-image: url('../images/woods.png');
+  }
 
-.BaseCol-0 {
-  border-left: 1px solid #ddd;
-}
+  .BaseTile-Oil {
+    background-image: url('../images/oil.png');
+  }
 
-.BaseRow-0 {
-  border-top: 1px solid #ddd;
-}
+  .BaseTile-Scrub {
+    background-image: url('../images/scrub.png');
+  }
 
-.BaseTile {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 64px;
-  height: 50px;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  position: relative;
-  background-color: #f5f5f5;
-}
+  .BaseTile-Swamp {
+    background-image: url('../images/swamp.png');
+  }
 
-.BaseTile:hover {
-  opacity: 0.6;
-}
+  .BaseProduction--Group {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 8px;
+  }
 
-.BaseTile--Selected {
-  background-color: #AEC71E;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-}
+  .BaseProduction {
+    line-height: 24px;
+    padding: 4px;
+    display: flex;
+  }
 
-.BaseTile img {
-  width: 55px;
-  max-width: 55px;
-  max-height: 55px;
-}
+  .BaseProduction--Value {
+    padding-left: 9px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
 
-.UnitUpgrade .BaseTileLevel {
-  background-image: url('../images/star.png');
-  background-size: 12px;
-  background-position: 2px 1px;
-  background-repeat: no-repeat;
-  padding-left: 15px;
-  padding-right: 3px;
-}
+  .BaseName, .BaseFaction-Name {
+    text-overflow: ellipsis;
+  }
 
-.BaseTileLevel {
-  position: absolute;
-  bottom: 4px;
-  left: 2px;
-  font-size: 0.8em;
-  background-color: #ddd;
-  color: black;
-  padding: 0 2px;
-  border: 1px solid black;
-}
+  .BaseName {
+    height: 32px;
+    display: flex;
+    align-content: center;
+  }
 
-.BaseTile {
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.BaseTile-Tiberium {
-  background-image: url('../images/tiberium.png');
-}
-
-.BaseTile-Crystal {
-  background-image: url('../images/crystal.png');
-}
-
-.BaseTile-Woods {
-  background-image: url('../images/woods.png');
-}
-
-.BaseTile-Oil {
-  background-image: url('../images/oil.png');
-}
-
-.BaseTile-Scrub {
-  background-image: url('../images/scrub.png');
-}
-
-.BaseTile-Swamp {
-  background-image: url('../images/swamp.png');
-}
-
-.BaseProduction--Group {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  height: 200px;
-  padding: 8px;
-}
-
-.BaseProduction {
-  line-height: 24px;
-  padding: 4px;
-  display: flex;
-}
-
-.BaseProduction--Value {
-  padding-left: 9px;
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
-.BaseName, .BaseFaction-Name {
-  text-overflow: ellipsis;
-}
-
-.BaseName {
-  height: 32px;
-  display: flex;
-  align-content: center;
-}
-
-.BaseName-Name {
-  padding: 4px;
-}
+  .BaseName-Name {
+    padding: 4px;
+  }

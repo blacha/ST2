@@ -2,9 +2,10 @@ import {Base} from '../../../lib/base';
 import {BaseProduction} from '../../../lib/production';
 
 import * as Util from '../../../lib/util';
+import {GameResources} from "../../../lib/game.resources";
 
 
-var ORDER = ['tiberium', 'crystal', 'power', 'credit'];
+var ORDER = [GameResources.TIBERIUM, GameResources.CRYSTAL, GameResources.POWER, GameResources.CREDIT];
 //export function RenderBaseHeader(base:Base) {
 //    return m('div', {
 //        className: 'BaseHeader'
@@ -22,13 +23,12 @@ export function makeProduction(base:Base) {
     var production = BaseProduction.getOutput(base);
 
     var productionLists = ORDER.map(function (key) {
-        var output = production[key];
 
         return m('div', {
             className: 'BaseProduction BaseProduction--' + key
         }, [
             m('i.icon-' + key),
-            m('span.BaseProduction-Value', Util.formatNumber(output.cont + output.pkg) + '/h')
+            m('span.BaseProduction-Value', Util.formatNumber(production.cont[key] + production.pkg[key]) + '/h')
         ]);
     });
 

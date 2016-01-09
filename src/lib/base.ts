@@ -243,6 +243,11 @@ export class Base {
     }
 
     static loadFromCity(player:ParseJSONPlayerObject, city:CityInfoData):Base {
+        var researchNumbers = Object.keys(player.research).filter(function(key) {
+            return player.research[key] > 1;
+        }).map((value) => {
+            return parseInt(value, 10);
+        });
         var cncBase:CNCBase = {
             x: city.x,
             y: city.y,
@@ -254,7 +259,7 @@ export class Base {
             owner: player.name,
             player: player.name,
             tiles: city.tiles,
-            upgrades: [], //player.research
+            upgrades: researchNumbers
         };
 
         return Base.load(cncBase);

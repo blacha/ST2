@@ -18,7 +18,7 @@ export class AlliancePlayerBase {
         }
 
         return [
-            AlliancePlayerBase.viewCityProduction(currentCity),
+            AlliancePlayerBase.viewCityProduction(ctrl, currentCity),
             AlliancePlayerBase.viewCityTiles(currentCity),
         ]
     }
@@ -27,9 +27,7 @@ export class AlliancePlayerBase {
         var renderTile = RenderBuildingTile.bind(null, true);
 
         return m('div', {
-            className: 'BaseTiles', onclick: function (evt) {
-                console.log('base-click', evt);
-            }
+            className: 'BaseTiles BaseTiles--OffInline'
         }, [
             m('div.BuildingTiles', city.$base.buildingsForEach(renderTile)),
             m('div.DefTiles', city.$base.defForEach(renderTile)),
@@ -37,24 +35,22 @@ export class AlliancePlayerBase {
         ]);
     }
 
-    static viewCityProduction(city:CityInfoData) {
+    static viewCityProduction(ctrl:AlliancePlayers, city:CityInfoData) {
+        var alliance = ctrl.getCurrentAlliance();
         var production = BaseProduction.getOutput(city.$base);
 
         var productionLists = ORDER.map(function (key) {
-            var output = production[key];
-
             return m('div', {
                 className: 'BaseProduction BaseProduction--' + key
             }, [
                 m('i.icon-' + key),
-                m('span.BaseProduction-Value', Format.formatNumber(output.cont + output.pkg) + '/h')
+                m('span.BaseProduction-Value', Format.formatNumber(production.cont[key] + production.pkg[key] + (alliance.bonus[key] ||0)) + '/h')
             ]);
         });
 
         return m('div', {
-            className: 'BaseProduction--Group BoxShadow'
+            className: 'BaseProduction--Group'
         }, [
-            m('span.BaseProduction-Title', 'Production'),
             productionLists
         ]);
     }

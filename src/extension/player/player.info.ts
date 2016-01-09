@@ -1,5 +1,6 @@
 import  * as PlayerAPI from '../../api/player.info';
 import {CityData} from './../city/city.data';
+import {PlayerDataVersion} from "../../api/player.info";
 
 export class PlayerInfo {
     static instance;
@@ -11,6 +12,7 @@ export class PlayerInfo {
         PlayerInfo.instance = ClientLib.Data.MainData.GetInstance();
 
         var playerData = {
+            version: PlayerDataVersion,
             world: PlayerInfo.getWorld(),
             player: PlayerInfo.getPlayerInfo(),
             alliance: PlayerInfo.getAllianceInfo()
