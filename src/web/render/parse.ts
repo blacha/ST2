@@ -113,7 +113,7 @@ export var ParseWebUtil = {
         }, logoutFunction);
     },
     lastUpdatedAt: () => {
-        const UPDATED_AT = 7 * 24 * 60  * 60 * 1000;
+        const UPDATED_AT = 7 * 24 * 60 * 60 * 1000;
         return {
             updatedAt: {
                 '$gte': new Date((+new Date()) - UPDATED_AT).toISOString()

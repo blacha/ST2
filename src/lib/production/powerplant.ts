@@ -78,7 +78,7 @@ export var PowerPlantCalculator:OutputCalculator = {
             }
         }
 
-        return  {
+        return {
             cont: outputCont,
             pkg: outputPackage
         };

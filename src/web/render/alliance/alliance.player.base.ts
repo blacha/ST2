@@ -22,6 +22,7 @@ export class AlliancePlayerBase {
             AlliancePlayerBase.viewCityTiles(currentCity),
         ]
     }
+
     static viewCityTiles(city:CityInfoData) {
         var renderTile = RenderBuildingTile.bind(null, true);
 
@@ -31,12 +32,12 @@ export class AlliancePlayerBase {
             }
         }, [
             m('div.BuildingTiles', city.$base.buildingsForEach(renderTile)),
-            m('div.DefTiles',  city.$base.defForEach(renderTile)),
-            m('div.OffTiles',  city.$base.offForEach(renderTile))
+            m('div.DefTiles', city.$base.defForEach(renderTile)),
+            m('div.OffTiles', city.$base.offForEach(renderTile))
         ]);
     }
 
-    static viewCityProduction(city:CityInfoData){
+    static viewCityProduction(city:CityInfoData) {
         var production = BaseProduction.getOutput(city.$base);
 
         var productionLists = ORDER.map(function (key) {

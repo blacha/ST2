@@ -32,7 +32,8 @@ export interface PlayerInfoData {
 export interface MCVInfoData {
     time: number;
     level: number;
-};
+}
+;
 
 export interface AllianceInfoData {
     world?: number;

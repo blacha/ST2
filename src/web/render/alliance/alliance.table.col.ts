@@ -12,7 +12,7 @@ interface CustomGetter {
 export class AllianceTableCol {
     public header:string;
     public key:string;
-    public sortKey: string;
+    public sortKey:string;
     private customGetter:CustomGetter;
     private customSortGetter:CustomGetter;
     private customFormatter:(value:any, data?:ParseJSONPlayerObject) => string;
@@ -37,7 +37,7 @@ export class AllianceTableCol {
 
         if (typeof key === 'function') {
             this.customGetter = <CustomGetter>key;
-            if (this.customSortGetter == null){
+            if (this.customSortGetter == null) {
                 this.customSortGetter = this.customGetter;
             }
         }
@@ -99,7 +99,6 @@ export class AllianceTableCol {
     resetSortOrder() {
         this.order = this.initalSortOrder;
     }
-
 
 
 }

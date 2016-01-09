@@ -180,11 +180,11 @@ export class AlliancePlayers {
         return value >= this.biggest[key];
     }
 
-    getPlayer(playerName: string):ParseJSONPlayerObject {
+    getPlayer(playerName:string):ParseJSONPlayerObject {
         var searchName = playerName.toLowerCase();
         var players = this.players();
 
-        var player = players.filter(function(player:ParseJSONPlayerObject) {
+        var player = players.filter(function (player:ParseJSONPlayerObject) {
             return player.name.toLowerCase() == searchName;
         });
 
@@ -196,7 +196,7 @@ export class AlliancePlayers {
         if (player == null) {
             return;
         }
-        var cities = player.cities.filter(function(city:CityInfoData) {
+        var cities = player.cities.filter(function (city:CityInfoData) {
             return city.id === baseId;
         });
 
@@ -207,7 +207,7 @@ export class AlliancePlayers {
         if (!this.currentCityId()) {
             return null;
         }
-        if(!this.currentPlayerName()) {
+        if (!this.currentPlayerName()) {
             return null;
         }
 
@@ -232,23 +232,22 @@ export class AlliancePlayers {
         }
 
 
-
         breadCrumb.unshift(m('button.AllianceInfo-Name.Button', {
-                        onclick: () => {
-                            m.route(`/alliance/${this.worldID}`);
-                            return false;
-                        }
-                    }, this.alliance().name));
+            onclick: () => {
+                m.route(`/alliance/${this.worldID}`);
+                return false;
+            }
+        }, this.alliance().name));
 
         breadCrumb.unshift(m('button.AllianceInfo-World.Button', {
-                        onclick: m.route.bind(m.route, '/alliance', null),
-                        title: 'Change world'
-                    }, this.world().name));
+            onclick: m.route.bind(m.route, '/alliance', null),
+            title: 'Change world'
+        }, this.world().name));
 
         var lastBreadCrumb = breadCrumb[breadCrumb.length - 1];
         lastBreadCrumb.attrs.className += ' Button--colored';
 
-        var output =  [
+        var output = [
             m('div.AllianceInfo-Title', breadCrumb)
         ];
 

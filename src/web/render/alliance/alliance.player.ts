@@ -82,7 +82,7 @@ export class AlliancePlayer {
 
         return [
             m('div.Support-Text', support.getLevel()),
-            m(`i.Support-Icon.Support-${support.getID()}`, { title: support.getGameData().display })
+            m(`i.Support-Icon.Support-${support.getID()}`, {title: support.getGameData().display})
         ];
     }
 

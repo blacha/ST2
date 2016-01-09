@@ -127,7 +127,7 @@ export class DUnitType extends UnitType {
 
 
     static MAP:{[key:string] : { [key:string]: DUnitType} } = {};
-    static ID_MAP:{[key:number] : DUnitType}  = {};
+    static ID_MAP:{[key:number] : DUnitType} = {};
 
     static make(faction:Faction, char:string) {
         char = (char || '').toLowerCase();

@@ -55,7 +55,7 @@ export var FormUtil = {
         }
     },
 
-    _textInputClassList: (state:FormInputState)  => {
+    _textInputClassList: (state:FormInputState) => {
         var classList = ['TextInput', 'TextInput--floating-label'];
         FormUtil._stateClassList(state, classList);
 

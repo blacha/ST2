@@ -83,7 +83,7 @@ export class OUnitType extends UnitType {
 
 
     static MAP:{[key:string] : { [key:number]: OUnitType} } = {};
-    static ID_MAP:{[key:number] : OUnitType}  = {};
+    static ID_MAP:{[key:number] : OUnitType} = {};
 
     static make(faction:Faction, char:string) {
         char = (char || '').toLowerCase();

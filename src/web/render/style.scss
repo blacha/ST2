@@ -9,8 +9,7 @@ $text-supporting-color: rgba(0, 0, 0, 0.54);
 $text-disabled-color: rgba(0, 0, 0, 0.38);
 $text-divider-color: rgba(0, 0, 0, 0.12);
 
-$text-accent-color:  unquote("rgb(#{$color-primary})");
-
+$text-accent-color: unquote("rgb(#{$color-primary})");
 
 $tiberium-color: #96BF48;
 $crystal-color: #4387BF;
@@ -28,13 +27,13 @@ $crystal-color: #4387BF;
 @import 'alliance/alliance';
 
 .TextCenter {
-    text-align: center;
+  text-align: center;
 }
 
 a {
-    text-decoration: none;
-    color: unquote("rgb(#{$color-primary})");
-    &:hover {
-        cursor: pointer;
-    }
+  text-decoration: none;
+  color: unquote("rgb(#{$color-primary})");
+  &:hover {
+    cursor: pointer;
+  }
 }

@@ -7,8 +7,6 @@ import * as Layout from '../layout/layout';
 var $log = Log.child({route: 'AllianceWorldSelector'});
 
 
-
-
 export class AllianceWorldSelector {
 
     private loadingAlliances;
@@ -24,7 +22,7 @@ export class AllianceWorldSelector {
 
 
         ParseWebUtil.query('Alliance', ParseWebUtil.lastUpdatedAt(), $log).then((allianceData) => {
-            allianceData.results.forEach(function(result) {
+            allianceData.results.forEach(function (result) {
                 result.createdAt = new Date(result.createdAt);
                 result.updatedAt = new Date(result.updatedAt);
             });
@@ -57,10 +55,10 @@ export class AllianceWorldSelector {
                 page: 'Alliance'
             }, [
                 m('div.AllianceWorldSelect', [
-                m('div.AllianceWorldSelect-Title', 'No Alliances found!'),
-                m('div.AllianceWorldSelect-Info',
-                    'This is caused by not having the ST extension installed'),
-                m('div.AllianceWorldSelect-Info', [
+                    m('div.AllianceWorldSelect-Title', 'No Alliances found!'),
+                    m('div.AllianceWorldSelect-Info',
+                        'This is caused by not having the ST extension installed'),
+                    m('div.AllianceWorldSelect-Info', [
                         'Please install it from ',
                         m('a', {
                             href: '#/install'
@@ -73,9 +71,9 @@ export class AllianceWorldSelector {
         var alliances = this.alliances().map(this.viewAlliance, this);
 
         return Layout.createLayout({
-                page: 'Alliance'
-            }, [
-                m('div.AllianceWorldSelect', [
+            page: 'Alliance'
+        }, [
+            m('div.AllianceWorldSelect', [
                 m('div.AllianceWorldSelect-Title', 'Select your world'),
                 m('div.AllianceWorldSelect-Alliances', alliances)
             ])

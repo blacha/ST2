@@ -35,7 +35,7 @@ export class ParseObject {
             Parse.Cloud.useMasterKey();
         }
 
-        return query.first().then((output)  => {
+        return query.first().then((output) => {
             $log.trace({
                 schema: this.name,
                 action: 'get-first-query',
@@ -54,7 +54,7 @@ export class ParseObject {
         if (master) {
             Parse.Cloud.useMasterKey();
         }
-        return query.first().then((output)  => {
+        return query.first().then((output) => {
             $log.trace({
                 schema: this.name,
                 action: 'get-first',

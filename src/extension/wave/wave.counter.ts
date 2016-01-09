@@ -62,7 +62,7 @@ export var WaveCounter = {
         };
     },
 
-    paste(x: number, y:number) {
+    paste(x:number, y:number) {
         var waves = this.count(x, y);
         var input = qx.core.Init.getApplication().getChat().getChatWidget().getEditable();
         var dom = input.getContentElement().getDomElement();

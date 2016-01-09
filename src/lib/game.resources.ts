@@ -27,7 +27,7 @@ export class GameResources implements Resources {
     public add(obj) {
         this.power += obj.power || 0;
         this.tiberium += obj.tiberium || 0;
-        this.crystal += obj.crystal || 0 ;
+        this.crystal += obj.crystal || 0;
         this.credits += obj.credits || 0;
     }
 

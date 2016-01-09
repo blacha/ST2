@@ -23,23 +23,27 @@ export class InstallExtension {
     }
 
     view() {
-        return  m('div.LoginForm', [
+        return m('div.LoginForm', [
             RegisterRender.LOGO,
             m('div.Card.BoxShadow', [
                 m('div.Card-SupportingText', 'To install the shockr tools extension please click the install button for your browser'),
                 m('div.Card-SupportingText', 'Chrome'),
                 m('div.Card-SupportingText', [
-                    m('button', { className: 'Button Button--secondary', disabled: true, onclick: this.openChromeExtensionWindow }, 'Extension'),
+                    m('button', {
+                        className: 'Button Button--secondary',
+                        disabled: true,
+                        onclick: this.openChromeExtensionWindow
+                    }, 'Extension'),
                     m('button', {
                         className: 'Button Button--secondary',
                         onclick: this.openUserScriptWindow
                     }, 'UserScript')
                 ]),
-                m('div.Card-SupportingText',  'Firefox'),
-                m('div.Card-SupportingText',  m('button', {
-                    className: 'Button Button--secondary',
-                    onclick: this.openUserScriptWindow
-                }, 'UserScript')
+                m('div.Card-SupportingText', 'Firefox'),
+                m('div.Card-SupportingText', m('button', {
+                        className: 'Button Button--secondary',
+                        onclick: this.openUserScriptWindow
+                    }, 'UserScript')
                 ),
             ])
         ]);

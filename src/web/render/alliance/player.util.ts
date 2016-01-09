@@ -8,7 +8,7 @@ import {AlliancePlayerInfoData} from "../../../api/player.info";
 function getAlliancePlayer(alliance:ParseJSONAllianceObject, playerName:string):AlliancePlayerInfoData {
     var searchName = playerName.toLowerCase();
 
-    return alliance.players.filter(function(player) {
+    return alliance.players.filter(function (player) {
         return player.name.toLowerCase() === searchName;
     }).pop();
 }
@@ -48,7 +48,7 @@ export function getStats(alliance:ParseJSONAllianceObject, player:ParseJSONPlaye
             let cityCost = city.$cost = new GameResources();
 
             var tiles = city.$base.getBaseTiles();
-            for (var i =0;i < tiles.length; i ++) {
+            for (var i = 0; i < tiles.length; i++) {
                 var tile = tiles[i];
                 if (tile == null) {
                     continue;

@@ -25,7 +25,7 @@ export class AllianceData {
         }
 
         return ParseWebUtil.query('World', {world: worldID}, $log).then((data) => {
-            if (data.results.length === 1){
+            if (data.results.length === 1) {
                 this.worlds[worldID] = data.results[0];
             }
             return data.results[0];
@@ -34,7 +34,7 @@ export class AllianceData {
 
     getAlliances(worldID:number, $log):_mithril.MithrilPromise<ParseJSONAllianceObject[]> {
         var allianceCache = this.alliances[worldID];
-        if (allianceCache != null && allianceCache.date + 30 * 1000 > +new Date()){
+        if (allianceCache != null && allianceCache.date + 30 * 1000 > +new Date()) {
             console.log('alliance-cache', allianceCache);
             var defer = m.deferred();
             defer.resolve(allianceCache.alliances);
@@ -52,7 +52,7 @@ export class AllianceData {
 
     getPlayers(worldID:number, $log):_mithril.MithrilPromise<ParseJSONPlayerObject[]> {
         var playerCache = this.players[worldID];
-        if (playerCache != null && playerCache.date + 30 * 1000 > +new Date()){
+        if (playerCache != null && playerCache.date + 30 * 1000 > +new Date()) {
             console.log('player-cache', playerCache);
             var defer = m.deferred();
             defer.resolve(playerCache.players);

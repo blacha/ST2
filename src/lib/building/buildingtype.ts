@@ -75,7 +75,7 @@ export class BuildingType extends GameDataObject {
 
 
     static MAP:{[key:string] : { [key:string]: BuildingType} } = {};
-    static ID_MAP:{[key:number] : BuildingType}  = {};
+    static ID_MAP:{[key:number] : BuildingType} = {};
 
 
     constructor(id:number,

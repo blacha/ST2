@@ -25,8 +25,8 @@ export class VerifyTask {
         log.info('Start ' + VerifyTask.getName());
 
         return ParseCLIUtil.getAll('Verify', {
-            world: client.getWorld()
-        }, log)
+                world: client.getWorld()
+            }, log)
             .then(VerifyTask.filterVerify.bind(VerifyTask, log))
             .then(VerifyTask.sendAllMessages.bind(VerifyTask, log, client))
             .then(function () {
@@ -72,4 +72,5 @@ export class VerifyTask {
             return verify;
         });
     }
-};
+}
+;

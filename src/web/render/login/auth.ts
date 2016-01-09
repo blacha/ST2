@@ -2,10 +2,10 @@ import {ParseWebUtil} from '../parse';
 
 export function WrapAuth(component) {
     return {
-        controller: function() {
+        controller: function () {
             return new AuthWrapper(component);
         },
-        view: function(ctrl) {
+        view: function (ctrl) {
             return ctrl.view();
         }
     }

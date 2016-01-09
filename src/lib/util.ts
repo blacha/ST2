@@ -10,8 +10,6 @@ import {GameDataResource} from "./data/gamedata";
 import {GameResources} from "./game.resources";
 
 
-
-
 export function random(prefix?:string):string {
 
     return null;
@@ -110,8 +108,8 @@ export function getTotalUpgradeCost(gdo:GameDataJSON, level:number):GameDataReso
     var totalCost = new GameResources();
 
     // TODO optimize?
-    for (var i = 1; i <= level; i ++) {
-        var currentCost = <any>getLevelValues('cost',  gdo.id, gdo.resources, i, Constants.RESOURCE_COST_GROWTH);
+    for (var i = 1; i <= level; i++) {
+        var currentCost = <any>getLevelValues('cost', gdo.id, gdo.resources, i, Constants.RESOURCE_COST_GROWTH);
         totalCost.add(currentCost);
         objCache[i] = totalCost.clone();
     }
@@ -121,11 +119,11 @@ export function getTotalUpgradeCost(gdo:GameDataJSON, level:number):GameDataReso
 }
 
 export function getUpgradeCost(gdo:GameDataJSON, level:number):GameDataResource {
-    return getLevelValues('cost', gdo.id, gdo.resources, level,  Constants.RESOURCE_COST_GROWTH)
+    return getLevelValues('cost', gdo.id, gdo.resources, level, Constants.RESOURCE_COST_GROWTH)
 }
 
 export function getRepairValue(gdo:GameDataJSON, level:number):GameDataRepair {
-    return getLevelValues('repair',  gdo.id, gdo.repair, level,  Constants.RESOURCE_PLUNDER_GROWTH)
+    return getLevelValues('repair', gdo.id, gdo.repair, level, Constants.RESOURCE_PLUNDER_GROWTH)
 }
 
 var LEVEL_CACHE = {

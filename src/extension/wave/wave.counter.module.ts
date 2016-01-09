@@ -5,8 +5,8 @@ import {WaveCount} from "./wave.counter";
 declare var webfrontend:any;
 declare var phe:any;
 
-var WaveCounterUI = { move: null, region: null };
-var WaveCounterCache: {[key:string] : WaveCount} = {};
+var WaveCounterUI = {move: null, region: null};
+var WaveCounterCache:{[key:string] : WaveCount} = {};
 
 export class WaveCounterModule {
     static listeners = [];
@@ -72,10 +72,11 @@ export class WaveCounterModule {
             y: WaveCounterModule.selectedBase.get_RawY()
         }
     }
+
     static count() {
         var XY = WaveCounterModule.getXY();
 
-        if (XY == null ) {
+        if (XY == null) {
             return;
         }
         return WaveCounter.count(XY.x, XY.y);
@@ -84,7 +85,7 @@ export class WaveCounterModule {
     static paste() {
         var XY = WaveCounterModule.getXY();
 
-        if (XY == null ) {
+        if (XY == null) {
             return;
         }
         return WaveCounter.paste(XY.x, XY.y);
@@ -132,7 +133,7 @@ export class WaveCounterModule {
     }
 
     static buildMoveUI() {
-        WaveCounterUI.move = { total: null, waves: null, levels: null, container: null};
+        WaveCounterUI.move = {total: null, waves: null, levels: null, container: null};
 
         var a = new qx.ui.container.Composite(new qx.ui.layout.HBox(6));
         a.add(new qx.ui.basic.Label('# Forgotten bases:').set({

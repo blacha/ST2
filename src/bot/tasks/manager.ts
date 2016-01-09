@@ -7,13 +7,13 @@ export interface CNCTask {
 }
 
 export class TaskManager {
-    private client: CNCClient;
-    private log: Log;
+    private client:CNCClient;
+    private log:Log;
     private defer;
     private queue;
-    private taskNames: string[];
+    private taskNames:string[];
 
-    constructor(client: CNCClient, $log:Log) {
+    constructor(client:CNCClient, $log:Log) {
         this.client = client;
         this.log = $log;
 

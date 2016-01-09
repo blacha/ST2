@@ -162,7 +162,7 @@ export class Base {
             BuildingType.GDI.SkystrikeSupport
         ];
 
-        for( var i = 0; i < this.base.length ; i ++) {
+        for (var i = 0; i < this.base.length; i++) {
             var building = <Building> this.base[i];
             if (building == null) {
                 continue;
@@ -171,7 +171,8 @@ export class Base {
             if (SUPPORTS.indexOf(building.getBuildingType()) > -1) {
                 return building;
             }
-        };
+        }
+        ;
         return null;
     }
 
@@ -249,11 +250,11 @@ export class Base {
             name: city.name,
             faction: player.faction,
             version: 0,
-            world:player.world,
-            owner:player.name,
-            player:player.name,
+            world: player.world,
+            owner: player.name,
+            player: player.name,
             tiles: city.tiles,
-            upgrades:[], //player.research
+            upgrades: [], //player.research
         };
 
         return Base.load(cncBase);

@@ -17,13 +17,13 @@ export var ParseCLIUtil = {
         var query = new Parse.Query(Obj);
 
         if (queryData != null) {
-            Object.keys(queryData).forEach(function(key) {
+            Object.keys(queryData).forEach(function (key) {
                 var value = queryData[key];
                 query.equalTo(key, value);
             });
         }
 
-        return query.find().then(function(data) {
+        return query.find().then(function (data) {
             return data;
         });
     }

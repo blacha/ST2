@@ -30,7 +30,7 @@ var MainPowCol = new AllianceTableCol('Pow/h', '$stats.main.production.power', {
 var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatHours});
 var MainCost = new AllianceTableCol('Base Cost', '$stats.main.$cost', {
     formatter: Format.formatTotalResources,
-    sorter: function(data:ParseJSONPlayerObject) {
+    sorter: function (data:ParseJSONPlayerObject) {
         return data.$stats.main.$cost.total();
     }
 });

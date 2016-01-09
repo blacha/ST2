@@ -1,26 +1,26 @@
 @import '../style/mdl/variables';
 
 .LoginForm {
-    margin: 5% auto auto;
-    width: $card-width;
-    padding: $padding;
+  margin: 5% auto auto;
+  width: $card-width;
+  padding: $padding;
 }
 
 .LoginForm-ErrorMessage {
-    color: $input-text-error-color;
-    padding: $padding;
-    text-align: center;
-    display: none;
+  color: $input-text-error-color;
+  padding: $padding;
+  text-align: center;
+  display: none;
 }
 
 .LoginForm.is-invalid .LoginForm-ErrorMessage {
-    display: block;
+  display: block;
 }
 
 .LoginForm .STLogo {
-    width: 100%;
+  width: 100%;
 }
 
 .LoginForm .Card-Actions {
-    text-align: right;
+  text-align: right;
 }

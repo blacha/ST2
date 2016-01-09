@@ -69,7 +69,7 @@ export class RegisterRender {
                 m('div.Card.BoxShadow', [
                     m('div.Card-SupportingText', 'Thank you for registering, a message containing your login details will be sent to you in CNC:TA.'),
                     m('div.Card-SupportingText', 'This process may take up to a hour.'),
-                    m('div.Card-SupportingText',  'Please install the shockrtools extension'),
+                    m('div.Card-SupportingText', 'Please install the shockrtools extension'),
                     m('div.Card-Actions', [
                         m('button', {
                             className: 'Button Button--secondary',
@@ -106,7 +106,7 @@ export class RegisterRender {
                 className: 'Button Button--secondary',
                 disabled: this.loading(),
                 type: 'button',
-                onclick:  m.route.bind(null, '/login', null)
+                onclick: m.route.bind(null, '/login', null)
             }, 'Login'),
 
             m('button', {

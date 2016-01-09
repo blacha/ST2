@@ -16,7 +16,6 @@ function setupShockrTools() {
     ST2.start();
 };
 
-
 function innerHTML(func) {
     return ('try {(  ' + func.toString() + ')()} catch(e) { console.log("Error start ST2", e);};');
 }
