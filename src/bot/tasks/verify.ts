@@ -2,7 +2,6 @@ import {CNCClient} from "../cnc/cnc";
 import {Log} from "../../lib/log/log";
 import {ParseCLIUtil} from "../db/parse";
 import {ParseObject} from "../../cloud/objects/parse.object";
-import {promiseSeries} from "../../extension/util/promise";
 
 const VERIFY_URL = 'https://chard.nz/st2/#/verify'
 function makeVerificationMessage(verifyUUID) {
@@ -17,52 +16,59 @@ function makeVerificationMessage(verifyUUID) {
 
 
 export class VerifyTask {
-    private client;
-
-    constructor(cnc:CNCClient) {
-        this.client = cnc;
+    static getName() {
+        return 'Verify';
     }
 
-    run($log:Log) {
-        var log = $log.child({task: 'Verify', world: this.client.getWorld()});
+    static run(client:CNCClient, $log:Log) {
+        var log = $log.child({task: 'Verify', world: client.getWorld()});
+        log.info('Start ' + VerifyTask.getName());
 
-        return ParseCLIUtil.getAll('Verify', {world: this.client.getWorld()}, log)
-            .then(this.filterVerify.bind(this, log))
-            .then(this.sendAllMessages.bind(this, log))
-        .then(function() {
-            // done.
-        })
+        return ParseCLIUtil.getAll('Verify', {
+            world: client.getWorld()
+        }, log)
+            .then(VerifyTask.filterVerify.bind(VerifyTask, log))
+            .then(VerifyTask.sendAllMessages.bind(VerifyTask, log, client))
+            .then(function () {
+                // done.
+            })
     }
 
-    filterVerify($log, toVerify) {
+    static filterVerify($log:Log, toVerify) {
         var toRun = toVerify.filter((verify) => {
             return verify.get('sent') == null;
         });
 
-        $log.info({ messages: toRun.map(function(verify) {
-            return verify.get('player');
-        })}, 'sending messages to users');
+        if (toRun.length > 0) {
+            $log.info({
+                messages: toRun.map(function (verify) {
+                    return verify.get('player');
+                })
+            }, 'sending messages to users');
+        }
 
         return toRun;
     }
 
-    sendAllMessages($log, toVerify) {
-        var sendMessage = (verify) => {
-            return this.sendVerificationMessage($log, verify).then(() => {
+    static sendAllMessages($log:Log, client:CNCClient, toVerify) {
+
+        return toVerify.reduce((prevVerfiy, verify) => {
+            prevVerfiy.then(() => {
+                return VerifyTask.sendVerificationMessage($log, client, verify);
+            }).then(() => {
                 verify.set('sent', new Date());
                 return verify.save();
-            }).then(function() {
+            }).then(function () {
                 $log.info({
                     player: verify.get('player')
                 }, 'VerifyDone');
             })
-        };
+        }, Promise.resolve());
 
-        return promiseSeries(toVerify, sendMessage);
     }
 
-    sendVerificationMessage($log, verify) {
-        return this.client.sendMail(verify.get('player'), 'Welcome to ST2', makeVerificationMessage(verify.get('uuid')), $log).then(function(){
+    static sendVerificationMessage($log:Log, client:CNCClient, verify) {
+        return client.sendMail(verify.get('player'), 'Welcome to ST2', makeVerificationMessage(verify.get('uuid')), $log).then(function () {
             return verify;
         });
     }

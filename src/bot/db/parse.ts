@@ -12,15 +12,13 @@ export var ParseCLIUtil = {
             className: className
         });
 
-        $log.info('getAll');
+        $log.trace('getAll');
         var Obj = Parse.Object.extend(className);
         var query = new Parse.Query(Obj);
 
         if (queryData != null) {
             Object.keys(queryData).forEach(function(key) {
                 var value = queryData[key];
-
-                $log.info(`Query: ${key}:${value}`);
                 query.equalTo(key, value);
             });
         }

@@ -93,7 +93,6 @@ export class CNCClient {
             var matches = res.body.match(/loggedInUser: '(.*)'/);
 
             if (!matches || matches[1] == '') {
-                console.log(res.body);
                 $log.debug('Failed to log in');
                 defer.reject(new Error('Could not login!'));
                 return;
@@ -176,12 +175,10 @@ export class CNCClient {
         var count = 0;
 
         var getKey = (data) => {
-            console.log('get-key', data);
             $log.debug({key: data.i}, 'Get session key');
 
             this.key = data.i;
             if (this.key != null && this.key !== '00000000-0000-0000-0000-000000000000') {
-                console.log('resolve-promise');
                 return defer.resolve();
             }
 
@@ -209,8 +206,7 @@ export class CNCClient {
         }
         var url = this.worldURL + CNCClient.URL.AJAX + endPoint;
 
-        console.log(url);
-        $log.debug({url: url}, endPoint);
+        $log.info(endPoint);
 
         return axios.post(url, args, {
             headers: {
@@ -223,7 +219,6 @@ export class CNCClient {
             }
             return response.data;
         }).catch(function (response) {
-            console.log(response);
             $log.error('Error fetching data');
         });
     }

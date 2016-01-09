@@ -3,39 +3,43 @@ import {Log} from "../../lib/log/log";
 import {ParseCLIUtil} from "../db/parse";
 import {promiseSeries} from "../../extension/util/promise";
 import {AlliancePlayerInfoData} from "../../api/player.info";
+
 export class AllianceDataTask {
-
-    private client:CNCClient;
-
-    constructor(cnc:CNCClient) {
-        this.client = cnc;
+    static getName() {
+        return 'Alliance';
     }
 
-    run($log:Log) {
-        var log = $log.child({task: 'Alliance', world: this.client.getWorld()});
+    static run(client:CNCClient, $log:Log) {
+        var log = $log.child({task: 'Alliance', world: client.getWorld()});
+        log.info('Start ' + AllianceDataTask.getName());
 
-        return ParseCLIUtil.getAll('Alliance', {world: this.client.getWorld()}, log)
-            .then(this.filterAlliance.bind(this, log))
-            .then(this.getAllData.bind(this, log))
+        return ParseCLIUtil.getAll('Alliance', {world: client.getWorld()}, log)
+            .then(AllianceDataTask.filterAlliance.bind(this, client, log))
+            .then(AllianceDataTask.getAllData.bind(this, client, log))
             .then(function() {
                 // done.
             })
     }
 
-    filterAlliance($log:Log, alliances) {
+    static filterAlliance(client:CNCClient, $log:Log, alliances) {
         return alliances.filter(function(alliance) {
             return alliance.get('alliance') > -1;
         });
     }
 
-    getAllData($log:Log, alliances) {
-        return promiseSeries(alliances, this.getAllianceData.bind(this, $log));
+    static getAllData(client:CNCClient, $log:Log, alliances) {
+
+        return alliances.reduce((prev, current) => {
+            return prev.then(() => {
+                return AllianceDataTask.getAllianceData(client, $log, current);
+            })
+        }, Promise.resolve())
     }
 
-    getAllianceData($log, alliance) {
+    static getAllianceData(client:CNCClient, $log:Log, alliance) {
         var allianceId = alliance.get('alliance');
 
-        return this.client.getAllianceInfo(allianceId, $log).then(function(data:AllianceData) {
+        return client.getAllianceInfo(allianceId, $log).then(function(data:AllianceData) {
             var allianceData = data.m.map(function(playerData:AlliancePlayerData):AlliancePlayerInfoData {
                 return {
                     name: playerData.n,
