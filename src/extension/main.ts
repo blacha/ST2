@@ -21,6 +21,8 @@ export var Modules = {
     WaveCounter: WaveCounterModule
 };
 
+export {LayoutScanner} from './layout/layout.scanner';
+
 export var Util = {
     Parse: ParseUtil,
     Log: Log,

@@ -11,8 +11,20 @@ export var PATCH_DATA = {
         data: 'webfrontend.gui.region.RegionCityInfo.prototype.setObject',
         re: /^function \([A-Za-z]+\)\{.+this\.([A-Za-z_]+)=/
     },
-    'ClientLib.Data.WorldSector.WorldObjectNPCBase.$get_Level': {
+    'ClientLib.Data.WorldSector.WorldObjectNPCCamp.$get_CampType': {
+        data: 'ClientLib.Data.WorldSector.WorldObjectNPCCamp.prototype.$ctor',
+        re: /this\.(.{6})=\(*g\>\>(22|0x16)\)/
+    },
+    'ClientLib.Data.WorldSector.WorldObjectNPCCamp.$get_Id': {
+        data: 'ClientLib.Data.WorldSector.WorldObjectNPCCamp.prototype.$ctor',
+        re:  /\&.*=-1;\}this\.(.{6})=\(/
+    },
+    'ClientLib.Data.WorldSector.WorldObjectNPCBase.$get_Id': {
         data: 'ClientLib.Data.WorldSector.WorldObjectNPCBase.prototype.$ctor',
-        re: /100\){0,1};this\.(.{6})=Math.floor/
+        re: /.*d\+=f;this\.(.{6})=\(/
+    },
+    'ClientLib.Data.WorldSector.WorldObjectCity.$get_Id': {
+        data: 'ClientLib.Data.WorldSector.WorldObjectCity.prototype.$ctor',
+        re: /.*d\+=f;this\.(.{6})=\(/
     }
 };

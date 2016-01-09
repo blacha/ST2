@@ -1,4 +1,5 @@
 export interface CityLayout {
+    id: number;
     level: number;
     name: string;
     x: number;

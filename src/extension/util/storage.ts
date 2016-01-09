@@ -21,6 +21,10 @@ export class StorageUtil {
 
     static setItem(key, value) {
         var realKey = StorageUtil.makeKey(key);
+        if (value == null) {
+            localStorage.removeItem(realKey);
+            return;
+        }
 
         localStorage.setItem(realKey, JSON.stringify({
             time: +new Date(),

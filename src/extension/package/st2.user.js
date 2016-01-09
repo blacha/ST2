@@ -5,7 +5,7 @@
 // @include         http*://prodgame*.alliances.commandandconquer.com/*/index.aspx*
 // @grant           GM_updatingEnabled
 // @grant           unsafeWindow
-// @version         5.0.2
+// @version         5.0.3
 // @downloadURL     https://chard.nz/st2/client/st2.user.js
 // @icon            https://c.ac.nz/favicon.png
 // ==/UserScript==

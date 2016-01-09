@@ -45,6 +45,7 @@ export class CityData {
         var player = MD.get_Player();
         var server = MD.get_Server();
         return {
+            id: city.get_Id(),
             level: city.get_LvlBase(),
             name: city.get_Name(),
             x: city.get_PosX(),
