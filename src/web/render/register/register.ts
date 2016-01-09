@@ -3,7 +3,7 @@
 import {ParseWebUtil} from '../parse';
 import {FormUtil, FormInputState, SelectFormInputState} from '../form';
 import {Log} from "../../../lib/log/log";
-import {ParseWorldObject} from "../../../lib/objects/world";
+import {ParseJSONWorldObject} from "../../../lib/objects/world";
 
 var $log = Log.child({route: 'Register'});
 export class RegisterRender {
@@ -21,7 +21,7 @@ export class RegisterRender {
 
     private error:_mithril.MithrilProperty<boolean>;
     private errorMessage:_mithril.MithrilProperty<string>;
-    private worlds:ParseWorldObject[];
+    private worlds:ParseJSONWorldObject[];
 
     constructor() {
         if (ParseWebUtil.token()) {

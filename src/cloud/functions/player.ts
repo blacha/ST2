@@ -7,9 +7,10 @@ import {Player} from '../objects/player';
 import {PlayerData} from '../../api/player.info';
 
 import {Log} from '../../lib/log/log';
-import {ParseAllianceObject} from "../../lib/objects/alliance";
-import {ParsePlayerObject} from "../../lib/objects/player";
-import {ParseWorldObject} from "../../lib/objects/world";
+import {ParsePlayerObject} from "../objects/player";
+import {ParseAllianceObject} from "../objects/alliance";
+import {ParseWorldObject} from "../objects/world";
+
 
 var PlayerLog = Log.child({
     func: 'player_info'
@@ -24,7 +25,9 @@ function PlayerInfo(req, res) {
     playerInfo.world = worldInfo.world;
     allianceInfo.world = worldInfo.world;
 
-    var worldObj:ParseWorldObject, playerObj:ParsePlayerObject, allianceObj:ParseAllianceObject;
+    var worldObj:ParseWorldObject;
+    var playerObj:ParsePlayerObject;
+    var allianceObj:ParseAllianceObject;
 
     var $log = PlayerLog.child({
         player: playerInfo.name,
@@ -45,7 +48,7 @@ function PlayerInfo(req, res) {
         })
 
         // Check to see if the alliance exists
-        .then(function (world) {
+        .then(function (world:ParseWorldObject) {
             worldObj = world;
             return Alliance.firstQuery({
                 world: allianceInfo.world,
@@ -54,7 +57,7 @@ function PlayerInfo(req, res) {
         })
 
         // create the alliance if it doesnt exist
-        .then(function (alliance) {
+        .then(function (alliance:ParseAllianceObject) {
             if (alliance == null) {
                 $log.info('Create alliance');
                 return Alliance.create(allianceInfo, true, $log);
@@ -63,20 +66,20 @@ function PlayerInfo(req, res) {
         })
 
         // Update the alliance ACL so the players can see it
-        .then(function (alliance) {
+        .then(function (alliance:ParseAllianceObject) {
             allianceObj = alliance;
             return Alliance.updateACL(alliance, $log);
         })
 
         // find the player
-        .then(function (alliance) {
+        .then(function (alliance:ParseAllianceObject) {
             return Player.firstQuery({
                 world: playerInfo.world,
                 player: playerInfo.player
             }, true, $log);
         })
 
-        .then(function (player) {
+        .then(function (player:ParsePlayerObject) {
             if (player == null) {
                 $log.info('Create player');
                 return Player.create(playerInfo, true, $log)
@@ -86,7 +89,7 @@ function PlayerInfo(req, res) {
 
         })
 
-        .then(function (player) {
+        .then(function (player:ParsePlayerObject) {
             playerObj = player;
 
             return Player.updateACL(playerObj, allianceObj, $log);

@@ -1,22 +1,22 @@
-import {ParseWorldObject} from "../../../lib/objects/world";
+import {ParseJSONWorldObject} from "../../../lib/objects/world";
 import {ParseUtil} from "../../../extension/util/parse";
 import {ParseWebUtil} from "../parse";
-import {ParseAllianceObject} from "../../../lib/objects/alliance";
-import {ParsePlayerObject} from "../../../lib/objects/player";
+import {ParseJSONAllianceObject} from "../../../lib/objects/alliance";
+import {ParseJSONPlayerObject} from "../../../lib/objects/player";
 
 var INSTANCE:AllianceData = null;
 
 export class AllianceData {
 
-    private worlds:{[key: string] : ParseWorldObject};
-    private alliances:{[key: string]: { date: number, alliances: ParseAllianceObject[]}};
-    private players:{[key: string]: { date: number, players: ParsePlayerObject[]}};
+    private worlds:{[key: string] : ParseJSONWorldObject};
+    private alliances:{[key: string]: { date: number, alliances: ParseJSONAllianceObject[]}};
+    private players:{[key: string]: { date: number, players: ParseJSONPlayerObject[]}};
 
     constructor() {
         this.reset();
     }
 
-    getWorld(worldID:number, $log):_mithril.MithrilPromise<ParseWorldObject> {
+    getWorld(worldID:number, $log):_mithril.MithrilPromise<ParseJSONWorldObject> {
         if (this.worlds[worldID]) {
             console.log('world-cache', worldID);
             var defer = m.deferred();
@@ -32,7 +32,7 @@ export class AllianceData {
         });
     }
 
-    getAlliances(worldID:number, $log):_mithril.MithrilPromise<ParseAllianceObject[]> {
+    getAlliances(worldID:number, $log):_mithril.MithrilPromise<ParseJSONAllianceObject[]> {
         var allianceCache = this.alliances[worldID];
         if (allianceCache != null && allianceCache.date + 30 * 1000 > +new Date()){
             console.log('alliance-cache', allianceCache);
@@ -50,7 +50,7 @@ export class AllianceData {
         });
     }
 
-    getPlayers(worldID:number, $log):_mithril.MithrilPromise<ParsePlayerObject[]> {
+    getPlayers(worldID:number, $log):_mithril.MithrilPromise<ParseJSONPlayerObject[]> {
         var playerCache = this.players[worldID];
         if (playerCache != null && playerCache.date + 30 * 1000 > +new Date()){
             console.log('player-cache', playerCache);

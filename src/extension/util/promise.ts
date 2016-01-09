@@ -5,12 +5,12 @@ export function promiseSeries(array, iterator) {
 
     for (var i = 0; i < array.length; i++) {
         current = output[i] = current.then(function (i) {
-            console.log('run-i');
+            console.log('run-i', i);
             return iterator(array[i]);
         }.bind(null, i))
     }
 
-    return Promise.all(output);
+    return current;
 }
 
 

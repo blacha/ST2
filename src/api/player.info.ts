@@ -38,8 +38,14 @@ export interface AllianceInfoData {
     world?: number;
     name: string;
     alliance: number;
-    players: string[];
+    players: AlliancePlayerInfoData[];
     bonus: AllianceBonusData;
+}
+
+export interface AlliancePlayerInfoData {
+    name: string;
+    rank: number;
+    score: number;
 }
 
 export interface AllianceBonusData {

@@ -1,10 +1,10 @@
-import {ParsePlayerObject} from "../../../lib/objects/player";
+import {ParseJSONPlayerObject} from "../../../lib/objects/player";
 import {PlayerStats} from "../../../lib/objects/player";
-import {ParseAllianceObject} from "../../../lib/objects/alliance";
+import {ParseJSONAllianceObject} from "../../../lib/objects/alliance";
 import {Base} from "../../../lib/base";
 import {GameResources} from "../../../lib/game.resources";
 
-export function getStats(alliance:ParseAllianceObject, player:ParsePlayerObject):PlayerStats {
+export function getStats(alliance:ParseJSONAllianceObject, player:ParseJSONPlayerObject):PlayerStats {
     if (alliance == null || player == null) {
         return;
     }

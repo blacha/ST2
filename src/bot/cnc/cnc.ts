@@ -186,12 +186,12 @@ export class CNCClient {
             }
 
             count++;
-            if (count === 3) {
+            if (count === 6) {
                 return defer.reject(new Error('unable to get Session key!'));
             }
 
 
-            setTimeout(function() {
+            setTimeout(() => {
                 return this.getData('OpenSession', data, $log).then(getKey);
             }, 500);
 

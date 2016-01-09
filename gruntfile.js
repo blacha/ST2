@@ -24,14 +24,7 @@ module.exports = function(grunt) {
 
     config.ts = {
         default: {
-            src: ['test/**/*.ts', 'src/**/*.ts'],
-            dest: 'build/',
-            options: {
-                target: 'es5',
-                module: 'commonjs',
-                comments: false,
-                sourcemap: true
-            }
+            tsconfig: './tsconfig.json'
         }
     };
 
@@ -48,7 +41,7 @@ module.exports = function(grunt) {
                 sourceMap: true
             },
             externals: [{
-                'moment': true
+                moment: true
             }]
         },
         cloud: {

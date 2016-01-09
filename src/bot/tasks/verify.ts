@@ -15,12 +15,6 @@ function makeVerificationMessage(verifyUUID) {
     `;
 }
 
-export interface ParseVerifyObject extends ParseObject {
-    world: number;
-    player: string;
-    uuid : string;
-    sent: string;
-}
 
 export class VerifyTask {
     private client;
@@ -32,17 +26,17 @@ export class VerifyTask {
     run($log:Log) {
         var log = $log.child({task: 'Verify', world: this.client.getWorld()});
 
-        return ParseCLIUtil.getAll('Verify', log)
-            .then(this.filterByWorld.bind(this, log))
+        return ParseCLIUtil.getAll('Verify', {world: this.client.getWorld()}, log)
+            .then(this.filterVerify.bind(this, log))
             .then(this.sendAllMessages.bind(this, log))
         .then(function() {
             // done.
         })
     }
 
-    filterByWorld($log, toVerify) {
+    filterVerify($log, toVerify) {
         var toRun = toVerify.filter((verify) => {
-            return verify.get('world') == this.client.getWorld()  && verify.get('sent') == null;
+            return verify.get('sent') == null;
         });
 
         $log.info({ messages: toRun.map(function(verify) {

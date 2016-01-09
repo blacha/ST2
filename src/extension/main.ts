@@ -7,8 +7,11 @@ import {Log} from '../lib/log/log';
 import {ParseUtil} from './util/parse';
 import {ClientLibUtil} from './util/clientlib';
 import {StorageUtil} from './util/storage';
+import {ConsoleLogTextStream} from "../lib/log/stream";
 
 var PlayerInfo = PlayerInfoModule.getInstance();
+
+Log.getInstance().addStream(new ConsoleLogTextStream(Log.DEBUG));
 
 export var $VERSION = '2.0.0';
 

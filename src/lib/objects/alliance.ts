@@ -1,10 +1,11 @@
-import {ParseBaseObject} from "./base.object";
+import {ParseJSONBaseObject} from "./base.object";
 import {AllianceBonusData} from "../../api/player.info";
+import {AlliancePlayerInfoData} from "../../api/player.info";
 
-export interface ParseAllianceObject extends ParseBaseObject {
+export interface ParseJSONAllianceObject extends ParseJSONBaseObject {
     world:number;
     alliance:number;
     name: string;
     bonus: AllianceBonusData;
-    players: string[]
+    players: AlliancePlayerInfoData[]
 }

@@ -14,7 +14,7 @@ import {CNCBase, CNCUnit, CNCTile} from '../web/client.base';
 
 import {ID_MAP, TECH_MAP} from './util';
 import {CityInfoData} from "../api/player.info";
-import {ParsePlayerObject} from "./objects/player";
+import {ParseJSONPlayerObject} from "./objects/player";
 interface CNCLocation {
     x: number;
     y: number;
@@ -241,7 +241,7 @@ export class Base {
         return this.upgrades.indexOf(unitID) !== -1;
     }
 
-    static loadFromCity(player:ParsePlayerObject, city:CityInfoData):Base {
+    static loadFromCity(player:ParseJSONPlayerObject, city:CityInfoData):Base {
         var cncBase:CNCBase = {
             x: city.x,
             y: city.y,

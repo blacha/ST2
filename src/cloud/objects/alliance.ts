@@ -5,6 +5,14 @@ import {Player, PlayerObject} from './player';
 import {AllianceInfoData} from '../../api/player.info';
 
 import {Log} from '../../lib/log/log';
+import {AlliancePlayerInfoData} from "../../api/player.info";
+import {ParseBaseObject} from "./parse.object";
+import {ParseJSONAllianceObject} from "../../lib/objects/alliance";
+
+export interface ParseAllianceObject extends ParseBaseObject {
+    attrs: ParseJSONAllianceObject
+}
+
 
 export class AllianceObject extends ParseObject {
     static schema = {
@@ -41,7 +49,7 @@ export class AllianceObject extends ParseObject {
         });
     }
 
-    update(to, from:AllianceInfoData, master:boolean, $log:Log) {
+    update(to:ParseAllianceObject, from:AllianceInfoData, master:boolean, $log:Log) {
         to.set(AllianceObject.schema.BONUS, from.bonus);
         to.set(AllianceObject.schema.PLAYERS, from.players);
         to.set(AllianceObject.schema.NAME, from.name);
@@ -51,7 +59,7 @@ export class AllianceObject extends ParseObject {
         return to.save();
     }
 
-    updateACL(alliance, $log:Log) {
+    updateACL(alliance:ParseAllianceObject, $log:Log) {
         $log = $log.child({
             alliance: alliance.get('name')
         });
@@ -65,7 +73,7 @@ export class AllianceObject extends ParseObject {
             }
 
             return allianceRole.getRoles().query().find();
-        }).then(function (roleList) {
+        }).then(function (roleList:any[]) {
             var roleMap = {};
             roleList.forEach(function (role) {
                 roleMap[role.get('name')] = role;
@@ -73,8 +81,8 @@ export class AllianceObject extends ParseObject {
 
             var toAdd = [];
 
-            var playerRoles = alliance.get(Alliance.schema.PLAYERS).map(function (player) {
-                var playerRole = PlayerObject.RoleName(player);
+            var playerRoles = alliance.get(Alliance.schema.PLAYERS).map(function (player:AlliancePlayerInfoData) {
+                var playerRole = PlayerObject.RoleName(player.name);
                 if (roleMap[playerRole] == null) {
                     toAdd.push(playerRole);
                     $log.debug({role: playerRole}, 'Add');
@@ -109,7 +117,7 @@ export class AllianceObject extends ParseObject {
         })
     }
 
-    static RoleName(alliance) {
+    static RoleName(alliance:ParseAllianceObject) {
         return [
             'alliance',
             alliance.get(AllianceObject.schema.WORLD),

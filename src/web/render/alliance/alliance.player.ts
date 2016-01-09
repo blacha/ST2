@@ -1,5 +1,5 @@
 import {AllianceTableCol} from "./alliance.table.col";
-import {ParsePlayerObject} from "../../../lib/objects/player";
+import {ParseJSONPlayerObject} from "../../../lib/objects/player";
 import {AlliancePlayers} from "./alliance.players";
 import {OUnitType} from "../../../lib/unit/ounittype";
 import {DUnitType} from "../../../lib/unit/dunittype";
@@ -18,7 +18,7 @@ export class AlliancePlayer {
         this.ctrl = ctrl;
     }
 
-    view(player:ParsePlayerObject) {
+    view(player:ParseJSONPlayerObject) {
         var currentCity = this.ctrl.getCurrentCity();
         if (currentCity) {
             return AlliancePlayerBase.view(this.ctrl)
@@ -30,7 +30,7 @@ export class AlliancePlayer {
         ]
     }
 
-    viewPlayerBases(player:ParsePlayerObject) {
+    viewPlayerBases(player:ParseJSONPlayerObject) {
         return m('div.AlliancePlayer-Base.PlayerBases', [
             m('div.PlayerBases-Title', 'Bases'),
             m('table.Table', [
@@ -86,7 +86,7 @@ export class AlliancePlayer {
         ];
     }
 
-    viewPlayerResearch(player:ParsePlayerObject) {
+    viewPlayerResearch(player:ParseJSONPlayerObject) {
         var playerFaction = Faction.fromID(player.faction);
         var ounits = OUnitType[playerFaction.getName()];
         var dunits = DUnitType[playerFaction.getName()];

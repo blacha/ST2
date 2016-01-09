@@ -36,8 +36,6 @@ export class Log {
         if (INSTANCE == null) {
             INSTANCE = new Log(null, {name: 'ST'});
             INSTANCE.hostname = typeof window === 'undefined' ? '?' : window.location.host;
-
-            //INSTANCE.addStream(new ConsoleLogTextStream(Log.TRACE));
         }
         return INSTANCE;
     }

@@ -1,4 +1,4 @@
-import {ParsePlayerObject} from "../../lib/objects/player";
+import {ParseJSONPlayerObject} from "../../lib/objects/player";
 import {Faction} from "../../lib/data/faction";
 import {OUnitType} from "../../lib/unit/ounittype";
 import {DUnitType} from "../../lib/unit/dunittype";
@@ -32,7 +32,7 @@ export function formatHours(seconds:number) {
 }
 
 
-export function formatResearch(research:{[key:string] : number}, player:ParsePlayerObject) {
+export function formatResearch(research:{[key:string] : number}, player:ParseJSONPlayerObject) {
     var data = countResearch(player);
 
     return m('span.AlliancePlayer-Upgrade', {
@@ -43,7 +43,7 @@ export function formatResearch(research:{[key:string] : number}, player:ParsePla
     ]);
 }
 
-export function countResearch(player:ParsePlayerObject) {
+export function countResearch(player:ParseJSONPlayerObject) {
     let oUpgrade = 0;
     let dUpgrade = 0;
     Object.keys(player.research).forEach(function (key) {
@@ -60,7 +60,7 @@ export function countResearch(player:ParsePlayerObject) {
     }
 }
 
-export function sumResearch(player:ParsePlayerObject) {
+export function sumResearch(player:ParseJSONPlayerObject) {
     let data = countResearch(player);
     return data.offense + data.defense;
 }

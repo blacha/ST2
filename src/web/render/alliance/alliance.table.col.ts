@@ -1,12 +1,12 @@
-import {ParsePlayerObject} from "../../../lib/objects/player";
+import {ParseJSONPlayerObject} from "../../../lib/objects/player";
 interface AllianceTableColOptions {
-    formatter?: (value:any, data?:ParsePlayerObject) => any;
+    formatter?: (value:any, data?:ParseJSONPlayerObject) => any;
     sorter?: CustomGetter;
     sort?: string;
 }
 
 interface CustomGetter {
-    (data:ParsePlayerObject, col?:AllianceTableCol): any
+    (data:ParseJSONPlayerObject, col?:AllianceTableCol): any
 }
 
 export class AllianceTableCol {
@@ -15,7 +15,7 @@ export class AllianceTableCol {
     public sortKey: string;
     private customGetter:CustomGetter;
     private customSortGetter:CustomGetter;
-    private customFormatter:(value:any, data?:ParsePlayerObject) => string;
+    private customFormatter:(value:any, data?:ParseJSONPlayerObject) => string;
 
     public enabled = true;
     public sortable = true;
@@ -51,7 +51,7 @@ export class AllianceTableCol {
         this.customGetter = custom;
     }
 
-    getValue(data:ParsePlayerObject):string {
+    getValue(data:ParseJSONPlayerObject):string {
         var value = '';
         if (this.customGetter) {
             value = this.customGetter(data, this);
@@ -65,7 +65,7 @@ export class AllianceTableCol {
         return value;
     }
 
-    static getValueByKey(data:ParsePlayerObject, key:string):string {
+    static getValueByKey(data:ParseJSONPlayerObject, key:string):string {
         var keys = key.split('.');
         var current = data;
         for (var i = 0; i < keys.length; i++) {
@@ -79,7 +79,7 @@ export class AllianceTableCol {
         return <any>current;
     }
 
-    getSortValue(data:ParsePlayerObject):string {
+    getSortValue(data:ParseJSONPlayerObject):string {
         var value = '';
         if (this.customSortGetter) {
             value = this.customSortGetter(data, this);

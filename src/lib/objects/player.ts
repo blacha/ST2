@@ -1,9 +1,9 @@
 import {ResearchInfoData, CommandInfoData, CityInfoData} from "../../api/player.info";
-import {ParseBaseObject} from "./base.object";
+import {ParseJSONBaseObject} from "./base.object";
 import {Base} from "../base";
 import {GameResources} from "../game.resources";
 
-export interface ParsePlayerObject extends ParseBaseObject {
+export interface ParseJSONPlayerObject extends ParseJSONBaseObject {
     world:number;
     faction:number;
     player: number;

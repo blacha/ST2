@@ -1,7 +1,7 @@
 import {ParseWebUtil} from '../parse';
 import {Log} from "../../../lib/log/log";
-import {ParseWorldObject} from "../../../lib/objects/world";
-import {ParseAllianceObject} from "../../../lib/objects/alliance";
+import {ParseJSONWorldObject} from "../../../lib/objects/world";
+import {ParseJSONAllianceObject} from "../../../lib/objects/alliance";
 import * as Layout from '../layout/layout';
 import {RegisterRender} from "../register/register";
 

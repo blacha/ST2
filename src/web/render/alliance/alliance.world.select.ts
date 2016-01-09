@@ -1,7 +1,7 @@
 import {ParseWebUtil} from '../parse';
 import {Log} from "../../../lib/log/log";
-import {ParseWorldObject} from "../../../lib/objects/world";
-import {ParseAllianceObject} from "../../../lib/objects/alliance";
+import {ParseJSONWorldObject} from "../../../lib/objects/world";
+import {ParseJSONAllianceObject} from "../../../lib/objects/alliance";
 import * as Layout from '../layout/layout';
 
 var $log = Log.child({route: 'AllianceWorldSelector'});
@@ -12,9 +12,9 @@ var $log = Log.child({route: 'AllianceWorldSelector'});
 export class AllianceWorldSelector {
 
     private loadingAlliances;
-    private worlds:_mithril.MithrilProperty<ParseWorldObject[]>;
-    private alliances:_mithril.MithrilProperty<ParseAllianceObject[]>;
-    private worldMap:{[key:string] : ParseWorldObject};
+    private worlds:_mithril.MithrilProperty<ParseJSONWorldObject[]>;
+    private alliances:_mithril.MithrilProperty<ParseJSONAllianceObject[]>;
+    private worldMap:{[key:string] : ParseJSONWorldObject};
 
     constructor() {
         this.loadingAlliances = m.prop(true);
@@ -35,7 +35,7 @@ export class AllianceWorldSelector {
         });
 
         ParseWebUtil.query('World', {}, $log).then((worldData) => {
-            worldData.results.forEach((world:ParseWorldObject) => {
+            worldData.results.forEach((world:ParseJSONWorldObject) => {
                 this.worldMap[world.world] = world;
             });
             this.worlds(worldData.results);
@@ -82,8 +82,8 @@ export class AllianceWorldSelector {
         ]);
     }
 
-    viewAlliance(alliance:ParseAllianceObject) {
-        var worldObj:ParseWorldObject = this.worldMap[alliance.world];
+    viewAlliance(alliance:ParseJSONAllianceObject) {
+        var worldObj:ParseJSONWorldObject = this.worldMap[alliance.world];
         if (worldObj == null) {
             return;
         }

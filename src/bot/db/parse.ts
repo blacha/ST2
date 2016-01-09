@@ -6,7 +6,7 @@ Parse.initialize(ParseConfig.APP, ParseConfig.JS, '2Yy0P9z6Ybp4ewFc736K8KhN4DUAb
 Parse.Cloud.useMasterKey();
 
 export var ParseCLIUtil = {
-    getAll(className, $log:Log) {
+    getAll(className, queryData, $log:Log) {
         $log = $log.child({
             module: 'Parse',
             className: className
@@ -16,8 +16,18 @@ export var ParseCLIUtil = {
         var Obj = Parse.Object.extend(className);
         var query = new Parse.Query(Obj);
 
+        if (queryData != null) {
+            Object.keys(queryData).forEach(function(key) {
+                var value = queryData[key];
+
+                $log.info(`Query: ${key}:${value}`);
+                query.equalTo(key, value);
+            });
+        }
+
         return query.find().then(function(data) {
             return data;
         });
     }
 };
+

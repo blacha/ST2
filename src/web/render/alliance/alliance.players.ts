@@ -1,9 +1,9 @@
-import {ParseAllianceObject} from "../../../lib/objects/alliance";
-import {ParsePlayerObject} from "../../../lib/objects/player";
+import {ParseJSONAllianceObject} from "../../../lib/objects/alliance";
+import {ParseJSONPlayerObject} from "../../../lib/objects/player";
 
 import {ParseWebUtil} from '../parse';
 import {Log} from "../../../lib/log/log";
-import {ParseWorldObject} from "../../../lib/objects/world";
+import {ParseJSONWorldObject} from "../../../lib/objects/world";
 import {ScoreCol, BIGGEST_COLS} from  './alliance.table';
 import {AllianceTableCol} from "./alliance.table.col";
 import * as Layout from '../layout/layout';
@@ -17,12 +17,12 @@ import {CityInfoData} from "../../../api/player.info";
 var $log = Log.child({route: 'AlliancePlayers'});
 
 export class AlliancePlayers {
-    private alliance:_mithril.MithrilProperty<ParseAllianceObject>;
-    private alliances:_mithril.MithrilProperty<ParseAllianceObject[]>;
-    private players:_mithril.MithrilProperty<ParsePlayerObject[]>;
+    private alliance:_mithril.MithrilProperty<ParseJSONAllianceObject>;
+    private alliances:_mithril.MithrilProperty<ParseJSONAllianceObject[]>;
+    private players:_mithril.MithrilProperty<ParseJSONPlayerObject[]>;
     private currentPlayerName:_mithril.MithrilProperty<string>;
     private currentCityId:_mithril.MithrilProperty<number>;
-    private world:_mithril.MithrilProperty<ParseWorldObject>;
+    private world:_mithril.MithrilProperty<ParseJSONWorldObject>;
     private worldID:number;
 
     public currentSort:AllianceTableCol;
@@ -154,7 +154,7 @@ export class AlliancePlayers {
         ]);
     }
 
-    private updateBiggest(players:ParsePlayerObject[]) {
+    private updateBiggest(players:ParseJSONPlayerObject[]) {
         this.biggest = {};
         players.forEach((player) => {
             BIGGEST_COLS.forEach((col:AllianceTableCol) => {
@@ -179,11 +179,11 @@ export class AlliancePlayers {
         return value >= this.biggest[key];
     }
 
-    getPlayer(playerName: string):ParsePlayerObject {
+    getPlayer(playerName: string):ParseJSONPlayerObject {
         var searchName = playerName.toLowerCase();
         var players = this.players();
 
-        var player = players.filter(function(player:ParsePlayerObject) {
+        var player = players.filter(function(player:ParseJSONPlayerObject) {
             return player.name.toLowerCase() == searchName;
         });
 
@@ -307,7 +307,7 @@ export class AlliancePlayers {
         this.players(sorted);
     }
 
-    sortPlayers(a:ParsePlayerObject, b:ParsePlayerObject) {
+    sortPlayers(a:ParseJSONPlayerObject, b:ParseJSONPlayerObject) {
         var valA = this.currentSort.getSortValue(a);
         var valB = this.currentSort.getSortValue(b);
 
@@ -330,7 +330,7 @@ export class AlliancePlayers {
         return ctrl.view();
     }
 
-    getCurrentAlliance():ParseAllianceObject {
+    getCurrentAlliance():ParseJSONAllianceObject {
         return this.alliance();
     }
 }

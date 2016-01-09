@@ -1,6 +1,13 @@
 /// <reference path="../parse.d.ts" />
 import {Log} from '../../lib/log/log';
 
+export interface ParseBaseObject {
+    get: (key:string) => any;
+    set: (key:string, value:any) => void;
+    save: () => any;
+    setACL: (acl:any) => any;
+}
+
 export class ParseObject {
     name:string;
     code:string[];

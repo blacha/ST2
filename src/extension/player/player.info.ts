@@ -60,9 +60,9 @@ export class PlayerInfo {
         var PlayerResearch = player.get_PlayerResearch();
         var ResearchItem = PlayerResearch.GetResearchItemFomMdbId(TechId);
 
-        //if (ResearchItem === null) {
-        //    return;
-        //}
+        if (ResearchItem === null) {
+            return;
+        }
         var NextLevelInfo = ResearchItem.get_NextLevelInfo_Obj();
 
         var resourcesNeeded = [];
@@ -113,7 +113,12 @@ export class PlayerInfo {
                 inf: alliance.get_POIInfantryBonus()
             },
             players: alliance.get_MemberDataAsArray().map(function (member) {
-                return member.Name;
+                return {
+                    name: member.Name,
+                    rank: member.Rank,
+                    score: member.Points,
+                    role: member.Role
+                }
             })
         };
     }

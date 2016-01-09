@@ -1,5 +1,5 @@
 import {AllianceTableCol} from "./alliance.table.col";
-import {ParsePlayerObject} from "../../../lib/objects/player";
+import {ParseJSONPlayerObject} from "../../../lib/objects/player";
 import * as Format from '../format';
 import * as TableFormat from './alliance.table.format';
 import {AlliancePlayers} from "./alliance.players";
@@ -35,7 +35,7 @@ var MainPowCol = new AllianceTableCol('Pow/h', '$stats.main.production.power', {
 var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatHours});
 var MainCost = new AllianceTableCol('Base Cost', '$stats.main.$cost', {
     formatter: Format.formatTotalResources,
-    sorter: function(data:ParsePlayerObject) {
+    sorter: function(data:ParseJSONPlayerObject) {
         return data.$stats.main.$cost.total();
     }
 });
@@ -88,7 +88,7 @@ export class AllianceTable {
         this.ctrl = ctrl;
     }
 
-    view(data:ParsePlayerObject[]) {
+    view(data:ParseJSONPlayerObject[]) {
         return m('table.Table', [
             m('thead.Table-Head', this.viewHeader()),
             m('tbody', data.map(this.viewRow.bind(this)))
@@ -129,7 +129,7 @@ export class AllianceTable {
         return cells;
     }
 
-    viewRow(data:ParsePlayerObject) {
+    viewRow(data:ParseJSONPlayerObject) {
         var cells = [];
         TABLE_COLS.forEach((col) => {
             if (col.enabled == false) {

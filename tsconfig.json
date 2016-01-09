@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
         "target": "ES5",
-        "outDir": "build/src/",
+        "outDir": "build/",
         "module": "commonjs",
         "sourceMap": false
     },
-    "files": [
-        "src/bot/main.ts"
+    "exclude": [
+        "build/",
+        "node_modules"
     ]
 }
