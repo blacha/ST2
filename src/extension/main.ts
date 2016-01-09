@@ -8,6 +8,7 @@ import {ParseUtil} from './util/parse';
 import {ClientLibUtil} from './util/clientlib';
 import {StorageUtil} from './util/storage';
 import {ConsoleLogTextStream} from "../lib/log/stream";
+import {WaveCounterModule} from "./wave/wave.counter.module";
 
 var PlayerInfo = PlayerInfoModule.getInstance();
 
@@ -16,7 +17,8 @@ Log.getInstance().addStream(new ConsoleLogTextStream(Log.DEBUG));
 export var $VERSION = '2.0.0';
 
 export var Modules = {
-    PlayerInfo: PlayerInfoModule
+    PlayerInfo: PlayerInfoModule,
+    WaveCounter: WaveCounterModule
 };
 
 export var Util = {
@@ -34,12 +36,19 @@ export function start() {
     // Patch the client lib before starting the modules
     ClientLibPatcher.patch();
 
-    PlayerInfoModule.start();
+    Object.keys(Modules).forEach((key) => {
+        var module = Modules[key];
+        module.start();
+    });
+
 }
 
 
 export function stop() {
-    PlayerInfoModule.stop();
+    Object.keys(Modules).forEach((key) => {
+        var module = Modules[key];
+        module.stop();
+    });
 }
 
 if (typeof ST2 !== 'undefined' && ST2.stop) {

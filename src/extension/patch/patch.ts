@@ -55,7 +55,7 @@ export class ClientLibPatcher {
                 continue;
             }
 
-            logger.debug({func: patch.func, match: matches[1]}, `patching.. ${funcName} to ${matches[1]}`);
+            logger.debug({func: funcName, match: matches[1]}, `patching.. ${funcName} to ${matches[1]}`);
             currentProto.prototype[funcName] = makeReturn(matches[1]);
         }
     }

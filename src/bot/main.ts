@@ -26,7 +26,7 @@ function makeTaskManagers(bots) {
 function addTasks(managers) {
     managers.forEach((manager:TaskManager) => {
         manager.addTask(VerifyTask);
-        manager.addTask(AllianceDataTask)
+        //manager.addTask(AllianceDataTask)
     });
 
     return managers;

@@ -11,21 +11,22 @@ var WaveCounterCache:{[key:string] : WaveCount} = {};
 export class WaveCounterModule {
     static listeners = [];
     static log:Log;
-    static BINDINGS = [
-        webfrontend.gui.region.RegionCityStatusInfoOwn,
-        webfrontend.gui.region.RegionCityStatusInfoAlliance,
-        webfrontend.gui.region.RegionCityStatusInfoEnemy,
-        webfrontend.gui.region.RegionNPCBaseStatusInfo,
-        webfrontend.gui.region.RegionNPCCampStatusInfo,
-        webfrontend.gui.region.RegionRuinStatusInfo,
-        webfrontend.gui.region.RegionPointOfInterestStatusInfo
-    ];
+    static BINDINGS;
 
 
     static lastBase;
     static selectedBase;
 
     static start() {
+        WaveCounterModule.BINDINGS = [
+            webfrontend.gui.region.RegionCityStatusInfoOwn,
+            webfrontend.gui.region.RegionCityStatusInfoAlliance,
+            webfrontend.gui.region.RegionCityStatusInfoEnemy,
+            webfrontend.gui.region.RegionNPCBaseStatusInfo,
+            webfrontend.gui.region.RegionNPCCampStatusInfo,
+            webfrontend.gui.region.RegionRuinStatusInfo,
+            webfrontend.gui.region.RegionPointOfInterestStatusInfo
+        ];
         WaveCounterModule.log = Log.child({module: 'WaveCounter'});
         WaveCounterModule.log.info('Starting...')
 
