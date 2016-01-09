@@ -9,13 +9,8 @@ var RankCol = new AllianceTableCol('Rank', '$alliance.rank');
 var NameCol = new AllianceTableCol('Player', 'name', {
     formatter: function (val) {
         var currentWorld = m.route.param('world');
-        var url = `/alliance/${currentWorld}/${val}`;
         return m('a', {
-            href: '#',
-            onclick: function () {
-                m.route(url);
-                return false;
-            }
+            href: `#/alliance/${currentWorld}/${val.toLowerCase()}`,
         }, val);
     }
 });
