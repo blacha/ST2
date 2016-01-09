@@ -2,6 +2,7 @@ import {ResearchInfoData, CommandInfoData, CityInfoData} from "../../api/player.
 import {ParseJSONBaseObject} from "./base.object";
 import {Base} from "../base";
 import {GameResources} from "../game.resources";
+import {AlliancePlayerInfoData} from "../../api/player.info";
 
 export interface ParseJSONPlayerObject extends ParseJSONBaseObject {
     world:number;
@@ -18,6 +19,7 @@ export interface ParseJSONPlayerObject extends ParseJSONBaseObject {
     research: ResearchInfoData;
     cities: CityInfoData[]
     $stats?: PlayerStats;
+    $alliance?: AlliancePlayerInfoData;
 }
 
 export interface PlayerStats {

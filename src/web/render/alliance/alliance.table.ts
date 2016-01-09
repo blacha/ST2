@@ -4,8 +4,8 @@ import * as Format from '../format';
 import * as TableFormat from './alliance.table.format';
 import {AlliancePlayers} from "./alliance.players";
 
-export var ScoreCol = new AllianceTableCol('Score', 'score', {formatter: Format.formatNumber});
-var RankCol = new AllianceTableCol('Rank', 'rank');
+export var ScoreCol = new AllianceTableCol('Score', '$alliance.score', {formatter: Format.formatNumber});
+var RankCol = new AllianceTableCol('Rank', '$alliance.rank');
 var NameCol = new AllianceTableCol('Player', 'name', {
     formatter: function (val) {
         var currentWorld = m.route.param('world');
@@ -61,6 +61,7 @@ export var BIGGEST_COLS = [
 ];
 
 export var TABLE_COLS = [
+    RankCol,
     ScoreCol,
     FactionCol,
     NameCol,
@@ -70,8 +71,6 @@ export var TABLE_COLS = [
     MainOCol,
     MainDCol,
     MainPowCol,
-    //MainRTCol,
-    //CommandCol,
     MainCost,
     RPCol,
     ResearchCol,

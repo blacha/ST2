@@ -13,6 +13,7 @@ import {AllianceTable} from "./alliance.table";
 import {AlliancePlayer} from "./alliance.player";
 import {AllianceData} from "../data/data";
 import {CityInfoData} from "../../../api/player.info";
+import {AlliancePlayerInfoData} from "../../../api/player.info";
 
 var $log = Log.child({route: 'AlliancePlayers'});
 

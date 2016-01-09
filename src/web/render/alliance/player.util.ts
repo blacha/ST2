@@ -3,6 +3,15 @@ import {PlayerStats} from "../../../lib/objects/player";
 import {ParseJSONAllianceObject} from "../../../lib/objects/alliance";
 import {Base} from "../../../lib/base";
 import {GameResources} from "../../../lib/game.resources";
+import {AlliancePlayerInfoData} from "../../../api/player.info";
+
+function getAlliancePlayer(alliance:ParseJSONAllianceObject, playerName:string):AlliancePlayerInfoData {
+    var searchName = playerName.toLowerCase();
+
+    return alliance.players.filter(function(player) {
+        return player.name.toLowerCase() === searchName;
+    }).pop();
+}
 
 export function getStats(alliance:ParseJSONAllianceObject, player:ParseJSONPlayerObject):PlayerStats {
     if (alliance == null || player == null) {
@@ -12,6 +21,8 @@ export function getStats(alliance:ParseJSONAllianceObject, player:ParseJSONPlaye
     if (player.$stats) {
         return player.$stats;
     }
+
+    player.$alliance = getAlliancePlayer(alliance, player.name);
 
     var maxO = 0;
     var totalProduction = new GameResources();
