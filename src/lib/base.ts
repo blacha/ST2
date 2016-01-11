@@ -154,12 +154,12 @@ export class Base {
 
     getSupport():Building {
         var SUPPORTS = [
-            BuildingType.NOD.EyeOfKane,
-            BuildingType.NOD.FistOfKane,
-            BuildingType.NOD.BladeOfKane,
-            BuildingType.GDI.FalconSupport,
-            BuildingType.GDI.IonCannonSupport,
-            BuildingType.GDI.SkystrikeSupport
+            BuildingType.NOD.EyeOfKane.getID(),
+            BuildingType.NOD.FistOfKane.getID(),
+            BuildingType.NOD.BladeOfKane.getID(),
+            BuildingType.GDI.FalconSupport.getID(),
+            BuildingType.GDI.IonCannonSupport.getID(),
+            BuildingType.GDI.SkystrikeSupport.getID()
         ];
 
         for (var i = 0; i < this.base.length; i++) {
@@ -168,7 +168,7 @@ export class Base {
                 continue;
             }
 
-            if (SUPPORTS.indexOf(building.getBuildingType()) > -1) {
+            if (SUPPORTS.indexOf(building.getID()) > -1) {
                 return building;
             }
         }
