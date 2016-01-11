@@ -67,7 +67,7 @@ export function sumResearch(player:ParseJSONPlayerObject) {
 
 export function formatTime(seconds:number, decimals = 2) {
     var interval = getTimeInterval(seconds);
-    if (interval.amount < 2) {
+    if (interval.amount <= 1.5) {
         return `${interval.amount.toFixed(decimals)} ${interval.interval}`;
     }
     return `${interval.amount.toFixed(decimals)} ${interval.interval}s`;
