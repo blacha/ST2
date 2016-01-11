@@ -11,10 +11,13 @@ import {AllianceWorldSelector} from "./alliance/alliance.world.select";
 import {AlliancePlayers} from "./alliance/alliance.players";
 import {InstallExtension} from './install/install';
 
+
+import * as GA from '../ga/ga';
+
 export var Render = {
     start: function () {
         m.route.mode = 'hash';
-        m.route(document.body, '/alliance', {
+        m.route(document.body, '/alliance', GA.TrackRoutes({
             '/b/:baseID': WrapAuth(BaseRender),
             '/layout/:world/:player': WrapAuth(BaseLayoutRender),
             '/layout/:world': WrapAuth(BaseLayoutRender),
@@ -34,6 +37,6 @@ export var Render = {
             '/register': RegisterRender,
             '/register/:id': RegisterRender,
             '/verify/:uuid': RegistrationCompleteRender
-        });
+        }));
     }
 };
