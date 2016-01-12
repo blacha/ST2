@@ -6,13 +6,17 @@ function createGA() {
     if (init) {
         return;
     }
-    ga('create', 'UA-39641775-3', 'auto');
-    init = true;
+    if (typeof ga !== 'undefined') {
+        ga('create', 'UA-39641775-3', 'auto');
+        init = true;
+    }
 }
 
 export function TrackGAController(controller) {
     return function () {
-        ga('send', 'pageview', {page: m.route()});
+        if (typeof ga !== 'undefined') {
+            ga('send', 'pageview', {page: m.route()});
+        }
         return controller.apply(this, arguments);
     }
 };
