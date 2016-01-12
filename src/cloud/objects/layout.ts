@@ -1,5 +1,5 @@
 import {ParseObject} from './parse.object';
-import {ParseLayoutJSONObject} from "../../lib/objects/layout";
+import {ParseJSONLayoutObject} from "../../lib/objects/layout";
 import {ParseBaseObject} from "./parse.object";
 import {Log} from "../../lib/log/log";
 import {CityLayout} from "../../api/city.layout";
@@ -9,7 +9,7 @@ import {ACL} from "../permission/acl";
 import {PlayerObject} from "./player";
 
 export interface ParseLayoutObject extends ParseBaseObject {
-    attrs: ParseLayoutJSONObject;
+    attrs: ParseJSONLayoutObject;
 }
 
 export class LayoutObject extends ParseObject {

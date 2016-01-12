@@ -18,7 +18,7 @@ var NameCol = new AllianceTableCol('Player', 'name', {
 var CommandCol = new AllianceTableCol('CP', 'command', {formatter: TableFormat.formatCP, sort: 'command.current'});
 var SubCol = new AllianceTableCol('Sub', 'sub');
 var FactionCol = new AllianceTableCol('F', 'faction', {formatter: TableFormat.formatFaction});
-var UpdatedAt = new AllianceTableCol('Updated', 'updatedAt', {formatter: TableFormat.formatTimeAgo});
+var UpdatedAt = new AllianceTableCol('Updated', 'updatedAt', {formatter: Format.formatTimeAgo});
 
 var TibProCol = new AllianceTableCol('Tib/h', '$stats.total.production.tiberium', {formatter: Format.formatNumber});
 var CryProCol = new AllianceTableCol('Cry/h', '$stats.total.production.crystal', {formatter: Format.formatNumber});

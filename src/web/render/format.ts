@@ -101,3 +101,9 @@ function getTimeInterval(seconds:number) {
 
     return {amount: seconds, interval: 'second'}
 }
+
+export function formatTimeAgo(dateString:string) {
+    var currentTime = +new Date();
+    var oldTime = +new Date(dateString);
+    return formatTime((currentTime - oldTime) / 1000, 0);
+}

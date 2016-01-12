@@ -2,30 +2,41 @@ import {ParseWebUtil} from '../parse';
 import {Base} from '../../../lib/base';
 import {Tile} from '../../../lib/base/tile';
 import {Log} from "../../../lib/log/log";
+import {ParseJSONWorldObject} from "../../../lib/objects/world";
+import {ParseJSONLayoutObject} from "../../../lib/objects/layout";
+
+import * as Layout from '../layout/layout';
+import * as Format from '../format';
+import {RenderBuildingTile} from "../base/tile";
 
 var $log = Log.child({route: 'BaseLayout'});
+import {TableController, renderTable} from '../ui/table/table';
+import {TableCol} from '../ui/table/table.col';
 
-export class BaseLayoutRender {
+import {COLS} from './base.layout.cols';
+
+export class BaseLayoutRender implements TableController {
     private worldID;
-    private world;
-    private layouts;
+    private world:_mithril.MithrilProperty<ParseJSONWorldObject>;
+    private layouts:_mithril.MithrilProperty<ParseJSONLayoutObject[]>;
+    public currentSort:TableCol = COLS[0];
 
     constructor() {
         this.worldID = m.prop(parseInt(m.route.param('world'), 10));
-        this.world = m.prop();
-        this.layouts = m.prop([]);
+        this.world = <any>m.prop({});
+        this.layouts = <any>m.prop([]);
 
         ParseWebUtil.query('World', {world: this.worldID()}, $log).then((result) => {
-            console.log('World', result.results);
             this.world(result.results[0]);
         });
 
         ParseWebUtil.query('Layout', {world: this.worldID()}, $log).then((result) => {
-            console.log('Layout', result.results);
-            var layout = result.results;
-            this.layouts(layout.map(function (layout) {
-                return Base.load(layout);
-            }));
+            var layouts = result.results;
+            layouts.forEach((layout:ParseJSONLayoutObject) => {
+                layout.$base = Base.load(layout);
+            });
+
+            this.layouts(layouts.sort(this.sortLayouts.bind(this)));
         })
     }
 
@@ -38,31 +49,65 @@ export class BaseLayoutRender {
     }
 
     view() {
-        console.log('RenderBase');
-        return m('div', [
-            this.world().name,
-            this.renderLayouts()
+        return Layout.createLayout({
+            page: 'Layout'
+        }, [
+            m('div.LayoutInfo', this.viewLayoutTitle()),
+            m('div.Layouts',
+                this.renderLayouts()
+            )
         ]);
     }
 
-    renderLayouts() {
-        var layouts = this.layouts();
-        var output = m('div.BaseLayouts');
+    viewLayoutTitle() {
+        var breadCrumb = [];
 
-        output.children = layouts.map((layout:Base) => {
-            var location = layout.getLocation()
-            return m(`div.BaseLayout.BaseLayout-${location.x}-${location.y}`, BaseLayoutRender.renderLayout(layout));
-        });
+        breadCrumb.push(
+            m('button.LayoutInfo-World.Button', {
+                onclick: null
+            }, this.world().name)
+        );
+
+        var output =  [
+            m('div.LayoutInfo-Title', breadCrumb)
+        ];
 
         return output;
     }
 
-    static renderLayout(layout:Base) {
-        var output = [];
-        layout.baseForEach((x, y, building, tile, base) => {
-            output.push(m(`div.BaseTile.BaseTile-`));
-            console.log(x, y, tile)
-        });
-        return m('div.BaseLayoutGrid', output);
+    renderLayouts() {
+        return renderTable(COLS, this.layouts(), this);
+    }
+
+    isBiggestValue(key:string, value:number) {
+        return false;
+    }
+
+    setSortCol(col:TableCol) {
+        if (this.currentSort === col) {
+            this.currentSort.swapSortOrder();
+        } else {
+            this.currentSort = col;
+            this.currentSort.resetSortOrder();
+        }
+
+        var sorted = this.layouts().sort(this.sortLayouts.bind(this));
+        this.layouts(sorted);
+    }
+
+    sortLayouts(a, b) {
+        var valA = this.currentSort.getSortValue(a, this);
+        var valB = this.currentSort.getSortValue(b, this);
+
+        if (valA === valB) {
+            return 0;
+        }
+
+        if (valA > valB) {
+            return this.currentSort.order;
+        }
+
+        return -1 * this.currentSort.order;
     }
 }
+

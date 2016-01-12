@@ -19,8 +19,3 @@ export function formatRepair(repair:PlayerRepairInfo):any {
     return Math.floor(repair.time / 36) / 100;
 }
 
-export function formatTimeAgo(dateString:string) {
-    var currentTime = +new Date();
-    var oldTime = +new Date(dateString);
-    return Format.formatTime((currentTime - oldTime) / 1000, 0);
-}
