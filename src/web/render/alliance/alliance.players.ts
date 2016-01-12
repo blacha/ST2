@@ -164,7 +164,7 @@ export class AlliancePlayers {
                     oldValue = 0;
                 }
 
-                var playerValue = parseFloat(col.getSortValue(player));
+                var playerValue = parseFloat(col.getSortValue(player, this));
                 if (playerValue > oldValue) {
                     this.biggest[col.key] = playerValue;
                 }
@@ -308,8 +308,8 @@ export class AlliancePlayers {
     }
 
     sortPlayers(a:ParseJSONPlayerObject, b:ParseJSONPlayerObject) {
-        var valA = this.currentSort.getSortValue(a);
-        var valB = this.currentSort.getSortValue(b);
+        var valA = this.currentSort.getSortValue(a, this);
+        var valB = this.currentSort.getSortValue(b, this);
 
         if (valA === valB) {
             return 0;

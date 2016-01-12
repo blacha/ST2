@@ -26,7 +26,9 @@ var CreProCol = new AllianceTableCol('$/h', '$stats.total.production.credits', {
 
 var MainOCol = new AllianceTableCol('Off', '$stats.main.offense', {formatter: Format.formatNumber});
 var MainDCol = new AllianceTableCol('Def', '$stats.main.defense', {formatter: Format.formatNumber});
-var MainPowCol = new AllianceTableCol('Pow/h', '$stats.main.production.power', {formatter: Format.formatNumber});
+var MainPowCol = new AllianceTableCol('Pow/h', function(data, col, alliance:AlliancePlayers) {
+    return AllianceTableCol.getValueByKey(data, '$stats.main.production.power') + alliance.getCurrentAlliance().bonus.power;
+}, {formatter: Format.formatNumber});
 var MainRTCol = new AllianceTableCol('RT', '$stats.main.repair.time', {formatter: Format.formatHours});
 var MainCost = new AllianceTableCol('Base Cost', '$stats.main.$cost', {
     formatter: Format.formatTotalResources,
@@ -131,9 +133,9 @@ export class AllianceTable {
             }
 
             var classNames = ['Table-Cell', `Table-Cell--${col.key}`];
-            var value = col.getValue(data);
+            var value = col.getValue(data, this.ctrl);
 
-            if (this.ctrl.isBiggestValue(col.key, parseFloat(col.getSortValue(data)))) {
+            if (this.ctrl.isBiggestValue(col.key, parseFloat(col.getSortValue(data, this.ctrl)))) {
                 classNames.push('Table-Cell--Biggest');
             }
             cells.push(m('td', {className: classNames.join(' ')}, [value]))
