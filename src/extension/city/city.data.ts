@@ -44,15 +44,18 @@ export class CityData {
         var MD = ClientLib.Data.MainData.GetInstance();
         var player = MD.get_Player();
         var server = MD.get_Server();
+        var alliance = MD.get_Alliance();
         return {
-            id: city.get_Id(),
+            cityid: city.get_Id(),
             level: city.get_LvlBase(),
             name: city.get_Name(),
             x: city.get_PosX(),
             y: city.get_PosY(),
             faction: city.get_CityFaction(),
             owner: city.get_OwnerName() || player.get_Name(),
-            v: city.get_Version(),
+            version: city.get_Version(),
+
+            alliance: alliance.get_Id() || -1,
             player: player.get_Name(),
             world: server.get_WorldId(),
 

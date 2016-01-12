@@ -60,7 +60,9 @@ export class LayoutScanner {
             return Promise.reject('Aborted');
         }
 
-        LayoutScanner.setCurrentCity(fromCity);
+        if (fromCity != null) {
+            LayoutScanner.setCurrentCity(fromCity);
+        }
 
         var world = ClientLib.Data.MainData.GetInstance().get_World();
         var object = world.GetObjectFromPosition(x, y);
@@ -77,7 +79,7 @@ export class LayoutScanner {
 
         var cachedBase = LayoutScanner.getCachedBase(coord);
         if (cachedBase != null) {
-            if (cachedBase.id == toScan.get_Id()) {
+            if (cachedBase.cityid == toScan.get_Id()) {
                 return Promise.resolve(cachedBase);
             }
 

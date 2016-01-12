@@ -1,13 +1,24 @@
+export const LayoutDataVersion = 1;
+
+export interface LayoutScanAPI {
+    version: number;
+    player: string;
+    world: number;
+    layouts: CityLayout[];
+}
+
 export interface CityLayout {
-    id: number;
+    cityid: number;
+    coord?: number;
     level: number;
     name: string;
     x: number;
     y: number;
     faction: number;
     owner: string;
-    v: number;
+    version: number;
     player: string;
+    alliance: number;
     world: number;
     tiles: any;
     upgrades: number[];

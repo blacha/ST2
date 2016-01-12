@@ -4,6 +4,7 @@ import {Resources} from "../lib/game.resources";
 
 
 export const PlayerDataVersion = 1;
+
 export interface PlayerData {
     world: WorldInfoData;
     player: PlayerInfoData;

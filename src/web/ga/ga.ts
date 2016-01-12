@@ -24,6 +24,7 @@ export function TrackGAController(controller) {
 
 export function TrackRoutes(routes):MithrilRoutes<any> {
     createGA();
+
     var map = {};
     for (var key in routes) {
         map[key] = {

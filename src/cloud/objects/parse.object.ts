@@ -6,6 +6,8 @@ export interface ParseBaseObject {
     set: (key:string, value:any) => void;
     save: () => any;
     setACL: (acl:any) => any;
+    getACL: () => any;
+    destroy: () => any;
 }
 
 export class ParseObject {
@@ -36,7 +38,7 @@ export class ParseObject {
         }
 
         return query.first().then((output) => {
-            $log.trace({
+            $log.debug({
                 schema: this.name,
                 action: 'get-first-query',
                 hasResult: output != null,

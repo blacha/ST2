@@ -118,10 +118,17 @@ export class AllianceObject extends ParseObject {
     }
 
     static RoleName(alliance:ParseAllianceObject) {
+        return AllianceObject.RoleNameByData(
+            parseInt(alliance.get(AllianceObject.schema.WORLD), 10),
+            parseInt(alliance.get(AllianceObject.schema.ALLIANCE), 10)
+        );
+    }
+
+    static RoleNameByData(world:number, alliance:number) {
         return [
             'alliance',
-            alliance.get(AllianceObject.schema.WORLD),
-            alliance.get(AllianceObject.schema.ALLIANCE)
+            world,
+            alliance
         ].join('-')
     }
 }
