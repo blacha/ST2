@@ -13,6 +13,7 @@ export class PlayerInfoModule {
         PlayerInfoModule.log.info('Starting...');
 
         PlayerInfoModule.$interval = setInterval(PlayerInfoModule.run, PlayerInfoModule.INTERVAL_TIME);
+        PlayerInfoModule.run();
     }
 
     static stop() {
