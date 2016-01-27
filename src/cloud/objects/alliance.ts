@@ -49,7 +49,42 @@ export class AllianceObject extends ParseObject {
         });
     }
 
+    private needsUpdate(to:ParseAllianceObject, from:AllianceInfoData) {
+        // Name change
+        if (to.get(AllianceObject.schema.NAME) != from.name) {
+            return true;
+        }
+
+        // Check bonus numbers
+        var bonsuses = to.get(AllianceObject.schema.BONUS);
+        var bonusFiltered = Object.keys(from.bonus).filter((key) => {
+            return bonsuses[key] !== from.bonus[key];
+        });
+        if (bonusFiltered.length > 0) {
+            return true;
+        }
+
+        // Check if new players added or removed
+        var playerMap = {};
+        var players = to.get(AllianceObject.schema.PLAYERS).forEach((player) => {
+            playerMap[player.name] = true;
+        });
+        var filtered = from.players.filter(function(player) {
+            return playerMap[player.name] !== true;
+        })
+        if (filtered.length > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     update(to:ParseAllianceObject, from:AllianceInfoData, master:boolean, $log:Log) {
+        if (this.needsUpdate(to, from) === false) {
+            $log.info('Skipping update');
+            return Parse.Promise.as(to);
+        }
+
         to.set(AllianceObject.schema.BONUS, from.bonus);
         to.set(AllianceObject.schema.PLAYERS, from.players);
         to.set(AllianceObject.schema.NAME, from.name);

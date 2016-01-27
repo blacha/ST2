@@ -53,7 +53,7 @@ export class VerifyTask {
     static sendAllMessages($log:Log, client:CNCClient, toVerify) {
 
         return toVerify.reduce((prevVerfiy, verify) => {
-            prevVerfiy.then(() => {
+            return prevVerfiy.then(() => {
                 return VerifyTask.sendVerificationMessage($log, client, verify);
             }).then(() => {
                 verify.set('sent', new Date());

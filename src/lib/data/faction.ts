@@ -32,7 +32,6 @@ export class Faction {
         }
 
         return Faction.Forgotten;
-        console.log('Unknown faction', id);
     }
 
 
