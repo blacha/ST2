@@ -12,7 +12,6 @@ import { JsonPlayerObject } from './objects/player';
 import { DefUnitType } from './unit/def.unit.type';
 import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
-import { ID_MAP } from './util';
 
 interface CNCLocation {
     x: number;
@@ -246,7 +245,7 @@ export class Base {
                 }
 
                 const actualUnit: TaTile = unit as TaTile;
-                const unitType: GameDataObject = ID_MAP[actualUnit.id];
+                const unitType: GameDataObject = GameDataObject.getById(actualUnit.id);
                 if (unitType == null) {
                     console.error('Unknown unit', actualUnit.id, '@', x, y);
                     continue;

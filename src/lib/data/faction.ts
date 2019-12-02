@@ -2,19 +2,12 @@ export class Faction {
     static GDI: Faction = new Faction('G', 'GDI');
     static NOD: Faction = new Faction('N', 'NOD');
     static Forgotten: Faction = new Faction('F', 'Forgotten');
+    code: string;
+    name: string;
 
-    constructor(public code: string, public name: string) {}
-
-    getCode() {
-        return this.code;
-    }
-
-    getName() {
-        return this.name;
-    }
-
-    getClassName() {
-        return this.name.toLowerCase();
+    constructor(code: string, name: string) {
+        this.code = code;
+        this.name = name;
     }
 
     static fromID(id: number) {
@@ -51,6 +44,6 @@ export class Faction {
     }
 
     toString() {
-        return '<Faction:' + this.getName() + '>';
+        return '<Faction:' + this.name + '>';
     }
 }

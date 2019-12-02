@@ -6,11 +6,13 @@ import { BuildingType } from './lib/building/building.type';
 import { BaseProduction } from './lib/production';
 import { GameResources } from './lib/game.resources';
 import { pad, formatNumber } from './lib/util';
+import { Constants } from './lib/constants';
+import { GameDataObject } from './lib/data/game.data.object';
 
 console.time('Loading');
 GameData.load(false);
 console.timeEnd('Loading');
-console.log('Loaded');
+// console.log('Loaded');
 
 const base = new Base();
 

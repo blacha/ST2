@@ -5,7 +5,7 @@ import { OffUnitType } from '../lib/unit/off.unit.type';
 import { pad } from '../lib/util';
 import * as GAME_DATA from './game.data.json';
 
-export const GameObjects: typeof GameDataObject[] = [DefUnitType, OffUnitType, BuildingType];
+export const GameObjects = [DefUnitType, OffUnitType, BuildingType];
 
 export const GameData = {
     /** Load the raw json game data into useful objects */

@@ -4,12 +4,6 @@ import { Faction } from '../data/faction';
 import { GameDataObject } from '../data/game.data.object';
 
 export class UnitType extends GameDataObject {
-    faction: Faction = Faction.Forgotten;
-
-    constructor(id: number) {
-        super(id);
-    }
-
     getName() {
         return this.data.display;
     }

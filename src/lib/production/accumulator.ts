@@ -5,7 +5,7 @@ import { GameResources } from '../game.resources';
 import * as Util from '../util';
 import { BaseOutput, OutputCalculator } from './calculator';
 
-export var AccumulatorCalculator: OutputCalculator = {
+export const AccumulatorCalculator: OutputCalculator = {
     name: 'Accumulator',
 
     buildings: [BuildingType.NOD.Accumulator.id, BuildingType.GDI.Accumulator.id],

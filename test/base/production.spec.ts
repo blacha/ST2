@@ -20,7 +20,7 @@ function printBase(base: Base) {
         const building = base.getBase(x, y)
         if (building) {
             // const res = base.getTile(x, y);
-            process.stdout.write(`${building.level}`.padStart(3, ' ') + building.type.codeName);
+            process.stdout.write(`${building.level}`.padStart(3, ' ') + building.type.code);
         } else {
             const res = base.getTile(x, y);
             process.stdout.write(res.code.padStart(4, ' '));

@@ -1,21 +1,44 @@
 import * as Util from '../util';
+import { Faction } from './faction';
 import { GameDataJson, GameDataRepair, GameDataResource } from './game.data';
-import { Constants } from '../constants';
+import { DefUnitType } from '../unit/def.unit.type';
+import { OffUnitType } from '../unit/off.unit.type';
+import { BuildingType } from '../building/building.type';
+
+export enum GameDataObjectType {
+    Building = 'b',
+    OffUnit = 'o',
+    DefUnit = 'd',
+}
 
 export class GameDataObject {
+    static UnknownCode = '?';
     id = -1;
     _data: GameDataJson | null = null;
     className = '';
-    codeName = ''; // cncopt code
+    faction: Faction;
+    code: string;
+    objectType: GameDataObjectType;
 
     static Id: Record<number, GameDataObject> = {};
+    static Type: Record<string, GameDataObject> = {};
+
     static getById(id: number): GameDataObject {
         return GameDataObject.Id[id];
     }
 
-    constructor(id: number) {
+    constructor(type: GameDataObjectType, id: number, faction: Faction, code: string) {
+        this.objectType = type;
         this.id = id;
+        this.code = code;
+        this.faction = faction;
+
         GameDataObject.Id[this.id] = this;
+        GameDataObject.Type[this.hash] = this;
+    }
+
+    get hash(): string {
+        return `${this.objectType}__${this.faction.code}__${this.code}`;
     }
 
     get data(): GameDataJson {
@@ -31,8 +54,7 @@ export class GameDataObject {
 
     setGameData(data: GameDataJson) {
         this._data = data;
-        this.className = this.data.display.toLowerCase().replace(/ /g, '-');
-        this.codeName = Constants.CODES[data.name];
+        this.className = data.name.replace(/ /g, '_');
     }
 
     getHealth(level: number) {
@@ -51,5 +73,17 @@ export class GameDataObject {
 
     getTotalUpgradeCost(level: number): GameDataResource {
         return Util.getTotalUpgradeCost(this.data, level);
+    }
+
+    isDefUnit(): this is DefUnitType {
+        return this.objectType == GameDataObjectType.DefUnit;
+    }
+
+    isOffUnit(): this is OffUnitType {
+        return this.objectType == GameDataObjectType.OffUnit;
+    }
+
+    isBuildingUnit(): this is BuildingType {
+        return this.objectType == GameDataObjectType.Building;
     }
 }
