@@ -1,4 +1,5 @@
 import { Base } from '../base';
+import { BaseIter } from '../base.iter';
 import { Tile } from '../base/tile';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
@@ -38,7 +39,7 @@ export const PowerPlantCalculator: OutputCalculator = {
         const packAmount = Util.getModifierValue(gd, 'PowerPackage', building.level);
         outputPackage.addResource(GameResources.POWER, (packAmount / packTime) * 3600);
 
-        const nearBy = base.getSurroundings(
+        const nearBy = BaseIter.getSurroundings(base,
             x,
             y,
             LinkAccumulator.buildings.concat(LinkRefinery.buildings),

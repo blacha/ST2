@@ -5,6 +5,7 @@ import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
 import * as Util from '../util';
 import { BaseOutput, OutputCalculator } from './calculator';
+import { BaseIter } from '../base.iter';
 
 export const RefineryCalculator: OutputCalculator = {
     name: 'Refinery',
@@ -34,7 +35,7 @@ export const RefineryCalculator: OutputCalculator = {
         const PowerLink = RefineryCalculator.links.PowerPlant;
         const TiberiumLink = RefineryCalculator.links.Tiberium;
 
-        const nearBy = base.getSurroundings(x, y, PowerLink.buildings, TiberiumLink.tiles);
+        const nearBy = BaseIter.getSurroundings(base, x, y, PowerLink.buildings, TiberiumLink.tiles);
 
         const powerCont = Util.getGrowthValue(PowerLink.values, buildingLevel);
         const tibCont = Util.getGrowthValue(TiberiumLink.values, buildingLevel);

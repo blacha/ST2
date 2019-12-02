@@ -5,6 +5,7 @@ import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
 import * as Util from '../util';
 import { BaseOutput, OutputCalculator } from './calculator';
+import { BaseIter } from '../base.iter';
 
 const ONE_HOUR_SECONDS = 60 * 60;
 const LinkSilo = {
@@ -41,7 +42,7 @@ export const HarvesterCalculator: OutputCalculator = {
         const packAmount = Util.getModifierValue(gd, 'TiberiumPackage', building.level);
         outputPackage.addResource(resourceType, (packAmount / packTimeSeconds) * ONE_HOUR_SECONDS);
 
-        const nearBy = base.getSurroundings(x, y, LinkSilo.buildings);
+        const nearBy = BaseIter.getSurroundings(base, x, y, LinkSilo.buildings);
         if (nearBy.length > 0) {
             outputCont.addResource(resourceType, Util.getGrowthValue(LinkSilo.values, building.level));
         }

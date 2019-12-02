@@ -6,9 +6,9 @@ import { OffUnitType } from '../unit/off.unit.type';
 import { BuildingType } from '../building/building.type';
 
 export enum GameDataObjectType {
-    Building = 'b',
-    OffUnit = 'o',
-    DefUnit = 'd',
+    Building = 'building',
+    OffUnit = 'off',
+    DefUnit = 'def',
 }
 
 export class GameDataObject {
@@ -25,6 +25,10 @@ export class GameDataObject {
 
     static getById(id: number): GameDataObject {
         return GameDataObject.Id[id];
+    }
+
+    static getByCode(objectType: GameDataObjectType, faction: Faction, code: string) {
+        return GameDataObject.Type[`${objectType}__${faction.code}__${code}`]
     }
 
     constructor(type: GameDataObjectType, id: number, faction: Faction, code: string) {

@@ -1,4 +1,5 @@
 import { Base } from '../base';
+import { BaseIter } from '../base.iter';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
@@ -22,7 +23,7 @@ export const AccumulatorCalculator: OutputCalculator = {
         const outputPackage = new GameResources();
 
         const PowerPlantLink = AccumulatorCalculator.links.PowerPlant;
-        const nearBy = base.getSurroundings(x, y, PowerPlantLink.buildings);
+        const nearBy = BaseIter.getSurroundings(base, x, y, PowerPlantLink.buildings);
 
         outputCont.addResource(
             GameResources.POWER,

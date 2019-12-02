@@ -5,6 +5,7 @@ import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
 import * as Util from '../util';
 import { BaseOutput, OutputCalculator } from './calculator';
+import { BaseIter } from '../base.iter';
 
 export const SiloCalculator: OutputCalculator = {
     name: 'Silo',
@@ -22,7 +23,7 @@ export const SiloCalculator: OutputCalculator = {
         const outputPackage = new GameResources();
 
         const HarvesterLink = SiloCalculator.links.Harvester;
-        const nearBy = base.getSurroundings(x, y, HarvesterLink.buildings);
+        const nearBy = BaseIter.getSurroundings(base, x, y, HarvesterLink.buildings);
         const perHarvester = Util.getGrowthValue(HarvesterLink.values, building.level);
         for (const nearBuilding of nearBy) {
             const tile = base.getTile(nearBuilding.x, nearBuilding.y);
