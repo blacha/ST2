@@ -1,65 +1,50 @@
-import {BuildingType} from './buildingtype';
-import {Buildable} from '../base/buildable';
-import {Tile} from '../base/tile';
-import {Base} from '../base';
+import { Buildable } from '../base/buildable';
+import { Tile } from '../base/tile';
+import { BuildingType } from './building.type';
+import { GameDataRepair } from '../data/game.data';
 
-var ID = 0;
 export class Building implements Buildable {
-    public id:string;
+    level: number;
+    type: BuildingType;
 
-    constructor(private building:BuildingType, private level:number) {
-        this.id = 'building-' + ID++;
-    }
-
-    getLevel():number {
-        return this.level;
-    }
-
-    setLevel(level:number) {
+    constructor(building: BuildingType, level: number) {
+        this.type = building;
         this.level = level;
     }
 
-    getBuildingType() {
-        return this.building;
-    }
-
     getHealth() {
-        return this.building.getHealth(this.level);
+        return this.type.getHealth(this.level);
     }
 
-    getID():number {
-        return this.building.getID();
+    get data() {
+        return this.type.data;
     }
 
-    getClassName():string {
-        return this.building.getClassName();
+    get className() {
+        return this.type.className;
     }
 
-    getName():string {
-        return this.building.getName();
+    get name() {
+        return this.type.name;
     }
 
     getUpgradeCost() {
-        return this.building.getUpgradeCost(this.level);
+        return this.type.getUpgradeCost(this.level);
     }
 
     getTotalUpgradeCost() {
-        return this.building.getTotalUpgradeCost(this.level);
+        return this.type.getTotalUpgradeCost(this.level);
     }
 
-    getPlunder() {
-        return this.building.getPlunder(this.level);
+    getPlunder(): GameDataRepair {
+        return this.type.getPlunder(this.level);
     }
 
-    canBuildOn(x:number, y:number, tile:Tile):boolean {
-        return this.building.canBuildOn(x, y, tile);
-    }
-
-    getGameData() {
-        return this.building.getGameData();
+    canBuildOn(x: number, y: number, tile: Tile): boolean {
+        return this.type.canBuildOn(x, y, tile);
     }
 
     toString() {
-        return `[Building: ${this.building.toString()}: ${this.level}]`;
+        return `[Building: ${this.type.toString()}: ${this.level}]`;
     }
 }

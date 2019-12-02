@@ -1,7 +1,6 @@
-import {Base} from '../base';
-import {Building} from '../building/building';
-import {Tile} from '../base/tile';
-import {GameResources} from "../game.resources";
+import { Base } from '../base';
+import { Building } from '../building/building';
+import { GameResources } from '../game.resources';
 
 export interface BaseOutput {
     cont: GameResources;
@@ -11,6 +10,6 @@ export interface BaseOutput {
 export interface OutputCalculator {
     name: string;
     buildings: number[];
-    calculate: (base:Base, x:number, y:number, building:Building) => BaseOutput;
+    calculate: (base: Base, x: number, y: number, building: Building) => BaseOutput;
     links: any;
 }

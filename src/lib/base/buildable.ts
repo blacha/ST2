@@ -1,20 +1,19 @@
-import {Tile} from './tile';
-import {GameDataJSON, GameDataRepair} from '../data/gamedata';
-import {GameDataResource} from "../data/gamedata";
+import { GameDataRepair, GameDataResource } from '../data/game.data';
+import { GameDataObject } from '../data/game.data.object';
+import { Tile } from './tile';
 
 export interface Buildable {
-    id:string;
+    /** Current level of the object */
+    level: number;
+    /** Game object */
+    type: GameDataObject;
 
-    getLevel(): number;
-    setLevel(level:number);
+    /** Cost for the next upgrade */
     getUpgradeCost(): GameDataResource;
+    /** Total cost of the building */
     getTotalUpgradeCost(): GameDataResource;
     getHealth(): number;
-    canBuildOn(x:number, y:number, tile:Tile) : boolean;
-    getID(): number;
-    getName():string;
-    getClassName():string;
-
-    getPlunder():GameDataRepair;
-    getGameData():GameDataJSON;
+    canBuildOn(x: number, y: number, tile: Tile): boolean;
+    /** How many resources will this give if destroyed in combat */
+    getPlunder(): GameDataRepair;
 }

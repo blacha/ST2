@@ -1,9 +1,7 @@
+import { CityLayout } from '../../api/city.layout';
+import { Base } from '../base';
+import { JsonBaseObject } from './base.object';
 
-import {ParseJSONBaseObject} from "./base.object";
-import {CityLayout} from "../../api/city.layout";
-import {Base} from "../base";
-
-export interface ParseJSONLayoutObject extends ParseJSONBaseObject, CityLayout {
-
-    $base?:Base;
+export interface JsonLayoutObject extends JsonBaseObject, CityLayout {
+    $base?: Base;
 }

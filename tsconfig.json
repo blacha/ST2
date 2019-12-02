@@ -1,12 +1,17 @@
 {
     "compilerOptions": {
-        "target": "ES5",
-        "outDir": "build/",
+        "target": "es2017",
         "module": "commonjs",
-        "sourceMap": false
+        "removeComments": true,
+        "outDir": "build/",
+        "sourceMap": true,
+        "strict": true,
+        "declaration": true,
+        "resolveJsonModule": true
     },
     "exclude": [
         "build/",
-        "node_modules"
+        "node_modules",
+        "game"
     ]
 }

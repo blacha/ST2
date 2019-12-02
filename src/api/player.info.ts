@@ -1,7 +1,6 @@
-import {Base} from "../lib/base";
-import {GameResources} from "../lib/game.resources";
-import {Resources} from "../lib/game.resources";
-
+import { Base } from '../lib/base';
+import { GameResources } from '../lib/game.resources';
+import { Resources } from '../lib/game.resources';
 
 export const PlayerDataVersion = 1;
 
@@ -22,7 +21,7 @@ export interface PlayerInfoData {
     player: number;
     faction: number;
     name: string;
-    score:number;
+    score: number;
     rank: number;
     sub: string;
     rp: number;
@@ -37,8 +36,6 @@ export interface MCVInfoData {
     time: number;
     level: number;
 }
-;
-
 export interface AllianceInfoData {
     world?: number;
     name: string;
@@ -64,7 +61,7 @@ export interface AllianceBonusData {
 }
 
 export interface ResearchInfoData {
-    [key:string]: number;
+    [key: string]: number;
 }
 export interface PlayerRepairInfo {
     veh: number;
@@ -80,21 +77,21 @@ export interface CommandInfoData {
 export interface CityInfoData {
     defense: number;
     offense: number;
-    level : number;
-    id : number;
+    level: number;
+    id: number;
     x: number;
     y: number;
     v: number;
     name: string;
     tiles: any;
-    production: Resources,
-    current: Resources,
+    production: Resources;
+    current: Resources;
     repair: {
         inf: number;
         veh: number;
         air: number;
         time: number;
-    },
+    };
     $base?: Base;
     $cost?: GameResources;
 }

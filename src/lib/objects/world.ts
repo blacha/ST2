@@ -1,6 +1,6 @@
-import {ParseJSONBaseObject} from "./base.object";
-export interface ParseJSONWorldObject extends ParseJSONBaseObject {
-    world:number;
-    name:string;
-    hasBot:boolean;
+import { JsonBaseObject } from './base.object';
+export interface ParseJSONWorldObject extends JsonBaseObject {
+    world: number;
+    name: string;
+    hasBot: boolean;
 }

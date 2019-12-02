@@ -1,57 +1,54 @@
-import {OutputCalculator, BaseOutput} from './calculator';
-import {BuildingType} from '../building/buildingtype';
-import {Base} from '../base';
-import {Building} from '../building/building';
-
-import {Tile} from '../base/tile';
+import { Base } from '../base';
+import { Tile } from '../base/tile';
+import { Building } from '../building/building';
+import { BuildingType } from '../building/building.type';
+import { GameResources } from '../game.resources';
 import * as Util from '../util';
-import {GameResources} from "../game.resources";
+import { BaseOutput, OutputCalculator } from './calculator';
 
-export var HarvesterCalculator:OutputCalculator = {
+const ONE_HOUR_SECONDS = 60 * 60;
+const LinkSilo = {
+    buildings: [BuildingType.GDI.Silo.id, BuildingType.NOD.Silo.id],
+    values: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710],
+};
+
+export const HarvesterCalculator: OutputCalculator = {
     name: 'Harvester',
     buildings: [
-        BuildingType.NOD.TiberiumHarvester.getID(),
-        BuildingType.NOD.CrystalHarvester.getID(),
-        BuildingType.GDI.TiberiumHarvester.getID(),
-        BuildingType.GDI.CrystalHarvester.getID(),
+        BuildingType.NOD.TiberiumHarvester.id,
+        BuildingType.NOD.CrystalHarvester.id,
+        BuildingType.GDI.TiberiumHarvester.id,
+        BuildingType.GDI.CrystalHarvester.id,
     ],
 
     links: {
-        Silo: {
-            buildings: [
-                BuildingType.GDI.Silo.getID(),
-                BuildingType.NOD.Silo.getID()
-            ],
-            values: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710]
-        }
+        Silo: LinkSilo,
     },
 
-    calculate: (base:Base, x:number, y:number, building:Building):BaseOutput => {
-        var gd = building.getGameData();
-        var outputCont = new GameResources();
-        var outputPackage = new GameResources();
+    calculate(base: Base, x: number, y: number, building: Building): BaseOutput {
+        const gd = building.type.data;
+        const outputCont = new GameResources();
+        const outputPackage = new GameResources();
 
-        var resourceType = GameResources.TIBERIUM;
-        var tile = base.getTile(x, y);
-        if (tile === Tile.Crystal) {
-            resourceType = GameResources.CRYSTAL;
+        // const tile = base.getTile(x, y);
+        const resourceType = base.getResource(x, y);
+        if (resourceType == null) {
+            throw new Error('Invalid resource type');
         }
 
-        // Package amount is per minute
-        var packTime = Util.getModifierValue(gd, 'TiberiumPackageTime', building.getLevel(), 1);
-        var packAmount = Util.getModifierValue(gd, 'TiberiumPackage', building.getLevel());
-        outputPackage.addResource(resourceType, (packAmount / packTime) * 3600);
+        // Package amount is per package time
+        const packTimeSeconds = Util.getModifierValue(gd, 'TiberiumPackageTime', building.level, 1);
+        const packAmount = Util.getModifierValue(gd, 'TiberiumPackage', building.level);
+        outputPackage.addResource(resourceType, (packAmount / packTimeSeconds) * ONE_HOUR_SECONDS);
 
-        var SlioLink = HarvesterCalculator.links.Silo;
-
-        var nearBy = base.getSurroundings(x, y, SlioLink.buildings);
+        const nearBy = base.getSurroundings(x, y, LinkSilo.buildings);
         if (nearBy.length > 0) {
-            outputCont.addResource(resourceType, Util.getGrowthValue(SlioLink.values, building.getLevel()));
+            outputCont.addResource(resourceType, Util.getGrowthValue(LinkSilo.values, building.level));
         }
 
         return {
             cont: outputCont,
-            pkg: outputPackage
+            pkg: outputPackage,
         };
-    }
+    },
 };

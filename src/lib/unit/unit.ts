@@ -1,70 +1,56 @@
-import {Faction} from '../data/faction';
-import {GameDataJSON} from '../data/gamedata';
-import {Tile} from '../base/tile';
-import {Buildable} from '../base/buildable';
-import {Constants} from '../constants';
-import {UnitType} from './unittype';
+import { Buildable } from '../base/buildable';
+import { Tile } from '../base/tile';
+import { GameDataJson } from '../data/game.data';
+import { UnitType } from './unit.type';
 
-var ID = 0;
+const ID = 0;
 
 export class Unit implements Buildable {
+    public type: UnitType;
+    public level: number;
 
-    public id:string;
-
-    constructor(private unit:UnitType, private level:number) {
-        this.id = 'unit-' + ID++;
-    }
-
-    setLevel(level:number) {
+    constructor(unit: UnitType, level: number) {
+        this.type = unit;
         this.level = level;
     }
 
-    getLevel() {
-        return this.level;
-    }
-
     getHealth() {
-        return this.unit.getHealth(this.level);
+        return this.type.getHealth(this.level);
     }
 
     getUpgradeCost() {
-        return this.unit.getUpgradeCost(this.level);
+        return this.type.getUpgradeCost(this.level);
     }
 
     getTotalUpgradeCost() {
-        return this.unit.getTotalUpgradeCost(this.level);
+        return this.type.getTotalUpgradeCost(this.level);
     }
 
     getPlunder() {
-        return this.unit.getPlunder(this.level);
+        return this.type.getPlunder(this.level);
     }
 
-    getID():number {
-        return this.unit.getID();
+    get className(): string {
+        return this.type.className;
     }
 
-    getClassName():string {
-        return this.unit.getClassName();
+    get name(): string {
+        return this.type.name;
     }
 
-    getName():string {
-        return this.unit.getName();
-    }
-
-    canBuildOn(x:number, y:number, tile:Tile):boolean {
+    canBuildOn(x: number, y: number, tile: Tile): boolean {
         if (tile !== Tile.Empty) {
             return false;
         }
 
-        return this.unit.canBuildOn(x, y, tile);
+        return this.type.canBuildOn(x, y, tile);
     }
 
-    getGameData():GameDataJSON {
-        return this.unit.getGameData();
+    get data(): GameDataJson {
+        return this.type.data;
     }
 
     toString() {
-        return `[Unit: ${this.unit.toString()}: ${this.level}]`;
+        return `[Unit: ${this.type.toString()}: ${this.level}]`;
     }
 }
-

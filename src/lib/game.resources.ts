@@ -5,26 +5,28 @@ export interface Resources {
     credits: number;
 }
 
-export class GameResources implements Resources {
-    static POWER = 'power';
-    static CRYSTAL = 'crystal';
-    static TIBERIUM = 'tiberium';
-    static CREDIT = 'credits';
+export type GameResource = 'power' | 'crystal' | 'tiberium' | 'credits';
 
-    public power = 0;
-    public tiberium = 0;
-    public crystal = 0;
-    public credits = 0;
+export class GameResources implements Resources {
+    static POWER: GameResource = 'power';
+    static CRYSTAL: GameResource = 'crystal';
+    static TIBERIUM: GameResource = 'tiberium';
+    static CREDIT: GameResource = 'credits';
+
+    power = 0;
+    tiberium = 0;
+    crystal = 0;
+    credits = 0;
 
     public total() {
         return this.power + this.tiberium + this.crystal + this.credits;
     }
 
-    public addResource(key:string, amount:number) {
+    public addResource(key: GameResource, amount: number) {
         this[key] += amount;
     }
 
-    public add(obj) {
+    public add(obj: GameResources) {
         this.power += obj.power || 0;
         this.tiberium += obj.tiberium || 0;
         this.crystal += obj.crystal || 0;
@@ -32,7 +34,7 @@ export class GameResources implements Resources {
     }
 
     public clone() {
-        var obj = new GameResources();
+        const obj = new GameResources();
         obj.tiberium = this.tiberium;
         obj.power = this.power;
         obj.crystal = this.crystal;
