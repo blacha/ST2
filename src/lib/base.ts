@@ -27,7 +27,7 @@ export class Base {
     tiles: Tile[];
     upgrades: number[];
 
-    constructor(name = 'Base', faction: Faction = Faction.GDI) {
+    constructor(name = 'Base', faction: Faction = Faction.Gdi) {
         this.name = name;
         this.faction = faction;
         this.tiles = [];

@@ -1,6 +1,6 @@
 export const LayoutDataVersion = 1;
 
-export interface LayoutScanAPI {
+export interface LayoutScanApi {
     version: number;
     player: string;
     world: number;
@@ -8,8 +8,7 @@ export interface LayoutScanAPI {
 }
 
 export interface CityLayout {
-    cityid: number;
-    coord?: number;
+    cityId: number;
     level: number;
     name: string;
     x: number;

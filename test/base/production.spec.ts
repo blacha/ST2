@@ -12,21 +12,6 @@ import { BaseOutput } from '../../src/lib/production/calculator';
 
 GameData.load();
 
-function printBase(base: Base) {
-    Base.buildingForEach((x, y) => {
-        if (y == 0) {
-            process.stdout.write('\n')
-        }
-        const building = base.getBase(x, y)
-        if (building) {
-            // const res = base.getTile(x, y);
-            process.stdout.write(`${building.level}`.padStart(3, ' ') + building.type.code);
-        } else {
-            const res = base.getTile(x, y);
-            process.stdout.write(res.code.padStart(4, ' '));
-        }
-    })
-}
 
 
 o.spec('BasePlunder', () => {

@@ -19,8 +19,8 @@ export class BaseBuilder {
 
     static fromCnCOpt(str: string) {
         const parts = str.split('|')
-        const baseFaction = Faction.make(parts[1]) || Faction.NOD;
-        const targetFaction = Faction.make(parts[2]) || Faction.NOD;
+        const baseFaction = Faction.make(parts[1]) || Faction.Nod;
+        const targetFaction = Faction.make(parts[2]) || Faction.Nod;
         const baseName = parts[3]
         const baseString = parts[4]
         console.log(baseName, baseFaction, baseString)
