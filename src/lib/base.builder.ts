@@ -1,5 +1,5 @@
 import { CityInfoData } from "../api/player.info";
-import { TaBase, TaTile } from "../client.base";
+// import { TaBase, TaTile } from "../client.base";
 import { Base } from "./base";
 import { Tile } from "./base/tile";
 import { Building } from "./building/building";
@@ -11,13 +11,14 @@ import { JsonPlayerObject } from "./objects/player";
 import { DefUnitType } from "./unit/def.unit.type";
 import { OffUnitType } from "./unit/off.unit.type";
 import { Unit } from "./unit/unit";
+import { CityLayout, CityLayoutTileObject } from "../api/city.layout";
 const codeZero = '0'.charCodeAt(0)
 const codeNine = '9'.charCodeAt(0)
 const codeDot = '.'.charCodeAt(0);
 
 export class BaseBuilder {
 
-    static fromCnCOpt(str: string) {
+    static fromCnCOpt(str: string): Base {
         const parts = str.split('|')
         const baseFaction = Faction.make(parts[1]) || Faction.Nod;
         const targetFaction = Faction.make(parts[2]) || Faction.Nod;
@@ -54,7 +55,7 @@ export class BaseBuilder {
             .filter(key => player.research[key] > 1)
             .map(val => parseInt(val), 10);
 
-        const cncBase: TaBase = {
+        const cncBase: CityLayout = {
             x: city.x,
             y: city.y,
             level: city.level,
@@ -99,7 +100,7 @@ export class BaseBuilder {
         }
     }
 
-    static load(cncBase: TaBase): Base {
+    static load(cncBase: CityLayout): Base {
         const output = new Base(cncBase.name, Faction.fromID(cncBase.faction));
         output.x = cncBase.x;
         output.y = cncBase.y;
@@ -124,7 +125,7 @@ export class BaseBuilder {
                     continue;
                 }
 
-                const actualUnit: TaTile = unit as TaTile;
+                const actualUnit: CityLayoutTileObject = unit as CityLayoutTileObject;
                 const unitType: GameDataObject = GameDataObject.getById(actualUnit.id);
                 if (unitType == null) {
                     console.error('Unknown unit', actualUnit.id, '@', x, y);

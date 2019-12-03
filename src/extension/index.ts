@@ -2,9 +2,11 @@ import { ClientLibUtil } from "./util/client.lib";
 import { ClientLibPatcher } from "./patch/patch";
 import { StModule } from "./module";
 import { LayoutScanner } from "./city/layout.scan";
+import { BaseBuilder } from "../lib/base.builder";
 
 
 class ShockrTools {
+    Base = BaseBuilder;
     Modules: Record<string, StModule> = {
         Layout: new LayoutScanner()
     }

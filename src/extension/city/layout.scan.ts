@@ -1,14 +1,15 @@
-import { StModule } from "../module";
-import { ClientLibIter } from "../util/iter";
-import { ClientLibPatcher } from "../patch/patch";
-import { CityData } from "./city.scan";
 import { CityLayout } from "../../api/city.layout";
 import { Faction } from "../../lib/data/faction";
+import { StModule } from "../module";
+import { ClientLibPatcher } from "../patch/patch";
+import { ClientLibIter } from "../util/iter";
+import { CityData } from "./city.scan";
 
 interface LayoutToScan {
     x: number;
     y: number;
     city: number;
+    distance: number;
 }
 
 export class LayoutScanner implements StModule {
@@ -31,24 +32,24 @@ export class LayoutScanner implements StModule {
             this.getNearByObjects(city)
         }
         this.lastCityId = null;
-        const scanList = Object.values(this.toScan);
+        const scanList = Object.values(this.toScan).sort((a, b) => a.distance - b.distance);
         this.toScan = {};
-        const output = [];
+        const output: CityLayout[] = [];
         for (const toScan of scanList) {
             const layout = await this.scanLayout(toScan.x, toScan.y, toScan.city);
             if (layout == null) {
                 continue;
             }
-            console.log('Scanned', layout)
             output.push(layout)
+            console.log('Scanned', layout, output.length, '/', scanList.length)
         }
     }
 
-    async scanLayout(x: number, y: number, cityId: number) {
+    async scanLayout(x: number, y: number, cityId: number): Promise<CityLayout | null> {
         if (this.abort) {
             return null;
         }
-        console.log(x, y, 'Scan')
+        console.log(x, y, 'Scan', cityId)
         if (cityId != null) {
             this.setCurrentCity(cityId);
         }
@@ -104,7 +105,10 @@ export class LayoutScanner implements StModule {
 
             return layout;
         }
+        console.error(x, y, 'Failed');
+        return null;
     }
+
     private cacheKey(x: number, y: number) {
         const worldId = ClientLib.Data.MainData.GetInstance().get_Server().get_WorldId()
         return `st-layout-${worldId}-${x}-${y}`
@@ -172,6 +176,7 @@ export class LayoutScanner implements StModule {
                 this.toScan[coord] = {
                     x: scanX,
                     y: scanY,
+                    distance,
                     city: city.get_Id()
                 }
             }

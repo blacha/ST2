@@ -6,6 +6,7 @@ import { Constants } from './constants';
 import { Faction } from './data/faction';
 import { GameDataObjectType } from './data/game.data.object';
 import { GameResource } from './game.resources';
+import { BaseIter } from './base.iter';
 
 export interface CncLocation {
     x: number;
@@ -94,6 +95,28 @@ export class Base {
 
     hasUpgrade(unitId: number) {
         return this.upgrades.indexOf(unitId) !== -1;
+    }
+
+    stats() {
+        const tiberium: Record<string, number> = {};
+        const crystal: Record<string, number> = {};
+        // TODO this is not super efficient, could be improved but generally runs in <1ms
+        Base.buildingForEach((x, y) => {
+            const tib = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Tiberium]).length
+            const cry = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Crystal]).length
+            // No one cares about 1 or two silos
+            if (tib < 3 && cry < 3) {
+                return;
+            }
+
+            if (cry == 0) {
+                tiberium[tib] = (tiberium[tib] || 0) + 1
+            }
+            if (tib == 0) {
+                crystal[cry] = (crystal[cry] || 0) + 1
+            }
+        })
+        return { tiberium, crystal }
     }
 
     static buildingForEach(callback: (x: number, y: number) => void) {
