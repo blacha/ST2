@@ -78,10 +78,9 @@ export class LayoutScanner implements StModule {
             if (this.abort) {
                 return null;
             }
-            if (i > 0) {
-                console.log(x, y, 'ScanCount', i);
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
+            console.log(x, y, 'ScanCount', i);
+            await new Promise(resolve => setTimeout(resolve, 500 * i));
+
             ClientLib.Data.MainData.GetInstance()
                 .get_Cities()
                 .set_CurrentCityId(obj.$get_Id());
