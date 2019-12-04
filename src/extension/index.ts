@@ -4,22 +4,17 @@ import { StModule } from './module';
 import { LayoutScanner } from './city/layout.scan';
 import { BaseBuilder } from '../lib/base.builder';
 
-
-
 class ShockrTools {
     Version = {
         /** package.json version */
         version: '__VERSION__',
         /** Git commit hash */
-        hash: '__HASH__'
-    }
+        hash: '__HASH__',
+    };
 
     Base = BaseBuilder;
-    Layout = new LayoutScanner()
-    Modules: StModule[] = [
-        this.Layout
-    ]
-
+    Layout = new LayoutScanner();
+    Modules: StModule[] = [this.Layout];
 
     async start() {
         let failCount = 0;

@@ -31,7 +31,7 @@ export interface SiloCount {
      * - Base with 2x4 & 1x5 = 120
      * - Base with 3x3 & 2x4 = 23
      */
-    score: number
+    score: number;
 }
 
 export class Base {
@@ -134,7 +134,7 @@ export class Base {
         return this.upgrades.indexOf(unitId) !== -1;
     }
 
-    _stats: { tiberium: SiloCount, crystal: SiloCount } | null = null
+    _stats: { tiberium: SiloCount; crystal: SiloCount } | null = null;
     get stats() {
         if (this._stats != null) {
             return this._stats;
@@ -161,12 +161,12 @@ export class Base {
         });
 
         for (let i = 0; i <= 6 - MIN_SILO; i++) {
-            tiberium.score += tiberium[i + MIN_SILO] * 10 ** i
-            crystal.score += crystal[i + MIN_SILO] * 10 ** i
+            tiberium.score += tiberium[i + MIN_SILO] * 10 ** i;
+            crystal.score += crystal[i + MIN_SILO] * 10 ** i;
         }
 
         this._stats = { tiberium, crystal };
-        return this._stats
+        return this._stats;
     }
 
     static buildingForEach(callback: (x: number, y: number) => void) {
@@ -188,6 +188,28 @@ export class Base {
         return GameDataObjectType.OffUnit;
     }
 
+    toCncOpt() {
+        const tiles = [];
+        for (let y = 0; y < Constants.MAX_BASE_Y; y++) {
+            for (let x = 0; x < Constants.MAX_BASE_X; x++) {
+                const building = this.getBase(x, y);
+                if (building != null) {
+                    tiles.push(building.level + building.type.code);
+                    continue;
+                }
+                const tile = this.getTile(x, y);
+                if (tile != null) {
+                    tiles.push(tile.code);
+                    continue;
+                }
+                console.log('WTF?');
+            }
+        }
+        return [3, this.faction.code, this.faction.code, this.name, tiles.join(''), 0, 0, 0, 0, 0, 'newEconomy'].join(
+            '|',
+        );
+    }
+
     toString() {
         function toStr(u: any) {
             return u.toString();
@@ -199,9 +221,9 @@ export class Base {
 
         return `[Base ${this.name}:${this.faction}
     buildings: [${this.base
-                .filter(removeEmpty)
-                .map(toStr)
-                .join('\n\t')})}]
+        .filter(removeEmpty)
+        .map(toStr)
+        .join('\n\t')})}]
         ]`;
     }
 }

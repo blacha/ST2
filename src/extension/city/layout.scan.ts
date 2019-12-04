@@ -16,8 +16,8 @@ interface LayoutToScan {
 export class LayoutScanner implements StModule {
     abort = false;
     lastCityId: number | null = null;
-    maxFailCount = 5;
-    lastScan: CityLayout[] = []
+    maxFailCount = 10;
+    lastScan: CityLayout[] = [];
 
     async start(): Promise<void> {
         // Nothing to do
@@ -51,7 +51,9 @@ export class LayoutScanner implements StModule {
     }
 
     bestBases() {
-        return this.lastScan.map(f => BaseBuilder.load(f)).sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score)
+        return this.lastScan
+            .map(f => BaseBuilder.load(f))
+            .sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score);
     }
 
     async scanLayout(x: number, y: number, cityId: number): Promise<CityLayout | null> {
@@ -79,7 +81,7 @@ export class LayoutScanner implements StModule {
                 return null;
             }
             console.log(x, y, 'ScanCount', i);
-            await new Promise(resolve => setTimeout(resolve, 500 * i));
+            await new Promise(resolve => setTimeout(resolve, 100 * i));
 
             ClientLib.Data.MainData.GetInstance()
                 .get_Cities()

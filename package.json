@@ -6,7 +6,7 @@
     "package": "rm -r dist/ && mkdir dist && node scripts/build-extension.js",
     "build": "tsc --pretty",
     "lint": "eslint 'src/**/*.ts' --quiet --fix",
-    "test": "ospec build/**/*.spec.js"
+    "test": "ospec build/**/*.test.js"
   },
   "dependencies": {
     "bblog": "^2.0.0",

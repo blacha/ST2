@@ -1,18 +1,15 @@
-
 import * as o from 'ospec';
 import 'source-map-support/register';
-import { GameData } from '../../src/data/loader';
-import { Base } from '../../src/lib/base';
-import { Tile } from '../../src/lib/base/tile';
-import { Building } from '../../src/lib/building/building';
-import { BuildingType } from '../../src/lib/building/building.type';
-import { GameResource, GameResources } from "../../src/lib/game.resources";
-import { BaseProduction } from '../../src/lib/production';
-import { BaseOutput } from '../../src/lib/production/calculator';
+import { GameData } from '../../data/loader';
+import { Base } from '../base';
+import { Tile } from '../base/tile';
+import { Building } from '../building/building';
+import { BuildingType } from '../building/building.type';
+import { GameResource, GameResources } from '../game.resources';
+import { BaseProduction } from '../production';
+import { BaseOutput } from '../production/calculator';
 
 GameData.load();
-
-
 
 o.spec('BasePlunder', () => {
     o('should plunder buildings', () => {
@@ -35,7 +32,7 @@ o.spec('BasePlunder', () => {
 });
 
 o.spec('BaseCost', () => {
-    var base: Base;
+    let base: Base;
 
     o.beforeEach(() => {
         base = new Base();
@@ -44,19 +41,17 @@ o.spec('BaseCost', () => {
     o('should get upgrade cost', () => {
         // silo : 15, 11,478
         // harv : 15, 11,478
-        var building = new Building(BuildingType.GDI.Refinery, 15);
-        var cost = building.getUpgradeCost();
+        const building = new Building(BuildingType.GDI.Refinery, 15);
+        const cost = building.getUpgradeCost();
         // console.log('cost', cost);
     });
 });
-
 
 function getTotal(output: BaseOutput, key: GameResource) {
     return output.pkg[key] + output.cont[key];
 }
 o.spec('BaseProduction', () => {
-
-    var base: Base;
+    let base: Base;
 
     o.beforeEach(() => {
         base = new Base();
@@ -69,13 +64,12 @@ o.spec('BaseProduction', () => {
         base.setTile(0, 7, Tile.Crystal);
     });
 
-
     o.spec('credit', () => {
         o('should produce from Refinery', () => {
             base.setBase(5, 1, new Building(BuildingType.GDI.Refinery, 12));
             base.setBase(5, 2, new Building(BuildingType.GDI.Refinery, 13));
             base.setBase(5, 3, new Building(BuildingType.GDI.Refinery, 14));
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
 
             o(output.pkg.credits).equals(4117.5);
             o(output.cont.credits).equals(0);
@@ -89,14 +83,13 @@ o.spec('BaseProduction', () => {
             base.setBase(1, 2, new Building(BuildingType.GDI.Refinery, 13));
             base.setBase(1, 3, new Building(BuildingType.GDI.Refinery, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
             o(output.pkg.credits).equals(4117.5);
             o(output.cont.credits).equals(4792.5);
             o(getTotal(output, GameResources.POWER)).equals(0);
             o(getTotal(output, GameResources.CRYSTAL)).equals(0);
             o(getTotal(output, GameResources.TIBERIUM)).equals(0);
         });
-
 
         o('should produce from power plants', () => {
             base.setBase(3, 1, new Building(BuildingType.GDI.Refinery, 12));
@@ -107,7 +100,7 @@ o.spec('BaseProduction', () => {
             base.setBase(2, 2, new Building(BuildingType.GDI.PowerPlant, 13));
             base.setBase(2, 3, new Building(BuildingType.GDI.PowerPlant, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
 
             o(output.cont.credits).equals(6294.375);
             o(output.pkg.credits).equals(4117.5);
@@ -121,13 +114,12 @@ o.spec('BaseProduction', () => {
     });
 
     o.spec('tiberium', () => {
-
         o('should produce from harvesters', () => {
             base.setBase(0, 1, new Building(BuildingType.GDI.TiberiumHarvester, 12));
             base.setBase(0, 2, new Building(BuildingType.GDI.TiberiumHarvester, 13));
             base.setBase(0, 3, new Building(BuildingType.GDI.TiberiumHarvester, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.POWER)).equals(0);
@@ -146,7 +138,7 @@ o.spec('BaseProduction', () => {
             base.setBase(1, 2, new Building(BuildingType.GDI.Silo, 13));
             base.setBase(1, 3, new Building(BuildingType.GDI.Silo, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.POWER)).equals(0);
@@ -157,13 +149,12 @@ o.spec('BaseProduction', () => {
     });
 
     o.spec('crystal', () => {
-
         o('should produce from harvesters', () => {
             base.setBase(0, 5, new Building(BuildingType.GDI.TiberiumHarvester, 12));
             base.setBase(0, 6, new Building(BuildingType.GDI.TiberiumHarvester, 13));
             base.setBase(0, 7, new Building(BuildingType.GDI.TiberiumHarvester, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.POWER)).equals(0);
@@ -182,7 +173,7 @@ o.spec('BaseProduction', () => {
             base.setBase(1, 6, new Building(BuildingType.GDI.Silo, 13));
             base.setBase(1, 7, new Building(BuildingType.GDI.Silo, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.POWER)).equals(0);
@@ -194,15 +185,14 @@ o.spec('BaseProduction', () => {
     });
 
     o.spec('power', () => {
-
         o('should produce from power plants', () => {
             base.setBase(3, 1, new Building(BuildingType.GDI.PowerPlant, 12));
             base.setBase(3, 2, new Building(BuildingType.GDI.PowerPlant, 13));
             base.setBase(3, 3, new Building(BuildingType.GDI.PowerPlant, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
             o(output.cont.power).equals(0);
-            o(output.pkg.power.toFixed(0)).equals("4448");
+            o(output.pkg.power.toFixed(0)).equals('4448');
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.CRYSTAL)).equals(0);
@@ -214,9 +204,9 @@ o.spec('BaseProduction', () => {
             base.setBase(1, 6, new Building(BuildingType.GDI.PowerPlant, 13));
             base.setBase(1, 7, new Building(BuildingType.GDI.PowerPlant, 14));
 
-            var output = BaseProduction.getOutput(base);
+            const output = BaseProduction.getOutput(base);
             o(output.cont.power).equals(5147.5);
-            o(output.pkg.power.toFixed(0)).equals("4448");
+            o(output.pkg.power.toFixed(0)).equals('4448');
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.CRYSTAL)).equals(0);
@@ -232,9 +222,9 @@ o.spec('BaseProduction', () => {
             base.setBase(4, 6, new Building(BuildingType.GDI.Accumulator, 13));
             base.setBase(4, 7, new Building(BuildingType.GDI.Accumulator, 14));
 
-            var output = BaseProduction.getOutput(base);
-            o(output.cont.power.toFixed(0)).equals("6796");
-            o(output.pkg.power.toFixed(0)).equals("4448");
+            const output = BaseProduction.getOutput(base);
+            o(output.cont.power.toFixed(0)).equals('6796');
+            o(output.pkg.power.toFixed(0)).equals('4448');
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.CRYSTAL)).equals(0);
@@ -250,14 +240,13 @@ o.spec('BaseProduction', () => {
             base.setBase(2, 6, new Building(BuildingType.GDI.Accumulator, 13));
             base.setBase(2, 7, new Building(BuildingType.GDI.Accumulator, 14));
 
-            var output = BaseProduction.getOutput(base);
-            o(output.cont.power.toFixed(0)).equals("11943");
-            o(output.pkg.power.toFixed(0)).equals("4448");
+            const output = BaseProduction.getOutput(base);
+            o(output.cont.power.toFixed(0)).equals('11943');
+            o(output.pkg.power.toFixed(0)).equals('4448');
 
             o(getTotal(output, GameResources.CREDIT)).equals(0);
             o(getTotal(output, GameResources.CRYSTAL)).equals(0);
             o(getTotal(output, GameResources.TIBERIUM)).equals(0);
         });
     });
-
 });

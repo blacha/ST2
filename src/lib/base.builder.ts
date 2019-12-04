@@ -88,8 +88,6 @@ export class BaseBuilder {
         return base.build(x, y, level, unitType);
     }
 
-
-
     /**
      * Load a base from a layout scan
      * @param cncBase base to load
