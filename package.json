@@ -8,8 +8,7 @@
     "test": "ospec build/**/*.spec.js"
   },
   "dependencies": {
-    "bblog": "^2.0.0",
-    "mithril": "^2.0.4"
+    "bblog": "^2.0.0"
   },
   "devDependencies": {
     "@types/mithril": "^2.0.2",
@@ -21,6 +20,7 @@
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
+    "git-rev-sync": "^1.12.0",
     "ospec": "^4.0.1",
     "prettier": "^1.19.1",
     "source-map-support": "^0.5.16",
