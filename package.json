@@ -9,7 +9,8 @@
     "test": "ospec build/**/*.spec.js"
   },
   "dependencies": {
-    "bblog": "^2.0.0"
+    "bblog": "^2.0.0",
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@types/mithril": "^2.0.2",

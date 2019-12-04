@@ -4,9 +4,12 @@ import { Building } from './building/building';
 import { BuildingType } from './building/building.type';
 import { Constants } from './constants';
 import { Faction } from './data/faction';
-import { GameDataObjectType } from './data/game.data.object';
+import { GameDataObjectType, GameDataObject } from './data/game.data.object';
 import { GameResource } from './game.resources';
 import { BaseIter } from './base.iter';
+import { OffUnitType } from './unit/off.unit.type';
+import { Unit } from './unit/unit';
+import { DefUnitType } from './unit/def.unit.type';
 
 export interface CncLocation {
     x: number;
@@ -52,6 +55,25 @@ export class Base {
 
     static $index(x: number, y: number) {
         return x + y * Constants.MAX_BASE_X;
+    }
+
+    /**
+     * Build a object at a position
+     * @param x x offset
+     * @param y y offset
+     * @param level Level of object
+     * @param unitType Object to build
+     */
+    build(x: number, y: number, level: number, unitType: GameDataObject): void {
+        if (unitType instanceof BuildingType) {
+            this.setBase(x, y, new Building(unitType, level));
+        } else if (unitType instanceof OffUnitType) {
+            this.setBase(x, y, new Unit(unitType, level));
+        } else if (unitType instanceof DefUnitType) {
+            this.setBase(x, y, new Unit(unitType, level));
+        } else {
+            console.error('Unknown unitType', unitType);
+        }
     }
 
     getSupport(): Building | null {

@@ -12,6 +12,7 @@ import { DefUnitType } from './unit/def.unit.type';
 import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
 import { CityLayout, CityLayoutTileObject } from '../api/city.layout';
+import { Uuid } from './uuid';
 const codeZero = '0'.charCodeAt(0);
 const codeNine = '9'.charCodeAt(0);
 const codeDot = '.'.charCodeAt(0);
@@ -84,21 +85,15 @@ export class BaseBuilder {
             }
             return;
         }
-        return BaseBuilder.build(base, x, y, level, unitType);
+        return base.build(x, y, level, unitType);
     }
 
-    static build(base: Base, x: number, y: number, level: number, unitType: GameDataObject): void {
-        if (unitType instanceof BuildingType) {
-            base.setBase(x, y, new Building(unitType, level));
-        } else if (unitType instanceof OffUnitType) {
-            base.setBase(x, y, new Unit(unitType, level));
-        } else if (unitType instanceof DefUnitType) {
-            base.setBase(x, y, new Unit(unitType, level));
-        } else {
-            console.error('Unknown unitType', unitType);
-        }
-    }
 
+
+    /**
+     * Load a base from a layout scan
+     * @param cncBase base to load
+     */
     static load(cncBase: CityLayout): Base {
         const output = new Base(cncBase.name, Faction.fromID(cncBase.faction));
         output.x = cncBase.x;
@@ -136,7 +131,7 @@ export class BaseBuilder {
                     output.setTile(x, y, tile);
                 }
 
-                BaseBuilder.build(output, x, y, actualUnit.l, unitType);
+                output.build(x, y, actualUnit.l, unitType);
             }
         }
 

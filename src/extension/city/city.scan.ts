@@ -1,6 +1,7 @@
 import { CityLayout } from '../../api/city.layout';
 import { Faction } from '../../lib/data/faction';
 import { ClientLibPatcher } from '../patch/patch';
+import { Uuid } from '../../lib/uuid';
 
 function GameToJSON(offset: number, unit: ClientLibCityUnit) {
     return {
@@ -137,7 +138,6 @@ export class CityData {
                         return;
                     }
                     const tech = rt.get_GameDataTech_Obj();
-
                     output.push(tech.c);
                 }
             });
