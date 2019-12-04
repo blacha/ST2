@@ -1,15 +1,24 @@
 export const LayoutDataVersion = 1;
 
-export interface LayoutScanAPI {
+export interface LayoutScanApi {
     version: number;
     player: string;
     world: number;
     layouts: CityLayout[];
 }
 
+export interface CityLayoutTileObject {
+    /** Tile Id */
+    t?: number;
+    /** Object level */
+    l: number;
+    /** Object Id */
+    id: number;
+}
+export type CityLayoutTile = number | CityLayoutTileObject;
+
 export interface CityLayout {
-    cityid: number;
-    coord?: number;
+    cityId?: number;
     level: number;
     name: string;
     x: number;
@@ -18,8 +27,8 @@ export interface CityLayout {
     owner: string;
     version: number;
     player: string;
-    alliance: number;
+    alliance?: number;
     world: number;
-    tiles: any;
+    tiles: CityLayoutTile[];
     upgrades: number[];
 }

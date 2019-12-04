@@ -27,56 +27,56 @@ export class DefUnitType extends UnitType {
 
     static GDI = {
         // Walls
-        Wall: new DefUnitType(106, Faction.GDI, 'w'),
-        AntitankBarrier: new DefUnitType(105, Faction.GDI, 't'),
-        Barbwire: new DefUnitType(104, Faction.GDI, 'b'),
+        Wall: new DefUnitType(106, Faction.Gdi, 'w'),
+        AntitankBarrier: new DefUnitType(105, Faction.Gdi, 't'),
+        Barbwire: new DefUnitType(104, Faction.Gdi, 'b'),
 
         // Arty
-        Watchtower: new DefUnitType(128, Faction.GDI, 'r'),
-        SAMSite: new DefUnitType(129, Faction.GDI, 'e'),
-        TitanArtillery: new DefUnitType(127, Faction.GDI, 'a'),
+        Watchtower: new DefUnitType(128, Faction.Gdi, 'r'),
+        SAMSite: new DefUnitType(129, Faction.Gdi, 'e'),
+        TitanArtillery: new DefUnitType(127, Faction.Gdi, 'a'),
 
         // Inf
-        MissileSquad: new DefUnitType(97, Faction.GDI, 'q'),
-        Sniper: new DefUnitType(96, Faction.GDI, 's'),
-        ZoneTrooper: new DefUnitType(95, Faction.GDI, 'z'),
+        MissileSquad: new DefUnitType(97, Faction.Gdi, 'q'),
+        Sniper: new DefUnitType(96, Faction.Gdi, 's'),
+        ZoneTrooper: new DefUnitType(95, Faction.Gdi, 'z'),
 
         // Turret
-        MGNest: new DefUnitType(102, Faction.GDI, 'm'),
-        Flak: new DefUnitType(103, Faction.GDI, 'f'),
-        Cannon: new DefUnitType(101, Faction.GDI, 'c'),
+        MGNest: new DefUnitType(102, Faction.Gdi, 'm'),
+        Flak: new DefUnitType(103, Faction.Gdi, 'f'),
+        Cannon: new DefUnitType(101, Faction.Gdi, 'c'),
 
         // Tank
-        APCGuardian: new DefUnitType(99, Faction.GDI, 'g'),
-        PitBull: new DefUnitType(100, Faction.GDI, 'p'),
-        Predator: new DefUnitType(98, Faction.GDI, 'd'),
+        APCGuardian: new DefUnitType(99, Faction.Gdi, 'g'),
+        PitBull: new DefUnitType(100, Faction.Gdi, 'p'),
+        Predator: new DefUnitType(98, Faction.Gdi, 'd'),
     };
 
     static NOD = {
         // Walls
-        LazerFence: new DefUnitType(169, Faction.NOD, 'b'),
-        AntitankBarrier: new DefUnitType(173, Faction.NOD, 't'),
-        Wall: new DefUnitType(174, Faction.NOD, 'w'),
+        LazerFence: new DefUnitType(169, Faction.Nod, 'b'),
+        AntitankBarrier: new DefUnitType(173, Faction.Nod, 't'),
+        Wall: new DefUnitType(174, Faction.Nod, 'w'),
 
         // Arty
-        SamSite: new DefUnitType(172, Faction.NOD, 'e'),
-        GatlingCannon: new DefUnitType(171, Faction.NOD, 'r'),
-        ObeliskArtillery: new DefUnitType(170, Faction.NOD, 'a'),
+        SamSite: new DefUnitType(172, Faction.Nod, 'e'),
+        GatlingCannon: new DefUnitType(171, Faction.Nod, 'r'),
+        ObeliskArtillery: new DefUnitType(170, Faction.Nod, 'a'),
 
         // Inf
-        BlackHand: new DefUnitType(160, Faction.NOD, 'z'),
-        Confessor: new DefUnitType(161, Faction.NOD, 's'),
-        MilitantRocketSoldiers: new DefUnitType(162, Faction.NOD, 'q'),
+        BlackHand: new DefUnitType(160, Faction.Nod, 'z'),
+        Confessor: new DefUnitType(161, Faction.Nod, 's'),
+        MilitantRocketSoldiers: new DefUnitType(162, Faction.Nod, 'q'),
 
         // Turret
-        BeamCannon: new DefUnitType(166, Faction.NOD, 'c'),
-        Flak: new DefUnitType(168, Faction.NOD, 'f'),
-        MGNest: new DefUnitType(167, Faction.NOD, 'm'),
+        BeamCannon: new DefUnitType(166, Faction.Nod, 'c'),
+        Flak: new DefUnitType(168, Faction.Nod, 'f'),
+        MGNest: new DefUnitType(167, Faction.Nod, 'm'),
 
         // Tank
-        AttackBike: new DefUnitType(165, Faction.NOD, 'p'),
-        Reckoner: new DefUnitType(164, Faction.NOD, 'g'),
-        ScorpionTank: new DefUnitType(163, Faction.NOD, 'd'),
+        AttackBike: new DefUnitType(165, Faction.Nod, 'p'),
+        Reckoner: new DefUnitType(164, Faction.Nod, 'g'),
+        ScorpionTank: new DefUnitType(163, Faction.Nod, 'd'),
     };
 
     static Forgotten = {

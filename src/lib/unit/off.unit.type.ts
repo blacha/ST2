@@ -22,46 +22,46 @@ export class OffUnitType extends UnitType {
 
     static GDI = {
         // Inf
-        Commando: new OffUnitType(85, Faction.GDI, 'c'),
-        MissileSquad: new OffUnitType(82, Faction.GDI, 'q'),
-        Riflemen: new OffUnitType(81, Faction.GDI, 'r'),
-        SniperTeam: new OffUnitType(83, Faction.GDI, 's'),
-        ZoneTrooper: new OffUnitType(84, Faction.GDI, 'z'),
+        Commando: new OffUnitType(85, Faction.Gdi, 'c'),
+        MissileSquad: new OffUnitType(82, Faction.Gdi, 'q'),
+        Riflemen: new OffUnitType(81, Faction.Gdi, 'r'),
+        SniperTeam: new OffUnitType(83, Faction.Gdi, 's'),
+        ZoneTrooper: new OffUnitType(84, Faction.Gdi, 'z'),
 
         // Tank
-        APCGuardian: new OffUnitType(88, Faction.GDI, 'g'),
-        Juggernaut: new OffUnitType(90, Faction.GDI, 'j'),
-        Mammoth: new OffUnitType(89, Faction.GDI, 'm'),
-        Pitbull: new OffUnitType(86, Faction.GDI, 'p'),
-        Predator: new OffUnitType(87, Faction.GDI, 'd'),
+        APCGuardian: new OffUnitType(88, Faction.Gdi, 'g'),
+        Juggernaut: new OffUnitType(90, Faction.Gdi, 'j'),
+        Mammoth: new OffUnitType(89, Faction.Gdi, 'm'),
+        Pitbull: new OffUnitType(86, Faction.Gdi, 'p'),
+        Predator: new OffUnitType(87, Faction.Gdi, 'd'),
 
         // Air
-        Firehawk: new OffUnitType(94, Faction.GDI, 'f'),
-        Kodiak: new OffUnitType(93, Faction.GDI, 'k'),
-        Orca: new OffUnitType(91, Faction.GDI, 'o'),
-        Paladin: new OffUnitType(92, Faction.GDI, 'a'),
+        Firehawk: new OffUnitType(94, Faction.Gdi, 'f'),
+        Kodiak: new OffUnitType(93, Faction.Gdi, 'k'),
+        Orca: new OffUnitType(91, Faction.Gdi, 'o'),
+        Paladin: new OffUnitType(92, Faction.Gdi, 'a'),
     };
 
     static NOD = {
         // Inf
-        Militants: new OffUnitType(133, Faction.NOD, 'm'),
-        MilitantRocketSoldiers: new OffUnitType(134, Faction.NOD, 'q'),
-        Confessor: new OffUnitType(135, Faction.NOD, 's'),
-        BlackHand: new OffUnitType(136, Faction.NOD, 'z'),
-        Commando: new OffUnitType(137, Faction.NOD, 'c'),
+        Militants: new OffUnitType(133, Faction.Nod, 'm'),
+        MilitantRocketSoldiers: new OffUnitType(134, Faction.Nod, 'q'),
+        Confessor: new OffUnitType(135, Faction.Nod, 's'),
+        BlackHand: new OffUnitType(136, Faction.Nod, 'z'),
+        Commando: new OffUnitType(137, Faction.Nod, 'c'),
 
         // Tank
-        AttackBike: new OffUnitType(138, Faction.NOD, 'b'),
-        ScorpionTank: new OffUnitType(139, Faction.NOD, 'o'),
-        Reckoner: new OffUnitType(140, Faction.NOD, 'k'),
-        Avatar: new OffUnitType(141, Faction.NOD, 'a'),
-        SpecterArtilery: new OffUnitType(142, Faction.NOD, 'p'),
+        AttackBike: new OffUnitType(138, Faction.Nod, 'b'),
+        ScorpionTank: new OffUnitType(139, Faction.Nod, 'o'),
+        Reckoner: new OffUnitType(140, Faction.Nod, 'k'),
+        Avatar: new OffUnitType(141, Faction.Nod, 'a'),
+        SpecterArtilery: new OffUnitType(142, Faction.Nod, 'p'),
 
         // Air
-        Venom: new OffUnitType(143, Faction.NOD, 'v'),
-        Cobra: new OffUnitType(144, Faction.NOD, 'r'),
-        Salamander: new OffUnitType(145, Faction.NOD, 'l'),
-        Vertigo: new OffUnitType(146, Faction.NOD, 't'),
+        Venom: new OffUnitType(143, Faction.Nod, 'v'),
+        Cobra: new OffUnitType(144, Faction.Nod, 'r'),
+        Salamander: new OffUnitType(145, Faction.Nod, 'l'),
+        Vertigo: new OffUnitType(146, Faction.Nod, 't'),
     };
 
     static Forgotten = {

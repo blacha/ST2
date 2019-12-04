@@ -28,7 +28,7 @@ export class GameDataObject {
     }
 
     static getByCode(objectType: GameDataObjectType, faction: Faction, code: string) {
-        return GameDataObject.Type[`${objectType}__${faction.code}__${code}`]
+        return GameDataObject.Type[`${objectType}__${faction.code}__${code}`];
     }
 
     constructor(type: GameDataObjectType, id: number, faction: Faction, code: string) {

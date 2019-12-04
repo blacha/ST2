@@ -1,11 +1,3 @@
-.idea/
-target/
-.tscache/
 node_modules/
 build/
-static/lib/bundle.js
-static/lib/style.css
-static/lib/style.css.map
-static/lib/bundle.min.js
-static/client/*.js
-/cloud
+extension.js

@@ -4,8 +4,12 @@ import { Building } from './building/building';
 import { BuildingType } from './building/building.type';
 import { Constants } from './constants';
 import { Faction } from './data/faction';
-import { GameDataObjectType } from './data/game.data.object';
+import { GameDataObjectType, GameDataObject } from './data/game.data.object';
 import { GameResource } from './game.resources';
+import { BaseIter } from './base.iter';
+import { OffUnitType } from './unit/off.unit.type';
+import { Unit } from './unit/unit';
+import { DefUnitType } from './unit/def.unit.type';
 
 export interface CncLocation {
     x: number;
@@ -14,6 +18,20 @@ export interface CncLocation {
 export interface CncBaseObject extends CncLocation {
     building?: Buildable;
     tile?: Tile;
+}
+export interface SiloCount {
+    [siloCount: number]: number;
+    '3': number;
+    '4': number;
+    '5': number;
+    '6': number;
+    /**
+     * Silo count shifted by 10
+     * @example
+     * - Base with 2x4 & 1x5 = 120
+     * - Base with 3x3 & 2x4 = 23
+     */
+    score: number
 }
 
 export class Base {
@@ -27,7 +45,7 @@ export class Base {
     tiles: Tile[];
     upgrades: number[];
 
-    constructor(name = 'Base', faction: Faction = Faction.GDI) {
+    constructor(name = 'Base', faction: Faction = Faction.Gdi) {
         this.name = name;
         this.faction = faction;
         this.tiles = [];
@@ -37,6 +55,25 @@ export class Base {
 
     static $index(x: number, y: number) {
         return x + y * Constants.MAX_BASE_X;
+    }
+
+    /**
+     * Build a object at a position
+     * @param x x offset
+     * @param y y offset
+     * @param level Level of object
+     * @param unitType Object to build
+     */
+    build(x: number, y: number, level: number, unitType: GameDataObject): void {
+        if (unitType instanceof BuildingType) {
+            this.setBase(x, y, new Building(unitType, level));
+        } else if (unitType instanceof OffUnitType) {
+            this.setBase(x, y, new Unit(unitType, level));
+        } else if (unitType instanceof DefUnitType) {
+            this.setBase(x, y, new Unit(unitType, level));
+        } else {
+            console.error('Unknown unitType', unitType);
+        }
     }
 
     getSupport(): Building | null {
@@ -77,6 +114,7 @@ export class Base {
     }
 
     setTile(x: number, y: number, tile: Tile) {
+        this._stats = null;
         this.tiles[Base.$index(x, y)] = tile;
     }
 
@@ -96,6 +134,41 @@ export class Base {
         return this.upgrades.indexOf(unitId) !== -1;
     }
 
+    _stats: { tiberium: SiloCount, crystal: SiloCount } | null = null
+    get stats() {
+        if (this._stats != null) {
+            return this._stats;
+        }
+        const tiberium: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
+        const crystal: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
+
+        const MIN_SILO = 3;
+        // TODO this is not super efficient, could be improved but generally runs in <1ms
+        Base.buildingForEach((x, y) => {
+            const tib = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Tiberium]).length;
+            const cry = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Crystal]).length;
+            // No one cares about one or two silos
+            if (tib < MIN_SILO && cry < MIN_SILO) {
+                return;
+            }
+
+            if (cry == 0) {
+                tiberium[tib] = (tiberium[tib] || 0) + 1;
+            }
+            if (tib == 0) {
+                crystal[cry] = (crystal[cry] || 0) + 1;
+            }
+        });
+
+        for (let i = 0; i <= 6 - MIN_SILO; i++) {
+            tiberium.score += tiberium[i + MIN_SILO] * 10 ** i
+            crystal.score += crystal[i + MIN_SILO] * 10 ** i
+        }
+
+        this._stats = { tiberium, crystal };
+        return this._stats
+    }
+
     static buildingForEach(callback: (x: number, y: number) => void) {
         for (let y = 0; y < Constants.MAX_BASE_Y; y++) {
             for (let x = 0; x < Constants.MAX_BASE_X; x++) {
@@ -107,7 +180,7 @@ export class Base {
     /** Get the type of object based on how far down it is */
     static getObjectType(yOffset: number): GameDataObjectType {
         if (yOffset < Constants.MAX_BASE_Y) {
-            return GameDataObjectType.Building
+            return GameDataObjectType.Building;
         }
         if (yOffset < Constants.MAX_DEF_Y) {
             return GameDataObjectType.DefUnit;

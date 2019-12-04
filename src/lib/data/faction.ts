@@ -1,6 +1,6 @@
 export class Faction {
-    static GDI: Faction = new Faction('G', 'GDI');
-    static NOD: Faction = new Faction('N', 'NOD');
+    static Gdi: Faction = new Faction('G', 'GDI');
+    static Nod: Faction = new Faction('N', 'NOD');
     static Forgotten: Faction = new Faction('F', 'Forgotten');
     code: string;
     name: string;
@@ -16,11 +16,11 @@ export class Faction {
         }
 
         if (id == 1) {
-            return Faction.GDI;
+            return Faction.Gdi;
         }
 
         if (id == 2) {
-            return Faction.NOD;
+            return Faction.Nod;
         }
 
         return Faction.Forgotten;
@@ -29,11 +29,11 @@ export class Faction {
     static make(char: string): Faction | null {
         const firstChar = char.charAt(0).toUpperCase();
         if (firstChar == 'N') {
-            return Faction.NOD;
+            return Faction.Nod;
         }
 
         if (firstChar == 'G') {
-            return Faction.GDI;
+            return Faction.Gdi;
         }
 
         if (firstChar == 'F') {

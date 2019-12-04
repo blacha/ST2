@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
+    "package": "rm -r dist/ && mkdir dist && node scripts/build-extension.js",
     "build": "tsc --pretty",
     "lint": "eslint 'src/**/*.ts' --quiet --fix",
     "test": "ospec build/**/*.spec.js"
   },
   "dependencies": {
     "bblog": "^2.0.0",
-    "mithril": "^2.0.4"
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@types/mithril": "^2.0.2",
@@ -17,9 +18,11 @@
     "@types/ospec": "^4.0.2",
     "@typescript-eslint/eslint-plugin": "^2.9.0",
     "@typescript-eslint/parser": "^2.9.0",
+    "@zeit/ncc": "^0.20.5",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
+    "git-rev-sync": "^1.12.0",
     "ospec": "^4.0.1",
     "prettier": "^1.19.1",
     "source-map-support": "^0.5.16",

@@ -1,36 +1,37 @@
-import { CityInfoData } from "../api/player.info";
-import { TaBase, TaTile } from "../client.base";
-import { Base } from "./base";
-import { Tile } from "./base/tile";
-import { Building } from "./building/building";
-import { BuildingType } from "./building/building.type";
-import { Constants } from "./constants";
-import { Faction } from "./data/faction";
-import { GameDataObject, GameDataObjectType } from "./data/game.data.object";
-import { JsonPlayerObject } from "./objects/player";
-import { DefUnitType } from "./unit/def.unit.type";
-import { OffUnitType } from "./unit/off.unit.type";
-import { Unit } from "./unit/unit";
-const codeZero = '0'.charCodeAt(0)
-const codeNine = '9'.charCodeAt(0)
+import { CityInfoData } from '../api/player.info';
+// import { TaBase, TaTile } from "../client.base";
+import { Base } from './base';
+import { Tile } from './base/tile';
+import { Building } from './building/building';
+import { BuildingType } from './building/building.type';
+import { Constants } from './constants';
+import { Faction } from './data/faction';
+import { GameDataObject, GameDataObjectType } from './data/game.data.object';
+import { JsonPlayerObject } from './objects/player';
+import { DefUnitType } from './unit/def.unit.type';
+import { OffUnitType } from './unit/off.unit.type';
+import { Unit } from './unit/unit';
+import { CityLayout, CityLayoutTileObject } from '../api/city.layout';
+import { Uuid } from './uuid';
+const codeZero = '0'.charCodeAt(0);
+const codeNine = '9'.charCodeAt(0);
 const codeDot = '.'.charCodeAt(0);
 
 export class BaseBuilder {
-
-    static fromCnCOpt(str: string) {
-        const parts = str.split('|')
-        const baseFaction = Faction.make(parts[1]) || Faction.NOD;
-        const targetFaction = Faction.make(parts[2]) || Faction.NOD;
-        const baseName = parts[3]
-        const baseString = parts[4]
-        console.log(baseName, baseFaction, baseString)
+    static fromCnCOpt(str: string): Base {
+        const parts = str.split('|');
+        const baseFaction = Faction.make(parts[1]) || Faction.Nod;
+        const targetFaction = Faction.make(parts[2]) || Faction.Nod;
+        const baseName = parts[3];
+        const baseString = parts[4];
+        console.log(baseName, baseFaction, baseString);
 
         const base = new Base(baseName, baseFaction);
 
-        let currentLevel = 0
+        let currentLevel = 0;
         let offset = 0;
         for (let i = 0; i < baseString.length; i++) {
-            const charCode = baseString.charCodeAt(i)
+            const charCode = baseString.charCodeAt(i);
             if (charCode >= codeZero && charCode <= codeNine) {
                 currentLevel = currentLevel * 10 + (charCode - codeZero);
                 continue;
@@ -46,7 +47,7 @@ export class BaseBuilder {
             BaseBuilder.buildByCode(base, x, y, currentLevel || 1, base.faction, baseString[i]);
             currentLevel = 0;
         }
-        return base
+        return base;
     }
 
     static fromCity(player: JsonPlayerObject, city: CityInfoData): Base {
@@ -54,7 +55,7 @@ export class BaseBuilder {
             .filter(key => player.research[key] > 1)
             .map(val => parseInt(val), 10);
 
-        const cncBase: TaBase = {
+        const cncBase: CityLayout = {
             x: city.x,
             y: city.y,
             level: city.level,
@@ -80,26 +81,20 @@ export class BaseBuilder {
             if (tile == null) {
                 console.error('Unknown UnitCode', Base.getObjectType(y), code);
             } else {
-                base.setTile(x, y, tile)
+                base.setTile(x, y, tile);
             }
             return;
         }
-        return BaseBuilder.build(base, x, y, level, unitType)
+        return base.build(x, y, level, unitType);
     }
 
-    static build(base: Base, x: number, y: number, level: number, unitType: GameDataObject): void {
-        if (unitType instanceof BuildingType) {
-            base.setBase(x, y, new Building(unitType, level));
-        } else if (unitType instanceof OffUnitType) {
-            base.setBase(x, y, new Unit(unitType, level));
-        } else if (unitType instanceof DefUnitType) {
-            base.setBase(x, y, new Unit(unitType, level));
-        } else {
-            console.error('Unknown unitType', unitType);
-        }
-    }
 
-    static load(cncBase: TaBase): Base {
+
+    /**
+     * Load a base from a layout scan
+     * @param cncBase base to load
+     */
+    static load(cncBase: CityLayout): Base {
         const output = new Base(cncBase.name, Faction.fromID(cncBase.faction));
         output.x = cncBase.x;
         output.y = cncBase.y;
@@ -124,7 +119,7 @@ export class BaseBuilder {
                     continue;
                 }
 
-                const actualUnit: TaTile = unit as TaTile;
+                const actualUnit: CityLayoutTileObject = unit as CityLayoutTileObject;
                 const unitType: GameDataObject = GameDataObject.getById(actualUnit.id);
                 if (unitType == null) {
                     console.error('Unknown unit', actualUnit.id, '@', x, y);
@@ -136,7 +131,7 @@ export class BaseBuilder {
                     output.setTile(x, y, tile);
                 }
 
-                BaseBuilder.build(output, x, y, actualUnit.l, unitType)
+                output.build(x, y, actualUnit.l, unitType);
             }
         }
 

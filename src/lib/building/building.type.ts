@@ -5,41 +5,41 @@ import { GameDataObject, GameDataObjectType } from '../data/game.data.object';
 
 export class BuildingType extends GameDataObject {
     static GDI = {
-        Silo: new BuildingType(120, Faction.GDI, 's'), //, 'GDI_Silo', 'Silo', 's'),
-        CrystalHarvester: new BuildingType(175, Faction.GDI, 'n', [Tile.Crystal]), //, 'GDI_Harvester_Crystal', 'Crystal Harvester', 'n'),
-        TiberiumHarvester: new BuildingType(115, Faction.GDI, 'h', [Tile.Tiberium]), //, 'GDI_Harvester', 'Tiberium Harvester', 'h'),
-        Accumulator: new BuildingType(107, Faction.GDI, 'a'), //, 'GDI_Accumulator', 'Accumulator', 'a'),
-        PowerPlant: new BuildingType(117, Faction.GDI, 'p'), //, 'GDI_Power_Plant', 'PowerPlant', 'p'),
-        Refinery: new BuildingType(119, Faction.GDI, 'r'), //, 'GDI_Refinery', 'Refinery', 'r'),
-        ConstructionYard: new BuildingType(112, Faction.GDI, 'y'), //, 'GDI_Construction_Yard', 'Construction Yard', 'y'),
-        Airport: new BuildingType(108, Faction.GDI, 'd'), //, 'GDI_Airport', 'Airport', 'd'),
-        Barracks: new BuildingType(110, Faction.GDI, 'b'), //, 'GDI_Barracks', 'Barracks', 'b'),
-        Factory: new BuildingType(114, Faction.GDI, 'f'), //, 'GDI_Factory', 'Factory', 'f'),
-        DefenseHQ: new BuildingType(130, Faction.GDI, 'q'), //, 'GDI_Defense_HQ', 'Defense HQ', 'q'),
-        DefenseFacility: new BuildingType(131, Faction.GDI, 'w'), //, 'GDI_Defense_Facility', 'Defense Facility', 'w'),
-        CommandCenter: new BuildingType(111, Faction.GDI, 'e'), //, 'GDI_Command_Center', 'Command Center', 'e'),
-        SkyStrikeSupport: new BuildingType(202, Faction.GDI, 'z'), //, 'GDI_Support_Art', 'Skystrike Support', 'z'),
-        FalconSupport: new BuildingType(200, Faction.GDI, 'x'), //, 'GDI_Support_Air', 'Falcon Support', 'x'),
-        IonCannonSupport: new BuildingType(201, Faction.GDI, 'i'), //, 'GDI_Support_Ion', 'Ion Cannon', 'i')
+        Silo: new BuildingType(120, Faction.Gdi, 's'), //, 'GDI_Silo', 'Silo', 's'),
+        CrystalHarvester: new BuildingType(175, Faction.Gdi, 'n', [Tile.Crystal]), //, 'GDI_Harvester_Crystal', 'Crystal Harvester', 'n'),
+        TiberiumHarvester: new BuildingType(115, Faction.Gdi, 'h', [Tile.Tiberium]), //, 'GDI_Harvester', 'Tiberium Harvester', 'h'),
+        Accumulator: new BuildingType(107, Faction.Gdi, 'a'), //, 'GDI_Accumulator', 'Accumulator', 'a'),
+        PowerPlant: new BuildingType(117, Faction.Gdi, 'p'), //, 'GDI_Power_Plant', 'PowerPlant', 'p'),
+        Refinery: new BuildingType(119, Faction.Gdi, 'r'), //, 'GDI_Refinery', 'Refinery', 'r'),
+        ConstructionYard: new BuildingType(112, Faction.Gdi, 'y'), //, 'GDI_Construction_Yard', 'Construction Yard', 'y'),
+        Airport: new BuildingType(108, Faction.Gdi, 'd'), //, 'GDI_Airport', 'Airport', 'd'),
+        Barracks: new BuildingType(110, Faction.Gdi, 'b'), //, 'GDI_Barracks', 'Barracks', 'b'),
+        Factory: new BuildingType(114, Faction.Gdi, 'f'), //, 'GDI_Factory', 'Factory', 'f'),
+        DefenseHQ: new BuildingType(130, Faction.Gdi, 'q'), //, 'GDI_Defense_HQ', 'Defense HQ', 'q'),
+        DefenseFacility: new BuildingType(131, Faction.Gdi, 'w'), //, 'GDI_Defense_Facility', 'Defense Facility', 'w'),
+        CommandCenter: new BuildingType(111, Faction.Gdi, 'e'), //, 'GDI_Command_Center', 'Command Center', 'e'),
+        SkyStrikeSupport: new BuildingType(202, Faction.Gdi, 'z'), //, 'GDI_Support_Art', 'Skystrike Support', 'z'),
+        FalconSupport: new BuildingType(200, Faction.Gdi, 'x'), //, 'GDI_Support_Air', 'Falcon Support', 'x'),
+        IonCannonSupport: new BuildingType(201, Faction.Gdi, 'i'), //, 'GDI_Support_Ion', 'Ion Cannon', 'i')
     };
 
     static NOD = {
-        Silo: new BuildingType(154, Faction.NOD, 's'), //, 'NOD_Silo', 'Silo', 's'),
-        CrystalHarvester: new BuildingType(176, Faction.NOD, 'n', [Tile.Crystal]), //, 'NOD_Harvester_Crystal', 'Crystal Harvester', 'n'),
-        TiberiumHarvester: new BuildingType(155, Faction.NOD, 'h', [Tile.Tiberium]), //, 'NOD_Harvester', 'Tiberium Harvester', 'h'),
-        Accumulator: new BuildingType(147, Faction.NOD, 'a'), //, 'NOD_Accumulator', 'Accumulator', 'a'),
-        PowerPlant: new BuildingType(152, Faction.NOD, 'p'), //, 'NOD_Power_Plant', 'Power Plant', 'p'),
-        Refinery: new BuildingType(153, Faction.NOD, 'r'), //, 'NOD_Refinery', 'Refinery', 'r'),
-        ConstructionYard: new BuildingType(151, Faction.NOD, 'y'), //, 'NOD_Construction_Yard', 'Construction Yard', 'y'),
-        Airport: new BuildingType(148, Faction.NOD, 'd'), //, 'NOD_Airport', 'Airport', 'd'),
-        Barracks: new BuildingType(149, Faction.NOD, 'b'), //, 'NOD_Barracks', 'Barracks', 'b'),
-        Factory: new BuildingType(156, Faction.NOD, 'f'), //, 'NOD_Factory', 'Factory', 'f'),
-        DefenseHQ: new BuildingType(157, Faction.NOD, 'q'), //, 'NOD_Defense_HQ', 'DefenseHQ', 'q'),
-        DefenseFacility: new BuildingType(158, Faction.NOD, 'w'), //, 'NOD_Defense_Facility', 'Defense Facility', 'w'),
-        CommandCenter: new BuildingType(159, Faction.NOD, 'e'), //, 'NOD_Command_Post', 'Command Center', 'e'),
-        BladeOfKane: new BuildingType(205, Faction.NOD, 'z'), //, 'NOD_Support_Art', 'Support Art', 'z'),
-        EyeOfKane: new BuildingType(203, Faction.NOD, 'x'), //, 'NOD_Support_Air', 'Support Air', 'x'),
-        FistOfKane: new BuildingType(204, Faction.NOD, 'i'), //, 'NOD_Support_Ion', 'Support Ion', 'i')
+        Silo: new BuildingType(154, Faction.Nod, 's'), //, 'NOD_Silo', 'Silo', 's'),
+        CrystalHarvester: new BuildingType(176, Faction.Nod, 'n', [Tile.Crystal]), //, 'NOD_Harvester_Crystal', 'Crystal Harvester', 'n'),
+        TiberiumHarvester: new BuildingType(155, Faction.Nod, 'h', [Tile.Tiberium]), //, 'NOD_Harvester', 'Tiberium Harvester', 'h'),
+        Accumulator: new BuildingType(147, Faction.Nod, 'a'), //, 'NOD_Accumulator', 'Accumulator', 'a'),
+        PowerPlant: new BuildingType(152, Faction.Nod, 'p'), //, 'NOD_Power_Plant', 'Power Plant', 'p'),
+        Refinery: new BuildingType(153, Faction.Nod, 'r'), //, 'NOD_Refinery', 'Refinery', 'r'),
+        ConstructionYard: new BuildingType(151, Faction.Nod, 'y'), //, 'NOD_Construction_Yard', 'Construction Yard', 'y'),
+        Airport: new BuildingType(148, Faction.Nod, 'd'), //, 'NOD_Airport', 'Airport', 'd'),
+        Barracks: new BuildingType(149, Faction.Nod, 'b'), //, 'NOD_Barracks', 'Barracks', 'b'),
+        Factory: new BuildingType(156, Faction.Nod, 'f'), //, 'NOD_Factory', 'Factory', 'f'),
+        DefenseHQ: new BuildingType(157, Faction.Nod, 'q'), //, 'NOD_Defense_HQ', 'DefenseHQ', 'q'),
+        DefenseFacility: new BuildingType(158, Faction.Nod, 'w'), //, 'NOD_Defense_Facility', 'Defense Facility', 'w'),
+        CommandCenter: new BuildingType(159, Faction.Nod, 'e'), //, 'NOD_Command_Post', 'Command Center', 'e'),
+        BladeOfKane: new BuildingType(205, Faction.Nod, 'z'), //, 'NOD_Support_Art', 'Support Art', 'z'),
+        EyeOfKane: new BuildingType(203, Faction.Nod, 'x'), //, 'NOD_Support_Air', 'Support Air', 'x'),
+        FistOfKane: new BuildingType(204, Faction.Nod, 'i'), //, 'NOD_Support_Ion', 'Support Ion', 'i')
     };
 
     static Forgotten = {

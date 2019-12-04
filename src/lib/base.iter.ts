@@ -1,7 +1,6 @@
-import { Base, CncBaseObject, CncLocation } from "./base";
-import { Tile } from "./base/tile";
-import { Constants } from "./constants";
-
+import { Base, CncBaseObject, CncLocation } from './base';
+import { Tile } from './base/tile';
+import { Constants } from './constants';
 
 export class BaseIter {
     static getSurroundings(base: Base, x: number, y: number, buildings?: number[], tiles?: Tile[]): CncBaseObject[] {

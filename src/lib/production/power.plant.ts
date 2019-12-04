@@ -39,7 +39,8 @@ export const PowerPlantCalculator: OutputCalculator = {
         const packAmount = Util.getModifierValue(gd, 'PowerPackage', building.level);
         outputPackage.addResource(GameResources.POWER, (packAmount / packTime) * 3600);
 
-        const nearBy = BaseIter.getSurroundings(base,
+        const nearBy = BaseIter.getSurroundings(
+            base,
             x,
             y,
             LinkAccumulator.buildings.concat(LinkRefinery.buildings),
