@@ -39,7 +39,6 @@ export class BaseIter {
                 }
 
                 if (buildings != null) {
-                    //console.log(building.getID(), building.getName(), buildings);
                     if (buildings.indexOf(building.type.id) > -1) {
                         output.push({
                             x: offX,
@@ -52,7 +51,6 @@ export class BaseIter {
                 }
 
                 if (tiles != null) {
-                    //console.log(tile.getCode(), tiles);
                     if (tiles.indexOf(tile) > -1) {
                         output.push({
                             x: offX,

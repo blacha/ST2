@@ -31,7 +31,6 @@ export class BaseProduction {
         }
 
         const production = calculator.calculate(base, x, y, building as Building);
-        // console.log('Production', building.type.className, production)
 
         output.cont.add(production.cont);
         output.pkg.add(production.pkg);

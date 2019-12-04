@@ -43,7 +43,6 @@ o.spec('BaseCost', () => {
         // harv : 15, 11,478
         const building = new Building(BuildingType.GDI.Refinery, 15);
         const cost = building.getUpgradeCost();
-        // console.log('cost', cost);
     });
 });
 

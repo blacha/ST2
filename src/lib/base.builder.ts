@@ -18,7 +18,6 @@ export class BaseBuilder {
         const targetFaction = Faction.make(parts[2]) || Faction.Nod;
         const baseName = parts[3];
         const baseString = parts[4];
-        console.log(baseName, baseFaction, baseString);
 
         const base = new Base(baseName, baseFaction);
         base.offFaction = targetFaction;
