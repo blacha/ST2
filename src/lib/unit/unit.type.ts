@@ -13,7 +13,7 @@ export class UnitType extends GameDataObject {
     }
 
     canBuildOn(x: number, y: number, tile: Tile): boolean {
-        if (x > Constants.MAX_BASE_X) {
+        if (x > Constants.MaxX) {
             return false;
         }
 

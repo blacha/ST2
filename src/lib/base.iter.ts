@@ -9,10 +9,10 @@ export class BaseIter {
             for (let dy = -1; dy < 2; dy++) {
                 const offX = x + dx;
                 const offY = y + dy;
-                if (offX < 0 || offX > Constants.MAX_BASE_X) {
+                if (offX < 0 || offX > Constants.MaxX) {
                     continue;
                 }
-                if (offY < 0 || offY > Constants.MAX_BASE_Y) {
+                if (offY < 0 || offY > Constants.MaxBaseY) {
                     continue;
                 }
                 if (offY === y && offX === x) {
@@ -74,10 +74,10 @@ export class BaseIter {
             for (let dy = -1; dy < 2; dy++) {
                 const offX = x + dx;
                 const offY = y + dy;
-                if (offX < 0 || offX > Constants.MAX_BASE_X) {
+                if (offX < 0 || offX > Constants.MaxX) {
                     continue;
                 }
-                if (offY < 0 || offY > Constants.MAX_BASE_Y) {
+                if (offY < 0 || offY > Constants.MaxBaseY) {
                     continue;
                 }
                 if (offY === y && offX === x) {

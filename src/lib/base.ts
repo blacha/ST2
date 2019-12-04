@@ -37,6 +37,7 @@ export interface SiloCount {
 export class Base {
     name: string;
     faction: Faction;
+    offFaction: Faction;
     base: Buildable[];
 
     x = -1;
@@ -48,13 +49,14 @@ export class Base {
     constructor(name = 'Base', faction: Faction = Faction.Gdi) {
         this.name = name;
         this.faction = faction;
+        this.offFaction = faction;
         this.tiles = [];
         this.upgrades = [];
         this.base = [];
     }
 
     static $index(x: number, y: number) {
-        return x + y * Constants.MAX_BASE_X;
+        return x + y * Constants.MaxX;
     }
 
     /**
@@ -170,8 +172,8 @@ export class Base {
     }
 
     static buildingForEach(callback: (x: number, y: number) => void) {
-        for (let y = 0; y < Constants.MAX_BASE_Y; y++) {
-            for (let x = 0; x < Constants.MAX_BASE_X; x++) {
+        for (let y = 0; y < Constants.MaxBaseY; y++) {
+            for (let x = 0; x < Constants.MaxX; x++) {
                 callback(x, y);
             }
         }
@@ -179,10 +181,10 @@ export class Base {
 
     /** Get the type of object based on how far down it is */
     static getObjectType(yOffset: number): GameDataObjectType {
-        if (yOffset < Constants.MAX_BASE_Y) {
+        if (yOffset < Constants.MaxBaseY) {
             return GameDataObjectType.Building;
         }
-        if (yOffset < Constants.MAX_DEF_Y) {
+        if (yOffset < Constants.MaxDefY) {
             return GameDataObjectType.DefUnit;
         }
         return GameDataObjectType.OffUnit;
@@ -190,11 +192,15 @@ export class Base {
 
     toCncOpt() {
         const tiles = [];
-        for (let y = 0; y < Constants.MAX_BASE_Y; y++) {
-            for (let x = 0; x < Constants.MAX_BASE_X; x++) {
-                const building = this.getBase(x, y);
-                if (building != null) {
-                    tiles.push(building.level + building.type.code);
+        for (let y = 0; y < Constants.MaxY; y++) {
+            for (let x = 0; x < Constants.MaxX; x++) {
+                const obj = this.getBase(x, y);
+                if (obj != null) {
+                    if (obj.level == 1) {
+                        tiles.push(obj.type.code);
+                    } else {
+                        tiles.push(obj.level + obj.type.code);
+                    }
                     continue;
                 }
                 const tile = this.getTile(x, y);
@@ -202,12 +208,24 @@ export class Base {
                     tiles.push(tile.code);
                     continue;
                 }
-                console.log('WTF?');
+                throw new Error('Everything should have a tile');
             }
         }
-        return [3, this.faction.code, this.faction.code, this.name, tiles.join(''), 0, 0, 0, 0, 0, 'newEconomy'].join(
-            '|',
-        );
+        return [
+            3,
+            this.faction.code,
+            this.offFaction.code,
+            this.name,
+            tiles.join(''),
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            'newEconomy',
+        ].join('|');
     }
 
     toString() {

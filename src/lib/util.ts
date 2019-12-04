@@ -24,18 +24,18 @@ function getLevelValues(type: string, id: number, values: any, level: number, gr
         return cache;
     }
 
-    const maxLevel = values[Constants.GROWTH_LEVEL];
+    const maxLevel = values[Constants.GrowthLevel];
     const keys = Object.keys(maxLevel);
     const output: any = {};
     for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        if (level <= Constants.GROWTH_LEVEL) {
+        if (level <= Constants.GrowthLevel) {
             output[key] = values[level][key];
             continue;
         }
 
-        const val = values[Constants.GROWTH_LEVEL][key];
-        output[key] = (val * Math.pow(growth, level - Constants.GROWTH_LEVEL)) as any;
+        const val = values[Constants.GrowthLevel][key];
+        output[key] = (val * Math.pow(growth, level - Constants.GrowthLevel)) as any;
     }
 
     objCache[level] = output;
@@ -46,37 +46,35 @@ export function pad(width: number, string: string): string {
     return width <= string.length ? string : pad(width, string + ' ');
 }
 
-export function getGrowthValue(values: number[], level: number, growth = Constants.RESOURCE_PRODUCTION_GROWTH): number {
-    if (level <= Constants.GROWTH_LEVEL) {
+export function getGrowthValue(values: number[], level: number, growth = Constants.ResourceProductionGrowth): number {
+    if (level <= Constants.GrowthLevel) {
         return values[level];
     }
     if (growth === 1) {
-        return values[Constants.GROWTH_LEVEL];
+        return values[Constants.GrowthLevel];
     }
 
-    return (
-        values[Constants.GROWTH_LEVEL] * Math.pow(Constants.RESOURCE_PRODUCTION_GROWTH, level - Constants.GROWTH_LEVEL)
-    );
+    return values[Constants.GrowthLevel] * Math.pow(Constants.ResourceProductionGrowth, level - Constants.GrowthLevel);
 }
 
 export function getModifierValue(
     gdo: GameDataJson,
     modifier: string,
     level: number,
-    growth = Constants.RESOURCE_PRODUCTION_GROWTH,
+    growth = Constants.ResourceProductionGrowth,
 ): number {
     const values = gdo.modifiers!;
-    if (level <= Constants.GROWTH_LEVEL) {
+    if (level <= Constants.GrowthLevel) {
         return values[level][modifier];
     }
-    const growthVal = values[Constants.GROWTH_LEVEL]!;
+    const growthVal = values[Constants.GrowthLevel]!;
 
     const val = growthVal[modifier];
     if (growth == 1) {
         return val;
     }
 
-    return val * Math.pow(growth, level - Constants.GROWTH_LEVEL);
+    return val * Math.pow(growth, level - Constants.GrowthLevel);
 }
 
 const Formats = ['', 'K', 'M', 'G', 'T'];
@@ -105,7 +103,7 @@ export function getTotalUpgradeCost(gdo: GameDataJson, level: number): GameDataR
 
     // TODO optimize?
     for (let i = 1; i <= level; i++) {
-        const currentCost = getLevelValues('cost', gdo.id, gdo.resources, i, Constants.RESOURCE_COST_GROWTH) as any;
+        const currentCost = getLevelValues('cost', gdo.id, gdo.resources, i, Constants.ResourceCostGrowth) as any;
         totalCost.add(currentCost);
         objCache[i] = totalCost.clone();
     }
@@ -115,9 +113,9 @@ export function getTotalUpgradeCost(gdo: GameDataJson, level: number): GameDataR
 }
 
 export function getUpgradeCost(gdo: GameDataJson, level: number): GameDataResource {
-    return getLevelValues('cost', gdo.id, gdo.resources, level, Constants.RESOURCE_COST_GROWTH);
+    return getLevelValues('cost', gdo.id, gdo.resources, level, Constants.ResourceCostGrowth);
 }
 
 export function getRepairValue(gdo: GameDataJson, level: number): GameDataRepair {
-    return getLevelValues('repair', gdo.id, gdo.repair, level, Constants.RESOURCE_PLUNDER_GROWTH);
+    return getLevelValues('repair', gdo.id, gdo.repair, level, Constants.ResourcePlunderGrowth);
 }

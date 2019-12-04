@@ -80,11 +80,11 @@ export class BuildingType extends GameDataObject {
     }
 
     canBuildOn(x: number, y: number, tile: Tile): boolean {
-        if (x > Constants.MAX_BASE_X) {
+        if (x > Constants.MaxX) {
             return false;
         }
 
-        if (y > Constants.MAX_BASE_Y) {
+        if (y > Constants.MaxBaseY) {
             return false;
         }
 

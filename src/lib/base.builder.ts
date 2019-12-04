@@ -1,18 +1,12 @@
+import { CityLayout, CityLayoutTileObject } from '../api/city.layout';
 import { CityInfoData } from '../api/player.info';
-// import { TaBase, TaTile } from "../client.base";
 import { Base } from './base';
 import { Tile } from './base/tile';
-import { Building } from './building/building';
-import { BuildingType } from './building/building.type';
 import { Constants } from './constants';
 import { Faction } from './data/faction';
-import { GameDataObject, GameDataObjectType } from './data/game.data.object';
+import { GameDataObject } from './data/game.data.object';
 import { JsonPlayerObject } from './objects/player';
-import { DefUnitType } from './unit/def.unit.type';
-import { OffUnitType } from './unit/off.unit.type';
-import { Unit } from './unit/unit';
-import { CityLayout, CityLayoutTileObject } from '../api/city.layout';
-import { Uuid } from './uuid';
+
 const codeZero = '0'.charCodeAt(0);
 const codeNine = '9'.charCodeAt(0);
 const codeDot = '.'.charCodeAt(0);
@@ -27,6 +21,7 @@ export class BaseBuilder {
         console.log(baseName, baseFaction, baseString);
 
         const base = new Base(baseName, baseFaction);
+        base.offFaction = targetFaction;
 
         let currentLevel = 0;
         let offset = 0;
@@ -36,15 +31,16 @@ export class BaseBuilder {
                 currentLevel = currentLevel * 10 + (charCode - codeZero);
                 continue;
             }
-            const x = offset % Constants.MAX_BASE_X;
-            const y = Math.floor(offset / Constants.MAX_BASE_X);
+            const x = offset % Constants.MaxX;
+            const y = Math.floor(offset / Constants.MaxX);
             offset++;
 
             if (charCode == codeDot) {
                 continue;
             }
 
-            BaseBuilder.buildByCode(base, x, y, currentLevel || 1, base.faction, baseString[i]);
+            const faction = y > Constants.MaxDefY ? targetFaction : baseFaction;
+            BaseBuilder.buildByCode(base, x, y, currentLevel || 1, faction, baseString[i]);
             currentLevel = 0;
         }
         return base;
@@ -97,8 +93,8 @@ export class BaseBuilder {
         output.x = cncBase.x;
         output.y = cncBase.y;
 
-        for (let y = 0; y < Constants.MAX_Y; y++) {
-            for (let x = 0; x < Constants.MAX_BASE_X; x++) {
+        for (let y = 0; y < Constants.MaxY; y++) {
+            for (let x = 0; x < Constants.MaxX; x++) {
                 const index = Base.$index(x, y);
                 const unit = cncBase.tiles[index];
                 let tile: Tile;

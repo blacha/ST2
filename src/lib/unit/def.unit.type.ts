@@ -10,11 +10,11 @@ export class DefUnitType extends UnitType {
     }
 
     canBuildOn(x: number, y: number, tile: Tile): boolean {
-        if (y <= Constants.MAX_BASE_Y) {
+        if (y <= Constants.MaxBaseY) {
             return false;
         }
 
-        if (y >= Constants.MAX_DEF_Y) {
+        if (y >= Constants.MaxDefY) {
             return false;
         }
 

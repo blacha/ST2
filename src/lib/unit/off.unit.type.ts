@@ -10,7 +10,7 @@ export class OffUnitType extends UnitType {
     }
 
     canBuildOn(x: number, y: number, tile: Tile): boolean {
-        if (y >= Constants.MAX_OFF_Y) {
+        if (y >= Constants.MaxOffY) {
             return false;
         }
         return super.canBuildOn(x, y, tile);
