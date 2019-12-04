@@ -1,4 +1,4 @@
 export enum LibTileType {
     Crystal = 1,
-    Tiberium = 2
+    Tiberium = 2,
 }

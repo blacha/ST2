@@ -1,9 +1,9 @@
-import { CityLayout } from "../../api/city.layout";
-import { Faction } from "../../lib/data/faction";
-import { StModule } from "../module";
-import { ClientLibPatcher } from "../patch/patch";
-import { ClientLibIter } from "../util/iter";
-import { CityData } from "./city.scan";
+import { CityLayout } from '../../api/city.layout';
+import { Faction } from '../../lib/data/faction';
+import { StModule } from '../module';
+import { ClientLibPatcher } from '../patch/patch';
+import { ClientLibIter } from '../util/iter';
+import { CityData } from './city.scan';
 
 interface LayoutToScan {
     x: number;
@@ -17,7 +17,9 @@ export class LayoutScanner implements StModule {
     lastCityId: number | null = null;
     maxFailCount = 5;
 
-    async start(): Promise<void> { }
+    async start(): Promise<void> {
+        // Nothing to do
+    }
 
     async stop(): Promise<void> {
         this.abort = true;
@@ -29,7 +31,7 @@ export class LayoutScanner implements StModule {
         this.toScan = {};
         const cities = this.getAllCities();
         for (const city of cities) {
-            this.getNearByObjects(city)
+            this.getNearByObjects(city);
         }
         this.lastCityId = null;
         const scanList = Object.values(this.toScan).sort((a, b) => a.distance - b.distance);
@@ -40,8 +42,8 @@ export class LayoutScanner implements StModule {
             if (layout == null) {
                 continue;
             }
-            output.push(layout)
-            console.log('Scanned', layout, output.length, '/', scanList.length)
+            output.push(layout);
+            console.log('Scanned', layout, output.length, '/', scanList.length);
         }
     }
 
@@ -49,7 +51,7 @@ export class LayoutScanner implements StModule {
         if (this.abort) {
             return null;
         }
-        console.log(x, y, 'Scan', cityId)
+        console.log(x, y, 'Scan', cityId);
         if (cityId != null) {
             this.setCurrentCity(cityId);
         }
@@ -61,7 +63,7 @@ export class LayoutScanner implements StModule {
         }
 
         if (!ClientLibPatcher.hasPatchedId(obj)) {
-            console.error('WorldObject missing $get_Id')
+            console.error('WorldObject missing $get_Id');
             return null;
         }
 
@@ -70,11 +72,15 @@ export class LayoutScanner implements StModule {
                 return null;
             }
             if (i > 0) {
-                console.log(x, y, 'ScanCount', i)
+                console.log(x, y, 'ScanCount', i);
                 await new Promise(resolve => setTimeout(resolve, 500));
             }
-            ClientLib.Data.MainData.GetInstance().get_Cities().set_CurrentCityId(obj.$get_Id())
-            const city = ClientLib.Data.MainData.GetInstance().get_Cities().GetCity(obj.$get_Id());
+            ClientLib.Data.MainData.GetInstance()
+                .get_Cities()
+                .set_CurrentCityId(obj.$get_Id());
+            const city = ClientLib.Data.MainData.GetInstance()
+                .get_Cities()
+                .GetCity(obj.$get_Id());
             if (city == null) {
                 continue;
             }
@@ -88,7 +94,7 @@ export class LayoutScanner implements StModule {
                 return null;
             }
 
-            const faction = Faction.fromID(city.get_CityFaction())
+            const faction = Faction.fromID(city.get_CityFaction());
             if (faction == Faction.Gdi || faction == Faction.Nod) {
                 return null;
             }
@@ -98,7 +104,7 @@ export class LayoutScanner implements StModule {
                 continue;
             }
 
-            const layout = CityData.getCityData(city)
+            const layout = CityData.getCityData(city);
             if (layout != null) {
                 this.setCache(x, y, layout);
             }
@@ -110,8 +116,10 @@ export class LayoutScanner implements StModule {
     }
 
     private cacheKey(x: number, y: number) {
-        const worldId = ClientLib.Data.MainData.GetInstance().get_Server().get_WorldId()
-        return `st-layout-${worldId}-${x}-${y}`
+        const worldId = ClientLib.Data.MainData.GetInstance()
+            .get_Server()
+            .get_WorldId();
+        return `st-layout-${worldId}-${x}-${y}`;
     }
 
     getCache(x: number, y: number): CityLayout | null {
@@ -119,7 +127,7 @@ export class LayoutScanner implements StModule {
         if (cached == null) {
             return null;
         }
-        return JSON.parse(cached) as CityLayout
+        return JSON.parse(cached) as CityLayout;
     }
     setCache(x: number, y: number, layout: CityLayout): void {
         localStorage.setItem(this.cacheKey(x, y), JSON.stringify(layout));
@@ -130,7 +138,9 @@ export class LayoutScanner implements StModule {
             return;
         }
 
-        const allCities = ClientLib.Data.MainData.GetInstance().get_Cities().get_AllCities();
+        const allCities = ClientLib.Data.MainData.GetInstance()
+            .get_Cities()
+            .get_AllCities();
         const selectedBase = allCities.d[cityId];
 
         ClientLib.Vis.VisMain.GetInstance().CenterGridPosition(selectedBase.get_PosX(), selectedBase.get_PosY());
@@ -143,14 +153,17 @@ export class LayoutScanner implements StModule {
         const x = city.get_PosX();
         const y = city.get_PosY();
 
-        const maxAttack = ClientLib.Data.MainData.GetInstance().get_Server().get_MaxAttackDistance() - 0.5;
+        const maxAttack =
+            ClientLib.Data.MainData.GetInstance()
+                .get_Server()
+                .get_MaxAttackDistance() - 0.5;
         const world = ClientLib.Data.MainData.GetInstance().get_World();
 
         for (let scanY = y - 11; scanY <= y + 11; scanY++) {
             for (let scanX = x - 11; scanX <= x + 11; scanX++) {
                 const distX = Math.abs(x - scanX);
                 const distY = Math.abs(y - scanY);
-                const distance = Math.sqrt((distX * distX) + (distY * distY));
+                const distance = Math.sqrt(distX * distX + distY * distY);
                 if (distance >= maxAttack) {
                     continue;
                 }
@@ -160,16 +173,22 @@ export class LayoutScanner implements StModule {
                     continue;
                 }
 
-                var object = world.GetObjectFromPosition(scanX, scanY);
+                const object = world.GetObjectFromPosition(scanX, scanY);
                 if (object == null) {
                     continue;
                 }
 
-                if (object.Type !== ClientLib.Data.WorldSector.ObjectType.NPCBase && object.Type !== ClientLib.Data.WorldSector.ObjectType.NPCCamp) {
+                if (
+                    object.Type !== ClientLib.Data.WorldSector.ObjectType.NPCBase &&
+                    object.Type !== ClientLib.Data.WorldSector.ObjectType.NPCCamp
+                ) {
                     continue;
                 }
 
-                if (ClientLibPatcher.hasPatchedCampType(object) && object.$get_CampType() === ClientLib.Data.Reports.ENPCCampType.Destroyed) {
+                if (
+                    ClientLibPatcher.hasPatchedCampType(object) &&
+                    object.$get_CampType() === ClientLib.Data.Reports.ENPCCampType.Destroyed
+                ) {
                     continue;
                 }
 
@@ -177,15 +196,16 @@ export class LayoutScanner implements StModule {
                     x: scanX,
                     y: scanY,
                     distance,
-                    city: city.get_Id()
-                }
+                    city: city.get_Id(),
+                };
             }
         }
     }
 
     protected getAllCities(): ClientLibCity[] {
-        const allCities = ClientLib.Data.MainData.GetInstance().get_Cities().get_AllCities()
-        return ClientLibIter.values(allCities)
+        const allCities = ClientLib.Data.MainData.GetInstance()
+            .get_Cities()
+            .get_AllCities();
+        return ClientLibIter.values(allCities);
     }
-
 }

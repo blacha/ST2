@@ -1,37 +1,36 @@
-import { CityInfoData } from "../api/player.info";
+import { CityInfoData } from '../api/player.info';
 // import { TaBase, TaTile } from "../client.base";
-import { Base } from "./base";
-import { Tile } from "./base/tile";
-import { Building } from "./building/building";
-import { BuildingType } from "./building/building.type";
-import { Constants } from "./constants";
-import { Faction } from "./data/faction";
-import { GameDataObject, GameDataObjectType } from "./data/game.data.object";
-import { JsonPlayerObject } from "./objects/player";
-import { DefUnitType } from "./unit/def.unit.type";
-import { OffUnitType } from "./unit/off.unit.type";
-import { Unit } from "./unit/unit";
-import { CityLayout, CityLayoutTileObject } from "../api/city.layout";
-const codeZero = '0'.charCodeAt(0)
-const codeNine = '9'.charCodeAt(0)
+import { Base } from './base';
+import { Tile } from './base/tile';
+import { Building } from './building/building';
+import { BuildingType } from './building/building.type';
+import { Constants } from './constants';
+import { Faction } from './data/faction';
+import { GameDataObject, GameDataObjectType } from './data/game.data.object';
+import { JsonPlayerObject } from './objects/player';
+import { DefUnitType } from './unit/def.unit.type';
+import { OffUnitType } from './unit/off.unit.type';
+import { Unit } from './unit/unit';
+import { CityLayout, CityLayoutTileObject } from '../api/city.layout';
+const codeZero = '0'.charCodeAt(0);
+const codeNine = '9'.charCodeAt(0);
 const codeDot = '.'.charCodeAt(0);
 
 export class BaseBuilder {
-
     static fromCnCOpt(str: string): Base {
-        const parts = str.split('|')
+        const parts = str.split('|');
         const baseFaction = Faction.make(parts[1]) || Faction.Nod;
         const targetFaction = Faction.make(parts[2]) || Faction.Nod;
-        const baseName = parts[3]
-        const baseString = parts[4]
-        console.log(baseName, baseFaction, baseString)
+        const baseName = parts[3];
+        const baseString = parts[4];
+        console.log(baseName, baseFaction, baseString);
 
         const base = new Base(baseName, baseFaction);
 
-        let currentLevel = 0
+        let currentLevel = 0;
         let offset = 0;
         for (let i = 0; i < baseString.length; i++) {
-            const charCode = baseString.charCodeAt(i)
+            const charCode = baseString.charCodeAt(i);
             if (charCode >= codeZero && charCode <= codeNine) {
                 currentLevel = currentLevel * 10 + (charCode - codeZero);
                 continue;
@@ -47,7 +46,7 @@ export class BaseBuilder {
             BaseBuilder.buildByCode(base, x, y, currentLevel || 1, base.faction, baseString[i]);
             currentLevel = 0;
         }
-        return base
+        return base;
     }
 
     static fromCity(player: JsonPlayerObject, city: CityInfoData): Base {
@@ -81,11 +80,11 @@ export class BaseBuilder {
             if (tile == null) {
                 console.error('Unknown UnitCode', Base.getObjectType(y), code);
             } else {
-                base.setTile(x, y, tile)
+                base.setTile(x, y, tile);
             }
             return;
         }
-        return BaseBuilder.build(base, x, y, level, unitType)
+        return BaseBuilder.build(base, x, y, level, unitType);
     }
 
     static build(base: Base, x: number, y: number, level: number, unitType: GameDataObject): void {
@@ -137,7 +136,7 @@ export class BaseBuilder {
                     output.setTile(x, y, tile);
                 }
 
-                BaseBuilder.build(output, x, y, actualUnit.l, unitType)
+                BaseBuilder.build(output, x, y, actualUnit.l, unitType);
             }
         }
 

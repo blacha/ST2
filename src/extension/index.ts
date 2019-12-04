@@ -1,15 +1,14 @@
-import { ClientLibUtil } from "./util/client.lib";
-import { ClientLibPatcher } from "./patch/patch";
-import { StModule } from "./module";
-import { LayoutScanner } from "./city/layout.scan";
-import { BaseBuilder } from "../lib/base.builder";
-
+import { ClientLibUtil } from './util/client.lib';
+import { ClientLibPatcher } from './patch/patch';
+import { StModule } from './module';
+import { LayoutScanner } from './city/layout.scan';
+import { BaseBuilder } from '../lib/base.builder';
 
 class ShockrTools {
     Base = BaseBuilder;
     Modules: Record<string, StModule> = {
-        Layout: new LayoutScanner()
-    }
+        Layout: new LayoutScanner(),
+    };
 
     get mods() {
         return Object.values(this.Modules);
@@ -21,7 +20,7 @@ class ShockrTools {
             failCount++;
             await new Promise(resolve => setTimeout(resolve, 100));
             if (failCount > 100) {
-                throw new Error('ShockrTools failed to start after 100 attempts.')
+                throw new Error('ShockrTools failed to start after 100 attempts.');
             }
         }
 
@@ -40,7 +39,7 @@ class ShockrTools {
     }
 }
 
-if (typeof window != "undefined") {
+if (typeof window != 'undefined') {
     const windowAny = window as any;
     if (windowAny.ST) {
         windowAny.ST.stop();
@@ -49,5 +48,3 @@ if (typeof window != "undefined") {
     windowAny.ST = st;
     st.start().catch(e => console.error(e));
 }
-
-

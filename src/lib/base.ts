@@ -102,21 +102,21 @@ export class Base {
         const crystal: Record<string, number> = {};
         // TODO this is not super efficient, could be improved but generally runs in <1ms
         Base.buildingForEach((x, y) => {
-            const tib = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Tiberium]).length
-            const cry = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Crystal]).length
+            const tib = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Tiberium]).length;
+            const cry = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Crystal]).length;
             // No one cares about 1 or two silos
             if (tib < 3 && cry < 3) {
                 return;
             }
 
             if (cry == 0) {
-                tiberium[tib] = (tiberium[tib] || 0) + 1
+                tiberium[tib] = (tiberium[tib] || 0) + 1;
             }
             if (tib == 0) {
-                crystal[cry] = (crystal[cry] || 0) + 1
+                crystal[cry] = (crystal[cry] || 0) + 1;
             }
-        })
-        return { tiberium, crystal }
+        });
+        return { tiberium, crystal };
     }
 
     static buildingForEach(callback: (x: number, y: number) => void) {
@@ -130,7 +130,7 @@ export class Base {
     /** Get the type of object based on how far down it is */
     static getObjectType(yOffset: number): GameDataObjectType {
         if (yOffset < Constants.MAX_BASE_Y) {
-            return GameDataObjectType.Building
+            return GameDataObjectType.Building;
         }
         if (yOffset < Constants.MAX_DEF_Y) {
             return GameDataObjectType.DefUnit;
@@ -149,9 +149,9 @@ export class Base {
 
         return `[Base ${this.name}:${this.faction}
     buildings: [${this.base
-                .filter(removeEmpty)
-                .map(toStr)
-                .join('\n\t')})}]
+        .filter(removeEmpty)
+        .map(toStr)
+        .join('\n\t')})}]
         ]`;
     }
 }

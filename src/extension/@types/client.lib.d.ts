@@ -1,13 +1,8 @@
-
+/* eslint-disable @typescript-eslint/camelcase */
 declare enum ClientLibTileType {
     Crystal = 1,
-    Tiberium = 2
+    Tiberium = 2,
 }
-
-// declare enum ClientLibFaction {
-//     Gdi = 1,
-//     Nod = 2
-// }
 
 declare enum ClientLibWorldObjectType {
     None = 0,
@@ -19,7 +14,7 @@ declare enum ClientLibWorldObjectType {
     Ruin = 7,
     Marker = 8,
     Outpost = 9,
-    FreeSlot = 255
+    FreeSlot = 255,
 }
 declare enum ClientLibFactionType {
     NotInitialized = 0,
@@ -30,7 +25,7 @@ declare enum ClientLibFactionType {
     NPCCamp = 5,
     NPCOutpost = 6,
     NPCFortress = 7,
-    NPCEvent = 8
+    NPCEvent = 8,
 }
 
 declare enum ClientLibNpcCampType {
@@ -40,7 +35,7 @@ declare enum ClientLibNpcCampType {
     Cluster = 3,
     Base = 4,
     Fortress = 6,
-    Event = 10
+    Event = 10,
 }
 
 interface GameDataTech {
@@ -63,14 +58,13 @@ interface GameDataUnit {
     /** Display Image url */
     dimg: string;
 
-    m: GameDataUnitM[]
+    m: GameDataUnitM[];
 }
 
 interface ClientLibPlayerResearchResult {
     get_CurrentLevel(): 0 | 1 | 2;
-    get_GameDataUnit_Obj(): GameDataUnit
-    get_GameDataTech_Obj(): GameDataTech
-
+    get_GameDataUnit_Obj(): GameDataUnit;
+    get_GameDataTech_Obj(): GameDataTech;
 }
 
 interface ClientLibPlayerResearch {
@@ -84,11 +78,11 @@ interface ClientLibCityBuildable {
     get_CurrentLevel(): number;
 }
 
-interface ClientLibCityBuilding extends ClientLibCityBuildable { }
-interface ClientLibCityUnit extends ClientLibCityBuildable { }
+type ClientLibCityBuilding = ClientLibCityBuildable;
+type ClientLibCityUnit = ClientLibCityBuildable;
 
 interface ClientLibCityUnits {
-
+    get_TotalDefenseHeadCount(): number;
 }
 
 interface ClientLibCity {
@@ -104,7 +98,7 @@ interface ClientLibCity {
     get_Name(): string;
     /** Null if current player's base */
     get_ActiveModules(): number[] | null;
-    get_Buildings(): ClientLibMap<ClientLibCityBuilding>
+    get_Buildings(): ClientLibMap<ClientLibCityBuilding>;
     get_CityFaction(): ClientLibFactionType;
     get_CityUnitsData(): ClientLibCityUnits;
     get_Version(): number | -1;
@@ -116,7 +110,7 @@ interface ClientLibCity {
     get_PosX(): number;
     get_PosY(): number;
 
-    GetResourceType(x: number, y: number): ClientLibTileType
+    GetResourceType(x: number, y: number): ClientLibTileType;
 }
 
 interface ClientLibMap<T> {
@@ -127,7 +121,7 @@ interface ClientLibMap<T> {
 }
 
 interface ClientLibArray<T> {
-    l: T[]
+    l: T[];
 }
 
 interface ClientLibCities {
@@ -140,8 +134,7 @@ interface ClientLibCities {
     get_CurrentOwnCityId(): number | -1;
     get_HomeCityId(): number | -1;
 
-
-    set_CurrentCityId(id: number): void
+    set_CurrentCityId(id: number): void;
     GetCity(id: number): ClientLibCity | null;
 }
 
@@ -173,11 +166,11 @@ interface ClientLibWorld {
 interface ClientLibMainData {
     get_Time(): unknown;
     get_Chat(): unknown;
-    get_Server(): ClientLibServer
+    get_Server(): ClientLibServer;
     get_World(): ClientLibWorld;
-    get_Player(): ClientLibPlayer
+    get_Player(): ClientLibPlayer;
     get_Alliance(): ClientLibAlliance;
-    get_Cities(): ClientLibCities
+    get_Cities(): ClientLibCities;
     get_CitiesSupport(): unknown;
     get_Mail(): unknown;
     get_Reports(): unknown;
@@ -199,35 +192,35 @@ interface ClientLibMainData {
 }
 
 interface ClientLibMathUtil {
-    EncodeCoordId(x: number, y: number): number
+    EncodeCoordId(x: number, y: number): number;
 }
 interface ClientLibVis {
     CenterGridPosition(x: number, y: number): void;
     Update(): void;
-    ViewUpdate(): void
+    ViewUpdate(): void;
 }
 
 interface Singleton<T> {
-    GetInstance(): T
+    GetInstance(): T;
 }
 
 interface ClientLibStatic {
     Data: {
         MainData: Singleton<ClientLibMainData>;
         WorldSector: {
-            ObjectType: typeof ClientLibWorldObjectType
-        }
+            ObjectType: typeof ClientLibWorldObjectType;
+        };
         Reports: {
             ENPCCampType: typeof ClientLibNpcCampType;
-        }
-    },
+        };
+    };
     Vis: {
-        VisMain: Singleton<ClientLibVis>
-    }
+        VisMain: Singleton<ClientLibVis>;
+    };
     Base: {
-        MathUtil: ClientLibMathUtil
-        EFactionType: typeof ClientLibFactionType
-    }
+        MathUtil: ClientLibMathUtil;
+        EFactionType: typeof ClientLibFactionType;
+    };
 }
 
 declare const ClientLib: ClientLibStatic;

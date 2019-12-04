@@ -15,7 +15,7 @@ export interface CityLayoutTileObject {
     /** Object Id */
     id: number;
 }
-export type CityLayoutTile = number | CityLayoutTileObject
+export type CityLayoutTile = number | CityLayoutTileObject;
 
 export interface CityLayout {
     cityId?: number;

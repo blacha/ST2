@@ -1,5 +1,3 @@
-
-
 interface GameDataStatic {
     units: Record<string, GameDataUnit>;
 }

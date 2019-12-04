@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/camelcase */
 import { PATCH_DATA } from './patch.data';
 
 export interface PatchedId {
@@ -6,22 +6,30 @@ export interface PatchedId {
 }
 
 export interface PatchedCampType {
-    $get_CampType(): ClientLibNpcCampType
+    $get_CampType(): ClientLibNpcCampType;
 }
 export interface PatchedCityUnits {
     $get_OffenseUnits(): ClientLibMap<ClientLibCityUnit>;
     $get_DefenseUnits(): ClientLibMap<ClientLibCityUnit>;
 }
 
+// eslint:disable @typescript-eslint/no-use-before-define
+function makeReturn(str: string): any {
+    return function() {
+        // @ts-ignore
+        return this[str];
+    };
+}
+
 export class ClientLibPatcher {
     static hasPatchedCityUnits(obj: any): obj is PatchedCityUnits {
-        return obj != null && typeof obj['$get_OffenseUnits'] == 'function'
+        return obj != null && typeof obj['$get_OffenseUnits'] == 'function';
     }
     static hasPatchedCampType(obj: any): obj is PatchedCampType {
-        return obj != null && typeof obj['$get_CampType'] == 'function'
+        return obj != null && typeof obj['$get_CampType'] == 'function';
     }
     static hasPatchedId(obj: any): obj is PatchedId {
-        return obj != null && typeof obj['$get_Id'] == 'function'
+        return obj != null && typeof obj['$get_Id'] == 'function';
     }
 
     static getFromKey(keys: string[], current: any = window): any {
@@ -41,14 +49,13 @@ export class ClientLibPatcher {
 
     static patch() {
         for (const [key, patch] of Object.entries(PATCH_DATA)) {
-            var protoPath = key.split('.');
-            var funcName = protoPath.pop();
+            const protoPath = key.split('.');
+            const funcName = protoPath.pop();
             if (funcName == null) {
                 continue;
             }
 
-
-            var currentProto = ClientLibPatcher.getFromKey(protoPath);
+            const currentProto = ClientLibPatcher.getFromKey(protoPath);
             if (currentProto == null) {
                 // logger.error({
                 //     func: funcName,
@@ -57,13 +64,13 @@ export class ClientLibPatcher {
                 continue;
             }
 
-            var currentData = ClientLibPatcher.getFromKey(patch.data.split('.'));
+            const currentData = ClientLibPatcher.getFromKey(patch.data.split('.'));
             if (currentData == null) {
                 // logger.error({ func: funcName, data: patch.data }, 'Invalid data path');
                 continue;
             }
 
-            var matches = currentData.toString().match(patch.re);
+            const matches = currentData.toString().match(patch.re);
             if (!matches) {
                 // logger.error({ func: funcName }, 'Unable to map');
                 continue;
@@ -73,12 +80,4 @@ export class ClientLibPatcher {
             currentProto.prototype[funcName] = makeReturn(matches[1]);
         }
     }
-}
-
-
-function makeReturn(str: string): any {
-    return function() {
-        // @ts-ignore
-        return this[str];
-    };
 }
