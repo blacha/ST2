@@ -24,8 +24,8 @@ export class CityData {
     }
 
     static getCurrentCity(): CityLayout | null {
-        const MD = ClientLib.Data.MainData.GetInstance();
-        const cities = MD.get_Cities();
+        const MainData = ClientLib.Data.MainData.GetInstance();
+        const cities = MainData.get_Cities();
 
         const currentCity = cities.get_CurrentCity();
         if (currentCity == null) {
@@ -39,10 +39,10 @@ export class CityData {
             return null;
         }
 
-        const MD = ClientLib.Data.MainData.GetInstance();
-        const player = MD.get_Player();
-        const server = MD.get_Server();
-        const alliance = MD.get_Alliance();
+        const MainData = ClientLib.Data.MainData.GetInstance();
+        const player = MainData.get_Player();
+        const server = MainData.get_Server();
+        const alliance = MainData.get_Alliance();
         return {
             cityId: city.get_Id(),
             level: city.get_LvlBase(),

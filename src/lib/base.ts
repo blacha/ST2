@@ -16,6 +16,20 @@ export interface CncBaseObject extends CncLocation {
     building?: Buildable;
     tile?: Tile;
 }
+export interface SiloCount {
+    [siloCount: number]: number;
+    '3': number;
+    '4': number;
+    '5': number;
+    '6': number;
+    /**
+     * Silo count shifted by 10
+     * @example
+     * - Base with 2x4 & 1x5 = 120
+     * - Base with 3x3 & 2x4 = 23
+     */
+    score: number
+}
 
 export class Base {
     name: string;
@@ -78,6 +92,7 @@ export class Base {
     }
 
     setTile(x: number, y: number, tile: Tile) {
+        this._stats = null;
         this.tiles[Base.$index(x, y)] = tile;
     }
 
@@ -97,15 +112,21 @@ export class Base {
         return this.upgrades.indexOf(unitId) !== -1;
     }
 
-    stats() {
-        const tiberium: Record<string, number> = {};
-        const crystal: Record<string, number> = {};
+    _stats: { tiberium: SiloCount, crystal: SiloCount } | null = null
+    get stats() {
+        if (this._stats != null) {
+            return this._stats;
+        }
+        const tiberium: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
+        const crystal: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
+
+        const MIN_SILO = 3;
         // TODO this is not super efficient, could be improved but generally runs in <1ms
         Base.buildingForEach((x, y) => {
             const tib = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Tiberium]).length;
             const cry = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Crystal]).length;
-            // No one cares about 1 or two silos
-            if (tib < 3 && cry < 3) {
+            // No one cares about one or two silos
+            if (tib < MIN_SILO && cry < MIN_SILO) {
                 return;
             }
 
@@ -116,7 +137,14 @@ export class Base {
                 crystal[cry] = (crystal[cry] || 0) + 1;
             }
         });
-        return { tiberium, crystal };
+
+        for (let i = 0; i <= 6 - MIN_SILO; i++) {
+            tiberium.score += tiberium[i + MIN_SILO] * 10 ** i
+            crystal.score += crystal[i + MIN_SILO] * 10 ** i
+        }
+
+        this._stats = { tiberium, crystal };
+        return this._stats
     }
 
     static buildingForEach(callback: (x: number, y: number) => void) {
@@ -149,9 +177,9 @@ export class Base {
 
         return `[Base ${this.name}:${this.faction}
     buildings: [${this.base
-        .filter(removeEmpty)
-        .map(toStr)
-        .join('\n\t')})}]
+                .filter(removeEmpty)
+                .map(toStr)
+                .join('\n\t')})}]
         ]`;
     }
 }

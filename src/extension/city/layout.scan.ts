@@ -4,6 +4,7 @@ import { StModule } from '../module';
 import { ClientLibPatcher } from '../patch/patch';
 import { ClientLibIter } from '../util/iter';
 import { CityData } from './city.scan';
+import { BaseBuilder } from '../../lib/base.builder';
 
 interface LayoutToScan {
     x: number;
@@ -16,6 +17,7 @@ export class LayoutScanner implements StModule {
     abort = false;
     lastCityId: number | null = null;
     maxFailCount = 5;
+    lastScan: CityLayout[] = []
 
     async start(): Promise<void> {
         // Nothing to do
@@ -45,6 +47,11 @@ export class LayoutScanner implements StModule {
             output.push(layout);
             console.log('Scanned', layout, output.length, '/', scanList.length);
         }
+        this.lastScan = output;
+    }
+
+    bestBases() {
+        return this.lastScan.map(f => BaseBuilder.load(f)).sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score)
     }
 
     async scanLayout(x: number, y: number, cityId: number): Promise<CityLayout | null> {

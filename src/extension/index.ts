@@ -4,15 +4,22 @@ import { StModule } from './module';
 import { LayoutScanner } from './city/layout.scan';
 import { BaseBuilder } from '../lib/base.builder';
 
-class ShockrTools {
-    Base = BaseBuilder;
-    Modules: Record<string, StModule> = {
-        Layout: new LayoutScanner(),
-    };
 
-    get mods() {
-        return Object.values(this.Modules);
+
+class ShockrTools {
+    Version = {
+        /** package.json version */
+        version: '__VERSION__',
+        /** Git commit hash */
+        hash: '__HASH__'
     }
+
+    Base = BaseBuilder;
+    Layout = new LayoutScanner()
+    Modules: StModule[] = [
+        this.Layout
+    ]
+
 
     async start() {
         let failCount = 0;
@@ -27,13 +34,13 @@ class ShockrTools {
         // Patch the client lib before starting the modules
         ClientLibPatcher.patch();
 
-        for (const mod of this.mods) {
+        for (const mod of this.Modules) {
             await mod.start();
         }
     }
 
     async stop() {
-        for (const mod of this.mods) {
+        for (const mod of this.Modules) {
             await mod.stop();
         }
     }
