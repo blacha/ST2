@@ -50,6 +50,8 @@ interface GameDataUnitM {
     i: number;
 }
 interface GameDataUnit {
+    /** Id */
+    i: number;
     /**
      * Display name
      * @example "Militants"
@@ -105,7 +107,10 @@ interface ClientLibCity {
 
     get_IsGhostMode(): boolean;
     /** Name of owner, undefined if player */
-    get_OwnerName(): string | null;
+    get_OwnerName(): string;
+    get_OwnerId(): number;
+    get_OwnerAllianceId(): number | null;
+    get_OwnerAllianceName(): string | undefined;
 
     get_PosX(): number;
     get_PosY(): number;

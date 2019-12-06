@@ -17,6 +17,9 @@ export interface CityLayoutTileObject {
 }
 export type CityLayoutTile = number | CityLayoutTileObject;
 
+export type GamePlayerId = number;
+export type GameAllianceId = number;
+
 export interface CityLayout {
     cityId?: number;
     level: number;
@@ -24,10 +27,14 @@ export interface CityLayout {
     x: number;
     y: number;
     faction: number;
+
     owner: string;
+    /** Player GameId */
+    ownerId?: GamePlayerId;
+
+    alliance?: string;
+    allianceId?: GameAllianceId | null;
     version: number;
-    player: string;
-    alliance?: number;
     world: number;
     tiles: CityLayoutTile[];
     upgrades: number[];

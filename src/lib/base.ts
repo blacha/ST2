@@ -53,6 +53,10 @@ export class Base {
     /** Max Y for O units */
     static readonly MaxOffY = 20;
 
+    static index(x: number, y: number) {
+        return x + y * Base.MaxX;
+    }
+
     name: string;
     faction: Faction;
     offFaction: Faction;

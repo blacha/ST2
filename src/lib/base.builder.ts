@@ -66,7 +66,6 @@ export class BaseBuilder {
             version: 0,
             world: player.world,
             owner: player.name,
-            player: player.name,
             tiles: city.tiles,
             upgrades,
         };

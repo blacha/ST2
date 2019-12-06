@@ -2,6 +2,7 @@ import { CityLayout } from '../../api/city.layout';
 import { Faction } from '../../lib/data/faction';
 import { ClientLibPatcher } from '../patch/patch';
 import { Uuid } from '../../lib/uuid';
+import { Base } from '../../lib/base';
 
 function GameToJSON(offset: number, unit: ClientLibCityUnit) {
     return {
@@ -13,17 +14,12 @@ function GameToJSON(offset: number, unit: ClientLibCityUnit) {
 }
 
 export class CityData {
-    static BASE_OFFSET_Y = 0;
-    static DEF_OFFSET_Y = 8;
-    static OFF_OFFSET_Y = CityData.DEF_OFFSET_Y + 8;
-    static MAX_BASE_X = 9;
+    // static BASE_OFFSET_Y = 0;
+    // static DEF_OFFSET_Y = 8;
+    // static OFF_OFFSET_Y = Base.MaxBaseY,+ 8;
+    // static MAX_BASE_X = 9;
 
     static $MM: number[];
-
-    static $index(x: number, y: number) {
-        return x + y * CityData.MAX_BASE_X;
-    }
-
     static getCurrentCity(): CityLayout | null {
         const MainData = ClientLib.Data.MainData.GetInstance();
         const cities = MainData.get_Cities();
@@ -43,7 +39,10 @@ export class CityData {
         const MainData = ClientLib.Data.MainData.GetInstance();
         const player = MainData.get_Player();
         const server = MainData.get_Server();
-        const alliance = MainData.get_Alliance();
+        const allianceId = city.get_OwnerAllianceId();
+        if (allianceId != null) {
+        }
+
         return {
             cityId: city.get_Id(),
             level: city.get_LvlBase(),
@@ -51,13 +50,12 @@ export class CityData {
             x: city.get_PosX(),
             y: city.get_PosY(),
             faction: city.get_CityFaction(),
+            ownerId: city.get_OwnerId(),
             owner: city.get_OwnerName() || player.name,
             version: city.get_Version(),
-
-            alliance: alliance.get_Id() || -1,
-            player: player.name,
             world: server.get_WorldId(),
-
+            alliance: city.get_OwnerAllianceName(),
+            allianceId: city.get_OwnerAllianceId(),
             tiles: CityData.getLayout(city),
             upgrades: CityData.getUpgrades(city),
         };
@@ -67,7 +65,7 @@ export class CityData {
         const xYMap: any = [];
 
         function mapUnit(unit: any) {
-            const index = CityData.$index(unit.x, unit.y);
+            const index = Base.index(unit.x, unit.y);
             delete unit.x;
             delete unit.y;
 
@@ -85,13 +83,13 @@ export class CityData {
         units.d.forEach(mapUnit);
         units.o.forEach(mapUnit);
 
-        for (let y = 0; y <= CityData.OFF_OFFSET_Y; y++) {
+        for (let y = 0; y <= Base.MaxDefY; y++) {
             for (let x = 0; x < 9; x++) {
                 const type = city.GetResourceType(x, y);
                 if (type == 0) {
                     continue;
                 }
-                const index = CityData.$index(x, y);
+                const index = Base.index(x, y);
 
                 const tileObj = xYMap[index];
                 if (tileObj == null) {
@@ -109,7 +107,7 @@ export class CityData {
     static getResources(city: ClientLibCity) {
         const data = [];
 
-        for (let y = 0; y <= CityData.OFF_OFFSET_Y; y++) {
+        for (let y = 0; y <= Base.MaxDefY; y++) {
             for (let x = 0; x < 9; x++) {
                 const type = city.GetResourceType(x, y);
                 if (type == 0) {
@@ -174,13 +172,13 @@ export class CityData {
         const faction = Faction.fromID(city.get_CityFaction());
         if (faction === Faction.Nod || faction === Faction.Gdi) {
             return {
-                d: Object.keys(defUnits.d).map(key => GameToJSON(CityData.DEF_OFFSET_Y, defUnits.d[key])),
-                o: Object.keys(offUnits.d).map(key => GameToJSON(CityData.OFF_OFFSET_Y, offUnits.d[key])),
+                d: Object.keys(defUnits.d).map(key => GameToJSON(Base.MaxBaseY, defUnits.d[key])),
+                o: Object.keys(offUnits.d).map(key => GameToJSON(Base.MaxDefY, offUnits.d[key])),
             };
         }
 
         return {
-            d: Object.keys(defUnits.d).map(key => GameToJSON(CityData.DEF_OFFSET_Y, defUnits.d[key])),
+            d: Object.keys(defUnits.d).map(key => GameToJSON(Base.MaxBaseY, defUnits.d[key])),
             o: [],
         };
     }
@@ -190,25 +188,23 @@ export class CityData {
         if (buildings.c == 0) {
             return [];
         }
-        return Object.keys(buildings.d).map(key => GameToJSON(CityData.DEF_OFFSET_Y, buildings.d[key]));
+        return Object.keys(buildings.d).map(key => GameToJSON(Base.MaxBaseY, buildings.d[key]));
     }
 
-    static getModuleMap() {
+    static getModuleMap(): number[] {
         if (CityData.$MM != null) {
             return CityData.$MM;
         }
         const units = GAMEDATA.units;
         const MODULES: number[] = [];
-        Object.keys(units).forEach(id => {
-            const unit = units[id];
-            const i = parseInt(id, 10);
+        for (const unit of Object.values(units)) {
             for (const module of unit.m) {
                 if (module.t == 1) {
-                    return;
+                    continue;
                 }
-                MODULES[module.i] = i;
+                MODULES[module.i] = unit.i;
             }
-        });
+        }
         CityData.$MM = MODULES;
         return MODULES;
     }
