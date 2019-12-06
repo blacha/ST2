@@ -1,46 +1,26 @@
+import { MovementType, PartialModifierMap, PartialResourceMap } from '../../extension/@types/client.lib.const';
+
 export interface GameDataJson {
+    /** Unit Id */
     id: number;
+    /** Unit name */
     name: string;
+    /** Display name */
     display: string;
+    /** Starting health points (Level 1) */
     health: number;
+    /** TechId */
     tech: number;
-    resources?: GameDataResource[];
-    repair?: GameDataRepair[];
+    /** Resources required to upgrade */
+    resources?: PartialResourceMap[];
+    /** Repair requirements */
+    repair?: PartialResourceMap[];
+    /** Faction */
     faction: string;
+    /** Movement speed */
     speed: number;
-    movement: string;
-    weapons?: GameDataWeapon[];
-    modifiers?: any[];
-}
-
-export interface GameDataWeapon {
-    range: {
-        min: number;
-        max: number;
-    };
-    armorType: string;
-    damage: number;
-    id: number;
-    type: any;
-    health: number;
-}
-
-export interface GameDataRepair {
-    crystal?: number;
-    RepairInf?: number;
-    RepairVeh?: number;
-    RepairAir?: number;
-    RepairBase?: number;
-    ResearchPoints?: number;
-    SupplyPoints?: number;
-    CommandPoints?: number;
-    OnlyForRewards?: number;
-    tiberium?: number;
-    credits?: number;
-}
-
-export interface GameDataResource {
-    crystal?: number;
-    power?: number;
-    tiberium?: number;
+    /** Type of movement */
+    movement: MovementType;
+    /** Modifiers */
+    modifiers?: PartialModifierMap[];
 }

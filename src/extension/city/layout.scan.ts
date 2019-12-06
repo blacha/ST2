@@ -5,7 +5,9 @@ import { ClientLibPatcher } from '../patch/patch';
 import { ClientLibIter } from '../util/iter';
 import { CityData } from './city.scan';
 import { BaseBuilder } from '../../lib/base.builder';
-
+import { WorldObjectType, NpcCampType } from '../@types/client.lib.const';
+import { ClientLibCity, ClientLibStatic } from '../@types/client.lib';
+declare const ClientLib: ClientLibStatic;
 interface LayoutToScan {
     x: number;
     y: number;
@@ -186,17 +188,11 @@ export class LayoutScanner implements StModule {
                     continue;
                 }
 
-                if (
-                    object.Type !== ClientLib.Data.WorldSector.ObjectType.NPCBase &&
-                    object.Type !== ClientLib.Data.WorldSector.ObjectType.NPCCamp
-                ) {
+                if (object.Type !== WorldObjectType.NPCBase && object.Type !== WorldObjectType.NPCCamp) {
                     continue;
                 }
 
-                if (
-                    ClientLibPatcher.hasPatchedCampType(object) &&
-                    object.$get_CampType() === ClientLib.Data.Reports.ENPCCampType.Destroyed
-                ) {
+                if (ClientLibPatcher.hasPatchedCampType(object) && object.$get_CampType() === NpcCampType.Destroyed) {
                     continue;
                 }
 

@@ -1,9 +1,13 @@
-import * as Util from '../util';
-import { Faction } from './faction';
-import { GameDataJson, GameDataRepair, GameDataResource } from './game.data';
+import { BuildingType } from '../building/building.type';
+import { GameResources } from '../game.resources';
 import { DefUnitType } from '../unit/def.unit.type';
 import { OffUnitType } from '../unit/off.unit.type';
-import { BuildingType } from '../building/building.type';
+import * as Util from '../util';
+import { Faction } from './faction';
+import { GameDataJson } from './game.data';
+import { Constants } from '../constants';
+import { PartialResourceMap, ResourceType } from '../../extension/@types/client.lib.const';
+import { GrowthCalculator } from '../growth.calculator';
 
 export enum GameDataObjectType {
     Building = 'building',
@@ -14,7 +18,6 @@ export enum GameDataObjectType {
 export class GameDataObject {
     static UnknownCode = '?';
     id = -1;
-    _data: GameDataJson | null = null;
     className = '';
     faction: Faction;
     code: string;
@@ -45,9 +48,10 @@ export class GameDataObject {
         return `${this.objectType}__${this.faction.code}__${this.code}`;
     }
 
+    _data: GameDataJson | null = null;
     get data(): GameDataJson {
         if (this._data == null) {
-            throw new Error('GameData not loaded id:' + this.id);
+            throw new Error(`GameData not loaded id:${this.id} ${this.code}`);
         }
         return this._data;
     }
@@ -67,16 +71,35 @@ export class GameDataObject {
         //    Constants.HEALTH_GROWTH);
     }
 
-    getPlunder(level: number): GameDataRepair {
-        return Util.getRepairValue(this.data, level);
+    getPlunder(level: number): PartialResourceMap {
+        if (this.data.repair == null) {
+            return {};
+        }
+        return GrowthCalculator.getResourceValues(this.data.repair, level, Constants.ResourcePlunderGrowth);
     }
 
-    getUpgradeCost(level: number): GameDataResource {
-        return Util.getUpgradeCost(this.data, level);
+    getUpgradeCost(level: number): GameResources {
+        if (this.data.resources == null) {
+            return new GameResources();
+        }
+        const resources = GrowthCalculator.getResourceValues(this.data.resources, level, Constants.ResourceCostGrowth);
+        return GameResources.fromResourceType(resources);
     }
 
-    getTotalUpgradeCost(level: number): GameDataResource {
-        return Util.getTotalUpgradeCost(this.data, level);
+    getTotalUpgradeCost(level: number): GameResources {
+        if (this.data.resources == null) {
+            return new GameResources();
+        }
+        const totalCost = new GameResources();
+        for (let i = 1; i <= level; i++) {
+            const levelResources = GrowthCalculator.getResourceValues(
+                this.data.resources,
+                i,
+                Constants.ResourceCostGrowth,
+            );
+            totalCost.addResources(levelResources);
+        }
+        return totalCost;
     }
 
     isDefUnit(): this is DefUnitType {

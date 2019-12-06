@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { PATCH_DATA } from './patch.data';
+import { NpcCampType } from '../@types/client.lib.const';
+import { ClientLibMap, ClientLibCityUnit } from '../@types/client.lib';
 
 export interface PatchedId {
     $get_Id(): number;
 }
 
 export interface PatchedCampType {
-    $get_CampType(): ClientLibNpcCampType;
+    $get_CampType(): NpcCampType;
 }
 export interface PatchedCityUnits {
     $get_OffenseUnits(): ClientLibMap<ClientLibCityUnit>;

@@ -4,8 +4,10 @@ import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
 import * as Util from '../util';
-import { BaseOutput, OutputCalculator } from './calculator';
+import { BaseOutput, OutputCalculator, BuildingOutput } from './calculator';
 import { BaseIter } from '../base.iter';
+import { ModifierType } from '../../extension/@types/client.lib.const';
+import { GrowthCalculator } from '../growth.calculator';
 
 export const RefineryCalculator: OutputCalculator = {
     name: 'Refinery',
@@ -22,13 +24,18 @@ export const RefineryCalculator: OutputCalculator = {
         },
     },
 
-    calculate: (base: Base, x: number, y: number, building: Building): BaseOutput => {
+    calculate: (base: Base, x: number, y: number, building: Building): BuildingOutput => {
         const gd = building.data;
         const buildingLevel = building.level;
 
         // Package amount is per minute
-        const packTime = Util.getModifierValue(gd, 'CreditPackageTime', buildingLevel, 1);
-        const packAmount = Util.getModifierValue(gd, 'CreditPackage', buildingLevel);
+        const packTime = GrowthCalculator.getModifierValue(
+            gd,
+            ModifierType.CreditsBonusTimeToComplete,
+            building.level,
+            1,
+        );
+        const packAmount = GrowthCalculator.getModifierValue(gd, ModifierType.CreditsPackageSize, building.level);
         const outputPackage = new GameResources();
         outputPackage.addResource(GameResources.CREDIT, (packAmount / packTime) * 3600);
 
@@ -37,8 +44,8 @@ export const RefineryCalculator: OutputCalculator = {
 
         const nearBy = BaseIter.getSurroundings(base, x, y, PowerLink.buildings, TiberiumLink.tiles);
 
-        const powerCont = Util.getGrowthValue(PowerLink.values, buildingLevel);
-        const tibCont = Util.getGrowthValue(TiberiumLink.values, buildingLevel);
+        const powerCont = GrowthCalculator.getLinkValue(PowerLink.values, buildingLevel);
+        const tibCont = GrowthCalculator.getLinkValue(TiberiumLink.values, buildingLevel);
 
         const outputCont = new GameResources();
         let firstPower = true;

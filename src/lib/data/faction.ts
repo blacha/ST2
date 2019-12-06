@@ -1,32 +1,41 @@
+import { FactionType } from '../../extension/@types/client.lib.const';
+
 export class Faction {
-    static Gdi: Faction = new Faction('G', 'GDI');
-    static Nod: Faction = new Faction('N', 'NOD');
-    static Forgotten: Faction = new Faction('F', 'Forgotten');
+    static Gdi: Faction = new Faction(FactionType.Gdi, 'G', 'GDI');
+    static Nod: Faction = new Faction(FactionType.Nod, 'N', 'NOD');
+    static Forgotten: Faction = new Faction(FactionType.Forgotten, 'F', 'Forgotten');
+    id: FactionType;
     code: string;
     name: string;
 
-    constructor(code: string, name: string) {
+    constructor(id: FactionType, code: string, name: string) {
+        this.id = id;
         this.code = code;
         this.name = name;
     }
 
-    static fromID(id: number) {
-        if (id == 7 || id == 4 || id == 6) {
+    static fromID(id: FactionType) {
+        if (
+            id == FactionType.NpcFortress ||
+            id == FactionType.NpcBase ||
+            id == FactionType.NpcOutpost ||
+            id == FactionType.NpcCamp
+        ) {
             return Faction.Forgotten;
         }
 
-        if (id == 1) {
+        if (id == FactionType.Gdi) {
             return Faction.Gdi;
         }
 
-        if (id == 2) {
+        if (id == FactionType.Nod) {
             return Faction.Nod;
         }
 
         return Faction.Forgotten;
     }
 
-    static make(char: string): Faction | null {
+    static fromString(char: string): Faction {
         const firstChar = char.charAt(0).toUpperCase();
         if (firstChar == 'N') {
             return Faction.Nod;
@@ -40,7 +49,7 @@ export class Faction {
             return Faction.Forgotten;
         }
 
-        return null;
+        throw new Error(`Unknown faction: "${char}"`);
     }
 
     toString() {

@@ -3,17 +3,18 @@ import { GameDataObject } from '../lib/data/game.data.object';
 import { DefUnitType } from '../lib/unit/def.unit.type';
 import { OffUnitType } from '../lib/unit/off.unit.type';
 import { pad } from '../lib/util';
-import * as GAME_DATA from './game.data.json';
+import * as GameJson from './game.data.json';
 
 export const GameObjects = [DefUnitType, OffUnitType, BuildingType];
 
 export const GameData = {
     /** Load the raw json game data into useful objects */
     load(printMessages = false) {
+        const units = GameJson.units;
         if (printMessages) {
-            GAME_DATA.sort((a, b) => a.id - b.id);
+            units.sort((a, b) => a.id - b.id);
         }
-        for (const data of GAME_DATA) {
+        for (const data of units) {
             const gameObject: GameDataObject = GameDataObject.getById(data.id);
             if (gameObject != null) {
                 gameObject.setGameData(data);

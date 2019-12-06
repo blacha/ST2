@@ -1,7 +1,7 @@
 import { Buildable } from '../base/buildable';
 import { Tile } from '../base/tile';
+import { GameResources } from '../game.resources';
 import { BuildingType } from './building.type';
-import { GameDataRepair } from '../data/game.data';
 
 export class Building implements Buildable {
     level: number;
@@ -28,15 +28,15 @@ export class Building implements Buildable {
         return this.type.name;
     }
 
-    getUpgradeCost() {
+    getUpgradeCost(): GameResources {
         return this.type.getUpgradeCost(this.level);
     }
 
-    getTotalUpgradeCost() {
+    getTotalUpgradeCost(): GameResources {
         return this.type.getTotalUpgradeCost(this.level);
     }
 
-    getPlunder(): GameDataRepair {
+    getPlunder() {
         return this.type.getPlunder(this.level);
     }
 

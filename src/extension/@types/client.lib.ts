@@ -1,93 +1,33 @@
+import { FactionType, ResourceType, WorldObjectType } from './client.lib.const';
+import { GameDataUnit, GameDataTech } from './game.data';
+
 /* eslint-disable @typescript-eslint/camelcase */
-declare enum ClientLibTileType {
-    Crystal = 1,
-    Tiberium = 2,
-}
 
-declare enum ClientLibWorldObjectType {
-    None = 0,
-    City = 1,
-    NPCBase = 2,
-    NPCCamp = 3,
-    PointOfInterest = 4,
-    NewPlayerSlot = 5,
-    Ruin = 7,
-    Marker = 8,
-    Outpost = 9,
-    FreeSlot = 255,
-}
-declare enum ClientLibFactionType {
-    NotInitialized = 0,
-    GDIFaction = 1,
-    NODFaction = 2,
-    FORFaction = 3,
-    NPCBase = 4,
-    NPCCamp = 5,
-    NPCOutpost = 6,
-    NPCFortress = 7,
-    NPCEvent = 8,
-}
-
-declare enum ClientLibNpcCampType {
-    Destroyed = 0,
-    Beginner = 1,
-    Random = 2,
-    Cluster = 3,
-    Base = 4,
-    Fortress = 6,
-    Event = 10,
-}
-
-interface GameDataTech {
-    /**
-     * @example NOD_Militants
-     */
-    dn: string;
-    c: number;
-}
-interface GameDataUnitM {
-    t: number;
-    i: number;
-}
-interface GameDataUnit {
-    /** Id */
-    i: number;
-    /**
-     * Display name
-     * @example "Militants"
-     */
-    dn: string;
-    /** Display Image url */
-    dimg: string;
-
-    m: GameDataUnitM[];
-}
-
-interface ClientLibPlayerResearchResult {
+export interface ClientLibPlayerResearchResult {
     get_CurrentLevel(): 0 | 1 | 2;
     get_GameDataUnit_Obj(): GameDataUnit;
     get_GameDataTech_Obj(): GameDataTech;
 }
 
-interface ClientLibPlayerResearch {
+export interface ClientLibPlayerResearch {
     GetResearchItemListByType(type: number): ClientLibArray<ClientLibPlayerResearchResult>;
 }
 
-interface ClientLibCityBuildable {
+export interface ClientLibCityBuildable {
     get_CoordX(): number;
     get_CoordY(): number;
     get_MdbUnitId(): number;
     get_CurrentLevel(): number;
 }
 
-type ClientLibCityBuilding = ClientLibCityBuildable;
-type ClientLibCityUnit = ClientLibCityBuildable;
+export type ClientLibCityBuilding = ClientLibCityBuildable;
+export type ClientLibCityUnit = ClientLibCityBuildable;
 
-interface ClientLibCityUnits {
+export interface ClientLibCityUnits {
     get_TotalDefenseHeadCount(): number;
 }
 
-interface ClientLibCity {
+export interface ClientLibCity {
     IsOwnBase(): boolean;
     GetBuildingsConditionInPercent(): number;
 
@@ -101,7 +41,7 @@ interface ClientLibCity {
     /** Null if current player's base */
     get_ActiveModules(): number[] | null;
     get_Buildings(): ClientLibMap<ClientLibCityBuilding>;
-    get_CityFaction(): ClientLibFactionType;
+    get_CityFaction(): FactionType;
     get_CityUnitsData(): ClientLibCityUnits;
     get_Version(): number | -1;
 
@@ -115,21 +55,21 @@ interface ClientLibCity {
     get_PosX(): number;
     get_PosY(): number;
 
-    GetResourceType(x: number, y: number): ClientLibTileType;
+    GetResourceType(x: number, y: number): ResourceType;
 }
 
-interface ClientLibMap<T> {
+export interface ClientLibMap<T> {
     /** Id to record map */
     d: Record<string, T>;
     /** Number of records */
     c: number;
 }
 
-interface ClientLibArray<T> {
+export interface ClientLibArray<T> {
     l: T[];
 }
 
-interface ClientLibCities {
+export interface ClientLibCities {
     get_PlayerResearch(): ClientLibPlayerResearch;
     get_CurrentCity(): ClientLibCity | null;
     get_AllCities(): ClientLibMap<ClientLibCity>;
@@ -143,11 +83,11 @@ interface ClientLibCities {
     GetCity(id: number): ClientLibCity | null;
 }
 
-interface ClientLibAlliance {
+export interface ClientLibAlliance {
     get_Id(): number;
 }
 
-interface ClientLibPlayer {
+export interface ClientLibPlayer {
     /** Player Name */
     name: string;
     accountId: number;
@@ -157,18 +97,18 @@ interface ClientLibPlayer {
     get_PlayerResearch(): ClientLibPlayerResearch;
 }
 
-interface ClientLibServer {
+export interface ClientLibServer {
     get_WorldId(): number;
     get_MaxAttackDistance(): number;
 }
-interface ClientLibWorldObject {
-    Type: ClientLibWorldObjectType;
+export interface ClientLibWorldObject {
+    Type: WorldObjectType;
 }
-interface ClientLibWorld {
+export interface ClientLibWorld {
     GetObjectFromPosition(x: number, y: number): ClientLibWorldObject;
 }
 
-interface ClientLibMainData {
+export interface ClientLibMainData {
     get_Time(): unknown;
     get_Chat(): unknown;
     get_Server(): ClientLibServer;
@@ -196,36 +136,27 @@ interface ClientLibMainData {
     get_ArsenalHandler(): unknown;
 }
 
-interface ClientLibMathUtil {
+export interface ClientLibMathUtil {
     EncodeCoordId(x: number, y: number): number;
 }
-interface ClientLibVis {
+export interface ClientLibVis {
     CenterGridPosition(x: number, y: number): void;
     Update(): void;
     ViewUpdate(): void;
 }
 
-interface Singleton<T> {
+export interface Singleton<T> {
     GetInstance(): T;
 }
 
-interface ClientLibStatic {
+export interface ClientLibStatic {
     Data: {
         MainData: Singleton<ClientLibMainData>;
-        WorldSector: {
-            ObjectType: typeof ClientLibWorldObjectType;
-        };
-        Reports: {
-            ENPCCampType: typeof ClientLibNpcCampType;
-        };
     };
     Vis: {
         VisMain: Singleton<ClientLibVis>;
     };
     Base: {
         MathUtil: ClientLibMathUtil;
-        EFactionType: typeof ClientLibFactionType;
     };
 }
-
-declare const ClientLib: ClientLibStatic;

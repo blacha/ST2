@@ -35,9 +35,9 @@ export interface SiloCount {
 
 export class PoiData extends GameResources {
     air = 0;
-    inf = 0;
-    veh = 0;
-    def = 0;
+    infantry = 0;
+    vehicle = 0;
+    defense = 0;
 }
 
 export class Base {
@@ -93,8 +93,8 @@ export class Base {
     build(x: number, y: number, level: number, unitType: GameDataObject): void {
         if (unitType instanceof BuildingType) {
             this.setBase(x, y, new Building(unitType, level));
-            if (unitType.tiles) {
-                this.setTile(x, y, unitType.tiles[0]);
+            if (unitType.tile !== Tile.Empty) {
+                this.setTile(x, y, unitType.tile);
             }
         } else if (unitType instanceof OffUnitType) {
             this.setBase(x, y, new Unit(unitType, level));
@@ -249,10 +249,10 @@ export class Base {
             this.poi.tiberium,
             this.poi.crystal,
             this.poi.power,
-            this.poi.inf,
-            this.poi.veh,
+            this.poi.infantry,
+            this.poi.vehicle,
             this.poi.air,
-            this.poi.def,
+            this.poi.defense,
             'newEconomy',
         ].join('|');
     }

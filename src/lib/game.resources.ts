@@ -1,3 +1,5 @@
+import { PartialResourceMap, ResourceType, PartialModifierMap } from '../extension/@types/client.lib.const';
+
 export interface Resources {
     power: number;
     tiberium: number;
@@ -8,14 +10,14 @@ export interface Resources {
 export type GameResource = 'power' | 'crystal' | 'tiberium' | 'credits';
 
 export class GameResources implements Resources {
-    static POWER: GameResource = 'power';
-    static CRYSTAL: GameResource = 'crystal';
     static TIBERIUM: GameResource = 'tiberium';
+    static CRYSTAL: GameResource = 'crystal';
+    static POWER: GameResource = 'power';
     static CREDIT: GameResource = 'credits';
 
-    power = 0;
     tiberium = 0;
     crystal = 0;
+    power = 0;
     credits = 0;
 
     public total() {
@@ -26,11 +28,23 @@ export class GameResources implements Resources {
         this[key] += amount;
     }
 
+    public addResources(obj: PartialResourceMap) {
+        this.addResource('tiberium', obj['Tiberium'] || 0);
+        this.addResource('crystal', obj['Crystal'] || 0);
+        this.addResource('power', obj['Power'] || 0);
+        this.addResource('credits', obj['Credits'] || 0);
+    }
     public add(obj: GameResources) {
         this.power += obj.power || 0;
         this.tiberium += obj.tiberium || 0;
         this.crystal += obj.crystal || 0;
         this.credits += obj.credits || 0;
+    }
+
+    static fromResourceType(r: PartialResourceMap) {
+        const res = new GameResources();
+        res.addResources(r);
+        return res;
     }
 
     public clone() {
@@ -40,5 +54,14 @@ export class GameResources implements Resources {
         obj.crystal = this.crystal;
         obj.credits = this.credits;
         return obj;
+    }
+
+    toJson() {
+        return {
+            tiberium: this.tiberium,
+            crystal: this.crystal,
+            power: this.power,
+            credits: this.credits,
+        };
     }
 }

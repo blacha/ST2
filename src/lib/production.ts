@@ -40,6 +40,7 @@ export class BaseProduction {
         const output: BaseOutput = {
             cont: new GameResources(),
             pkg: new GameResources(),
+            alliance: base.poi.clone(),
         };
 
         Base.buildingForEach((x, y) => BaseProduction.getBuildingOutput(output, base, x, y));

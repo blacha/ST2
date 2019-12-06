@@ -4,7 +4,8 @@ import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
 import * as Util from '../util';
-import { BaseOutput, OutputCalculator } from './calculator';
+import { BuildingOutput, OutputCalculator } from './calculator';
+import { GrowthCalculator } from '../growth.calculator';
 
 export const AccumulatorCalculator: OutputCalculator = {
     name: 'Accumulator',
@@ -18,7 +19,7 @@ export const AccumulatorCalculator: OutputCalculator = {
         },
     },
 
-    calculate: (base: Base, x: number, y: number, building: Building): BaseOutput => {
+    calculate: (base: Base, x: number, y: number, building: Building): BuildingOutput => {
         const outputCont = new GameResources();
         const outputPackage = new GameResources();
 
@@ -27,7 +28,7 @@ export const AccumulatorCalculator: OutputCalculator = {
 
         outputCont.addResource(
             GameResources.POWER,
-            nearBy.length * Util.getGrowthValue(PowerPlantLink.values, building.level),
+            nearBy.length * GrowthCalculator.getLinkValue(PowerPlantLink.values, building.level),
         );
 
         return {

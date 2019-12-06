@@ -14,8 +14,8 @@ const codeDot = '.'.charCodeAt(0);
 export class BaseBuilder {
     static fromCnCOpt(str: string): Base {
         const parts = str.split('|');
-        const baseFaction = Faction.make(parts[1]) || Faction.Nod;
-        const targetFaction = Faction.make(parts[2]) || Faction.Nod;
+        const baseFaction = Faction.fromString(parts[1]) || Faction.Nod;
+        const targetFaction = Faction.fromString(parts[2]) || Faction.Nod;
         const baseName = parts[3];
         const baseString = parts[4];
 
@@ -45,10 +45,10 @@ export class BaseBuilder {
         base.poi.tiberium = parseInt(parts[5], 10);
         base.poi.crystal = parseInt(parts[6], 10);
         base.poi.power = parseInt(parts[7], 10);
-        base.poi.inf = parseFloat(parts[8]);
-        base.poi.veh = parseFloat(parts[9]);
+        base.poi.infantry = parseFloat(parts[8]);
+        base.poi.vehicle = parseFloat(parts[9]);
         base.poi.air = parseFloat(parts[10]);
-        base.poi.def = parseFloat(parts[11]);
+        base.poi.defense = parseFloat(parts[11]);
         return base;
     }
 

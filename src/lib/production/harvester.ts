@@ -1,11 +1,11 @@
+import { ModifierType } from '../../extension/@types/client.lib.const';
 import { Base } from '../base';
-import { Tile } from '../base/tile';
+import { BaseIter } from '../base.iter';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
-import * as Util from '../util';
-import { BaseOutput, OutputCalculator } from './calculator';
-import { BaseIter } from '../base.iter';
+import { BuildingOutput, OutputCalculator } from './calculator';
+import { GrowthCalculator } from '../growth.calculator';
 
 const ONE_HOUR_SECONDS = 60 * 60;
 const LinkSilo = {
@@ -26,27 +26,31 @@ export const HarvesterCalculator: OutputCalculator = {
         Silo: LinkSilo,
     },
 
-    calculate(base: Base, x: number, y: number, building: Building): BaseOutput {
-        const gd = building.type.data;
+    calculate(base: Base, x: number, y: number, building: Building): BuildingOutput {
         const outputCont = new GameResources();
         const outputPackage = new GameResources();
 
-        // const tile = base.getTile(x, y);
         const resourceType = base.getResource(x, y);
         if (resourceType == null) {
             throw new Error('Invalid resource type');
         }
 
-        const packageType = resourceType == 'tiberium' ? 'Tiberium' : 'Crystal';
-
-        // Package amount is per package time
-        const packTimeSeconds = Util.getModifierValue(gd, `${packageType}PackageTime`, building.level, 1);
-        const packAmount = Util.getModifierValue(gd, `${packageType}Package`, building.level);
+        const packTimeSeconds = GrowthCalculator.getModifierValue(
+            BuildingType.GDI.TiberiumHarvester.data,
+            ModifierType.TiberiumBonusTimeToComplete,
+            building.level,
+            1,
+        );
+        const packAmount = GrowthCalculator.getModifierValue(
+            BuildingType.GDI.TiberiumHarvester.data,
+            ModifierType.TiberiumPackageSize,
+            building.level,
+        );
         outputPackage.addResource(resourceType, (packAmount / packTimeSeconds) * ONE_HOUR_SECONDS);
 
         const nearBy = BaseIter.getSurroundings(base, x, y, LinkSilo.buildings);
         if (nearBy.length > 0) {
-            outputCont.addResource(resourceType, Util.getGrowthValue(LinkSilo.values, building.level));
+            outputCont.addResource(resourceType, GrowthCalculator.getLinkValue(LinkSilo.values, building.level));
         }
 
         return {

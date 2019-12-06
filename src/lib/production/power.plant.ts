@@ -5,7 +5,9 @@ import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
 import * as Util from '../util';
-import { BaseOutput, OutputCalculator } from './calculator';
+import { BaseOutput, OutputCalculator, BuildingOutput } from './calculator';
+import { ModifierType } from '../../extension/@types/client.lib.const';
+import { GrowthCalculator } from '../growth.calculator';
 
 const LinkAccumulator = {
     buildings: [BuildingType.GDI.Accumulator.id, BuildingType.NOD.Accumulator.id],
@@ -30,13 +32,18 @@ export const PowerPlantCalculator: OutputCalculator = {
         Crystal: LinkCrystal,
     },
 
-    calculate(base: Base, x: number, y: number, building: Building): BaseOutput {
+    calculate(base: Base, x: number, y: number, building: Building): BuildingOutput {
         const outputCont = new GameResources();
         const outputPackage = new GameResources();
 
         const gd = building.type.data;
-        const packTime = Util.getModifierValue(gd, 'PowerPackageTime', building.level, 1);
-        const packAmount = Util.getModifierValue(gd, 'PowerPackage', building.level);
+        const packTime = GrowthCalculator.getModifierValue(
+            gd,
+            ModifierType.PowerBonusTimeToComplete,
+            building.level,
+            1,
+        );
+        const packAmount = GrowthCalculator.getModifierValue(gd, ModifierType.PowerPackageSize, building.level);
         outputPackage.addResource(GameResources.POWER, (packAmount / packTime) * 3600);
 
         const nearBy = BaseIter.getSurroundings(
@@ -46,9 +53,9 @@ export const PowerPlantCalculator: OutputCalculator = {
             LinkAccumulator.buildings.concat(LinkRefinery.buildings),
             LinkCrystal.tiles,
         );
-        const accumulatorBonus = Util.getGrowthValue(LinkAccumulator.values, building.level);
-        const crystalBonus = Util.getGrowthValue(LinkCrystal.values, building.level);
-        const creditBonus = Util.getGrowthValue(LinkRefinery.values, building.level);
+        const accumulatorBonus = GrowthCalculator.getLinkValue(LinkAccumulator.values, building.level);
+        const crystalBonus = GrowthCalculator.getLinkValue(LinkCrystal.values, building.level);
+        const creditBonus = GrowthCalculator.getLinkValue(LinkRefinery.values, building.level);
 
         let firstAccumulator = true;
         for (let i = 0; i < nearBy.length; i++) {

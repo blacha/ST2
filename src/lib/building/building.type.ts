@@ -6,8 +6,8 @@ import { GameDataObject, GameDataObjectType } from '../data/game.data.object';
 export class BuildingType extends GameDataObject {
     static GDI = {
         Silo: new BuildingType(120, Faction.Gdi, 's'), //, 'GDI_Silo', 'Silo', 's'),
-        CrystalHarvester: new BuildingType(175, Faction.Gdi, 'n', [Tile.Crystal]), //, 'GDI_Harvester_Crystal', 'Crystal Harvester', 'n'),
-        TiberiumHarvester: new BuildingType(115, Faction.Gdi, 'h', [Tile.Tiberium]), //, 'GDI_Harvester', 'Tiberium Harvester', 'h'),
+        CrystalHarvester: new BuildingType(175, Faction.Gdi, 'n', Tile.Crystal), //, 'GDI_Harvester_Crystal', 'Crystal Harvester', 'n'),
+        TiberiumHarvester: new BuildingType(115, Faction.Gdi, 'h', Tile.Tiberium), //, 'GDI_Harvester', 'Tiberium Harvester', 'h'),
         Accumulator: new BuildingType(107, Faction.Gdi, 'a'), //, 'GDI_Accumulator', 'Accumulator', 'a'),
         PowerPlant: new BuildingType(117, Faction.Gdi, 'p'), //, 'GDI_Power_Plant', 'PowerPlant', 'p'),
         Refinery: new BuildingType(119, Faction.Gdi, 'r'), //, 'GDI_Refinery', 'Refinery', 'r'),
@@ -25,8 +25,8 @@ export class BuildingType extends GameDataObject {
 
     static NOD = {
         Silo: new BuildingType(154, Faction.Nod, 's'), //, 'NOD_Silo', 'Silo', 's'),
-        CrystalHarvester: new BuildingType(176, Faction.Nod, 'n', [Tile.Crystal]), //, 'NOD_Harvester_Crystal', 'Crystal Harvester', 'n'),
-        TiberiumHarvester: new BuildingType(155, Faction.Nod, 'h', [Tile.Tiberium]), //, 'NOD_Harvester', 'Tiberium Harvester', 'h'),
+        CrystalHarvester: new BuildingType(176, Faction.Nod, 'n', Tile.Crystal), //, 'NOD_Harvester_Crystal', 'Crystal Harvester', 'n'),
+        TiberiumHarvester: new BuildingType(155, Faction.Nod, 'h', Tile.Tiberium), //, 'NOD_Harvester', 'Tiberium Harvester', 'h'),
         Accumulator: new BuildingType(147, Faction.Nod, 'a'), //, 'NOD_Accumulator', 'Accumulator', 'a'),
         PowerPlant: new BuildingType(152, Faction.Nod, 'p'), //, 'NOD_Power_Plant', 'Power Plant', 'p'),
         Refinery: new BuildingType(153, Faction.Nod, 'r'), //, 'NOD_Refinery', 'Refinery', 'r'),
@@ -49,8 +49,8 @@ export class BuildingType extends GameDataObject {
         DefenseFacility: new BuildingType(195, Faction.Forgotten, 'w'), //, 'FOR_Defense_Facility', 'Defense Facility', 'w'),
         DefenseHQ: new BuildingType(196, Faction.Forgotten, 'q'), //, 'FOR_Defense_HQ', 'Defense HQ', 'q'),
         TradeCenter: new BuildingType(197, Faction.Forgotten, 'u'), //, 'FOR_Trade_Center', 'Trade Center', 'u'),
-        TiberiumHarvester: new BuildingType(198, Faction.Forgotten, 'h', [Tile.Tiberium]), //, 'FOR_Harvester_Tiberium', 'Tiberium Harvester', 'h'),
-        CrystalHarvester: new BuildingType(199, Faction.Forgotten, 'n', [Tile.Crystal]), //, 'FOR_Harvester_Crystal', 'Crystal Harvester', 'n'),
+        TiberiumHarvester: new BuildingType(198, Faction.Forgotten, 'h', Tile.Tiberium), //, 'FOR_Harvester_Tiberium', 'Tiberium Harvester', 'h'),
+        CrystalHarvester: new BuildingType(199, Faction.Forgotten, 'n', Tile.Crystal), //, 'FOR_Harvester_Crystal', 'Crystal Harvester', 'n'),
         TiberiumSilo: new BuildingType(206, Faction.Forgotten, 'b'), //, 'FOR_Tiberium_Booster', 'Tiberium Silo', 'b'),
         CrystalSilo: new BuildingType(207, Faction.Forgotten, 'v'), //, 'FOR_Crystal_Booster', 'Crystal Silo', 'v')
     };
@@ -70,12 +70,12 @@ export class BuildingType extends GameDataObject {
         HeavyMGNest: new BuildingType(235, Faction.Forgotten, '?'),
     };
 
-    tiles: Tile[];
+    tile: Tile;
     supports: string[];
 
-    constructor(id: number, faction: Faction, code: string, tiles: Tile[] = [Tile.Empty], supports: string[] = []) {
+    constructor(id: number, faction: Faction, code: string, tiles: Tile = Tile.Empty, supports: string[] = []) {
         super(GameDataObjectType.Building, id, faction, code);
-        this.tiles = tiles;
+        this.tile = tiles;
         this.supports = supports;
     }
 
@@ -88,7 +88,7 @@ export class BuildingType extends GameDataObject {
             return false;
         }
 
-        return this.tiles.indexOf(tile) != -1;
+        return this.tile === tile;
     }
 
     getName() {

@@ -1,9 +1,13 @@
 import { CityLayout } from '../../api/city.layout';
 import { Faction } from '../../lib/data/faction';
+import { ClientLibCity, ClientLibCityUnit, ClientLibStatic } from '../@types/client.lib';
+import { GameDataStatic } from '../@types/game.data';
 import { ClientLibPatcher } from '../patch/patch';
 import { Uuid } from '../../lib/uuid';
 import { Base } from '../../lib/base';
 
+declare const ClientLib: ClientLibStatic;
+declare const GAMEDATA: GameDataStatic;
 function GameToJSON(offset: number, unit: ClientLibCityUnit) {
     return {
         x: unit.get_CoordX(),
@@ -14,11 +18,6 @@ function GameToJSON(offset: number, unit: ClientLibCityUnit) {
 }
 
 export class CityData {
-    // static BASE_OFFSET_Y = 0;
-    // static DEF_OFFSET_Y = 8;
-    // static OFF_OFFSET_Y = Base.MaxBaseY,+ 8;
-    // static MAX_BASE_X = 9;
-
     static $MM: number[];
     static getCurrentCity(): CityLayout | null {
         const MainData = ClientLib.Data.MainData.GetInstance();
@@ -39,10 +38,6 @@ export class CityData {
         const MainData = ClientLib.Data.MainData.GetInstance();
         const player = MainData.get_Player();
         const server = MainData.get_Server();
-        const allianceId = city.get_OwnerAllianceId();
-        if (allianceId != null) {
-        }
-
         return {
             cityId: city.get_Id(),
             level: city.get_LvlBase(),

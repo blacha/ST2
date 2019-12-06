@@ -1,18 +1,7 @@
-import { Base } from "../../lib/base";
 import { Tile } from "../../lib/base/tile";
 import * as React from 'react';
 
 
-export class BaseView extends React.Component {
-
-    render() {
-        return (
-            <div className="Base">
-
-            </div>
-        )
-    }
-}
 
 export interface TileProps {
 

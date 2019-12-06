@@ -3,3 +3,4 @@ build/
 extension.js
 dist/
 .cache
+gamedata.*.json

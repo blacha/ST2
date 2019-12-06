@@ -1,11 +1,12 @@
 import { Base } from '../base';
+import { BaseIter } from '../base.iter';
 import { Tile } from '../base/tile';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
 import * as Util from '../util';
-import { BaseOutput, OutputCalculator } from './calculator';
-import { BaseIter } from '../base.iter';
+import { BuildingOutput, OutputCalculator } from './calculator';
+import { GrowthCalculator } from '../growth.calculator';
 
 export const SiloCalculator: OutputCalculator = {
     name: 'Silo',
@@ -13,18 +14,23 @@ export const SiloCalculator: OutputCalculator = {
 
     links: {
         Harvester: {
-            buildings: [BuildingType.GDI.TiberiumHarvester.id, BuildingType.NOD.TiberiumHarvester.id],
+            buildings: [
+                BuildingType.GDI.TiberiumHarvester.id,
+                BuildingType.GDI.CrystalHarvester.id,
+                BuildingType.NOD.TiberiumHarvester.id,
+                BuildingType.NOD.CrystalHarvester.id,
+            ],
             values: [0, 72, 90, 125, 170, 220, 275, 335, 400, 460, 530, 610, 710],
         },
     },
 
-    calculate(base: Base, x: number, y: number, building: Building): BaseOutput {
+    calculate(base: Base, x: number, y: number, building: Building): BuildingOutput {
         const outputCont = new GameResources();
         const outputPackage = new GameResources();
 
         const HarvesterLink = SiloCalculator.links.Harvester;
         const nearBy = BaseIter.getSurroundings(base, x, y, HarvesterLink.buildings);
-        const perHarvester = Util.getGrowthValue(HarvesterLink.values, building.level);
+        const perHarvester = GrowthCalculator.getLinkValue(HarvesterLink.values, building.level);
         for (const nearBuilding of nearBy) {
             const tile = base.getTile(nearBuilding.x, nearBuilding.y);
             if (tile === Tile.Tiberium) {

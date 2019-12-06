@@ -71,7 +71,7 @@
     console.log(ObjMap);
 })();
 
-function dumpEnum(obj) {
+function de(obj) {
     return (
         '\n' +
         Object.keys(obj)
@@ -82,3 +82,11 @@ function dumpEnum(obj) {
         '\n'
     );
 }
+
+Object.keys(ClientLib.Base).forEach(c => {
+    if (c.startsWith('E')) {
+        console.log(`export const enum ${c} {
+            ${de(ClientLib.Base[c])}
+        }`);
+    }
+});

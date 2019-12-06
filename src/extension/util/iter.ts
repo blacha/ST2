@@ -1,3 +1,5 @@
+import { ClientLibMap } from '../@types/client.lib';
+
 export class ClientLibIter {
     static values<T>(obj: ClientLibMap<T>): T[] {
         return Object.values(obj.d);

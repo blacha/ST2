@@ -1,4 +1,7 @@
+import { ClientLibStatic } from '../@types/client.lib';
+
 declare let qx: any;
+declare const ClientLib: ClientLibStatic;
 export class ClientLibUtil {
     static isLoaded(): boolean {
         if (typeof ClientLib === 'undefined') {
