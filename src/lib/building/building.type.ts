@@ -1,5 +1,5 @@
+import { Base } from '../base';
 import { Tile } from '../base/tile';
-import { Constants } from '../constants';
 import { Faction } from '../data/faction';
 import { GameDataObject, GameDataObjectType } from '../data/game.data.object';
 
@@ -49,8 +49,8 @@ export class BuildingType extends GameDataObject {
         DefenseFacility: new BuildingType(195, Faction.Forgotten, 'w'), //, 'FOR_Defense_Facility', 'Defense Facility', 'w'),
         DefenseHQ: new BuildingType(196, Faction.Forgotten, 'q'), //, 'FOR_Defense_HQ', 'Defense HQ', 'q'),
         TradeCenter: new BuildingType(197, Faction.Forgotten, 'u'), //, 'FOR_Trade_Center', 'Trade Center', 'u'),
-        TiberiumHarvester: new BuildingType(198, Faction.Forgotten, 'h'), //, 'FOR_Harvester_Tiberium', 'Tiberium Harvester', 'h'),
-        CrystalHarvester: new BuildingType(199, Faction.Forgotten, 'n'), //, 'FOR_Harvester_Crystal', 'Crystal Harvester', 'n'),
+        TiberiumHarvester: new BuildingType(198, Faction.Forgotten, 'h', [Tile.Tiberium]), //, 'FOR_Harvester_Tiberium', 'Tiberium Harvester', 'h'),
+        CrystalHarvester: new BuildingType(199, Faction.Forgotten, 'n', [Tile.Crystal]), //, 'FOR_Harvester_Crystal', 'Crystal Harvester', 'n'),
         TiberiumSilo: new BuildingType(206, Faction.Forgotten, 'b'), //, 'FOR_Tiberium_Booster', 'Tiberium Silo', 'b'),
         CrystalSilo: new BuildingType(207, Faction.Forgotten, 'v'), //, 'FOR_Crystal_Booster', 'Crystal Silo', 'v')
     };
@@ -80,11 +80,11 @@ export class BuildingType extends GameDataObject {
     }
 
     canBuildOn(x: number, y: number, tile: Tile): boolean {
-        if (x > Constants.MaxX) {
+        if (x > Base.MaxX) {
             return false;
         }
 
-        if (y > Constants.MaxBaseY) {
+        if (y > Base.MaxBaseY) {
             return false;
         }
 

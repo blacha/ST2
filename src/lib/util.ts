@@ -63,7 +63,12 @@ export function getModifierValue(
     level: number,
     growth = Constants.ResourceProductionGrowth,
 ): number {
-    const values = gdo.modifiers!;
+    const values = gdo.modifiers;
+    console.log(gdo.id, gdo.name, level, modifier);
+    if (values == null) {
+        console.log('Missing?', gdo);
+        throw new Error('Missing');
+    }
     if (level <= Constants.GrowthLevel) {
         return values[level][modifier];
     }

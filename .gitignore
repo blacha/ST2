@@ -2,3 +2,4 @@ node_modules/
 build/
 extension.js
 dist/
+.cache

@@ -3,6 +3,7 @@ import { ClientLibPatcher } from './patch/patch';
 import { StModule } from './module';
 import { LayoutScanner } from './city/layout.scan';
 import { BaseBuilder } from '../lib/base.builder';
+import { Base } from '../lib/base';
 
 class ShockrTools {
     Version = {

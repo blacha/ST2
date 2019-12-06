@@ -60,7 +60,7 @@ export class LayoutScanner implements StModule {
         if (this.abort) {
             return null;
         }
-        console.log(x, y, 'Scan', cityId);
+        // console.log(x, y, 'Scan', cityId);
         if (cityId != null) {
             this.setCurrentCity(cityId);
         }
@@ -80,7 +80,7 @@ export class LayoutScanner implements StModule {
             if (this.abort) {
                 return null;
             }
-            console.log(x, y, 'ScanCount', i);
+            // console.log(x, y, 'ScanCount', i);
             await new Promise(resolve => setTimeout(resolve, 100 * i));
 
             ClientLib.Data.MainData.GetInstance()
@@ -119,7 +119,7 @@ export class LayoutScanner implements StModule {
 
             return layout;
         }
-        console.error(x, y, 'Failed');
+        console.error(x, y, 'ScanFailed');
         return null;
     }
 

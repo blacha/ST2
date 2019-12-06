@@ -2,10 +2,9 @@ import { Buildable } from './base/buildable';
 import { Tile } from './base/tile';
 import { Building } from './building/building';
 import { BuildingType } from './building/building.type';
-import { Constants } from './constants';
 import { Faction } from './data/faction';
 import { GameDataObjectType, GameDataObject } from './data/game.data.object';
-import { GameResource } from './game.resources';
+import { GameResource, GameResources } from './game.resources';
 import { BaseIter } from './base.iter';
 import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
@@ -34,11 +33,32 @@ export interface SiloCount {
     score: number;
 }
 
+export class PoiData extends GameResources {
+    air = 0;
+    inf = 0;
+    veh = 0;
+    def = 0;
+}
+
 export class Base {
+    /** Width of bases. */
+    static readonly MaxX = 9;
+    /** Height of bases */
+    static readonly MaxY = 20;
+
+    /** Max Y for Base buildings  */
+    static readonly MaxBaseY = 8;
+    /** Max Y for D units */
+    static readonly MaxDefY = 16;
+    /** Max Y for O units */
+    static readonly MaxOffY = 20;
+
     name: string;
     faction: Faction;
     offFaction: Faction;
     base: Buildable[];
+
+    poi: PoiData = new PoiData();
 
     x = -1;
     y = -1;
@@ -56,7 +76,7 @@ export class Base {
     }
 
     static $index(x: number, y: number) {
-        return x + y * Constants.MaxX;
+        return x + y * Base.MaxX;
     }
 
     /**
@@ -69,6 +89,9 @@ export class Base {
     build(x: number, y: number, level: number, unitType: GameDataObject): void {
         if (unitType instanceof BuildingType) {
             this.setBase(x, y, new Building(unitType, level));
+            if (unitType.tiles) {
+                this.setTile(x, y, unitType.tiles[0]);
+            }
         } else if (unitType instanceof OffUnitType) {
             this.setBase(x, y, new Unit(unitType, level));
         } else if (unitType instanceof DefUnitType) {
@@ -137,6 +160,7 @@ export class Base {
     }
 
     _stats: { tiberium: SiloCount; crystal: SiloCount } | null = null;
+    _score: number | null = null;
     get stats() {
         if (this._stats != null) {
             return this._stats;
@@ -168,12 +192,13 @@ export class Base {
         }
 
         this._stats = { tiberium, crystal };
+        this._score = tiberium.score;
         return this._stats;
     }
 
     static buildingForEach(callback: (x: number, y: number) => void) {
-        for (let y = 0; y < Constants.MaxBaseY; y++) {
-            for (let x = 0; x < Constants.MaxX; x++) {
+        for (let y = 0; y < Base.MaxBaseY; y++) {
+            for (let x = 0; x < Base.MaxX; x++) {
                 callback(x, y);
             }
         }
@@ -181,10 +206,10 @@ export class Base {
 
     /** Get the type of object based on how far down it is */
     static getObjectType(yOffset: number): GameDataObjectType {
-        if (yOffset < Constants.MaxBaseY) {
+        if (yOffset < Base.MaxBaseY) {
             return GameDataObjectType.Building;
         }
-        if (yOffset < Constants.MaxDefY) {
+        if (yOffset < Base.MaxDefY) {
             return GameDataObjectType.DefUnit;
         }
         return GameDataObjectType.OffUnit;
@@ -192,8 +217,8 @@ export class Base {
 
     toCncOpt() {
         const tiles = [];
-        for (let y = 0; y < Constants.MaxY; y++) {
-            for (let x = 0; x < Constants.MaxX; x++) {
+        for (let y = 0; y < Base.MaxY; y++) {
+            for (let x = 0; x < Base.MaxX; x++) {
                 const obj = this.getBase(x, y);
                 if (obj != null) {
                     if (obj.level == 1) {
@@ -217,13 +242,13 @@ export class Base {
             this.offFaction.code,
             this.name,
             tiles.join(''),
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            this.poi.tiberium,
+            this.poi.crystal,
+            this.poi.power,
+            this.poi.inf,
+            this.poi.veh,
+            this.poi.air,
+            this.poi.def,
             'newEconomy',
         ].join('|');
     }

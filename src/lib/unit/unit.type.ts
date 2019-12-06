@@ -1,5 +1,5 @@
+import { Base } from '../base';
 import { Tile } from '../base/tile';
-import { Constants } from '../constants';
 import { Faction } from '../data/faction';
 import { GameDataObject } from '../data/game.data.object';
 
@@ -13,7 +13,7 @@ export class UnitType extends GameDataObject {
     }
 
     canBuildOn(x: number, y: number, tile: Tile): boolean {
-        if (x > Constants.MaxX) {
+        if (x > Base.MaxX) {
             return false;
         }
 

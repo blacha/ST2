@@ -1,6 +1,5 @@
 import { Base, CncBaseObject, CncLocation } from './base';
 import { Tile } from './base/tile';
-import { Constants } from './constants';
 
 export class BaseIter {
     static getSurroundings(base: Base, x: number, y: number, buildings?: number[], tiles?: Tile[]): CncBaseObject[] {
@@ -9,10 +8,10 @@ export class BaseIter {
             for (let dy = -1; dy < 2; dy++) {
                 const offX = x + dx;
                 const offY = y + dy;
-                if (offX < 0 || offX > Constants.MaxX) {
+                if (offX < 0 || offX > Base.MaxX) {
                     continue;
                 }
-                if (offY < 0 || offY > Constants.MaxBaseY) {
+                if (offY < 0 || offY > Base.MaxBaseY) {
                     continue;
                 }
                 if (offY === y && offX === x) {
@@ -72,10 +71,10 @@ export class BaseIter {
             for (let dy = -1; dy < 2; dy++) {
                 const offX = x + dx;
                 const offY = y + dy;
-                if (offX < 0 || offX > Constants.MaxX) {
+                if (offX < 0 || offX > Base.MaxX) {
                     continue;
                 }
-                if (offY < 0 || offY > Constants.MaxBaseY) {
+                if (offY < 0 || offY > Base.MaxBaseY) {
                     continue;
                 }
                 if (offY === y && offX === x) {

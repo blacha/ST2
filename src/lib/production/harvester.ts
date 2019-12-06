@@ -37,9 +37,11 @@ export const HarvesterCalculator: OutputCalculator = {
             throw new Error('Invalid resource type');
         }
 
+        const packageType = resourceType == 'tiberium' ? 'Tiberium' : 'Crystal';
+
         // Package amount is per package time
-        const packTimeSeconds = Util.getModifierValue(gd, 'TiberiumPackageTime', building.level, 1);
-        const packAmount = Util.getModifierValue(gd, 'TiberiumPackage', building.level);
+        const packTimeSeconds = Util.getModifierValue(gd, `${packageType}PackageTime`, building.level, 1);
+        const packAmount = Util.getModifierValue(gd, `${packageType}Package`, building.level);
         outputPackage.addResource(resourceType, (packAmount / packTimeSeconds) * ONE_HOUR_SECONDS);
 
         const nearBy = BaseIter.getSurroundings(base, x, y, LinkSilo.buildings);
