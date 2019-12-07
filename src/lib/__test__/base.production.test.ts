@@ -11,47 +11,6 @@ import { BaseOutput } from '../production/calculator';
 
 GameData.load();
 
-o.spec('BasePlunder', () => {
-    o('should plunder buildings', () => {
-        const plunder = GameResources.fromResourceType(new Building(BuildingType.Forgotten.Silo, 13).getPlunder());
-        o(Math.floor(plunder.crystal)).equals(3685);
-        o(Math.floor(plunder.tiberium)).equals(3685);
-
-        const plunderB = GameResources.fromResourceType(
-            new Building(BuildingType.Forgotten.TiberiumHarvester, 13).getPlunder(),
-        );
-        o(Math.floor(plunderB.tiberium)).equals(7229);
-        o(plunderB.crystal).equals(0);
-
-        const plunderC = GameResources.fromResourceType(
-            new Building(BuildingType.Forgotten.CrystalHarvester, 13).getPlunder(),
-        );
-        o(Math.floor(plunderC.crystal)).equals(7229);
-        o(plunderC.tiberium).equals(0);
-
-        const plunderD = GameResources.fromResourceType(
-            new Building(BuildingType.Forgotten.ConstructionYard, 13).getPlunder(),
-        );
-        o(plunderD.crystal).equals(0);
-        o(plunderD.tiberium).equals(2520);
-    });
-});
-
-o.spec('BaseCost', () => {
-    let base: Base;
-
-    o.beforeEach(() => {
-        base = new Base();
-    });
-
-    o('should get upgrade cost', () => {
-        // silo : 15, 11,478
-        // harv : 15, 11,478
-        const building = new Building(BuildingType.GDI.Refinery, 15);
-        const cost = building.getUpgradeCost();
-    });
-});
-
 function getTotal(output: BaseOutput, key: GameResource) {
     return output.pkg[key] + output.cont[key];
 }
