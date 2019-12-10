@@ -22,6 +22,12 @@ export enum WorldObjectType {
     FreeSlot = 255,
 }
 
+export enum ResearchType {
+    OffUnits = 1,
+    DefUnits = 2,
+    Buildings = 5,
+}
+
 export enum NpcCampType {
     Destroyed = 0,
     Beginner = 1,

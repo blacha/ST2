@@ -9,6 +9,7 @@ import { BaseIter } from './base.iter';
 import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
 import { DefUnitType } from './unit/def.unit.type';
+import { Uuid } from './uuid';
 
 export interface CncLocation {
     x: number;
@@ -57,6 +58,8 @@ export class Base {
         return x + y * Base.MaxX;
     }
 
+    id: string;
+
     name: string;
     faction: Faction;
     offFaction: Faction;
@@ -77,6 +80,8 @@ export class Base {
         this.tiles = [];
         this.upgrades = [];
         this.base = [];
+
+        this.id = Uuid.ulid();
     }
 
     static $index(x: number, y: number) {

@@ -1,9 +1,9 @@
 import { MovementType, ModifierType, ResourceType } from './client.lib.const';
 
 /* eslint-disable @typescript-eslint/camelcase */
-
 export interface GameDataResourceCost {
     t: ResourceType;
+    /** Resource count */
     c: number;
 }
 

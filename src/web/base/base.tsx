@@ -9,19 +9,25 @@ import { Buildable } from '../../lib/base/buildable';
 import { BaseProduction } from '../../lib/production';
 
 
-const TileSize = 48;
+const TileSize = 32;
 
 export const BaseCss = {
+    Size32: style({
+        width: '32px',
+        height: '32px'
+    }),
+    Size48: style({
+        width: '48px',
+        height: '48px'
+    }),
+
     Base: style({
-        width: (Base.MaxX * TileSize) + 'px',
         display: 'flex',
         flexWrap: 'wrap'
     }),
     Grid: {
         Base: style({
             position: 'relative',
-            width: `${TileSize}px`,
-            height: `${TileSize}px`,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -69,23 +75,25 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     render() {
         return (
             <div className="Base">
-                <ViewBaseMain base={this.base} />
+                <ViewBaseMain base={this.base} size={32} />
                 <ViewBaseStats base={this.base} />
             </div>
         )
     }
 }
 
-export class ViewBaseMain extends React.Component<{ base: Base }> {
+export class ViewBaseMain extends React.Component<{ base: Base, size: number }> {
 
     render() {
         const output = []
-        for (let y = 0; y < Base.MaxBaseY; y++) {
-            for (let x = 0; x < Base.MaxX; x++) {
-                output.push(
-                    <ViewBaseItem x={x} y={y} base={this.props.base} key={`${x}-${y}`} />
+        for (let x = 0; x < Base.MaxX; x++) {
+            const row = []
+            for (let y = 0; y < Base.MaxBaseY; y++) {
+                row.push(
+                    <ViewBaseItem x={x} y={y} base={this.props.base} size={this.props.size} key={`${x}-${y}`} />
                 )
             }
+            output.push(<div className={`BaseRow-${x}`} key={`row-${x}`}>{...row}</div>)
         }
 
         return (<div className={BaseCss.Base}>{output}</div>)
@@ -93,10 +101,10 @@ export class ViewBaseMain extends React.Component<{ base: Base }> {
 }
 
 
-export class ViewBaseItem extends React.Component<{ x: number, y: number, base: Base }> {
+export class ViewBaseItem extends React.Component<{ x: number, y: number, base: Base, size: number }> {
 
     render() {
-        const { x, y, base } = this.props;
+        const { x, y, base, size } = this.props;
         const classNames = [BaseCss.Grid.Base];
         const tile = base.getTile(x, y);
         if (tile == Tile.Crystal) {
@@ -104,6 +112,12 @@ export class ViewBaseItem extends React.Component<{ x: number, y: number, base: 
         } else if (tile == Tile.Tiberium) {
             classNames.push(BaseCss.Grid.Tiberium)
         }
+        if (size !== 32) {
+            classNames.push(style({ width: size + 'px', height: size + 'px' }))
+        } else {
+            classNames.push(BaseCss.Size48)
+        }
+
         const building = base.getBase(x, y);
         if (building == null) {
             return <div className={classNames.join(" ")} />
@@ -122,8 +136,8 @@ export class ViewBaseStats extends React.Component<{ base: Base }> {
 
     render() {
         const stats = this.props.base.stats;
-        // const prod = BaseProduction.getOutput(this.props.base);
-        // console.log(prod)
+        const prod = BaseProduction.getOutput(this.props.base);
+        console.log(prod)
         return (<div className={BaseCss.Base}>
             <div>Stats</div>
             <div><div>Tiberium</div><div>{stats.tiberium.score}</div></div>

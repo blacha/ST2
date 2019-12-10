@@ -1,12 +1,13 @@
-import { CityLayout } from '../../api/city.layout';
+import { CityLayout, LayoutScanApi } from '../../api/city.layout';
+import { BaseBuilder } from '../../lib/base.builder';
 import { Faction } from '../../lib/data/faction';
+import { ClientLibCity, ClientLibStatic } from '../@types/client.lib';
+import { NpcCampType, WorldObjectType } from '../@types/client.lib.const';
 import { StModule } from '../module';
 import { ClientLibPatcher } from '../patch/patch';
 import { ClientLibIter } from '../util/iter';
 import { CityData } from './city.scan';
-import { BaseBuilder } from '../../lib/base.builder';
-import { WorldObjectType, NpcCampType } from '../@types/client.lib.const';
-import { ClientLibCity, ClientLibStatic } from '../@types/client.lib';
+
 declare const ClientLib: ClientLibStatic;
 interface LayoutToScan {
     x: number;
@@ -15,30 +16,51 @@ interface LayoutToScan {
     distance: number;
 }
 
+export enum LayoutScannerState {
+    Init,
+    Ready,
+    Scanning,
+    Abort,
+}
+
 export class LayoutScanner implements StModule {
     abort = false;
     lastCityId: number | null = null;
     maxFailCount = 10;
     lastScan: CityLayout[] = [];
+    state: LayoutScannerState = LayoutScannerState.Init;
 
     async start(): Promise<void> {
         // Nothing to do
+        this.state = LayoutScannerState.Ready;
     }
 
     async stop(): Promise<void> {
-        this.abort = true;
+        this.state = LayoutScannerState.Abort;
     }
 
     toScan: Record<string, LayoutToScan> = {};
 
-    public async scan() {
+    public async scan(): Promise<LayoutScanApi | null> {
+        if (this.state != LayoutScannerState.Ready) {
+            return null;
+        }
+        this.state = LayoutScannerState.Scanning;
         this.toScan = {};
         const cities = this.getAllCities();
         for (const city of cities) {
             this.getNearByObjects(city);
         }
         this.lastCityId = null;
-        const scanList = Object.values(this.toScan).sort((a, b) => a.distance - b.distance);
+
+        // Scan the closest bases first
+        const scanList = Object.values(this.toScan).sort((a, b) => {
+            if (a.city == b.city) {
+                return a.distance - b.distance;
+            }
+            return a.city - b.city;
+        });
+
         this.toScan = {};
         const output: CityLayout[] = [];
         for (const toScan of scanList) {
@@ -47,9 +69,29 @@ export class LayoutScanner implements StModule {
                 continue;
             }
             output.push(layout);
-            console.log('Scanned', layout, output.length, '/', scanList.length);
+            console.log(
+                'Scanned',
+                BaseBuilder.load(layout).stats.tiberium.score,
+                layout,
+                output.length,
+                '/',
+                scanList.length,
+            );
         }
         this.lastScan = output;
+
+        this.state = LayoutScannerState.Ready;
+        const md = ClientLib.Data.MainData.GetInstance();
+        return {
+            v: 1,
+            world: md.get_Server().get_WorldId(),
+            player: {
+                id: md.get_Player().id,
+                accountId: md.get_Player().accountId,
+                name: md.get_Player().name,
+            },
+            layouts: output,
+        };
     }
 
     bestBases() {

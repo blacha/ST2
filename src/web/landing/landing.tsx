@@ -12,6 +12,9 @@ export class ViewLandingPage extends React.Component {
             <div>
                 <Link to={`/base/${ExampleBaseString}`}>Link</Link>
             </div>
+            <div>
+                <Link to={`/scan/abc123`}>Scan</Link>
+            </div>
         </div>)
     }
 }

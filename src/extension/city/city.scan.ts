@@ -1,14 +1,15 @@
-import { CityLayout } from '../../api/city.layout';
+import { CityLayout, CityLayoutTile } from '../../api/city.layout';
+import { Base } from '../../lib/base';
 import { Faction } from '../../lib/data/faction';
 import { ClientLibCity, ClientLibCityUnit, ClientLibStatic } from '../@types/client.lib';
 import { GameDataStatic } from '../@types/game.data';
 import { ClientLibPatcher } from '../patch/patch';
-import { Uuid } from '../../lib/uuid';
-import { Base } from '../../lib/base';
+import { ResearchType } from '../@types/client.lib.const';
 
 declare const ClientLib: ClientLibStatic;
 declare const GAMEDATA: GameDataStatic;
-function GameToJSON(offset: number, unit: ClientLibCityUnit) {
+
+function GameToJSON(offset: number, unit: ClientLibCityUnit): CityLayoutTile & { x: number; y: number } {
     return {
         x: unit.get_CoordX(),
         y: unit.get_CoordY() + offset,
@@ -56,17 +57,19 @@ export class CityData {
         };
     }
 
-    static getLayout(city: ClientLibCity) {
-        const xYMap: any = [];
+    static getLayout(city: ClientLibCity): CityLayoutTile[] {
+        const xYMap: CityLayoutTile[] = [];
 
-        function mapUnit(unit: any) {
+        function mapUnit(unit: CityLayoutTile & { x: number; y: number }) {
             const index = Base.index(unit.x, unit.y);
             delete unit.x;
             delete unit.y;
 
+            const existing = xYMap[index];
+
             // Units can be inside other units
-            if (xYMap[index]) {
-                xYMap[index].u = unit;
+            if (existing != null && typeof existing == 'object') {
+                existing.u = unit;
                 return;
             }
             xYMap[index] = unit;
@@ -87,7 +90,7 @@ export class CityData {
                 const index = Base.index(x, y);
 
                 const tileObj = xYMap[index];
-                if (tileObj == null) {
+                if (tileObj == null || typeof tileObj == 'number') {
                     xYMap[index] = type;
                     continue;
                 }
@@ -99,41 +102,26 @@ export class CityData {
         return xYMap;
     }
 
-    static getResources(city: ClientLibCity) {
-        const data = [];
-
-        for (let y = 0; y <= Base.MaxDefY; y++) {
-            for (let x = 0; x < 9; x++) {
-                const type = city.GetResourceType(x, y);
-                if (type == 0) {
-                    continue;
-                }
-                data.push({ x, y, type });
-            }
-        }
-        return data;
-    }
-
     static getUpgrades(city: ClientLibCity): number[] {
         if (city.IsOwnBase()) {
             const player = ClientLib.Data.MainData.GetInstance().get_Player();
             const research = player.get_PlayerResearch();
 
             const output: number[] = [];
-            [1, 2, 5].forEach(function(type) {
+            for (const type of [ResearchType.OffUnits, ResearchType.DefUnits, ResearchType.Buildings]) {
                 const list = research.GetResearchItemListByType(type);
                 for (const rt of list.l) {
                     if (rt.get_CurrentLevel() < 2) {
-                        return;
+                        continue;
                     }
                     const unit = rt.get_GameDataUnit_Obj();
                     if (unit == null) {
-                        return;
+                        continue;
                     }
                     const tech = rt.get_GameDataTech_Obj();
                     output.push(tech.c);
                 }
-            });
+            }
 
             return output;
         }
@@ -159,8 +147,9 @@ export class CityData {
     static getUnits(city: ClientLibCity) {
         const units = city.get_CityUnitsData();
         if (!ClientLibPatcher.hasPatchedCityUnits(units)) {
-            throw new Error('City has not been missing: $get_DefenseUnits ');
+            throw new Error('City has not been missing: $get_DefenseUnits');
         }
+
         const defUnits = units.$get_DefenseUnits();
         const offUnits = units.$get_OffenseUnits();
 
