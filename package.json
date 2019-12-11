@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "package": "rm -r dist/ && mkdir dist && node scripts/build-extension.js && parcel build static/index.html",
+    "package": "rm -fr dist/ && mkdir dist && node scripts/build-extension.js && parcel build static/index.html",
     "build": "tsc --pretty",
     "lint": "eslint 'src/**/*.ts' --quiet --fix",
     "test": "ospec build/**/*.test.js"
