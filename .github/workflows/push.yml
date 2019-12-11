@@ -31,7 +31,7 @@ jobs:
 
     - name: Deploy
       if: github.ref == 'refs/heads/master' && github.repository == 'blacha/st'
-      run: firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
+      run: npx firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
       env:
         FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
 
