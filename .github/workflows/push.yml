@@ -25,3 +25,13 @@ jobs:
 
     - name: Test
       run: yarn run test
+
+    - name: Package
+      run: yarn run package
+
+    - name: Deploy
+      if: github.ref == 'refs/heads/master' && github.repository == 'blacha/st'
+      run: firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
+      env:
+        FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
+

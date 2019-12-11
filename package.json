@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "package": "rm -r dist/ && mkdir dist && node scripts/build-extension.js",
+    "package": "rm -r dist/ && mkdir dist && node scripts/build-extension.js && parcel build static/index.html",
     "build": "tsc --pretty",
     "lint": "eslint 'src/**/*.ts' --quiet --fix",
     "test": "ospec build/**/*.test.js"
@@ -26,9 +26,11 @@
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
+    "firebase-tools": "^7.9.0",
     "git-rev-sync": "^1.12.0",
     "mithril": "^2.0.4",
     "ospec": "^4.0.1",
+    "parcel": "^1.12.4",
     "prettier": "^1.19.1",
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0",
