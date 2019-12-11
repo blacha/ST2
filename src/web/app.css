@@ -1,0 +1,25 @@
+.Icon {
+    background: url(../../static/128_transparent.png) no-repeat;
+    width: 32px;
+    height: 32px;
+    background-size: 100%;
+    margin-right: 16px;
+}
+
+.Container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.Content {
+    margin: auto;
+    max-width: 112rem;
+    padding: 0 2rem;
+    width: 100%;
+    margin-top: 6rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
