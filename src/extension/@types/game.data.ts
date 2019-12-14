@@ -80,6 +80,8 @@ export interface GameDataUnit {
      * @example "Militants"
      */
     dn: string;
+    /** @example "Mobile anti-air infantry" */
+    ds: string;
     id: string;
 
     /** Speed */

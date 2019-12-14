@@ -14,14 +14,32 @@ export interface ClientLibPlayerResearch {
 }
 
 export interface ClientLibCityBuildable {
+    get_Id(): number;
     get_CoordX(): number;
     get_CoordY(): number;
     get_MdbUnitId(): number;
     get_CurrentLevel(): number;
 }
 
+export interface ClientLibCityUnitRepairRequirements {
+    Type: ResourceType;
+    Count: number;
+}
+
 export type ClientLibCityBuilding = ClientLibCityBuildable;
-export type ClientLibCityUnit = ClientLibCityBuildable;
+export interface ClientLibCityUnit extends ClientLibCityBuildable {
+    get_Health(): number;
+    get_CurrentDamage(): number;
+    /** Health percent between 0-1 */
+    get_HitpointsPercent(): number;
+    get_UnitGameData_Obj(): GameDataUnit;
+    get_IsAlive(): boolean;
+    get_UnitLevelRepairRequirements(): ClientLibCityUnitRepairRequirements[];
+}
+
+export interface ClientLibBattleViewUnit {
+    get_UnitDetails(): ClientLibCityUnit;
+}
 
 export interface ClientLibCityUnits {
     get_TotalDefenseHeadCount(): number;
@@ -143,6 +161,16 @@ export interface ClientLibVis {
     CenterGridPosition(x: number, y: number): void;
     Update(): void;
     ViewUpdate(): void;
+
+    get_MouseMode(): MouseMode;
+}
+
+export enum MouseMode {
+    Default = 0,
+    Repair = 1,
+    Move = 2,
+    Upgrade = 3,
+    Sell = 4,
 }
 
 export interface Singleton<T> {

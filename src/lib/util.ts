@@ -12,3 +12,13 @@ export function formatNumber(num: number): string {
 
     return num.toFixed(4) + Formats[current];
 }
+
+export enum ConsoleColor {
+    Green = `\x1b[32m`,
+    Blue = `\x1b[34m`,
+    Reset = `\x1b[0m`,
+}
+
+export function color(char: string, color: ConsoleColor) {
+    return `${color}${char}${ConsoleColor.Reset}`;
+}

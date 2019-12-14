@@ -24,6 +24,8 @@ export enum LayoutScannerState {
 }
 
 export class LayoutScanner implements StModule {
+    name = 'Layout';
+
     abort = false;
     lastCityId: number | null = null;
     maxFailCount = 10;
@@ -146,7 +148,7 @@ export class LayoutScanner implements StModule {
                 return null;
             }
 
-            const faction = Faction.fromID(city.get_CityFaction());
+            const faction = Faction.fromId(city.get_CityFaction());
             if (faction == Faction.Gdi || faction == Faction.Nod) {
                 return null;
             }

@@ -4,6 +4,9 @@ import { StModule } from './module';
 import { LayoutScanner } from './city/layout.scan';
 import { BaseBuilder } from '../lib/base.builder';
 import { Base } from '../lib/base';
+import { ClientLibStatic } from './@types/client.lib';
+
+declare const ClientLib: ClientLibStatic;
 
 class ShockrTools {
     Version = {
@@ -35,6 +38,32 @@ class ShockrTools {
         }
     }
 
+    select(b: Base): void;
+    select(x: number, y: number): void;
+    select(x: number | Base, y?: number): void {
+        if (typeof x == 'number' && typeof y == 'number') {
+            this.selectXy(x, y);
+        } else if (x instanceof Base) {
+            this.selectXy(x.x, x.y);
+        }
+    }
+
+    selectXy(x: number, y: number) {
+        ClientLib.Vis.VisMain.GetInstance().CenterGridPosition(x, y);
+
+        const md = ClientLib.Data.MainData.GetInstance();
+
+        const world = md.get_World();
+        const obj = world.GetObjectFromPosition(x, y);
+        if (obj == null) {
+            return;
+        }
+
+        if (ClientLibPatcher.hasPatchedId(obj)) {
+            md.get_Cities().set_CurrentCityId(obj.$get_Id());
+        }
+    }
+
     async stop() {
         for (const mod of this.Modules) {
             await mod.stop();
@@ -44,10 +73,10 @@ class ShockrTools {
 
 if (typeof window != 'undefined') {
     const windowAny = window as any;
-    if (windowAny.ST) {
-        windowAny.ST.stop();
+    if (windowAny.st) {
+        windowAny.st.stop();
     }
     const st = new ShockrTools();
-    windowAny.ST = st;
+    windowAny.st = st;
     st.start().catch(e => console.error(e));
 }

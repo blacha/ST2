@@ -1,15 +1,15 @@
 import { CityLayout, CityLayoutTile } from '../../api/city.layout';
 import { Base } from '../../lib/base';
 import { Faction } from '../../lib/data/faction';
-import { ClientLibCity, ClientLibCityUnit, ClientLibStatic } from '../@types/client.lib';
+import { ClientLibCity, ClientLibCityBuildable, ClientLibStatic } from '../@types/client.lib';
+import { ResearchType } from '../@types/client.lib.const';
 import { GameDataStatic } from '../@types/game.data';
 import { ClientLibPatcher } from '../patch/patch';
-import { ResearchType } from '../@types/client.lib.const';
 
 declare const ClientLib: ClientLibStatic;
 declare const GAMEDATA: GameDataStatic;
 
-function GameToJSON(offset: number, unit: ClientLibCityUnit): CityLayoutTile & { x: number; y: number } {
+function GameToJSON(offset: number, unit: ClientLibCityBuildable): CityLayoutTile & { x: number; y: number } {
     return {
         x: unit.get_CoordX(),
         y: unit.get_CoordY() + offset,
@@ -153,7 +153,7 @@ export class CityData {
         const defUnits = units.$get_DefenseUnits();
         const offUnits = units.$get_OffenseUnits();
 
-        const faction = Faction.fromID(city.get_CityFaction());
+        const faction = Faction.fromId(city.get_CityFaction());
         if (faction === Faction.Nod || faction === Faction.Gdi) {
             return {
                 d: Object.keys(defUnits.d).map(key => GameToJSON(Base.MaxBaseY, defUnits.d[key])),

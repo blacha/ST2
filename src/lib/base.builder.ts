@@ -94,7 +94,7 @@ export class BaseBuilder {
      * @param cncBase base to load
      */
     static load(cncBase: CityLayout): Base {
-        const output = new Base(cncBase.name, Faction.fromID(cncBase.faction));
+        const output = new Base(cncBase.name, Faction.fromId(cncBase.faction));
         output.x = cncBase.x;
         output.y = cncBase.y;
 

@@ -14,7 +14,7 @@ export class Faction {
         this.name = name;
     }
 
-    static fromID(id: FactionType) {
+    static fromId(id: FactionType) {
         if (
             id == FactionType.NpcFortress ||
             id == FactionType.NpcBase ||

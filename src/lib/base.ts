@@ -10,6 +10,7 @@ import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
 import { DefUnitType } from './unit/def.unit.type';
 import { Uuid } from './uuid';
+import { color, ConsoleColor } from './util';
 
 export interface CncLocation {
     x: number;
@@ -260,6 +261,27 @@ export class Base {
             this.poi.defense,
             'newEconomy',
         ].join('|');
+    }
+
+    toStringColor(): string {
+        const output: string[] = [];
+        for (let y = 0; y < Base.MaxBaseY; y++) {
+            const row: string[] = [];
+            for (let x = 0; x < Base.MaxX; x++) {
+                const tile = this.getTile(x, y);
+
+                if (tile.code === Tile.Tiberium.code) {
+                    row.push(color(' # ', ConsoleColor.Green));
+                } else if (tile.code === Tile.Crystal.code) {
+                    row.push(color(' # ', ConsoleColor.Blue));
+                } else {
+                    row.push(' . ');
+                }
+            }
+
+            output.push(row.join(''));
+        }
+        return output.join('\n');
     }
 
     toString() {

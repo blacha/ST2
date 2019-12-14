@@ -31,7 +31,7 @@ export class App extends React.Component {
             <BrowserRouter>
                 <div className={AppCss.Main}>
                     <div className={AppCss.Header}>
-                        <section className="container">
+                        <section className="Container">
                             <div className="Icon"></div>
                             <div className="IconTitle">ShockrTools</div>
                         </section>
