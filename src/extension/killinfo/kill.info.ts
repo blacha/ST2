@@ -14,7 +14,7 @@ export interface KillInfoProto {
 /**
  * Display the approximate plunder amount when mousing over units inside the battle view
  */
-class KillInfo implements StModule {
+export class KillInfo implements StModule {
     name = 'KillInfo';
 
     protoInfo: KillInfoProto | null = null;
@@ -23,21 +23,23 @@ class KillInfo implements StModule {
     async start() {
         this.findPrototype();
 
-        if (this.protoInfo == null) {
-            return;
-        }
-        const proto = $I[this.protoInfo.protoName];
-        if (proto == null || proto.prototype[this.protoInfo.functionName] == null) {
+        const protoInfo = this.protoInfo;
+        if (protoInfo == null) {
             return;
         }
 
-        this.oldFunction = proto.prototype[this.protoInfo.functionName];
-        proto.prototype[this.protoInfo.functionName] = function(c: ClientLibBattleViewUnit) {
+        const proto = $I[protoInfo.protoName];
+        if (proto == null || proto.prototype[protoInfo.functionName] == null) {
+            return;
+        }
+
+        const oldFunction = (this.oldFunction = proto.prototype[protoInfo.functionName]);
+        proto.prototype[protoInfo.functionName] = function(c: ClientLibBattleViewUnit) {
             if (typeof c.get_UnitDetails !== 'function') {
-                return this.oldFunction.call(this, c);
+                return oldFunction.call(this, c);
             }
 
-            this.oldFunction.call(this, c);
+            oldFunction.call(this, c);
             if (ClientLib.Vis.VisMain.GetInstance().get_MouseMode() != MouseMode.Default) {
                 return;
             }
@@ -49,8 +51,8 @@ class KillInfo implements StModule {
             const plunder = unit.get_UnitLevelRepairRequirements();
             const data = unit.get_UnitGameData_Obj();
 
-            if (this[this.protoInfo.internalObj] != null) {
-                this[this.protoInfo.internalObj][this.protoInfo.showFunc](data.dn, data.ds, plunder, '');
+            if (this[protoInfo.internalObj] != null) {
+                this[protoInfo.internalObj][protoInfo.showFunction](data.dn, data.ds, plunder, '');
             }
         };
     }
@@ -58,10 +60,9 @@ class KillInfo implements StModule {
     findPrototype() {
         const funcNameMatch = '"tnf:full hp needed to upgrade")';
         const funcContentMatch = 'DefenseTerrainFieldType';
-        let funcName = '';
 
         /** Look for the translation string */
-        function searchFunction(proto: any) {
+        function searchFunction(proto: any): string {
             for (const j of Object.keys(proto)) {
                 if (j.length !== 6) {
                     continue;
@@ -83,11 +84,9 @@ class KillInfo implements StModule {
             if (obj.prototype === undefined) {
                 continue;
             }
+            const funcName = searchFunction(obj.prototype);
             if (funcName === '') {
-                funcName = searchFunction(obj.prototype);
-                if (funcName === '') {
-                    continue;
-                }
+                continue;
             }
 
             const func = obj.prototype[funcName];

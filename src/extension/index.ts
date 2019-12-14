@@ -5,6 +5,7 @@ import { LayoutScanner } from './city/layout.scan';
 import { BaseBuilder } from '../lib/base.builder';
 import { Base } from '../lib/base';
 import { ClientLibStatic } from './@types/client.lib';
+import { KillInfo } from './killinfo/kill.info';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -18,7 +19,8 @@ class ShockrTools {
 
     Base = BaseBuilder;
     Layout = new LayoutScanner();
-    Modules: StModule[] = [this.Layout];
+    KillInfo = new KillInfo();
+    Modules: StModule[] = [this.Layout, this.KillInfo];
 
     async start() {
         let failCount = 0;
