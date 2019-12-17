@@ -1,4 +1,4 @@
-import { FactionType, ResourceType, WorldObjectType } from './client.lib.const';
+import { FactionType, ResourceType, WorldObjectType, VisObjectType } from './client.lib.const';
 import { GameDataUnit, GameDataTech } from './game.data';
 
 /* eslint-disable @typescript-eslint/camelcase */
@@ -126,6 +126,17 @@ export interface ClientLibWorld {
     GetObjectFromPosition(x: number, y: number): ClientLibWorldObject;
 }
 
+export type RegionNpcCamp = VisObject;
+export type RegionObject = VisObject;
+
+export interface VisObject {
+    get_Id(): number;
+    get_X(): number;
+    get_Y(): number;
+    get_VisObjectType(): VisObjectType;
+    get_Coordinates(): number;
+}
+
 export interface ClientLibMainData {
     get_Time(): unknown;
     get_Chat(): unknown;
@@ -183,6 +194,9 @@ export interface ClientLibStatic {
     };
     Vis: {
         VisMain: Singleton<ClientLibVis>;
+        VisObject: {
+            EObjectType: typeof VisObjectType;
+        };
     };
     Base: {
         MathUtil: ClientLibMathUtil;

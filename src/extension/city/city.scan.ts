@@ -19,6 +19,7 @@ function GameToJSON(offset: number, unit: ClientLibCityBuildable): CityLayoutTil
 }
 
 export class CityData {
+    static MaxFailCount = 10;
     static $MM: number[];
     static getCurrentCity(): CityLayout | null {
         const MainData = ClientLib.Data.MainData.GetInstance();
@@ -60,7 +61,7 @@ export class CityData {
     static getLayout(city: ClientLibCity): CityLayoutTile[] {
         const xYMap: CityLayoutTile[] = [];
 
-        function mapUnit(unit: CityLayoutTile & { x: number; y: number }) {
+        function addUnit(unit: CityLayoutTile & { x: number; y: number }) {
             const index = Base.index(unit.x, unit.y);
             delete unit.x;
             delete unit.y;
@@ -75,11 +76,18 @@ export class CityData {
             xYMap[index] = unit;
         }
 
-        CityData.getBuildings(city).forEach(mapUnit);
+        const buildings = CityData.getBuildings(city);
+        for (const building of buildings) {
+            addUnit(building);
+        }
 
         const units = CityData.getUnits(city);
-        units.d.forEach(mapUnit);
-        units.o.forEach(mapUnit);
+        for (const unit of units.d) {
+            addUnit(unit);
+        }
+        for (const unit of units.o) {
+            addUnit(unit);
+        }
 
         for (let y = 0; y <= Base.MaxDefY; y++) {
             for (let x = 0; x < 9; x++) {
@@ -100,6 +108,40 @@ export class CityData {
         }
 
         return xYMap;
+    }
+
+    static async waitForCityReady(cityId: number): Promise<ClientLibCity | null> {
+        for (let i = 0; i < CityData.MaxFailCount; i++) {
+            await new Promise(resolve => setTimeout(resolve, 100 * i));
+
+            const city = CityData.isReady(cityId);
+            if (city != null) {
+                return city;
+            }
+        }
+        return null;
+    }
+
+    static isReady(cityId: number): ClientLibCity | null {
+        const city = ClientLib.Data.MainData.GetInstance()
+            .get_Cities()
+            .GetCity(cityId);
+
+        if (city == null) {
+            return null;
+        }
+
+        // Dead ignore
+        if (city.get_IsGhostMode()) {
+            return null;
+        }
+
+        // Base has not loaded yet
+        if (city.GetBuildingsConditionInPercent() === 0) {
+            return null;
+        }
+
+        return city;
     }
 
     static getUpgrades(city: ClientLibCity): number[] {
@@ -172,7 +214,7 @@ export class CityData {
         if (buildings.c == 0) {
             return [];
         }
-        return Object.keys(buildings.d).map(key => GameToJSON(Base.MaxBaseY, buildings.d[key]));
+        return Object.keys(buildings.d).map(key => GameToJSON(0, buildings.d[key]));
     }
 
     static getModuleMap(): number[] {

@@ -85,10 +85,6 @@ export class Base {
         this.id = Uuid.ulid();
     }
 
-    static $index(x: number, y: number) {
-        return x + y * Base.MaxX;
-    }
-
     /**
      * Build a object at a position
      * @param x x offset
@@ -134,7 +130,7 @@ export class Base {
     }
 
     getTile(x: number, y: number) {
-        return this.tiles[Base.$index(x, y)] || Tile.Empty;
+        return this.tiles[Base.index(x, y)] || Tile.Empty;
     }
 
     getResource(x: number, y: number): GameResource | null {
@@ -150,15 +146,15 @@ export class Base {
 
     setTile(x: number, y: number, tile: Tile) {
         this._stats = null;
-        this.tiles[Base.$index(x, y)] = tile;
+        this.tiles[Base.index(x, y)] = tile;
     }
 
     getBase(x: number, y: number): Buildable {
-        return this.base[Base.$index(x, y)];
+        return this.base[Base.index(x, y)];
     }
 
     setBase(x: number, y: number, buildable: Buildable) {
-        this.base[Base.$index(x, y)] = buildable;
+        this.base[Base.index(x, y)] = buildable;
     }
 
     setUpgrades(upgrades: number[]) {

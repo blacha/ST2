@@ -166,5 +166,43 @@ export enum PlacementType {
     Structure = 4,
 }
 
+export enum VisObjectType {
+    UnknownType = 0,
+    CityBuildingType = 1,
+    CityResourceFieldType = 2,
+    CityWallType = 3,
+    RegionCityType = 4,
+    RegionSuperWeaponType = 5,
+    RegionTerrainType = 6,
+    BattlegroundUnit = 7,
+    ArmyUnitType = 8,
+    ArmyDismissArea = 9,
+    DefenseUnitType = 10,
+    DefenseTerrainFieldType = 11,
+    RegionMoveTarget = 12,
+    RegionFreeSlotType = 13,
+    RegionNPCBase = 14,
+    RegionNPCCamp = 15,
+    RegionPointOfInterest = 16,
+    RegionRuin = 17,
+    RegionGhostCity = 18,
+    RegionNewPlayerSpot = 19,
+    DefenseTerrainFieldAdditionalSlosType = 20,
+    DefenseOffScreenUnit = 21,
+    WorldObject = 24,
+    WorldMapMarker = 25,
+    WorldSatelliteCrashMarker = 26,
+    WorldHubCenterMarker = 27,
+    WorldHubControlMarker = 28,
+    RegionHubServer = 29,
+    RegionHubControl = 30,
+    RegionHubCenter = 31,
+    RegionAllianceMarker = 32,
+    WorldCityOwn = 33,
+    WorldAllianceMarker = 34,
+    WorldPOI = 35,
+    WorldCityNotOwn = 36,
+}
+
 export type PartialModifierMap = Partial<Record<keyof typeof ModifierType, number>>;
 export type PartialResourceMap = Partial<Record<keyof typeof ResourceType, number>>;

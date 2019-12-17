@@ -100,7 +100,7 @@ export class BaseBuilder {
 
         for (let y = 0; y < Base.MaxY; y++) {
             for (let x = 0; x < Base.MaxX; x++) {
-                const index = Base.$index(x, y);
+                const index = Base.index(x, y);
                 const unit = cncBase.tiles[index];
                 let tile: Tile;
 

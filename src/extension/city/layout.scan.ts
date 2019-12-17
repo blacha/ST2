@@ -122,51 +122,36 @@ export class LayoutScanner implements StModule {
             return null;
         }
 
-        for (let i = 0; i < this.maxFailCount; i++) {
-            if (this.abort) {
-                return null;
-            }
-            // console.log(x, y, 'ScanCount', i);
-            await new Promise(resolve => setTimeout(resolve, 100 * i));
+        ClientLib.Data.MainData.GetInstance()
+            .get_Cities()
+            .set_CurrentCityId(obj.$get_Id());
 
-            ClientLib.Data.MainData.GetInstance()
-                .get_Cities()
-                .set_CurrentCityId(obj.$get_Id());
-            const city = ClientLib.Data.MainData.GetInstance()
-                .get_Cities()
-                .GetCity(obj.$get_Id());
-            if (city == null) {
-                continue;
-            }
-
-            const cached = this.getCache(x, y);
-            if (cached != null && cached.cityId == city.get_Id() && cached.version > -1) {
-                return cached;
-            }
-            // Dead ignore
-            if (city.get_IsGhostMode()) {
-                return null;
-            }
-
-            const faction = Faction.fromId(city.get_CityFaction());
-            if (faction == Faction.Gdi || faction == Faction.Nod) {
-                return null;
-            }
-
-            // Base has not loaded yet
-            if (city.GetBuildingsConditionInPercent() === 0) {
-                continue;
-            }
-
-            const layout = CityData.getCityData(city);
-            if (layout != null) {
-                this.setCache(x, y, layout);
-            }
-
-            return layout;
+        const city = await CityData.waitForCityReady(obj.$get_Id());
+        if (this.abort) {
+            return null;
         }
-        console.error(x, y, 'ScanFailed');
-        return null;
+
+        if (city == null) {
+            console.error(x, y, 'ScanFailed');
+            return null;
+        }
+
+        const cached = this.getCache(x, y);
+        if (cached != null && cached.cityId == city.get_Id() && cached.version > -1) {
+            return cached;
+        }
+
+        const faction = Faction.fromId(city.get_CityFaction());
+        if (faction == Faction.Gdi || faction == Faction.Nod) {
+            return null;
+        }
+
+        const layout = CityData.getCityData(city);
+        if (layout != null) {
+            this.setCache(x, y, layout);
+        }
+
+        return layout;
     }
 
     private cacheKey(x: number, y: number) {
@@ -183,6 +168,7 @@ export class LayoutScanner implements StModule {
         }
         return JSON.parse(cached) as CityLayout;
     }
+
     setCache(x: number, y: number, layout: CityLayout): void {
         localStorage.setItem(this.cacheKey(x, y), JSON.stringify(layout));
     }

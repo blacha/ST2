@@ -6,6 +6,7 @@ import { BaseBuilder } from '../lib/base.builder';
 import { Base } from '../lib/base';
 import { ClientLibStatic } from './@types/client.lib';
 import { KillInfo } from './killinfo/kill.info';
+import { VisitBaseButton } from './visit/visit.base';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -17,10 +18,12 @@ class ShockrTools {
         hash: '__HASH__',
     };
 
-    Base = BaseBuilder;
+    Base = Base;
+    Builder = BaseBuilder;
     Layout = new LayoutScanner();
     KillInfo = new KillInfo();
-    Modules: StModule[] = [this.Layout, this.KillInfo];
+    VisitBase = new VisitBaseButton();
+    Modules: StModule[] = [this.Layout, this.KillInfo, this.VisitBase];
 
     async start() {
         let failCount = 0;
@@ -34,8 +37,9 @@ class ShockrTools {
 
         // Patch the client lib before starting the modules
         ClientLibPatcher.patch();
-
+        console.log('st:starting');
         for (const mod of this.Modules) {
+            console.log('\tstart' + mod.name);
             await mod.start();
         }
     }
@@ -67,18 +71,27 @@ class ShockrTools {
     }
 
     async stop() {
+        console.log('st:stopping');
         for (const mod of this.Modules) {
+            console.log('\tstop', mod.name);
             await mod.stop();
         }
+        console.log('st:stopped');
     }
 }
 
+export const StStatic = new ShockrTools();
+
 if (typeof window != 'undefined') {
-    const windowAny = window as any;
-    if (windowAny.st) {
-        windowAny.st.stop();
+    async function startup() {
+        const windowAny = window as any;
+        if (windowAny.st) {
+            await windowAny.st.stop();
+        }
+
+        windowAny.st = StStatic;
+        await StStatic.start();
     }
-    const st = new ShockrTools();
-    windowAny.st = st;
-    st.start().catch(e => console.error(e));
+
+    startup().catch(e => console.error(e));
 }
