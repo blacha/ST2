@@ -174,6 +174,8 @@ export interface ClientLibVis {
     ViewUpdate(): void;
 
     get_MouseMode(): MouseMode;
+
+    get_SelectedObject(): VisObject | null;
 }
 
 export enum MouseMode {
@@ -193,6 +195,7 @@ export interface ClientLibStatic {
         MainData: Singleton<ClientLibMainData>;
     };
     Vis: {
+        SelectionChange: Function;
         VisMain: Singleton<ClientLibVis>;
         VisObject: {
             EObjectType: typeof VisObjectType;
@@ -200,5 +203,26 @@ export interface ClientLibStatic {
     };
     Base: {
         MathUtil: ClientLibMathUtil;
+    };
+}
+
+export interface PheStatic {
+    cnc: {
+        Util: {
+            attachNetEvent(
+                mainData: ClientLibVis,
+                evtName: 'SelectionChange',
+                eventFunction: Function,
+                thisArg: any,
+                callback: Function,
+            ): void;
+            detachNetEvent(
+                mainData: ClientLibVis,
+                evtName: 'SelectionChange',
+                eventFunction: Function,
+                thisArg: any,
+                callback: Function,
+            ): void;
+        };
     };
 }

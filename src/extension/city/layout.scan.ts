@@ -1,7 +1,7 @@
 import { CityLayout, LayoutScanApi } from '../../api/city.layout';
 import { BaseBuilder } from '../../lib/base.builder';
 import { Faction } from '../../lib/data/faction';
-import { ClientLibCity, ClientLibStatic } from '../@types/client.lib';
+import { ClientLibCity, ClientLibStatic, PheStatic } from '../@types/client.lib';
 import { NpcCampType, WorldObjectType } from '../@types/client.lib.const';
 import { StModule } from '../module';
 import { ClientLibPatcher } from '../patch/patch';
@@ -9,6 +9,7 @@ import { ClientLibIter } from '../util/iter';
 import { CityData } from './city.scan';
 
 declare const ClientLib: ClientLibStatic;
+declare const phe: PheStatic;
 interface LayoutToScan {
     x: number;
     y: number;
@@ -26,27 +27,71 @@ export enum LayoutScannerState {
 export class LayoutScanner implements StModule {
     name = 'Layout';
 
-    abort = false;
     lastCityId: number | null = null;
-    maxFailCount = 10;
     lastScan: CityLayout[] = [];
     state: LayoutScannerState = LayoutScannerState.Init;
+    toScan: Record<string, LayoutToScan> = {};
 
     async start(): Promise<void> {
-        // Nothing to do
         this.state = LayoutScannerState.Ready;
+        phe.cnc.Util.attachNetEvent(
+            ClientLib.Vis.VisMain.GetInstance(),
+            'SelectionChange',
+            ClientLib.Vis.SelectionChange,
+            this,
+            this.onSelectionChange,
+        );
     }
 
     async stop(): Promise<void> {
         this.state = LayoutScannerState.Abort;
+        phe.cnc.Util.detachNetEvent(
+            ClientLib.Vis.VisMain.GetInstance(),
+            'SelectionChange',
+            ClientLib.Vis.SelectionChange,
+            this,
+            this.onSelectionChange,
+        );
     }
 
-    toScan: Record<string, LayoutToScan> = {};
+
+    /**
+     * When a player selects a new base, attempt to scan it
+     * Abort if the current selected object changes
+     */
+    public async onSelectionChange(): Promise<void> {
+        // Already doing something else abort
+        if (this.state != LayoutScannerState.Ready) {
+            return;
+        }
+
+        const currentObj = ClientLib.Vis.VisMain.GetInstance().get_SelectedObject();
+        if (currentObj === null) {
+            return;
+        }
+
+        const currentType = currentObj.get_VisObjectType();
+        if (
+            currentType === ClientLib.Vis.VisObject.EObjectType.RegionNPCCamp ||
+            currentType === ClientLib.Vis.VisObject.EObjectType.RegionNPCBase
+        ) {
+            const data = await this.scanLayout(currentObj.get_Id());
+            console.log(data);
+        }
+    }
 
     public async scan(): Promise<LayoutScanApi | null> {
         if (this.state != LayoutScannerState.Ready) {
             return null;
         }
+        try {
+            return await this.doScan();
+        } finally {
+            this.state = LayoutScannerState.Ready;
+        }
+    }
+
+    private async doScan(): Promise<LayoutScanApi | null> {
         this.state = LayoutScannerState.Scanning;
         this.toScan = {};
         const cities = this.getAllCities();
@@ -95,22 +140,20 @@ export class LayoutScanner implements StModule {
             layouts: output,
         };
     }
+    /** Should the scan be aborted */
+    get isAborting() {
+        return this.state === LayoutScannerState.Abort;
+    }
 
+    /** Top bases sorted by tiberium score */
     bestBases() {
         return this.lastScan
             .map(f => BaseBuilder.load(f))
             .sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score);
     }
 
-    async scanLayout(x: number, y: number, cityId: number): Promise<CityLayout | null> {
-        if (this.abort) {
-            return null;
-        }
-        // console.log(x, y, 'Scan', cityId);
-        if (cityId != null) {
-            this.setCurrentCity(cityId);
-        }
-
+    /** Lookup cityId given the worldX/Y */
+    getCityId(x: number, y: number): number | null {
         const world = ClientLib.Data.MainData.GetInstance().get_World();
         const obj = world.GetObjectFromPosition(x, y);
         if (obj == null) {
@@ -118,16 +161,45 @@ export class LayoutScanner implements StModule {
         }
 
         if (!ClientLibPatcher.hasPatchedId(obj)) {
-            console.error('WorldObject missing $get_Id');
             return null;
         }
 
         ClientLib.Data.MainData.GetInstance()
             .get_Cities()
             .set_CurrentCityId(obj.$get_Id());
+        return obj.$get_Id();
+    }
 
-        const city = await CityData.waitForCityReady(obj.$get_Id());
-        if (this.abort) {
+    /**
+     * Scan a city given the cityId
+     * @param cityId
+     */
+    async scanLayout(cityId: number): Promise<CityLayout | null>;
+
+    /**
+     * Scan a city given the position and optionally the city to scan from
+     * @param x worldX
+     * @param y worldY
+     * @param scanCityId optional city to scan from
+     */
+    async scanLayout(x: number, y: number, scanCityId?: number): Promise<CityLayout | null>;
+    async scanLayout(x: number, y?: number, scanCityId?: number): Promise<CityLayout | null> {
+        if (this.isAborting) {
+            return null;
+        }
+
+        // console.log(x, y, 'Scan', scanCityId);
+        if (scanCityId != null) {
+            this.setCurrentCity(scanCityId);
+        }
+
+        const cityId = y == null ? x : this.getCityId(x, y);
+        if (cityId == null) {
+            return null;
+        }
+
+        const city = await CityData.waitForCityReady(cityId);
+        if (this.isAborting) {
             return null;
         }
 
@@ -136,7 +208,7 @@ export class LayoutScanner implements StModule {
             return null;
         }
 
-        const cached = this.getCache(x, y);
+        const cached = this.getCache(city.get_PosX(), city.get_PosY());
         if (cached != null && cached.cityId == city.get_Id() && cached.version > -1) {
             return cached;
         }
@@ -148,7 +220,7 @@ export class LayoutScanner implements StModule {
 
         const layout = CityData.getCityData(city);
         if (layout != null) {
-            this.setCache(x, y, layout);
+            this.setCache(city.get_PosX(), city.get_PosY(), layout);
         }
 
         return layout;
@@ -208,8 +280,8 @@ export class LayoutScanner implements StModule {
                     continue;
                 }
 
-                const coord = ClientLib.Base.MathUtil.EncodeCoordId(scanX, scanY);
-                if (this.toScan[coord]) {
+                const coOrd = ClientLib.Base.MathUtil.EncodeCoordId(scanX, scanY);
+                if (this.toScan[coOrd]) {
                     continue;
                 }
 
@@ -226,7 +298,7 @@ export class LayoutScanner implements StModule {
                     continue;
                 }
 
-                this.toScan[coord] = {
+                this.toScan[coOrd] = {
                     x: scanX,
                     y: scanY,
                     distance,
