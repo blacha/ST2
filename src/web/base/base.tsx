@@ -29,6 +29,12 @@ export const BaseCss = {
         flexWrap: 'wrap',
         justifyContent: 'space-between',
     }),
+    BaseDef: style({
+        margin: '16px 0',
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+    }),
     Total: style({
         fontWeight: 'bold',
     }),
@@ -53,7 +59,7 @@ export const BaseCss = {
             backgroundColor: 'rgba(20,20,20,0.47)',
         }),
         Woods: style({
-            backgroundColor: 'rgba(20,20,20,0.47)',
+            backgroundColor: 'rgba(140,80,0,0.47)',
         }),
         Swamp: style({
             backgroundColor: 'rgba(0,80,0,0.47)',
@@ -95,7 +101,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
         return (
             <div className="Base">
                 <div className={BaseCss.Title}>
-                    <div>{this.base.name} sadasd </div>
+                    <div>{this.base.name} </div>
                     <div>{this.base.x > 0 ? `@ ${this.base.x}, ${this.base.y}` : ''}</div>
                     <div>{this.base.owner}</div>
                 </div>

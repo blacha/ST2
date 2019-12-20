@@ -14,5 +14,6 @@
         "build/",
         "node_modules",
         "game"
-    ]
+    ],
+    "include": ["src/"]
 }

@@ -18,6 +18,6 @@ export class ViewBaseDef extends React.Component<{ base: Base; size: number }> {
             );
         }
 
-        return <div className={BaseCss.Base}>{output}</div>;
+        return <div className={BaseCss.BaseDef}>{output}</div>;
     }
 }
