@@ -19,6 +19,8 @@ export class ViewBaseItem extends React.Component<{ x: number; y: number; base: 
             classNames.push(BaseCss.Grid.Swamp);
         } else if (tile == Tile.Woods) {
             classNames.push(BaseCss.Grid.Woods);
+        } else if(tile == Tile.Scrub) {
+            classNames.push(BaseCss.Grid.Scrub);
         }
 
         if (size !== 32) {
@@ -29,7 +31,7 @@ export class ViewBaseItem extends React.Component<{ x: number; y: number; base: 
 
         const building = base.getBase(x, y);
         if (building == null) {
-            return <div className={classNames.join(' ')} />;
+            return <div className={classNames.join(' ')} title={tile.name} />;
         }
 
         return (

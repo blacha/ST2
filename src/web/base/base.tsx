@@ -62,7 +62,10 @@ export const BaseCss = {
             backgroundColor: 'rgba(140,80,0,0.47)',
         }),
         Swamp: style({
-            backgroundColor: 'rgba(0,80,0,0.47)',
+            backgroundColor: 'rgba(0,0,80,0.47)',
+        }),
+        Scrub: style({
+            backgroundColor: 'rgba(100,80,80,0.47)',
         }),
     },
     Cell: {
@@ -71,9 +74,6 @@ export const BaseCss = {
             bottom: '2px',
             right: '2px',
             fontSize: '80%',
-            // border: '1px solid rgba(0,0,0,0.2)',
-            // backgroundColor: 'rgba(150,0,0,0.8)',
-            // borderRadius: '4px'
         }),
     },
 };
@@ -113,4 +113,3 @@ export class ViewBase extends React.Component<ViewBaseProps> {
         );
     }
 }
-

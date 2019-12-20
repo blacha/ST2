@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { style } from 'typestyle';
+import { ViewAlliance } from './alliance/alliance';
 import { ViewBase } from './base/base';
 import { ViewLandingPage } from './landing/landing';
-import { ViewScan } from './scan/scan.result'
-import { style } from 'typestyle';
-import {ViewAlliance} from './alliance/alliance'
+import { ViewScan } from './scan/scan.result';
 
 
 const AppCss = {
