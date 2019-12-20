@@ -54,7 +54,6 @@ export class LayoutScanner implements StModule {
         );
     }
 
-
     /**
      * When a player selects a new base, attempt to scan it
      * Abort if the current selected object changes
@@ -76,7 +75,10 @@ export class LayoutScanner implements StModule {
             currentType === ClientLib.Vis.VisObject.EObjectType.RegionNPCBase
         ) {
             const data = await this.scanLayout(currentObj.get_Id());
-            console.log(data);
+            if (data != null) {
+                console.log(BaseBuilder.load(data).stats.tiberium.score, data);
+                this.lastScan = [data];
+            }
         }
     }
 
@@ -254,10 +256,11 @@ export class LayoutScanner implements StModule {
             .get_Cities()
             .get_AllCities();
         const selectedBase = allCities.d[cityId];
+        const visMain = ClientLib.Vis.VisMain.GetInstance();
 
-        ClientLib.Vis.VisMain.GetInstance().CenterGridPosition(selectedBase.get_PosX(), selectedBase.get_PosY());
-        ClientLib.Vis.VisMain.GetInstance().Update();
-        ClientLib.Vis.VisMain.GetInstance().ViewUpdate();
+        visMain.CenterGridPosition(selectedBase.get_PosX(), selectedBase.get_PosY());
+        visMain.Update();
+        visMain.ViewUpdate();
         this.lastCityId = cityId;
     }
 

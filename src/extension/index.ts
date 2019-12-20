@@ -7,6 +7,7 @@ import { Base } from '../lib/base';
 import { ClientLibStatic } from './@types/client.lib';
 import { KillInfo } from './killinfo/kill.info';
 import { VisitBaseButton } from './visit/visit.base';
+import { PlayerInfo } from './player/player.info';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -23,7 +24,8 @@ class ShockrTools {
     Layout = new LayoutScanner();
     KillInfo = new KillInfo();
     VisitBase = new VisitBaseButton();
-    Modules: StModule[] = [this.Layout, this.KillInfo, this.VisitBase];
+    Player = new PlayerInfo();
+    Modules: StModule[] = [this.Layout, this.KillInfo, this.VisitBase, this.Player];
 
     async start() {
         let failCount = 0;

@@ -124,6 +124,7 @@ export interface ClientLibWorldObject {
 }
 export interface ClientLibWorld {
     GetObjectFromPosition(x: number, y: number): ClientLibWorldObject;
+    GetCities(): ClientLibMap<ClientLibWorldObject>;
 }
 
 export type RegionNpcCamp = VisObject;

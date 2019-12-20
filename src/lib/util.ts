@@ -10,7 +10,7 @@ export function formatNumber(num: number): string {
         num /= 1000;
     }
 
-    return num.toFixed(4) + Formats[current];
+    return num.toFixed(2) + Formats[current];
 }
 
 export enum ConsoleColor {

@@ -27,8 +27,12 @@ export const PATCH_DATA = {
         data: 'ClientLib.Data.WorldSector.WorldObjectNPCBase.prototype.$ctor',
         re: /100\){0,1};this\.(.{6})=Math.floor/,
     },
-    'ClientLib.Data.WorldSector.WorldObjectCity.$get_Id': {
+    'ClientLib.Data.WorldSector.WorldObjectCity.$get_AllianceId': {
         data: 'ClientLib.Data.WorldSector.WorldObjectCity.prototype.$ctor',
         re: /.*d\+=f;this\.(.{6})=\(/,
+    },
+    'ClientLib.Data.WorldSector.WorldObjectCity.$get_Id': {
+        data: 'ClientLib.Data.WorldSector.WorldObjectCity.prototype.$ctor',
+        re: /.*d\+=f;this\.([A-Z]{6})=\(.*d\+=f.*d\+=/,
     },
 };
