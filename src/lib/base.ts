@@ -1,16 +1,23 @@
+import { BaseIter } from './base.iter';
 import { Buildable } from './base/buildable';
 import { Tile } from './base/tile';
 import { Building } from './building/building';
 import { BuildingType } from './building/building.type';
 import { Faction } from './data/faction';
-import { GameDataObjectType, GameDataObject } from './data/game.data.object';
+import { GameDataObject, GameDataObjectType } from './data/game.data.object';
 import { GameResource, GameResources } from './game.resources';
-import { BaseIter } from './base.iter';
+import { BaseProduction } from './production';
+import { BaseOutput } from './production/calculator';
+import { DefUnitType } from './unit/def.unit.type';
 import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
-import { DefUnitType } from './unit/def.unit.type';
-import { Uuid } from './uuid';
 import { color, ConsoleColor } from './util';
+import { Uuid } from './uuid';
+import { HarvesterCalculator } from './production/harvester';
+import { SiloCalculator } from './production/silo';
+import { PowerPlantCalculator } from './production/power.plant';
+import { AccumulatorCalculator } from './production/accumulator';
+import { RefineryCalculator } from './production/refinery';
 
 export interface CncLocation {
     x: number;
@@ -65,6 +72,7 @@ export class Base {
     faction: Faction;
     offFaction: Faction;
     base: Buildable[];
+    owner: string | null;
 
     poi: PoiData = new PoiData();
 
@@ -83,6 +91,7 @@ export class Base {
         this.base = [];
 
         this.id = Uuid.ulid();
+        this.owner = null;
     }
 
     /**
@@ -144,8 +153,14 @@ export class Base {
         return null;
     }
 
-    setTile(x: number, y: number, tile: Tile) {
+    clearCache() {
+        this._score = null;
         this._stats = null;
+        this._production = null;
+    }
+
+    setTile(x: number, y: number, tile: Tile) {
+        this.clearCache();
         this.tiles[Base.index(x, y)] = tile;
     }
 
@@ -165,8 +180,16 @@ export class Base {
         return this.upgrades.indexOf(unitId) !== -1;
     }
 
-    _stats: { tiberium: SiloCount; crystal: SiloCount } | null = null;
-    _score: number | null = null;
+    private _production: BaseOutput | null = null;
+    get production() {
+        if (this._production == null) {
+            this._production = BaseProduction.getOutput(this);
+        }
+        return this._production;
+    }
+
+    private _stats: { tiberium: SiloCount; crystal: SiloCount } | null = null;
+    private _score: number | null = null;
     get stats() {
         if (this._stats != null) {
             return this._stats;
@@ -274,7 +297,6 @@ export class Base {
                     row.push(' . ');
                 }
             }
-
             output.push(row.join(''));
         }
         return output.join('\n');

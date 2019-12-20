@@ -28,6 +28,9 @@ export const BaseCss = {
     Total: style({
         fontWeight: 'bold',
     }),
+    Title: style({
+        fontWeight: 'bold',
+    }),
     Grid: {
         Base: style({
             position: 'relative',
@@ -78,8 +81,10 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     render() {
         return (
             <div className="Base">
-                <div>
-                    {this.base.name} @ {this.base.x}, {this.base.y}
+                <div className={BaseCss.Title}>
+                    <div>{this.base.name}</div>
+                    <div>{this.base.x > 0 ? `@ ${this.base.x}, ${this.base.y}` : ''}</div>
+                    <div>{this.base.owner}</div>
                 </div>
                 <ViewBaseMain base={this.base} size={32} />
                 <ViewBaseStats base={this.base} />
@@ -145,25 +150,25 @@ export class ViewBaseStats extends React.Component<{ base: Base }> {
         return (
             <div className={BaseCss.Base}>
                 <div>
-                    <div>Tiberium</div>
+                    <div className={BaseCss.Title}>Tiberium</div>
                     <div>{formatNumber(prod.cont.tiberium)}</div>
                     <div>{formatNumber(prod.pkg.tiberium)}</div>
                     <div className={BaseCss.Total}>{formatNumber(prod.cont.tiberium + prod.pkg.tiberium)}</div>
                 </div>
                 <div>
-                    <div>Crystal</div>
+                    <div className={BaseCss.Title}>Crystal</div>
                     <div>{formatNumber(prod.cont.crystal)}</div>
                     <div>{formatNumber(prod.pkg.crystal)}</div>
                     <div className={BaseCss.Total}>{formatNumber(prod.cont.crystal + prod.pkg.crystal)}</div>
                 </div>
                 <div>
-                    <div>Power</div>
+                    <div className={BaseCss.Title}>Power</div>
                     <div>{formatNumber(prod.cont.power)}</div>
                     <div>{formatNumber(prod.pkg.power)}</div>
                     <div className={BaseCss.Total}>{formatNumber(prod.cont.power + prod.pkg.power)}</div>
                 </div>
                 <div>
-                    <div>Credits</div>
+                    <div className={BaseCss.Title}>Credits</div>
                     <div>{formatNumber(prod.cont.credits)}</div>
                     <div>{formatNumber(prod.pkg.credits)}</div>
                     <div className={BaseCss.Total}>{formatNumber(prod.cont.credits + prod.pkg.credits)}</div>

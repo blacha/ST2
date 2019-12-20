@@ -1,13 +1,7 @@
 import { Base } from './base';
-import { Tile } from './base/tile';
 import { Building } from './building/building';
 import { GameResources } from './game.resources';
-import { AccumulatorCalculator } from './production/accumulator';
 import { BaseOutput, OutputCalculator } from './production/calculator';
-import { HarvesterCalculator } from './production/harvester';
-import { PowerPlantCalculator } from './production/power.plant';
-import { RefineryCalculator } from './production/refinery';
-import { SiloCalculator } from './production/silo';
 
 export class BaseProduction {
     static BuildingMap: { [key: string]: OutputCalculator } = {};
@@ -40,16 +34,14 @@ export class BaseProduction {
         const output: BaseOutput = {
             cont: new GameResources(),
             pkg: new GameResources(),
+            total: new GameResources(),
             alliance: base.poi.clone(),
         };
 
         Base.buildingForEach((x, y) => BaseProduction.getBuildingOutput(output, base, x, y));
+        output.total.add(output.cont);
+        output.total.add(output.pkg);
+        output.total.add(output.alliance);
         return output;
     }
 }
-
-BaseProduction.registerCalculator(HarvesterCalculator);
-BaseProduction.registerCalculator(SiloCalculator);
-BaseProduction.registerCalculator(PowerPlantCalculator);
-BaseProduction.registerCalculator(AccumulatorCalculator);
-BaseProduction.registerCalculator(RefineryCalculator);

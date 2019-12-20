@@ -4,6 +4,7 @@ import { ViewBase } from './base/base';
 import { ViewLandingPage } from './landing/landing';
 import { ViewScan } from './scan/scan.result'
 import { style } from 'typestyle';
+import {ViewAlliance} from './alliance/alliance'
 
 
 const AppCss = {
@@ -41,6 +42,7 @@ export class App extends React.Component {
                             <Route exact={true} path="/" component={ViewLandingPage} />
                             <Route path="/base/:baseId" component={ViewBase} />
                             <Route path="/base" component={ViewBase} />
+                            <Route path="/alliance" component={ViewAlliance} />
                             <Route path="/scan/:scanId" component={ViewScan} />
                             <Redirect to="/" />
                         </Switch>

@@ -4,8 +4,8 @@ import { BaseIter } from '../base.iter';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
-import { BuildingOutput, OutputCalculator } from './calculator';
 import { GrowthCalculator } from '../growth.calculator';
+import { BuildingOutput, OutputCalculator } from './calculator';
 
 const ONE_HOUR_SECONDS = 60 * 60;
 const LinkSilo = {

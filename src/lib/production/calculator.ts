@@ -8,6 +8,7 @@ export interface BuildingOutput {
 }
 export interface BaseOutput extends BuildingOutput {
     alliance: GameResources;
+    total: GameResources;
 }
 
 export interface OutputCalculator {
