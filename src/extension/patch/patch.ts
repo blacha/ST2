@@ -88,7 +88,6 @@ export class ClientLibPatcher {
             return;
         }
 
-        console.log('Patching', funcName, matches[1]);
         // logger.debug({ func: funcName, match: matches[1] }, `patching.. ${funcName} to ${matches[1]}`);
         currentProto.prototype[funcName] = makeReturn(matches[1]);
     }
