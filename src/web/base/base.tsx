@@ -7,6 +7,10 @@ import { Tile } from '../../lib/base/tile';
 import { Buildable } from '../../lib/base/buildable';
 import { BaseProduction } from '../../lib/production';
 import { formatNumber } from '../../lib/util';
+import { ViewBaseStats } from './base.stats';
+import { ViewBaseMain } from './base.main';
+import { ViewBaseDef } from './base.def';
+import { ViewBaseOff } from './base.off';
 
 const TileSize = 32;
 
@@ -45,6 +49,15 @@ export const BaseCss = {
         Tiberium: style({
             backgroundColor: 'rgba(0,200,0,0.47)',
         }),
+        Oil: style({
+            backgroundColor: 'rgba(20,20,20,0.47)',
+        }),
+        Woods: style({
+            backgroundColor: 'rgba(20,20,20,0.47)',
+        }),
+        Swamp: style({
+            backgroundColor: 'rgba(0,80,0,0.47)',
+        }),
     },
     Cell: {
         Level: style({
@@ -82,98 +95,16 @@ export class ViewBase extends React.Component<ViewBaseProps> {
         return (
             <div className="Base">
                 <div className={BaseCss.Title}>
-                    <div>{this.base.name}</div>
+                    <div>{this.base.name} sadasd </div>
                     <div>{this.base.x > 0 ? `@ ${this.base.x}, ${this.base.y}` : ''}</div>
                     <div>{this.base.owner}</div>
                 </div>
-                <ViewBaseMain base={this.base} size={32} />
                 <ViewBaseStats base={this.base} />
+                <ViewBaseMain base={this.base} size={32} />
+                <ViewBaseDef base={this.base} size={32} />
+                <ViewBaseOff base={this.base} size={32} />
             </div>
         );
     }
 }
 
-export class ViewBaseMain extends React.Component<{ base: Base; size: number }> {
-    render() {
-        const output = [];
-        for (let x = 0; x < Base.MaxX; x++) {
-            const row = [];
-            for (let y = 0; y < Base.MaxY; y++) {
-                row.push(<ViewBaseItem x={x} y={y} base={this.props.base} size={this.props.size} key={`${x}-${y}`} />);
-            }
-            output.push(
-                <div className={`BaseRow-${x}`} key={`row-${x}`}>
-                    {...row}
-                </div>,
-            );
-        }
-
-        return <div className={BaseCss.Base}>{output}</div>;
-    }
-}
-
-export class ViewBaseItem extends React.Component<{ x: number; y: number; base: Base; size: number }> {
-    render() {
-        const { x, y, base, size } = this.props;
-        const classNames = [BaseCss.Grid.Base];
-        const tile = base.getTile(x, y);
-        if (tile == Tile.Crystal) {
-            classNames.push(BaseCss.Grid.Crystal);
-        } else if (tile == Tile.Tiberium) {
-            classNames.push(BaseCss.Grid.Tiberium);
-        }
-        if (size !== 32) {
-            classNames.push(style({ width: size + 'px', height: size + 'px' }));
-        } else {
-            classNames.push(BaseCss.Size48);
-        }
-
-        const building = base.getBase(x, y);
-        if (building == null) {
-            return <div className={classNames.join(' ')} />;
-        }
-
-        return (
-            <div className={classNames.join(' ')} title={building.type.data.display + ` (${building.level})`}>
-                <div className={BaseCss.Cell.Level}>{building.level}</div>
-                <div>{building.type.code}</div>
-            </div>
-        );
-    }
-}
-
-export class ViewBaseStats extends React.Component<{ base: Base }> {
-    render() {
-        const stats = this.props.base.stats;
-        const prod = BaseProduction.getOutput(this.props.base);
-        console.log(prod);
-        return (
-            <div className={BaseCss.Base}>
-                <div>
-                    <div className={BaseCss.Title}>Tiberium</div>
-                    <div>{formatNumber(prod.cont.tiberium)}</div>
-                    <div>{formatNumber(prod.pkg.tiberium)}</div>
-                    <div className={BaseCss.Total}>{formatNumber(prod.cont.tiberium + prod.pkg.tiberium)}</div>
-                </div>
-                <div>
-                    <div className={BaseCss.Title}>Crystal</div>
-                    <div>{formatNumber(prod.cont.crystal)}</div>
-                    <div>{formatNumber(prod.pkg.crystal)}</div>
-                    <div className={BaseCss.Total}>{formatNumber(prod.cont.crystal + prod.pkg.crystal)}</div>
-                </div>
-                <div>
-                    <div className={BaseCss.Title}>Power</div>
-                    <div>{formatNumber(prod.cont.power)}</div>
-                    <div>{formatNumber(prod.pkg.power)}</div>
-                    <div className={BaseCss.Total}>{formatNumber(prod.cont.power + prod.pkg.power)}</div>
-                </div>
-                <div>
-                    <div className={BaseCss.Title}>Credits</div>
-                    <div>{formatNumber(prod.cont.credits)}</div>
-                    <div>{formatNumber(prod.pkg.credits)}</div>
-                    <div className={BaseCss.Total}>{formatNumber(prod.cont.credits + prod.pkg.credits)}</div>
-                </div>
-            </div>
-        );
-    }
-}

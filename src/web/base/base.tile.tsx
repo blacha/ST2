@@ -1,63 +1,42 @@
+import React = require("react");
+import { style } from "typestyle";
+import { Base } from "../../lib/base";
 import { Tile } from "../../lib/base/tile";
-import * as React from 'react';
+import { BaseCss } from "./base";
 
-
-
-export interface TileProps {
-
-}
-export interface TileState {
-
-}
-
-export class BaseTileView extends React.Component<TileProps, TileState> {
-
+export class ViewBaseItem extends React.Component<{ x: number; y: number; base: Base; size: number }> {
     render() {
+        const { x, y, base, size } = this.props;
+        const classNames = [BaseCss.Grid.Base];
+        const tile = base.getTile(x, y);
+        if (tile == Tile.Crystal) {
+            classNames.push(BaseCss.Grid.Crystal);
+        } else if (tile == Tile.Tiberium) {
+            classNames.push(BaseCss.Grid.Tiberium);
+        } else if (tile == Tile.Oil) {
+            classNames.push(BaseCss.Grid.Oil);
+        } else if (tile == Tile.Swamp) {
+            classNames.push(BaseCss.Grid.Swamp);
+        } else if (tile == Tile.Woods) {
+            classNames.push(BaseCss.Grid.Woods);
+        }
+
+        if (size !== 32) {
+            classNames.push(style({ width: size + 'px', height: size + 'px' }));
+        } else {
+            classNames.push(BaseCss.Size48);
+        }
+
+        const building = base.getBase(x, y);
+        if (building == null) {
+            return <div className={classNames.join(' ')} />;
+        }
+
         return (
-            <div className="BaseTile"></div>
-        )
+            <div className={classNames.join(' ')} title={building.type.data.display + ` (${building.level})`}>
+                <div className={BaseCss.Cell.Level}>{building.level}</div>
+                <div>{building.type.code}</div>
+            </div>
+        );
     }
 }
-
-// export function RenderBuildingTile(base: Base, x: number, y: number) {
-//     const className = [
-//         'BaseTile',
-//         `BaseRow-${y}`,
-//         `BaseCol-${x}`,
-//         `BaseTile-${x}-${y}`
-//     ];
-//     const tile = base.getTile(x, y);
-
-//     if (tile !== Tile.Empty) {
-//         className.push('BaseTile-' + tile.name);
-//     }
-//     const building = base.getBase(x, y)
-
-//     if (building == null) {
-//         return m('div', { className: className.join(' ') });
-//     }
-
-//     const hasUpgrade = base.hasUpgrade(building.type.id);
-//     if (hasUpgrade) {
-//         className.push('UnitUpgrade');
-//     }
-
-//     className.push('BaseTile-' + building.type.id);
-//     const output: m.Vnode[] = [
-//         m('img', {
-//             style: {
-//                 width: '64px',
-//                 height: '64px',
-//             },
-//             src: '/static/images/' + building.type.id + '.png',
-//         }),
-//         m('span', {
-//             className: 'BaseTileLevel'
-//         }, building.level)
-//     ];
-
-//     return m('div', {
-//         className: className.join(' '),
-//         title: building.type.name
-//     }, output);
-// }

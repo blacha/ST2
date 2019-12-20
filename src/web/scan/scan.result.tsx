@@ -3,9 +3,9 @@ import { RouteComponentProps } from "react-router-dom";
 import { LayoutScanApi } from "../../api/city.layout";
 import { Base } from "../../lib/base";
 import { BaseBuilder } from "../../lib/base.builder";
-import { ViewBaseMain } from "../base/base";
 // import { ScanResults } from "../data/scan.result";
 import { style } from "typestyle";
+import { ViewBaseMain } from "../base/base.main";
 
 const ScanCss = {
     ScanList: style({
