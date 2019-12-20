@@ -106,7 +106,7 @@ export class VisitBaseButton implements StModule {
                 }
                 const base = BaseBuilder.load(layout);
                 const baseUrl = 'https://shockrtools.web.app/base/' + encodeURI(base.toCncOpt());
-                // window.open(baseUrl, '_blank');
+                window.open(baseUrl, '_blank');
                 qx.core.Init.getApplication()
                     .getPlayArea()
                     .setView(13, city.get_Id(), 0, 0);
