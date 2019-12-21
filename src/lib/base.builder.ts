@@ -5,7 +5,6 @@ import { Tile } from './base/tile';
 import { Faction } from './data/faction';
 import { GameDataObject } from './data/game.data.object';
 import { JsonPlayerObject } from './objects/player';
-import { Building } from './building/building';
 
 const codeZero = '0'.charCodeAt(0);
 const codeNine = '9'.charCodeAt(0);

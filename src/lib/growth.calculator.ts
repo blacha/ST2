@@ -1,6 +1,5 @@
-import { PartialResourceMap, ResourceType, ModifierType } from '../extension/@types/client.lib.const';
+import { ModifierType, PartialResourceMap, ResourceType } from '../extension/@types/client.lib.const';
 import { Constants } from './constants';
-import { GameDataObject } from './data/game.data.object';
 import { GameDataJson } from './data/game.data';
 
 export class GrowthCalculator {

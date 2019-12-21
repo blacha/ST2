@@ -1,13 +1,12 @@
+import { PartialResourceMap } from '../../extension/@types/client.lib.const';
 import { BuildingType } from '../building/building.type';
+import { Constants } from '../constants';
 import { GameResources } from '../game.resources';
+import { GrowthCalculator } from '../growth.calculator';
 import { DefUnitType } from '../unit/def.unit.type';
 import { OffUnitType } from '../unit/off.unit.type';
-import * as Util from '../util';
 import { Faction } from './faction';
 import { GameDataJson } from './game.data';
-import { Constants } from '../constants';
-import { PartialResourceMap, ResourceType } from '../../extension/@types/client.lib.const';
-import { GrowthCalculator } from '../growth.calculator';
 
 export enum GameDataObjectType {
     Building = 'building',

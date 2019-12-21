@@ -3,8 +3,6 @@ import { Tile } from '../base/tile';
 import { GameDataJson } from '../data/game.data';
 import { UnitType } from './unit.type';
 
-const ID = 0;
-
 export class Unit implements Buildable {
     public type: UnitType;
     public level: number;

@@ -1,13 +1,12 @@
+import { ModifierType } from '../../extension/@types/client.lib.const';
 import { Base } from '../base';
+import { BaseIter } from '../base.iter';
 import { Tile } from '../base/tile';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
-import * as Util from '../util';
-import { BaseOutput, OutputCalculator, BuildingOutput } from './calculator';
-import { BaseIter } from '../base.iter';
-import { ModifierType } from '../../extension/@types/client.lib.const';
 import { GrowthCalculator } from '../growth.calculator';
+import { BuildingOutput, OutputCalculator } from './calculator';
 
 export const RefineryCalculator: OutputCalculator = {
     name: 'Refinery',

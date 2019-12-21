@@ -3,9 +3,8 @@ import { BaseIter } from '../base.iter';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';
-import * as Util from '../util';
-import { BuildingOutput, OutputCalculator } from './calculator';
 import { GrowthCalculator } from '../growth.calculator';
+import { BuildingOutput, OutputCalculator } from './calculator';
 
 export const AccumulatorCalculator: OutputCalculator = {
     name: 'Accumulator',

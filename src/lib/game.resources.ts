@@ -1,4 +1,4 @@
-import { PartialResourceMap, ResourceType, PartialModifierMap } from '../extension/@types/client.lib.const';
+import { PartialResourceMap } from '../extension/@types/client.lib.const';
 
 export interface Resources {
     power: number;
