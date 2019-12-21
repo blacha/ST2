@@ -43,6 +43,8 @@ export class CityData {
         return {
             cityId: city.get_Id(),
             level: city.get_LvlBase(),
+            levelOff: city.get_LvlOffense(),
+            levelDef: city.get_LvlDefense(),
             name: city.get_Name(),
             x: city.get_PosX(),
             y: city.get_PosY(),

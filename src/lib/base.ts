@@ -13,11 +13,6 @@ import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
 import { color, ConsoleColor } from './util';
 import { Uuid } from './uuid';
-import { HarvesterCalculator } from './production/harvester';
-import { SiloCalculator } from './production/silo';
-import { PowerPlantCalculator } from './production/power.plant';
-import { AccumulatorCalculator } from './production/accumulator';
-import { RefineryCalculator } from './production/refinery';
 
 export interface CncLocation {
     x: number;
@@ -73,6 +68,11 @@ export class Base {
     offFaction: Faction;
     base: Buildable[];
     owner: string | null;
+    private levels: {
+        base: number;
+        off: number;
+        def: number;
+    } = { base: 0, off: 0, def: 0 };
 
     poi: PoiData = new PoiData();
 
@@ -94,6 +94,29 @@ export class Base {
         this.owner = null;
     }
 
+    setBaseLevels(base: number, off = 0, def = 0) {
+        this.levels = { base, off, def };
+    }
+
+    get level() {
+        if (this.levels.base) {
+            return this.levels.base;
+        }
+        return 0;
+    }
+
+    get levelOffense() {
+        if (this.levels.off) {
+            return this.levels.off;
+        }
+        return 0;
+    }
+    get levelDefense() {
+        if (this.levels.def) {
+            return this.levels.def;
+        }
+        return 0;
+    }
     /**
      * Build a object at a position
      * @param x x offset

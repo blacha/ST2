@@ -1,16 +1,12 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { style } from 'typestyle';
 import { Base } from '../../lib/base';
 import { BaseBuilder } from '../../lib/base.builder';
-import { style } from 'typestyle';
-import { Tile } from '../../lib/base/tile';
-import { Buildable } from '../../lib/base/buildable';
-import { BaseProduction } from '../../lib/production';
-import { formatNumber } from '../../lib/util';
-import { ViewBaseStats } from './base.stats';
-import { ViewBaseMain } from './base.main';
 import { ViewBaseDef } from './base.def';
+import { ViewBaseMain } from './base.main';
 import { ViewBaseOff } from './base.off';
+import { ViewBaseStats } from './base.stats';
 
 const TileSize = 32;
 
@@ -49,24 +45,12 @@ export const BaseCss = {
             alignItems: 'center',
             outline: '1px solid rgba(0,0,0,0.4)',
         }),
-        Crystal: style({
-            backgroundColor: 'rgba(0,0,150,0.47)',
-        }),
-        Tiberium: style({
-            backgroundColor: 'rgba(0,200,0,0.47)',
-        }),
-        Oil: style({
-            backgroundColor: 'rgba(20,20,20,0.47)',
-        }),
-        Woods: style({
-            backgroundColor: 'rgba(140,80,0,0.47)',
-        }),
-        Swamp: style({
-            backgroundColor: 'rgba(0,0,80,0.47)',
-        }),
-        Scrub: style({
-            backgroundColor: 'rgba(100,80,80,0.47)',
-        }),
+        Crystal: style({ backgroundColor: 'rgba(0,0,150,0.47)' }),
+        Tiberium: style({ backgroundColor: 'rgba(0,200,0,0.47)' }),
+        Oil: style({ backgroundColor: 'rgba(20,20,20,0.47)' }),
+        Woods: style({ backgroundColor: 'rgba(140,80,0,0.47)' }),
+        Swamp: style({ backgroundColor: 'rgba(0,0,80,0.47)' }),
+        Scrub: style({ backgroundColor: 'rgba(100,80,80,0.47)' }),
     },
     Cell: {
         Level: style({
@@ -106,9 +90,9 @@ export class ViewBase extends React.Component<ViewBaseProps> {
                     <div>{this.base.owner}</div>
                 </div>
                 <ViewBaseStats base={this.base} />
-                <ViewBaseMain base={this.base} size={32} />
-                <ViewBaseDef base={this.base} size={32} />
-                <ViewBaseOff base={this.base} size={32} />
+                <ViewBaseMain base={this.base} size={TileSize} />
+                <ViewBaseDef base={this.base} size={TileSize} />
+                <ViewBaseOff base={this.base} size={TileSize} />
             </div>
         );
     }

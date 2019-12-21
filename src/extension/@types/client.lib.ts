@@ -55,6 +55,9 @@ export interface ClientLibCity {
     /** Get full level */
     get_LvlBase(): number;
 
+    get_LvlDefense(): number;
+    get_LvlOffense(): number;
+
     get_Name(): string;
     /** Null if current player's base */
     get_ActiveModules(): number[] | null;

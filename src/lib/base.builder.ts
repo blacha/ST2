@@ -98,6 +98,7 @@ export class BaseBuilder {
         output.owner = cncBase.owner;
         output.x = cncBase.x;
         output.y = cncBase.y;
+        output.setBaseLevels(cncBase.level, cncBase.levelOff, cncBase.levelDef);
 
         for (let y = 0; y < Base.MaxY; y++) {
             for (let x = 0; x < Base.MaxX; x++) {
