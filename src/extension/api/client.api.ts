@@ -8,7 +8,11 @@ export class ClientApi implements StModule {
 
     async sendBase(base: CityLayout) {
         const url = [this.baseUrl, 'world', base.world, 'base', Coord.toId(base.x, base.y)].join('/');
-        const res = await fetch(url, { method: 'POST', body: JSON.stringify(base) });
+        const res = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(base),
+            headers: { 'content-type': 'application/json', authorization: 'Bearer' },
+        });
         console.log(res.status, url);
         const body = await res.json();
         console.log(body);

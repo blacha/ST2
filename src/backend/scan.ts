@@ -1,11 +1,12 @@
 import { CityLayout } from '../api/city.layout';
 import { ApiCall, ApiRequest } from './api.call';
 import { Coord, Point } from './coord';
+import { FirestoreAdmin } from './db.admin';
+import { DbBase } from './db/db.base';
 
 export interface ApiScanResponse {
     worldId: number;
     location: Point;
-    base: CityLayout;
 }
 
 export interface ApiScanRequest {
@@ -24,10 +25,15 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         if (isNaN(worldId) || worldId < 0 || worldId > 1000) {
             throw new Error('Invalid worldId');
         }
+
         const location = Coord.fromId(coordId);
+        const BaseCollection = FirestoreAdmin.collection('base');
+        const base = req.body;
 
-        const body = req.body;
+        const baseId = `${worldId}_${coordId}`;
 
-        return { worldId, location, base: body };
+        await BaseCollection.doc(baseId).set({ base, worldId, coordId });
+
+        return { worldId, location };
     }
 }

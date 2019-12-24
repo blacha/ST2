@@ -27,6 +27,7 @@ export type GamePlayerId = number;
 export type GameAllianceId = number;
 
 export interface CityLayout {
+    baseId?: string;
     cityId?: number;
 
     level: number;
