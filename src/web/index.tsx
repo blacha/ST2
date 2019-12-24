@@ -4,7 +4,6 @@ import { GameData } from '../data/loader';
 import { App } from './app';
 
 document.addEventListener('DOMContentLoaded', () => {
-    GameData.load()
-    ReactDom.render(<App />, document.getElementById("main"));
+    GameData.load();
+    ReactDom.render(<App />, document.getElementById('main'));
 });
-

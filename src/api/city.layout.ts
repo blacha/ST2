@@ -28,12 +28,16 @@ export type GameAllianceId = number;
 
 export interface CityLayout {
     cityId?: number;
+
     level: number;
     levelOff?: number;
     levelDef?: number;
+
     name: string;
+
     x: number;
     y: number;
+
     faction: number;
 
     owner: string;

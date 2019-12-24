@@ -1,4 +1,4 @@
-import { ClientLibMap } from '../@types/client.lib';
+import { ClientLibMap } from '../@types/client.lib.util';
 
 export class ClientLibIter {
     static values<T>(obj: ClientLibMap<T>): T[] {

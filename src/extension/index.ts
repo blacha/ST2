@@ -5,20 +5,15 @@ import { LayoutScanner } from './city/layout.scan';
 import { BaseBuilder } from '../lib/base.builder';
 import { Base } from '../lib/base';
 import { ClientLibStatic } from './@types/client.lib';
-import { KillInfo } from './killinfo/kill.info';
+import { KillInfo } from './kill.info/kill.info';
 import { VisitBaseButton } from './visit/visit.base';
 import { PlayerInfo } from './player/player.info';
+import { Version } from '../version';
 
 declare const ClientLib: ClientLibStatic;
 
 class ShockrTools {
-    Version = {
-        /** package.json version */
-        version: '__VERSION__',
-        /** Git commit hash */
-        hash: '__HASH__',
-    };
-
+    Version = Version;
     Base = Base;
     Builder = BaseBuilder;
     Layout = new LayoutScanner();
@@ -41,8 +36,10 @@ class ShockrTools {
         ClientLibPatcher.patch();
         console.log('st:starting');
         for (const mod of this.Modules) {
-            console.log('\tstart' + mod.name);
-            await mod.start();
+            if (mod.start) {
+                console.log('\tstart' + mod.name);
+                await mod.start();
+            }
         }
     }
 
@@ -75,8 +72,10 @@ class ShockrTools {
     async stop() {
         console.log('st:stopping');
         for (const mod of this.Modules) {
-            console.log('\tstop', mod.name);
-            await mod.stop();
+            if (mod.stop) {
+                console.log('\tstop', mod.name);
+                await mod.stop();
+            }
         }
         console.log('st:stopped');
     }

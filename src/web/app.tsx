@@ -6,11 +6,10 @@ import { ViewBase } from './base/base';
 import { ViewLandingPage } from './landing/landing';
 import { ViewScan } from './scan/scan.result';
 
-
 const AppCss = {
     Main: style({
         fontFamily: '"Roboto Condensed"',
-        color: 'rgba(0,0,0,0.87)'
+        color: 'rgba(0,0,0,0.87)',
     }),
     Header: style({
         background: '#f4f5f6',
@@ -23,8 +22,8 @@ const AppCss = {
         right: 0,
         top: 0,
         width: '100%',
-    })
-}
+    }),
+};
 
 export class App extends React.Component {
     public render() {

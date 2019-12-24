@@ -7,6 +7,7 @@
         "sourceMap": true,
         "strict": true,
         "declaration": true,
+        "declarationMap": true,
         "resolveJsonModule": true,
         "jsx": "react"
     },
@@ -15,5 +16,5 @@
         "node_modules",
         "game"
     ],
-    "include": ["src/"]
+    "include": ["src/**/*.ts*"]
 }

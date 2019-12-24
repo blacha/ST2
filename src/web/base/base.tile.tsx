@@ -1,8 +1,8 @@
-import React = require("react");
-import { style } from "typestyle";
-import { Base } from "../../lib/base";
-import { Tile } from "../../lib/base/tile";
-import { BaseCss } from "./base";
+import React = require('react');
+import { style } from 'typestyle';
+import { Base } from '../../lib/base';
+import { Tile } from '../../lib/base/tile';
+import { BaseCss } from './base';
 
 export class ViewBaseItem extends React.Component<{ x: number; y: number; base: Base; size: number }> {
     render() {
@@ -19,7 +19,7 @@ export class ViewBaseItem extends React.Component<{ x: number; y: number; base: 
             classNames.push(BaseCss.Grid.Swamp);
         } else if (tile == Tile.Woods) {
             classNames.push(BaseCss.Grid.Woods);
-        } else if(tile == Tile.Scrub) {
+        } else if (tile == Tile.Scrub) {
             classNames.push(BaseCss.Grid.Scrub);
         }
 

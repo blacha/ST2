@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { PATCH_DATA } from './patch.data';
 import { NpcCampType } from '../@types/client.lib.const';
-import { ClientLibMap, ClientLibCityUnit } from '../@types/client.lib';
+import { ClientLibCityUnit } from '../@types/client.lib';
+import { ClientLibMap } from '../@types/client.lib.util';
 
 export interface PatchedId {
     $get_Id(): number;

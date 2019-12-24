@@ -10,15 +10,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const GD: GameDataStatic = require('../../gamedata.2019-12.w410.json');
 
-import { Faction } from '../lib/data/faction';
-import { GameDataJson } from '../lib/data/game.data';
+import { Faction } from '../../lib/data/faction';
+import { GameDataJson } from '../../lib/data/game.data';
 import {
     ModifierType,
     PartialModifierMap,
     PartialResourceMap,
     ResourceType,
-} from '../extension/@types/client.lib.const';
-import { GameDataModifiers, GameDataResourceCost, GameDataStatic } from '../extension/@types/game.data';
+} from '../../extension/@types/client.lib.const';
+import { GameDataModifiers, GameDataResourceCost, GameDataStatic } from '../../extension/@types/game.data';
 import { writeFileSync } from 'fs';
 
 function getModifiers(rc: GameDataModifiers) {

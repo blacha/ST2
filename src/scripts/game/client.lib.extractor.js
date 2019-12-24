@@ -70,23 +70,3 @@
     extractData(ClientLib.Data.MainData.GetInstance());
     console.log(ObjMap);
 })();
-
-function de(obj) {
-    return (
-        '\n' +
-        Object.keys(obj)
-            .map(c => [c, obj[c]])
-            .sort((a, b) => a[1] - b[1])
-            .map(c => c.join(' = '))
-            .join(',\n') +
-        '\n'
-    );
-}
-
-Object.keys(ClientLib.Base).forEach(c => {
-    if (c.startsWith('E')) {
-        console.log(`export const enum ${c} {
-            ${de(ClientLib.Base[c])}
-        }`);
-    }
-});

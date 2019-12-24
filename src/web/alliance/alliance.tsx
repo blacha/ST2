@@ -3,7 +3,6 @@ import { style } from 'typestyle';
 import { Base } from '../../lib/base';
 import { GameResources } from '../../lib/game.resources';
 import { formatNumber } from '../../lib/util';
-import { BaseBuilder } from '../../lib/base.builder';
 
 export const AllianceCss = {
     Table: style({
@@ -27,7 +26,7 @@ export interface PlayerStats {
 
 export class ViewAlliance extends React.Component<{}> {
     alliance: Base[];
-    byPlayer:PlayerStats[] = [];
+    byPlayer: PlayerStats[] = [];
 
     constructor(props: {}) {
         super(props);
@@ -42,8 +41,8 @@ export class ViewAlliance extends React.Component<{}> {
                 current = {
                     bases: [],
                     production: new GameResources(),
-                    main: base
-                }
+                    main: base,
+                };
                 playerSet.set(base.owner, current);
             }
             if (current.main.levelOffense < base.levelOffense) {
@@ -52,13 +51,12 @@ export class ViewAlliance extends React.Component<{}> {
             current.bases.push(base);
             current.production.add(base.production.total);
         }
-        this.byPlayer = Array.from(playerSet.values())
+        this.byPlayer = Array.from(playerSet.values());
     }
 
     render() {
         const output = [];
         for (const baseInfo of this.byPlayer) {
-
             output.push(
                 <div className={AllianceCss.Base} key={baseInfo.main.id}>
                     <div>{baseInfo.main.owner}</div>

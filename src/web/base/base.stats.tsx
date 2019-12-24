@@ -1,7 +1,7 @@
-import React = require("react");
-import { Base } from "../../lib/base";
-import { BaseCss } from "./base";
-import { formatNumber } from "../../lib/util";
+import React = require('react');
+import { Base } from '../../lib/base';
+import { BaseCss } from './base';
+import { formatNumber } from '../../lib/util';
 
 export class ViewBaseStats extends React.Component<{ base: Base }> {
     render() {

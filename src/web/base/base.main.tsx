@@ -1,7 +1,7 @@
-import React = require("react");
-import { Base } from "../../lib/base";
-import { BaseCss } from "./base";
-import { ViewBaseItem } from "./base.tile";
+import React = require('react');
+import { Base } from '../../lib/base';
+import { BaseCss } from './base';
+import { ViewBaseItem } from './base.tile';
 
 export class ViewBaseMain extends React.Component<{ base: Base; size: number }> {
     render() {
@@ -21,7 +21,3 @@ export class ViewBaseMain extends React.Component<{ base: Base; size: number }> 
         return <div className={BaseCss.Base}>{output}</div>;
     }
 }
-
-
-
-

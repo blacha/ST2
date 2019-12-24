@@ -1,5 +1,6 @@
 import { FactionType, ResourceType, WorldObjectType, VisObjectType } from './client.lib.const';
 import { GameDataUnit, GameDataTech } from './game.data';
+import { ClientLibSingleton, ClientLibList, ClientLibMap } from './client.lib.util';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -10,7 +11,7 @@ export interface ClientLibPlayerResearchResult {
 }
 
 export interface ClientLibPlayerResearch {
-    GetResearchItemListByType(type: number): ClientLibArray<ClientLibPlayerResearchResult>;
+    GetResearchItemListByType(type: number): ClientLibList<ClientLibPlayerResearchResult>;
 }
 
 export interface ClientLibCityBuildable {
@@ -54,7 +55,6 @@ export interface ClientLibCity {
     get_BaseLevel(): number;
     /** Get full level */
     get_LvlBase(): number;
-
     get_LvlDefense(): number;
     get_LvlOffense(): number;
 
@@ -77,17 +77,6 @@ export interface ClientLibCity {
     get_PosY(): number;
 
     GetResourceType(x: number, y: number): ResourceType;
-}
-
-export interface ClientLibMap<T> {
-    /** Id to record map */
-    d: Record<string, T>;
-    /** Number of records */
-    c: number;
-}
-
-export interface ClientLibArray<T> {
-    l: T[];
 }
 
 export interface ClientLibCities {
@@ -190,17 +179,13 @@ export enum MouseMode {
     Sell = 4,
 }
 
-export interface Singleton<T> {
-    GetInstance(): T;
-}
-
 export interface ClientLibStatic {
     Data: {
-        MainData: Singleton<ClientLibMainData>;
+        MainData: ClientLibSingleton<ClientLibMainData>;
     };
     Vis: {
         SelectionChange: Function;
-        VisMain: Singleton<ClientLibVis>;
+        VisMain: ClientLibSingleton<ClientLibVis>;
         VisObject: {
             EObjectType: typeof VisObjectType;
         };
