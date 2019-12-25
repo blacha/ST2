@@ -37,53 +37,11 @@ export class LayoutScanner implements StModule {
     async start(st: ShockrTools): Promise<void> {
         this.st = st;
         this.state = LayoutScannerState.Ready;
-        phe.cnc.Util.attachNetEvent(
-            ClientLib.Vis.VisMain.GetInstance(),
-            'SelectionChange',
-            ClientLib.Vis.SelectionChange,
-            this,
-            this.onSelectionChange,
-        );
         CityData.removeStaleCache();
     }
 
     async stop(): Promise<void> {
         this.state = LayoutScannerState.Abort;
-        phe.cnc.Util.detachNetEvent(
-            ClientLib.Vis.VisMain.GetInstance(),
-            'SelectionChange',
-            ClientLib.Vis.SelectionChange,
-            this,
-            this.onSelectionChange,
-        );
-    }
-
-    /**
-     * When a player selects a new base, attempt to scan it
-     * Abort if the current selected object changes
-     */
-    public async onSelectionChange(): Promise<void> {
-        // Already doing something else abort
-        if (this.state != LayoutScannerState.Ready) {
-            return;
-        }
-
-        const currentObj = ClientLib.Vis.VisMain.GetInstance().get_SelectedObject();
-        if (currentObj === null) {
-            return;
-        }
-
-        const currentType = currentObj.get_VisObjectType();
-        if (
-            currentType === ClientLib.Vis.VisObject.EObjectType.RegionNPCCamp ||
-            currentType === ClientLib.Vis.VisObject.EObjectType.RegionNPCBase
-        ) {
-            const data = await this.scanLayout(currentObj.get_Id());
-            if (data != null) {
-                console.log(BaseBuilder.load(data).stats.tiberium.score, data);
-                this.lastScan = [data];
-            }
-        }
     }
 
     public async scan(): Promise<LayoutScanApi | null> {

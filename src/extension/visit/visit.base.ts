@@ -57,7 +57,9 @@ export class VisitBaseButton implements StModule {
 
             const currentId = selectedBase.get_Id?.();
             if (currentId == null) {
+                self.buttons.forEach(b => b.exclude());
                 self.lastBaseId = null;
+                return;
             }
 
             if (currentId == self.lastBaseId) {
@@ -65,7 +67,6 @@ export class VisitBaseButton implements StModule {
             }
 
             self.buttons.forEach(b => b.exclude());
-
             self.lastBaseId = currentId;
 
             switch (selectedBase.get_VisObjectType()) {
@@ -73,6 +74,7 @@ export class VisitBaseButton implements StModule {
                 case VisObjectType.RegionNPCCamp:
                 case VisObjectType.RegionCityType:
                     self.waitForBaseReady();
+                    break;
             }
             oldFunction.call(this, selectedBase);
         };
@@ -103,10 +105,7 @@ export class VisitBaseButton implements StModule {
                 continue;
             }
 
-            const button = new qx.ui.form.Button(
-                'Scan',
-                'https://shockrtools.web.app/128_transparent.0012b310.png',
-            ) as QxButton;
+            const button = new qx.ui.form.Button('Scan', 'https://shockrtools.web.app/128.0012b310.png') as QxButton;
 
             button.getChildControl('icon').set({ width: 16, height: 16, scale: true }); // Force icon to be 16x16 px
             button.addListener('execute', async () => {
