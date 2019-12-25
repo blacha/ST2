@@ -1,4 +1,4 @@
-import { CityLayout, CityLayoutTile } from '../../api/city.layout';
+import { CityLayout, CityLayoutTile, CacheObject } from '../../api/city.layout';
 import { Base } from '../../lib/base';
 import { Faction } from '../../lib/data/faction';
 import { ClientLibCity, ClientLibCityBuildable, ClientLibStatic } from '../@types/client.lib';
@@ -8,6 +8,8 @@ import { ClientLibPatcher } from '../patch/patch';
 
 declare const ClientLib: ClientLibStatic;
 declare const GAMEDATA: GameDataStatic;
+
+export const OneDayMs = 24 * 60 * 60 * 1000;
 
 function GameToJSON(offset: number, unit: ClientLibCityBuildable): CityLayoutTile & { x: number; y: number } {
     return {
@@ -112,13 +114,23 @@ export class CityData {
         return xYMap;
     }
 
-    static async waitForCityReady(cityId: number): Promise<ClientLibCity | null> {
+    static async waitForCityReady(cityId: number): Promise<CityLayout | null> {
+        const cached = this.getCache(cityId);
+        if (cached != null && cached.version > -1) {
+            return cached;
+        }
+
         for (let i = 0; i < CityData.MaxFailCount; i++) {
             await new Promise(resolve => setTimeout(resolve, 100 * i));
 
             const city = CityData.isReady(cityId);
-            if (city != null) {
-                return city;
+            if (city == null) {
+                continue;
+            }
+            const layout = CityData.getCityData(city);
+            if (layout != null) {
+                this.setCache(city.get_Id(), layout);
+                return layout;
             }
         }
         return null;
@@ -209,6 +221,45 @@ export class CityData {
             d: Object.keys(defUnits.d).map(key => GameToJSON(Base.MaxBaseY, defUnits.d[key])),
             o: [],
         };
+    }
+
+    /** Remove stale cache keys */
+    static removeStaleCache() {
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (!key?.startsWith('st-layout')) {
+                continue;
+            }
+            const value = localStorage.getItem(key);
+            if (value == null) {
+                localStorage.removeItem(key);
+                continue;
+            }
+            const cacheItem = JSON.parse(value) as CacheObject<CityLayout>;
+            if (cacheItem == null || cacheItem.timestamp == null || Date.now() - cacheItem.timestamp > OneDayMs) {
+                localStorage.removeItem(key);
+            }
+        }
+    }
+
+    private static cacheKey(cityId: number) {
+        const worldId = ClientLib.Data.MainData.GetInstance()
+            .get_Server()
+            .get_WorldId();
+        return `st-layout-${worldId}-${cityId}`;
+    }
+
+    static getCache(cityId: number): CityLayout | null {
+        const cached = localStorage.getItem(this.cacheKey(cityId));
+        if (cached == null) {
+            return null;
+        }
+        const cachedObj = JSON.parse(cached) as CacheObject<CityLayout>;
+        return cachedObj.obj;
+    }
+
+    static setCache(cityId: number, layout: CityLayout): void {
+        localStorage.setItem(this.cacheKey(cityId), JSON.stringify({ obj: layout, timestamp: Date.now() }));
     }
 
     static getBuildings(city: ClientLibCity) {

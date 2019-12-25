@@ -44,6 +44,7 @@ export class LayoutScanner implements StModule {
             this,
             this.onSelectionChange,
         );
+        CityData.removeStaleCache();
     }
 
     async stop(): Promise<void> {
@@ -193,7 +194,6 @@ export class LayoutScanner implements StModule {
             return null;
         }
 
-        // console.log(x, y, 'Scan', scanCityId);
         if (scanCityId != null) {
             this.setCurrentCity(scanCityId);
         }
@@ -213,37 +213,11 @@ export class LayoutScanner implements StModule {
             return null;
         }
 
-        const cached = this.getCache(city.get_PosX(), city.get_PosY());
-        if (cached != null && cached.cityId == city.get_Id() && cached.version > -1) {
-            return cached;
+        if (city != null) {
+            await this.st?.Api.base(city);
         }
 
-        const layout = CityData.getCityData(city);
-        if (layout != null) {
-            await this.st?.Api.base(layout);
-            this.setCache(city.get_PosX(), city.get_PosY(), layout);
-        }
-
-        return layout;
-    }
-
-    private cacheKey(x: number, y: number) {
-        const worldId = ClientLib.Data.MainData.GetInstance()
-            .get_Server()
-            .get_WorldId();
-        return `st-layout-${worldId}-${x}-${y}`;
-    }
-
-    getCache(x: number, y: number): CityLayout | null {
-        const cached = localStorage.getItem(this.cacheKey(x, y));
-        if (cached == null) {
-            return null;
-        }
-        return JSON.parse(cached) as CityLayout;
-    }
-
-    setCache(x: number, y: number, layout: CityLayout): void {
-        localStorage.setItem(this.cacheKey(x, y), JSON.stringify(layout));
+        return city;
     }
 
     setCurrentCity(cityId: number) {

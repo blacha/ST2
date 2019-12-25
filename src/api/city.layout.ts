@@ -62,3 +62,8 @@ export interface CityLayout {
     /** Units that have upgrades */
     upgrades: number[];
 }
+
+export interface CacheObject<T> {
+    timestamp: number;
+    obj: T;
+}

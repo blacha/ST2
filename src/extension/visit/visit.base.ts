@@ -78,12 +78,7 @@ export class VisitBaseButton implements StModule {
             return;
         }
 
-        const layout = CityData.getCityData(city);
-        if (layout == null) {
-            return;
-        }
-
-        const res = await this.st?.Api.base(layout);
+        const res = await this.st?.Api.base(city);
         if (res == null) {
             return;
         }
@@ -112,7 +107,8 @@ export class VisitBaseButton implements StModule {
                 if (this.lastBase == null) {
                     return;
                 }
-                const city = await CityData.waitForCityReady(this.lastBase.get_Id());
+                const cityId = this.lastBase.get_Id();
+                const city = await CityData.waitForCityReady(cityId);
                 if (city == null) {
                     return;
                 }
@@ -120,7 +116,7 @@ export class VisitBaseButton implements StModule {
                 window.open(`https://shockrtools.web.app/base/${this.stId}`, '_blank');
                 qx.core.Init.getApplication()
                     .getPlayArea()
-                    .setView(13, city.get_Id(), 0, 0);
+                    .setView(13, cityId, 0, 0);
             });
             composite.add(button);
             this.buttons.push(button);

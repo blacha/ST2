@@ -1,18 +1,14 @@
-import { CityLayout } from '../../api/city.layout';
+import { CityLayout, CacheObject } from '../../api/city.layout';
 import { ApiScanResponse } from '../../api/request.scan';
 import { StModule } from '../module';
 
-interface CacheObject<T> {
-    timestamp: number;
-    obj: Promise<T>;
-}
 const CacheTime = 5 * 60 * 1000;
 
 export class ClientApi implements StModule {
     name = 'api';
     baseUrl = 'https://shockrtools.web.app/api/v1';
 
-    lastSent: Record<string, CacheObject<ApiScanResponse>> = {};
+    lastSent: Record<string, CacheObject<Promise<ApiScanResponse>>> = {};
 
     async base(base: CityLayout): Promise<ApiScanResponse> {
         const existing = this.lastSent[base.cityId];
