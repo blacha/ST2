@@ -1,67 +1,97 @@
-import { Base } from './base';
+import * as Base62 from 'base62';
 import { Tile } from './base/tile';
-import { Base64 } from './base64';
 
+export interface Point {
+    x: number;
+    y: number;
+}
 export class BasePacker {
-    static packId(worldId: number, cityId: number) {
-        const buf = Buffer.alloc(6);
-        buf.writeUInt32BE(cityId, 0);
-        buf.writeUInt16BE(worldId, 4);
-        return Base64.encode(buf);
-    }
+    static number = {
+        pack(x: number): string {
+            return Base62.encode(x);
+        },
+        unpack(s: string): number {
+            return Base62.decode(s);
+        },
+    };
 
-    static unpackId(data: string): { worldId: number; cityId: number } {
-        const buf = Base64.decode(data);
-        const cityId = buf.readUInt32BE(0);
-        const worldId = buf.readUInt16BE(4);
-        return { worldId, cityId };
-    }
+    static xy = {
+        pack(x: number, y: number): number {
+            return (y << 0x10) | x;
+        },
 
-    static packRow(tiles: Tile[], y: number): number {
-        let outputValue = 0;
-        for (let x = 0; x < Base.MaxX; x++) {
-            const tile = tiles[y * Base.MaxX + x];
+        unpack(num: number): Point {
+            return { y: num >> 0x10, x: num & 0xffff };
+        },
+    };
 
-            if (tile == null) {
-                continue;
+    static scan = {
+        pack(worldId: number, scanId: string) {
+            return scanId + '.' + Base62.encode(worldId);
+        },
+    };
+
+    static id = {
+        pack(worldId: number, cityId: number) {
+            return Base62.encode(cityId) + '.' + Base62.encode(worldId);
+        },
+
+        unpack(data: string): { worldId: number; cityId: number } {
+            const [cityId, worldId] = data.split('.').map(c => Base62.decode(c));
+            return { worldId, cityId };
+        },
+    };
+
+    static layout = {
+        pack(tiles: Tile[]) {
+            let tile = Tile.Empty;
+            let count = 0;
+            const output = [];
+
+            for (const tIn of tiles) {
+                const t = tIn || Tile.Empty;
+                if (t.code === tile.code) {
+                    count++;
+                    continue;
+                }
+                if (count == 1) {
+                    output.push(tile.code);
+                } else if (count > 0) {
+                    output.push(`${count}${tile.code}`);
+                }
+                tile = t;
+                count = 1;
             }
-            const tileOffset = tile.id << (x * 3);
-            outputValue += tileOffset;
-        }
-        return outputValue;
-    }
 
-    /**
-     * Pack tile data into a number array
-     * @param tiles tiles to pack
-     */
-    static packLayout(tiles: Tile[]): number[] {
-        const output: number[] = [];
-        for (let y = 0; y < Base.MaxDefY; y++) {
-            const packed = BasePacker.packRow(tiles, y);
-            output.push(packed);
-        }
-        return output;
-    }
+            if (tile != Tile.Empty) {
+                if (count == 1) {
+                    output.push(tile.code);
+                } else if (count > 0) {
+                    output.push(`${count}${tile.code}`);
+                }
+            }
+            return output.join('');
+        },
+        unpack(str: string): Tile[] {
+            const output: Tile[] = [];
+            let currentCount = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charAt(i);
+                const intNum = parseInt(char);
+                if (!isNaN(intNum)) {
+                    currentCount = currentCount * 10 + intNum;
+                    continue;
+                }
 
-    static unpackRow(tile: number, y: number, base: Base) {
-        if (tile == 0) {
-            return;
-        }
-        for (let x = 0; x < Base.MaxX; x++) {
-            const tileOffset = (tile >> (x * 3)) & 0b111;
-            base.setTile(x, y, Tile.Id[tileOffset]);
-        }
-    }
+                const toSet = currentCount || 1;
+                const tile = Tile.Map[char];
+                for (let x = 0; x < toSet; x++) {
+                    output.push(tile);
+                }
+                currentCount = 0;
+            }
 
-    /**
-     * Unpack a packed layout data
-     * @param tiles
-     * @param base
-     */
-    static unpackLayout(tiles: number[], base: Base): void {
-        for (let y = 0; y < Base.MaxDefY; y++) {
-            BasePacker.unpackRow(tiles[y], y, base);
-        }
-    }
+            return output;
+        },
+    };
 }

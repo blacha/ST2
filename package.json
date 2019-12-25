@@ -13,7 +13,9 @@
   "browserslist": [
     "last 1 Chrome version"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "base62": "^2.0.1"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.6",
     "@types/git-rev-sync": "^1.12.0",

@@ -51,7 +51,7 @@ export interface CityLayout {
     /** Owners name */
     owner: string;
     /** Player GameId */
-    ownerId?: GamePlayerId;
+    ownerId: GamePlayerId;
     /** Alliance name */
     alliance?: string;
     /** Alliance Id */

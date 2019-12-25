@@ -1,38 +1,20 @@
-import { CityLayout, CacheObject } from '../../api/city.layout';
+import { CacheObject, CityLayout } from '../../api/city.layout';
 import { ApiScanResponse } from '../../api/request.scan';
 import { StModule } from '../module';
-
-const CacheTime = 5 * 60 * 1000;
+import { BatchBaseSender } from './batcher.base';
 
 export class ClientApi implements StModule {
     name = 'api';
     baseUrl = 'https://shockrtools.web.app/api/v1';
 
     lastSent: Record<string, CacheObject<Promise<ApiScanResponse>>> = {};
+    baseSender = new BatchBaseSender(this);
 
-    async base(base: CityLayout): Promise<ApiScanResponse> {
-        const existing = this.lastSent[base.cityId];
-        if (existing == null || Date.now() - existing.timestamp > CacheTime) {
-            this.lastSent[base.cityId] = {
-                timestamp: Date.now(),
-                obj: this.doSend(base),
-            };
-        }
-        return this.lastSent[base.cityId].obj;
+    async base(base: CityLayout): Promise<string> {
+        return this.baseSender.queue(base);
     }
 
-    private async doSend(base: CityLayout): Promise<ApiScanResponse> {
-        const url = [this.baseUrl, 'world', base.worldId, 'base'].join('/');
-        const res = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(base),
-            headers: { 'content-type': 'application/json', authorization: 'Bearer' },
-        });
-        if (!res.ok) {
-            console.error(await res.text());
-            throw new Error('Failed to scan');
-        }
-        const body = (await res.json()) as ApiScanResponse;
-        return body;
+    flush() {
+        this.baseSender.flush();
     }
 }

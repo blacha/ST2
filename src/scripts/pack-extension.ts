@@ -1,12 +1,12 @@
 import { pack, NccOutput } from './pack';
 import { Version } from '../version';
 
-const ExtensionHeader = `
-// ==UserScript==
+const ExtensionHeader = `// ==UserScript==
 // @name            Shockr - Tiberium Alliances Tools
 // @author          Shockr <shockr@chard.com>
 // @description     Tools to work with Tiberium alliances https://shockrtools.web.app/
-// @include         http*://*.alliances.commandandconquer.com/*/index.aspx*
+// @include        http*://prodgame*.alliances.commandandconquer.com/*/index.aspx*
+// @include        http*://cncapp*.alliances.commandandconquer.com/*/index.aspx*
 // @grant           GM_updatingEnabled
 // @grant           unsafeWindow
 // @version         ${Version.version}
@@ -28,7 +28,7 @@ if (window.location.pathname !== ('/login/auth')) {
 }
 
 function makeExtension(output: NccOutput): NccOutput {
-    const lines = output.code.split('\n');
+    const lines = output.code.replace('require("crypto");', 'null;').split('\n');
     lines.shift();
 
     output.code = `${ExtensionHeader}\n${makeInjector(lines.join('\n'))}`;

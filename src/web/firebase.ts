@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import { DbBase } from '../backend/db/db.base';
+import { DbBase, DbLayout } from '../backend/db/db.base';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBm7H-ccEuECJXxP4hAPSnew0E6HyGmeoo',
@@ -16,3 +16,4 @@ export const FirebaseClient = firebase.initializeApp(firebaseConfig);
 export const firestore = FirebaseClient.firestore();
 
 export const FireStoreBases = firestore.collection('base') as firebase.firestore.CollectionReference<DbBase>;
+export const FireStoreLayouts = firestore.collection('layout') as firebase.firestore.CollectionReference<DbLayout>;

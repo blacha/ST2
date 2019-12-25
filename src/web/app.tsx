@@ -44,7 +44,7 @@ export class App extends React.Component {
                             <Route path="/base/:baseId" component={ViewBase} />
                             <Route path="/base" component={ViewBase} />
                             <Route path="/world/:worldId/alliance/:allianceId" component={ViewAlliance} />
-                            <Route path="/world/:worldId/layout" component={ViewScan} />
+                            <Route path="/world/:worldId/layout/:scanId" component={ViewScan} />
                             <Redirect to="/" />
                         </Switch>
                     </div>

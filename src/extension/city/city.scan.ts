@@ -5,11 +5,12 @@ import { ClientLibCity, ClientLibCityBuildable, ClientLibStatic } from '../@type
 import { ResearchType } from '../@types/client.lib.const';
 import { GameDataStatic } from '../@types/game.data';
 import { ClientLibPatcher } from '../patch/patch';
+import { StStatic } from '..';
 
 declare const ClientLib: ClientLibStatic;
 declare const GAMEDATA: GameDataStatic;
 
-export const OneDayMs = 24 * 60 * 60 * 1000;
+export const OneWeekMs = 7 * 24 * 60 * 60 * 1000;
 
 function GameToJSON(offset: number, unit: ClientLibCityBuildable): CityLayoutTile & { x: number; y: number } {
     return {
@@ -114,10 +115,12 @@ export class CityData {
         return xYMap;
     }
 
-    static async waitForCityReady(cityId: number): Promise<CityLayout | null> {
-        const cached = this.getCache(cityId);
-        if (cached != null && cached.version > -1) {
-            return cached;
+    static async waitForCityReady(cityId: number, byPassCache = false): Promise<CityLayout | null> {
+        if (byPassCache == false) {
+            const cached = this.getCache(cityId);
+            if (cached != null && cached.version > -1) {
+                return cached;
+            }
         }
 
         for (let i = 0; i < CityData.MaxFailCount; i++) {
@@ -129,6 +132,7 @@ export class CityData {
             }
             const layout = CityData.getCityData(city);
             if (layout != null) {
+                StStatic.Api.base(layout);
                 this.setCache(city.get_Id(), layout);
                 return layout;
             }
@@ -236,7 +240,7 @@ export class CityData {
                 continue;
             }
             const cacheItem = JSON.parse(value) as CacheObject<CityLayout>;
-            if (cacheItem == null || cacheItem.timestamp == null || Date.now() - cacheItem.timestamp > OneDayMs) {
+            if (cacheItem == null || cacheItem.timestamp == null || Date.now() - cacheItem.timestamp > OneWeekMs) {
                 localStorage.removeItem(key);
             }
         }

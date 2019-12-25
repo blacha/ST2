@@ -181,7 +181,7 @@ export class Base {
     }
 
     clearCache() {
-        this._score = null;
+        this.score = null;
         this._stats = null;
         this._production = null;
     }
@@ -215,20 +215,26 @@ export class Base {
         return this._production;
     }
 
-    private _stats: { tiberium: SiloCount; crystal: SiloCount } | null = null;
-    private _score: number | null = null;
+    private _stats: { tiberium: SiloCount; crystal: SiloCount; mixed: SiloCount } | null = null;
+    private score: number | null = null;
     get stats() {
         if (this._stats != null) {
             return this._stats;
         }
         const tiberium: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
         const crystal: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
+        const mixed: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
 
         const MIN_SILO = 3;
         // TODO this is not super efficient, could be improved but generally runs in <1ms
         Base.buildingForEach((x, y) => {
             const tib = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Tiberium]).length;
             const cry = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Crystal]).length;
+
+            if (tib + cry > 3) {
+                mixed[tib + cry] = (mixed[tib + cry] || 0) + 1;
+            }
+
             // No one cares about one or two silos
             if (tib < MIN_SILO && cry < MIN_SILO) {
                 return;
@@ -245,10 +251,11 @@ export class Base {
         for (let i = 0; i <= 6 - MIN_SILO; i++) {
             tiberium.score += tiberium[i + MIN_SILO] * 10 ** i;
             crystal.score += crystal[i + MIN_SILO] * 10 ** i;
+            mixed.score += mixed[i + MIN_SILO] * 10 ** i;
         }
 
-        this._stats = { tiberium, crystal };
-        this._score = tiberium.score;
+        this._stats = { tiberium, crystal, mixed };
+        this.score = tiberium.score + crystal.score * 0.1 + mixed.score * 0.25;
         return this._stats;
     }
 

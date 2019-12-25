@@ -2,13 +2,15 @@ import { StModule } from '../module';
 import { ClientLibStatic } from '../@types/client.lib';
 import { ClientLibPatcher } from '../patch/patch';
 import { CityData } from '../city/city.scan';
+import { ShockrTools } from '..';
 
 declare const ClientLib: ClientLibStatic;
 export class PlayerInfo implements StModule {
     name = 'PlayerInfo';
+    st: ShockrTools | null = null;
 
-    async start(): Promise<void> {
-        //
+    async start(st: ShockrTools): Promise<void> {
+        this.st = st;
     }
     async stop(): Promise<void> {
         //
@@ -30,17 +32,13 @@ export class PlayerInfo implements StModule {
 
             const cityId = city.$get_Id();
             cities.set_CurrentCityId(cityId);
-            await CityData.waitForCityReady(cityId);
-            const cityObj = ClientLib.Data.MainData.GetInstance()
-                .get_Cities()
-                .GetCity(cityId);
+            const cityObj = await CityData.waitForCityReady(cityId, true);
 
             if (cityObj == null) {
                 continue;
             }
 
-            const cityLayout = await CityData.getCityData(cityObj);
-            allPlayers.push(cityLayout);
+            allPlayers.push(cityObj);
         }
         return allPlayers;
     }

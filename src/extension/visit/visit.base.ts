@@ -1,13 +1,14 @@
-import { BaseBuilder } from '../../lib/base.builder';
-import { RegionObject } from '../@types/client.lib';
+import { ShockrTools } from '..';
+import { BasePacker } from '../../lib/base.packer';
+import { ClientLibStatic, RegionObject } from '../@types/client.lib';
 import { VisObjectType } from '../@types/client.lib.const';
 import { CityData } from '../city/city.scan';
 import { StModule } from '../module';
-import { ShockrTools } from '..';
 
 // Visit base can be used on anything in range
 // qx.core.Init.getApplication().getPlayArea().setView(ClientLib.Data.PlayerAreaViewMode.pavmAllianceBase, cities.get_CurrentCityId(),0,0)
 
+declare const ClientLib: ClientLibStatic;
 declare const webfrontend: any;
 declare const qx: any;
 
@@ -78,13 +79,7 @@ export class VisitBaseButton implements StModule {
             return;
         }
 
-        const res = await this.st?.Api.base(city);
-        if (res == null) {
-            return;
-        }
-
         if (waitId == this.lastBase?.get_Id()) {
-            this.stId = res.id;
             this.buttons.forEach(b => b.show());
         }
     }
@@ -112,8 +107,11 @@ export class VisitBaseButton implements StModule {
                 if (city == null) {
                     return;
                 }
-
-                window.open(`https://shockrtools.web.app/base/${this.stId}`, '_blank');
+                const worldId = ClientLib.Data.MainData.GetInstance()
+                    .get_Server()
+                    .get_WorldId();
+                const baseId = BasePacker.id.pack(worldId, cityId);
+                window.open(`https://shockrtools.web.app/base/${baseId}`, '_blank');
                 qx.core.Init.getApplication()
                     .getPlayArea()
                     .setView(13, cityId, 0, 0);
