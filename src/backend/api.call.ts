@@ -1,6 +1,6 @@
-import { ulid } from 'ulid';
 import * as express from 'express';
 import * as expressCore from 'express-serve-static-core';
+import { Id } from '../lib/uuid';
 
 export interface ApiFunc<Params = any, Body = any, Response = any> {
     params: Params;
@@ -22,7 +22,7 @@ export abstract class ApiCall<T extends ApiFunc> {
     }
     static async validateRequest<T extends ApiFunc>(req: express.Request): Promise<ApiRequest<T>> {
         const apiReq = req as ApiRequest<any>;
-        apiReq.id = ulid();
+        apiReq.id = Id.generate();
         return apiReq;
     }
 

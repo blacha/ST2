@@ -7,6 +7,7 @@ import { StModule } from '../module';
 import { ClientLibPatcher } from '../patch/patch';
 import { ClientLibIter } from '../util/iter';
 import { CityData } from './city.scan';
+import { ShockrTools } from '..';
 
 declare const ClientLib: ClientLibStatic;
 declare const phe: PheStatic;
@@ -31,8 +32,10 @@ export class LayoutScanner implements StModule {
     lastScan: CityLayout[] = [];
     state: LayoutScannerState = LayoutScannerState.Init;
     toScan: Record<string, LayoutToScan> = {};
+    st: ShockrTools | null = null;
 
-    async start(): Promise<void> {
+    async start(st: ShockrTools): Promise<void> {
+        this.st = st;
         this.state = LayoutScannerState.Ready;
         phe.cnc.Util.attachNetEvent(
             ClientLib.Vis.VisMain.GetInstance(),
@@ -215,13 +218,9 @@ export class LayoutScanner implements StModule {
             return cached;
         }
 
-        const faction = Faction.fromId(city.get_CityFaction());
-        if (faction == Faction.Gdi || faction == Faction.Nod) {
-            return null;
-        }
-
         const layout = CityData.getCityData(city);
         if (layout != null) {
+            await this.st?.Api.base(layout);
             this.setCache(city.get_PosX(), city.get_PosY(), layout);
         }
 

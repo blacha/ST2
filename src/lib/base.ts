@@ -12,7 +12,7 @@ import { DefUnitType } from './unit/def.unit.type';
 import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
 import { color, ConsoleColor } from './util';
-import { Uuid } from './uuid';
+import { Id } from './uuid';
 
 export interface CncLocation {
     x: number;
@@ -90,7 +90,7 @@ export class Base {
         this.upgrades = [];
         this.base = [];
 
-        this.id = Uuid.ulid();
+        this.id = Id.generate();
         this.owner = null;
     }
 
@@ -174,6 +174,10 @@ export class Base {
             return 'tiberium';
         }
         return null;
+    }
+    clear() {
+        this.clearCache();
+        this.base = [];
     }
 
     clearCache() {

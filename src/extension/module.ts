@@ -1,5 +1,7 @@
+import { ShockrTools } from './index';
+
 export interface StModule {
     name: string;
-    start?(): Promise<void>;
+    start?(st: ShockrTools): Promise<void>;
     stop?(): Promise<void>;
 }

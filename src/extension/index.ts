@@ -9,18 +9,22 @@ import { KillInfo } from './kill.info/kill.info';
 import { VisitBaseButton } from './visit/visit.base';
 import { PlayerInfo } from './player/player.info';
 import { Version } from '../version';
+import { ClientApi } from './api/client.api';
 
 declare const ClientLib: ClientLibStatic;
 
-class ShockrTools {
+export class ShockrTools {
     Version = Version;
     Base = Base;
     Builder = BaseBuilder;
+
+    Api = new ClientApi();
     Layout = new LayoutScanner();
     KillInfo = new KillInfo();
     VisitBase = new VisitBaseButton();
     Player = new PlayerInfo();
-    Modules: StModule[] = [this.Layout, this.KillInfo, this.VisitBase, this.Player];
+
+    Modules: StModule[] = [this.Api, this.Layout, this.KillInfo, this.VisitBase, this.Player];
 
     async start() {
         let failCount = 0;
@@ -38,7 +42,7 @@ class ShockrTools {
         for (const mod of this.Modules) {
             if (mod.start) {
                 console.log('\tstart' + mod.name);
-                await mod.start();
+                await mod.start(this);
             }
         }
     }

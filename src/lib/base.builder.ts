@@ -1,10 +1,8 @@
 import { CityLayout, CityLayoutTileObject } from '../api/city.layout';
-import { CityInfoData } from '../api/player.info';
 import { Base } from './base';
 import { Tile } from './base/tile';
 import { Faction } from './data/faction';
 import { GameDataObject } from './data/game.data.object';
-import { JsonPlayerObject } from './objects/player';
 
 const codeZero = '0'.charCodeAt(0);
 const codeNine = '9'.charCodeAt(0);
@@ -49,27 +47,6 @@ export class BaseBuilder {
         base.poi.air = parseFloat(parts[10]);
         base.poi.defense = parseFloat(parts[11]);
         return base;
-    }
-
-    static fromCity(player: JsonPlayerObject, city: CityInfoData): Base {
-        const upgrades = Object.keys(player.research)
-            .filter(key => player.research[key] > 1)
-            .map(val => parseInt(val), 10);
-
-        const cncBase: CityLayout = {
-            x: city.x,
-            y: city.y,
-            level: city.level,
-            name: city.name,
-            faction: player.faction,
-            version: 0,
-            world: player.world,
-            owner: player.name,
-            tiles: city.tiles,
-            upgrades,
-        };
-
-        return BaseBuilder.load(cncBase);
     }
 
     static buildByCode(base: Base, x: number, y: number, level: number, faction: Faction, code: string): void {
@@ -126,12 +103,11 @@ export class BaseBuilder {
                     continue;
                 }
 
+                output.build(x, y, actualUnit.l, unitType);
                 if (actualUnit.t) {
                     tile = Tile.Id[actualUnit.t];
                     output.setTile(x, y, tile);
                 }
-
-                output.build(x, y, actualUnit.l, unitType);
             }
         }
 

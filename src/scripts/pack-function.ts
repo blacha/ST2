@@ -1,6 +1,6 @@
 import { pack } from './pack';
 
-pack('./build/src/backend/index.js', './functions/lib/index.js', false, [
+pack('./build/src/backend/index.js', './functions/lib/index.js', [
     'firebase-admin',
     'firebase-functions',
     'cors',

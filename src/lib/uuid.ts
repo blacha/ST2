@@ -1,2 +1,6 @@
-import { ulid } from 'ulid';
-export const Uuid = { ulid };
+import * as ulid from 'ulid';
+export const Id = {
+    generate(): string {
+        return ulid.ulid().toLowerCase();
+    },
+};

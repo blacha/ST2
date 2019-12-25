@@ -3,6 +3,7 @@ import { RegionObject } from '../@types/client.lib';
 import { VisObjectType } from '../@types/client.lib.const';
 import { CityData } from '../city/city.scan';
 import { StModule } from '../module';
+import { ShockrTools } from '..';
 
 // Visit base can be used on anything in range
 // qx.core.Init.getApplication().getPlayArea().setView(ClientLib.Data.PlayerAreaViewMode.pavmAllianceBase, cities.get_CurrentCityId(),0,0)
@@ -39,8 +40,11 @@ export class VisitBaseButton implements StModule {
     buttons: QxButton[] = [];
     composite: QxComposite | null = null;
     lastBase: RegionObject | null = null;
+    stId: string | null = null;
+    st: ShockrTools | null = null;
 
-    async start(): Promise<void> {
+    async start(st: ShockrTools): Promise<void> {
+        this.st = st;
         const regionCity = webfrontend.gui.region.RegionCityMenu.prototype;
         const oldFunction = (this.oldFunction = regionCity.showMenu);
         /* eslint-disable @typescript-eslint/no-this-alias */
@@ -69,11 +73,23 @@ export class VisitBaseButton implements StModule {
         if (waitId == null) {
             return;
         }
-        const res = await CityData.waitForCityReady(waitId);
+        const city = await CityData.waitForCityReady(waitId);
+        if (city == null) {
+            return;
+        }
+
+        const layout = CityData.getCityData(city);
+        if (layout == null) {
+            return;
+        }
+
+        const res = await this.st?.Api.base(layout);
         if (res == null) {
             return;
         }
+
         if (waitId == this.lastBase?.get_Id()) {
+            this.stId = res.id;
             this.buttons.forEach(b => b.show());
         }
     }
@@ -90,6 +106,7 @@ export class VisitBaseButton implements StModule {
                 'ST',
                 'https://shockrtools.web.app/128_transparent.0012b310.png',
             ) as QxButton;
+
             button.getChildControl('icon').set({ width: 16, height: 16, scale: true }); // Force icon to be 16x16 px
             button.addListener('execute', async () => {
                 if (this.lastBase == null) {
@@ -100,13 +117,7 @@ export class VisitBaseButton implements StModule {
                     return;
                 }
 
-                const layout = CityData.getCityData(city);
-                if (layout == null) {
-                    return;
-                }
-                const base = BaseBuilder.load(layout);
-                const baseUrl = 'https://shockrtools.web.app/base/' + encodeURI(base.toCncOpt());
-                window.open(baseUrl, '_blank');
+                window.open(`https://shockrtools.web.app/base/${this.stId}`, '_blank');
                 qx.core.Init.getApplication()
                     .getPlayArea()
                     .setView(13, city.get_Id(), 0, 0);

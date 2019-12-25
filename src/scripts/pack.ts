@@ -4,17 +4,14 @@ import * as path from 'path';
 import * as gitRev from 'git-rev-sync';
 import * as packageJson from '../../package.json';
 
-interface NccOutput {
+export interface NccOutput {
     code: string;
     map?: string;
     assets: { [fileName: string]: { source: Buffer; permissions: number } };
 }
 
-function writeAssets(dst: string, output: NccOutput, isBrowser: boolean) {
+function writeAssets(dst: string, output: NccOutput) {
     const lines = output.code.split('\n');
-    if (isBrowser) {
-        lines.shift();
-    }
     const code = lines
         .join('\n')
         .replace(' __dirname + ', '') // Hack to make NCC pack for web!
@@ -31,12 +28,20 @@ function writeAssets(dst: string, output: NccOutput, isBrowser: boolean) {
         fs.writeFileSync(outputFile, asset.source);
     }
 }
+function noop(output: NccOutput) {
+    return output;
+}
 
-export async function pack(src: string, dst: string, isBrowser = true, externals: string[] = []) {
+export async function pack(
+    src: string,
+    dst: string,
+    externals: string[] = [],
+    callback: (output: NccOutput) => NccOutput = noop,
+) {
     const dstPath = path.dirname(dst);
     if (!fs.existsSync(dstPath)) {
         fs.mkdirSync(dstPath, { recursive: true });
     }
     const output = await ncc(src, { externals, sourceMap: true });
-    writeAssets(dst, output, isBrowser);
+    writeAssets(dst, callback(output));
 }

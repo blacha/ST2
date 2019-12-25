@@ -1,11 +1,10 @@
 import React = require('react');
 import { RouteComponentProps } from 'react-router-dom';
-import { LayoutScanApi } from '../../api/city.layout';
+import { style } from 'typestyle';
 import { Base } from '../../lib/base';
 import { BaseBuilder } from '../../lib/base.builder';
-// import { ScanResults } from "../data/scan.result";
-import { style } from 'typestyle';
 import { ViewBaseMain } from '../base/base.main';
+import { FirebaseFirestore } from '../firebase';
 
 const ScanCss = {
     ScanList: style({
@@ -17,32 +16,40 @@ const ScanCss = {
     }),
 };
 
+interface ScanState {
+    bases: Base[];
+}
 type ViewScanProps = RouteComponentProps<{ scanId?: string }>;
 
-export class ViewScan extends React.Component<ViewScanProps> {
-    scan: LayoutScanApi;
-    bases: Base[];
+export class ViewScan extends React.Component<ViewScanProps, ScanState> {
+    componentDidMount() {
+        this.loadScan();
+    }
 
-    constructor(props: ViewScanProps) {
-        super(props);
-        const { scanId } = this.props.match.params;
-        this.scan = { v: 1, player: { id: 1, accountId: 2, name: 'foo' }, world: 410, layouts: [] }; // ScanResults[1]
-        console.log('Scan', scanId, this.scan);
+    async loadScan() {
+        const baseStore = FirebaseFirestore.collection('base');
+        const results = await baseStore.where('worldId', '==', 410).get();
+        const bases = results.docs.map(c => {
+            const base = BaseBuilder.load(c.data() as any);
+            base.clear();
+            return base;
+        });
 
-        this.bases = this.scan.layouts.map(c => BaseBuilder.load(c));
-
-        this.bases.sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score);
+        bases.sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score);
+        this.setState({ bases });
     }
 
     render() {
         return (
             <div className={ScanCss.ScanList}>
-                {this.bases.map(base => {
+                {this.state?.bases.map(base => {
                     return (
-                        <div className={ScanCss.BaseCard}>
+                        <div className={ScanCss.BaseCard} key={base.id}>
                             <div>
-                                {' '}
-                                {base.x}:{base.y}{' '}
+                                <div>
+                                    {base.x}:{base.y}
+                                </div>
+                                <div>{base.name}</div>
                             </div>
                             <ViewBaseMain base={base} key={base.id} size={24} />
                         </div>
