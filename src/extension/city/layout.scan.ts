@@ -213,10 +213,6 @@ export class LayoutScanner implements StModule {
             return null;
         }
 
-        if (city != null) {
-            await this.st?.Api.base(city);
-        }
-
         return city;
     }
 
