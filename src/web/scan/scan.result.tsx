@@ -28,7 +28,10 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
 
     async loadScan() {
         const baseStore = FirebaseFirestore.collection('base');
-        const results = await baseStore.where('worldId', '==', 410).get();
+        const results = await baseStore
+            .where('worldId', '==', 410)
+            .limit(100)
+            .get();
         const bases = results.docs.map(c => {
             const base = BaseBuilder.load(c.data() as any);
             base.clear();
