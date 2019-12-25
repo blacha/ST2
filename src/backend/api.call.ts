@@ -3,6 +3,7 @@ import * as expressCore from 'express-serve-static-core';
 import { Id } from '../lib/uuid';
 
 export interface ApiFunc<Params = any, Body = any, Response = any> {
+    path: string;
     params: Params;
     body: Body;
     response: Response;
@@ -14,7 +15,7 @@ export interface ApiRequest<T extends ApiFunc> extends expressCore.Request<T['pa
 }
 
 export abstract class ApiCall<T extends ApiFunc> {
-    abstract path: string;
+    abstract path: T['path'];
     abstract method: 'get' | 'post';
 
     static bind<T>(app: express.Application, ApiFunc: ApiCall<any>) {

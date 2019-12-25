@@ -8,8 +8,8 @@ export interface ApiScanResponse {
 }
 
 export interface ApiScanRequest {
-    path: '/api/v1/world/:worldId/base/:coordId';
-    params: { worldId: string; coordId: string };
+    path: '/api/v1/world/:worldId/base';
+    params: { worldId: number };
     body: CityLayout;
     response: ApiScanResponse;
 }

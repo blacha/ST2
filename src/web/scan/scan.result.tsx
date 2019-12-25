@@ -4,7 +4,7 @@ import { style } from 'typestyle';
 import { Base } from '../../lib/base';
 import { BaseBuilder } from '../../lib/base.builder';
 import { ViewBaseMain } from '../base/base.main';
-import { FirebaseFirestore } from '../firebase';
+import { FireStoreBases } from '../firebase';
 
 const ScanCss = {
     ScanList: style({
@@ -19,7 +19,7 @@ const ScanCss = {
 interface ScanState {
     bases: Base[];
 }
-type ViewScanProps = RouteComponentProps<{ scanId?: string }>;
+type ViewScanProps = RouteComponentProps<{ worldId: string }>;
 
 export class ViewScan extends React.Component<ViewScanProps, ScanState> {
     componentDidMount() {
@@ -27,18 +27,18 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
     }
 
     async loadScan() {
-        const baseStore = FirebaseFirestore.collection('base');
-        const results = await baseStore
-            .where('worldId', '==', 410)
+        const results = await FireStoreBases.where('worldId', '==', Number(this.props.match.params.worldId))
+            .where('ownerId', '<', 0)
             .limit(100)
             .get();
-        const bases = results.docs.map(c => {
-            const base = BaseBuilder.load(c.data() as any);
-            base.clear();
+
+        const bases: Base[] = results.docs.map(c => {
+            const base = BaseBuilder.load(c.data());
+            base.clear(); // Remove buildings
             return base;
         });
 
-        bases.sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score);
+        bases.sort((a: Base, b: Base) => b.stats.tiberium.score - a.stats.tiberium.score);
         this.setState({ bases });
     }
 

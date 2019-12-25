@@ -2,27 +2,22 @@ import { ApiScanRequest, ApiScanResponse } from '../api/request.scan';
 import { ApiCall, ApiRequest } from './api.call';
 import { Coord } from './coord';
 import { FirestoreAdmin } from './db.admin';
-import { Id } from '../lib/uuid';
+import { BaseBuilder } from '../lib/base.builder';
+import { BasePacker } from '../lib/base.packer';
 
 export class ApiScan extends ApiCall<ApiScanRequest> {
-    path = '/api/v1/world/:worldId/base/:coordId';
+    path = '/api/v1/world/:worldId/base' as const;
     method = 'post' as const;
 
     async handle(req: ApiRequest<ApiScanRequest>): Promise<ApiScanResponse> {
         const worldId = Number(req.params.worldId);
-        const coordId = Number(req.params.coordId);
-        if (isNaN(worldId) || worldId < 0 || worldId > 1000) {
-            throw new Error('Invalid worldId');
-        }
+        const baseJson = req.body;
+        const base = BaseBuilder.load(baseJson);
+        const baseId = BasePacker.packId(worldId, baseJson.cityId);
 
-        const location = Coord.fromId(coordId);
         const BaseCollection = FirestoreAdmin.collection('base');
+        await BaseCollection.doc(baseId).set({ ...baseJson, stats: base.stats });
 
-        const base = req.body;
-
-        const baseLocation = `w${worldId}c${base.cityId}`;
-        await BaseCollection.doc(baseLocation).set({ ...base, worldId, coordId });
-
-        return { id: baseLocation, worldId, location };
+        return { id: baseId, worldId, location: { x: baseJson.x, y: baseJson.y } };
     }
 }

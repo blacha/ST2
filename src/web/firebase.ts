@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
+import { DbBase } from '../backend/db/db.base';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBm7H-ccEuECJXxP4hAPSnew0E6HyGmeoo',
@@ -12,4 +13,6 @@ const firebaseConfig = {
 };
 
 export const FirebaseClient = firebase.initializeApp(firebaseConfig);
-export const FirebaseFirestore = FirebaseClient.firestore();
+export const firestore = FirebaseClient.firestore();
+
+export const FireStoreBases = firestore.collection('base') as firebase.firestore.CollectionReference<DbBase>;

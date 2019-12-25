@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch, Link } from 'react-router-dom';
 import { style } from 'typestyle';
 import { ViewAlliance } from './alliance/alliance';
 import { ViewBase } from './base/base';
@@ -33,7 +33,9 @@ export class App extends React.Component {
                     <div className={AppCss.Header}>
                         <section className="Container">
                             <div className="Icon"></div>
-                            <div className="IconTitle">ShockrTools</div>
+                            <div className="IconTitle">
+                                <Link to="/">ShockrTools</Link>
+                            </div>
                         </section>
                     </div>
                     <div className="Content">
@@ -41,8 +43,8 @@ export class App extends React.Component {
                             <Route exact={true} path="/" component={ViewLandingPage} />
                             <Route path="/base/:baseId" component={ViewBase} />
                             <Route path="/base" component={ViewBase} />
-                            <Route path="/alliance" component={ViewAlliance} />
-                            <Route path="/scan/:scanId" component={ViewScan} />
+                            <Route path="/world/:worldId/alliance/:allianceId" component={ViewAlliance} />
+                            <Route path="/world/:worldId/layout" component={ViewScan} />
                             <Redirect to="/" />
                         </Switch>
                     </div>

@@ -12,7 +12,10 @@ export class ViewLandingPage extends React.Component {
                     <Link to={`/base/${ExampleBaseString}`}>Link</Link>
                 </div>
                 <div>
-                    <Link to={`/scan/abc123`}>Scan</Link>
+                    <Link to={`/world/410/layout`}>Scan</Link>
+                </div>
+                <div>
+                    <Link to={`/world/410/alliance/106`}>Alliance</Link>
                 </div>
             </div>
         );

@@ -3,6 +3,9 @@ import { style } from 'typestyle';
 import { Base } from '../../lib/base';
 import { GameResources } from '../../lib/game.resources';
 import { formatNumber } from '../../lib/util';
+import { FireStoreBases } from '../firebase';
+import { BaseBuilder } from '../../lib/base.builder';
+import { RouteComponentProps } from 'react-router-dom';
 
 export const AllianceCss = {
     Table: style({
@@ -24,15 +27,28 @@ export interface PlayerStats {
     main: Base;
 }
 
-export class ViewAlliance extends React.Component<{}> {
-    alliance: Base[];
-    byPlayer: PlayerStats[] = [];
+type AllianceProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
+interface AllianceState {
+    info: PlayerStats[];
+}
 
-    constructor(props: {}) {
-        super(props);
-        this.alliance = []; //AllianceData.map(c => BaseBuilder.load(c as any))
+export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
+    state: AllianceState = { info: [] };
+
+    componentDidMount() {
+        const { worldId, allianceId } = this.props.match.params;
+        console.log('LoadAlliance', this.props.match);
+        this.loadAlliance(Number(worldId), Number(allianceId));
+    }
+
+    async loadAlliance(worldId: number, allianceId: number) {
+        const doc = await FireStoreBases.where('worldId', '==', worldId)
+            .where('allianceId', '==', allianceId)
+            .get();
+        console.log(doc);
+        const bases = doc.docs.map(c => BaseBuilder.load(c.data()));
         const playerSet = new Map<string, PlayerStats>();
-        for (const base of this.alliance) {
+        for (const base of bases) {
             if (base.owner == null) {
                 continue;
             }
@@ -51,12 +67,12 @@ export class ViewAlliance extends React.Component<{}> {
             current.bases.push(base);
             current.production.add(base.production.total);
         }
-        this.byPlayer = Array.from(playerSet.values());
+        this.setState({ info: Array.from(playerSet.values()) });
     }
 
     render() {
         const output = [];
-        for (const baseInfo of this.byPlayer) {
+        for (const baseInfo of this.state.info) {
             output.push(
                 <div className={AllianceCss.Base} key={baseInfo.main.id}>
                     <div>{baseInfo.main.owner}</div>

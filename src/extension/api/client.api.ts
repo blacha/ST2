@@ -1,24 +1,32 @@
-import { StModule } from '../module';
 import { CityLayout } from '../../api/city.layout';
-import { Coord } from '../../backend/coord';
 import { ApiScanResponse } from '../../api/request.scan';
+import { StModule } from '../module';
+
+interface CacheObject<T> {
+    timestamp: number;
+    obj: Promise<T>;
+}
+const CacheTime = 5 * 60 * 1000;
 
 export class ClientApi implements StModule {
     name = 'api';
     baseUrl = 'https://shockrtools.web.app/api/v1';
 
-    lastSent: Record<string, Promise<ApiScanResponse>> = {};
+    lastSent: Record<string, CacheObject<ApiScanResponse>> = {};
 
     async base(base: CityLayout): Promise<ApiScanResponse> {
-        if (this.lastSent[base.cityId] == null) {
-            this.lastSent[base.cityId] = this.doSend(base);
+        const existing = this.lastSent[base.cityId];
+        if (existing == null || Date.now() - existing.timestamp > CacheTime) {
+            this.lastSent[base.cityId] = {
+                timestamp: Date.now(),
+                obj: this.doSend(base),
+            };
         }
-
-        return this.lastSent[base.cityId];
+        return this.lastSent[base.cityId].obj;
     }
 
     private async doSend(base: CityLayout): Promise<ApiScanResponse> {
-        const url = [this.baseUrl, 'world', base.world, 'base', Coord.toId(base.x, base.y)].join('/');
+        const url = [this.baseUrl, 'world', base.world, 'base'].join('/');
         const res = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(base),
@@ -29,7 +37,6 @@ export class ClientApi implements StModule {
             throw new Error('Failed to scan');
         }
         const body = (await res.json()) as ApiScanResponse;
-        delete this.lastSent[base.cityId];
         return body;
     }
 }

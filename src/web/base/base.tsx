@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Base } from '../../lib/base';
 import { BaseBuilder } from '../../lib/base.builder';
+import { FireStoreBases } from '../firebase';
 import { ViewBaseDef } from './base.def';
 import { ViewBaseMain } from './base.main';
 import { ViewBaseOff } from './base.off';
@@ -61,38 +62,68 @@ export const BaseCss = {
         }),
     },
 };
-
+export enum ComponentLoading {
+    Ready,
+    Loading,
+    Failed,
+    Done,
+}
 type ViewBaseProps = RouteComponentProps<{ baseId?: string }>;
 
 export class ViewBase extends React.Component<ViewBaseProps> {
-    base: Base;
+    state = { base: new Base(), state: ComponentLoading.Ready };
 
-    constructor(props: ViewBaseProps) {
-        super(props);
+    componentDidMount() {
         const { baseId } = this.props.match.params;
         if (baseId == null) {
-            this.base = new Base();
+            return;
+        }
+
+        if (baseId.indexOf('|') > -1) {
+            this.setState({ base: BaseBuilder.fromCnCOpt(baseId), state: ComponentLoading.Done });
         } else {
-            if (baseId.indexOf('|') > -1) {
-                this.base = BaseBuilder.fromCnCOpt(baseId);
-            } else {
-                this.base = new Base();
-            }
+            this.setState({ base: new Base(), state: ComponentLoading.Loading });
+            this.loadBase(baseId);
         }
     }
 
+    async loadBase(baseId: string) {
+        console.log('LoadBase', baseId);
+        const doc = await FireStoreBases.doc(baseId).get();
+        console.log('Loaded', doc, doc.exists, doc.data());
+        if (!doc.exists) {
+            this.setState({ base: this.state.base, state: ComponentLoading.Failed });
+            return;
+        }
+        const data = doc.data();
+        if (data == null) {
+            this.setState({ base: this.state.base, state: ComponentLoading.Failed });
+            return;
+        }
+        const base = BaseBuilder.load(data);
+        this.setState({ base, state: ComponentLoading.Done });
+    }
+
     render() {
+        const { base, state } = this.state;
+        if (state == ComponentLoading.Loading) {
+            return <div>Loading...</div>;
+        }
+        if (state == ComponentLoading.Failed) {
+            return <div>Could not find base</div>;
+        }
+
         return (
             <div className="Base">
                 <div className={BaseCss.Title}>
-                    <div>{this.base.name} </div>
-                    <div>{this.base.x > 0 ? `@ ${this.base.x}, ${this.base.y}` : ''}</div>
-                    <div>{this.base.owner}</div>
+                    <div>{base.name} </div>
+                    <div>{base.x > 0 ? `@ ${base.x}, ${base.y}` : ''}</div>
+                    <div>{base.owner}</div>
                 </div>
-                <ViewBaseStats base={this.base} />
-                <ViewBaseMain base={this.base} size={TileSize} />
-                <ViewBaseDef base={this.base} size={TileSize} />
-                <ViewBaseOff base={this.base} size={TileSize} />
+                <ViewBaseStats base={base} />
+                <ViewBaseMain base={base} size={TileSize} />
+                <ViewBaseDef base={base} size={TileSize} />
+                <ViewBaseOff base={base} size={TileSize} />
             </div>
         );
     }
