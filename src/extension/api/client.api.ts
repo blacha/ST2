@@ -26,7 +26,7 @@ export class ClientApi implements StModule {
     }
 
     private async doSend(base: CityLayout): Promise<ApiScanResponse> {
-        const url = [this.baseUrl, 'world', base.world, 'base'].join('/');
+        const url = [this.baseUrl, 'world', base.worldId, 'base'].join('/');
         const res = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(base),

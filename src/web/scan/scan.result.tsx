@@ -23,15 +23,20 @@ type ViewScanProps = RouteComponentProps<{ worldId: string }>;
 
 export class ViewScan extends React.Component<ViewScanProps, ScanState> {
     componentDidMount() {
-        this.loadScan();
+        const worldId = Number(this.props.match.params.worldId);
+        this.loadScan(worldId);
     }
 
-    async loadScan() {
-        const results = await FireStoreBases.where('worldId', '==', Number(this.props.match.params.worldId))
-            .where('ownerId', '<', 0)
+    async loadScan(worldId: number) {
+        console.log('LoadLayouts', worldId);
+        const results = await FireStoreBases.where('worldId', '==', worldId)
+            // .where('score.tiberium.score', '>', 0)
+            // .where('ownerId', '<', 0)
             .limit(100)
+            // .orderBy('score.tiberium.score')
             .get();
 
+        console.log('Loaded', results.docs.length);
         const bases: Base[] = results.docs.map(c => {
             const base = BaseBuilder.load(c.data());
             base.clear(); // Remove buildings

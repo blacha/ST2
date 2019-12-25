@@ -27,26 +27,38 @@ export type GamePlayerId = number;
 export type GameAllianceId = number;
 
 export interface CityLayout {
+    /** CNC city Id */
     cityId: number;
+    /** Id of the world that the base is on */
+    worldId: number;
 
+    /** Base level */
     level: number;
+    /** Base Offense level */
     levelOff?: number;
+    /** Base Defense level */
     levelDef?: number;
 
+    /** Name of base */
     name: string;
 
     x: number;
     y: number;
 
+    /** Faction, GDI, NOD, Forgotten */
     faction: number;
 
+    /** Owners name */
     owner: string;
     /** Player GameId */
     ownerId?: GamePlayerId;
+    /** Alliance name */
     alliance?: string;
+    /** Alliance Id */
     allianceId?: GameAllianceId | null;
+    /** Base version  */
     version: number;
-    world: number;
     tiles: CityLayoutTile[];
+    /** Units that have upgrades */
     upgrades: number[];
 }

@@ -52,7 +52,7 @@ export class CityData {
             ownerId: city.get_OwnerId(),
             owner: city.get_OwnerName() || player.name,
             version: city.get_Version(),
-            world: server.get_WorldId(),
+            worldId: server.get_WorldId(),
             alliance: city.get_OwnerAllianceName(),
             allianceId: city.get_OwnerAllianceId(),
             tiles: CityData.getLayout(city),
