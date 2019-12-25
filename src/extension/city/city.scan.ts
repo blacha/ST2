@@ -127,6 +127,7 @@ export class CityData {
         for (let i = 0; i < CityData.MaxFailCount; i++) {
             const city = CityData.isReady(cityId);
             if (city == null) {
+                await new Promise(resolve => setTimeout(resolve, 100 * i));
                 continue;
             }
 
@@ -141,7 +142,6 @@ export class CityData {
                 this.setCache(city.get_Id(), layout);
                 return layout;
             }
-            await new Promise(resolve => setTimeout(resolve, 100 * i));
         }
         return null;
     }
