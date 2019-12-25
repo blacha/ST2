@@ -18,9 +18,9 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         const location = Coord.fromId(coordId);
         const BaseCollection = FirestoreAdmin.collection('base');
 
-        const baseLocation = `w${worldId}c${coordId}`;
         const base = req.body;
 
+        const baseLocation = `w${worldId}c${base.cityId}`;
         await BaseCollection.doc(baseLocation).set({ ...base, worldId, coordId });
 
         return { id: baseLocation, worldId, location };
