@@ -4,6 +4,7 @@ import { ClientLibStatic, RegionObject } from '../@types/client.lib';
 import { VisObjectType } from '../@types/client.lib.const';
 import { CityData } from '../city/city.scan';
 import { StModule } from '../module';
+import { BaseBuilder } from '../../lib/base.builder';
 
 // Visit base can be used on anything in range
 // qx.core.Init.getApplication().getPlayArea().setView(ClientLib.Data.PlayerAreaViewMode.pavmAllianceBase, cities.get_CurrentCityId(),0,0)
@@ -40,8 +41,7 @@ export class VisitBaseButton implements StModule {
     isStarted = false;
     buttons: QxButton[] = [];
     composite: QxComposite | null = null;
-    lastBase: RegionObject | null = null;
-    stId: string | null = null;
+    lastBaseId: number | null = null;
     st: ShockrTools | null = null;
 
     async start(st: ShockrTools): Promise<void> {
@@ -54,9 +54,19 @@ export class VisitBaseButton implements StModule {
             if (!self.isStarted) {
                 self.registerButtons(this);
             }
+
+            const currentId = selectedBase.get_Id?.();
+            if (currentId == null) {
+                self.lastBaseId = null;
+            }
+
+            if (currentId == self.lastBaseId) {
+                return;
+            }
+
             self.buttons.forEach(b => b.exclude());
 
-            self.lastBase = selectedBase;
+            self.lastBaseId = currentId;
 
             switch (selectedBase.get_VisObjectType()) {
                 case VisObjectType.RegionNPCBase:
@@ -70,16 +80,17 @@ export class VisitBaseButton implements StModule {
 
     /** Enable the button if/when it can be enabled. */
     private async waitForBaseReady() {
-        const waitId = this.lastBase?.get_Id();
+        const waitId = this.lastBaseId;
         if (waitId == null) {
             return;
         }
-        const city = await CityData.waitForCityReady(waitId);
+        // Accept cached data up to 5 minutes old
+        const city = await CityData.waitForCityReady(waitId, false, 5 * 60 * 1000);
         if (city == null) {
             return;
         }
 
-        if (waitId == this.lastBase?.get_Id()) {
+        if (waitId == this.lastBaseId) {
             this.buttons.forEach(b => b.show());
         }
     }
@@ -93,28 +104,24 @@ export class VisitBaseButton implements StModule {
             }
 
             const button = new qx.ui.form.Button(
-                'ST',
+                'Scan',
                 'https://shockrtools.web.app/128_transparent.0012b310.png',
             ) as QxButton;
 
             button.getChildControl('icon').set({ width: 16, height: 16, scale: true }); // Force icon to be 16x16 px
             button.addListener('execute', async () => {
-                if (this.lastBase == null) {
+                if (this.lastBaseId == null) {
                     return;
                 }
-                const cityId = this.lastBase.get_Id();
-                const city = await CityData.waitForCityReady(cityId);
+                const city = await CityData.waitForCityReady(this.lastBaseId);
                 if (city == null) {
                     return;
                 }
-                const worldId = ClientLib.Data.MainData.GetInstance()
-                    .get_Server()
-                    .get_WorldId();
-                const baseId = BasePacker.id.pack(worldId, cityId);
-                window.open(`https://shockrtools.web.app/base/${baseId}`, '_blank');
+                const base = BaseBuilder.load(city);
+                window.open(`https://shockrtools.web.app/base/${base.toCncOpt()}`, '_blank');
                 qx.core.Init.getApplication()
                     .getPlayArea()
-                    .setView(13, cityId, 0, 0);
+                    .setView(13, this.lastBaseId, 0, 0);
             });
             composite.add(button);
             this.buttons.push(button);

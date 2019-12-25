@@ -115,9 +115,10 @@ export class CityData {
         return xYMap;
     }
 
-    static async waitForCityReady(cityId: number, byPassCache = false): Promise<CityLayout | null> {
+    static async waitForCityReady(cityId: number, byPassCache = false, maxAge = OneWeekMs): Promise<CityLayout | null> {
+        const cached = this.getCache(cityId, maxAge);
+
         if (byPassCache == false) {
-            const cached = this.getCache(cityId);
             if (cached != null && cached.version > -1) {
                 return cached;
             }
@@ -130,6 +131,12 @@ export class CityData {
             if (city == null) {
                 continue;
             }
+
+            if (city.get_Version() > -1 && cached?.version == city.get_Version()) {
+                StStatic.Api.base(cached);
+                return cached;
+            }
+
             const layout = CityData.getCityData(city);
             if (layout != null) {
                 StStatic.Api.base(layout);
@@ -253,12 +260,15 @@ export class CityData {
         return `st-layout-${worldId}-${cityId}`;
     }
 
-    static getCache(cityId: number): CityLayout | null {
+    static getCache(cityId: number, maxAge: number): CityLayout | null {
         const cached = localStorage.getItem(this.cacheKey(cityId));
         if (cached == null) {
             return null;
         }
         const cachedObj = JSON.parse(cached) as CacheObject<CityLayout>;
+        if (Date.now() - cachedObj.timestamp > maxAge) {
+            return null;
+        }
         return cachedObj.obj;
     }
 

@@ -69,12 +69,7 @@ export abstract class Batcher<K extends keyof T, T, R> {
         }
 
         if (this.toSend.size > this.maxSize) {
-            if (this.sendTimeout) {
-                clearTimeout(this.sendTimeout);
-            }
-            const toSend = this.toSend;
-            this.toSend = new Map();
-            this.exec(toSend);
+            this.flush();
         }
 
         return sending.def.promise;
@@ -85,6 +80,7 @@ export abstract class Batcher<K extends keyof T, T, R> {
             return;
         }
         clearTimeout(this.sendTimeout);
+        this.sendTimeout = null;
         this.exec(this.toSend);
     }
 
