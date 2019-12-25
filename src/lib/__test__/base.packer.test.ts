@@ -33,5 +33,3 @@ o.spec('BasePacker', () => {
         o(BasePacker.xy.unpack(point)).deepEquals({ x: 768, y: 398 });
     });
 });
-
-o.run();
