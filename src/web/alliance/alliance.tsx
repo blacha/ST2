@@ -48,9 +48,10 @@ export const AllianceColumns = [
         sorter: (a: PlayerStats, b: PlayerStats) => a.name.localeCompare(b.name),
     },
     {
-        title: 'Faction',
+        title: 'F',
         dataIndex: 'main',
         key: 'faction',
+        width: 50,
         render: (main: Base) => viewFaction(main.faction),
         sorter: (a: PlayerStats, b: PlayerStats) => a.main.faction.name.localeCompare(b.main.faction.name),
     },
@@ -93,17 +94,17 @@ export const AllianceColumns = [
         key: 'main',
         children: [
             {
+                title: 'Name',
+                dataIndex: 'main',
+                key: 'mainName',
+                render: (main: Base) => <Link to={'/base/' + main.id}>{main.name}</Link>,
+            },
+            {
                 title: 'Level',
                 dataIndex: 'main',
                 key: 'level',
                 render: (main: Base) => formatNumber(main.level),
                 sorter: (a: PlayerStats, b: PlayerStats) => a.main.level - b.main.level,
-            },
-            {
-                title: 'Name',
-                dataIndex: 'main',
-                key: 'mainName',
-                render: (main: Base) => <Link to={'/base/' + main.id}>{main.name}</Link>,
             },
             {
                 title: 'CC',
@@ -192,8 +193,9 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 dataSource={this.state.info}
                 columns={AllianceColumns}
                 pagination={false}
+                bordered
                 loading={this.isLoading}
-                size="middle"
+                size="small"
             />
         );
     }
