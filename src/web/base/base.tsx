@@ -123,9 +123,11 @@ export class ViewBase extends React.Component<ViewBaseProps> {
                     <div>{base.owner}</div>
                 </div>
                 <ViewBaseStats base={base} />
-                <ViewBaseMain base={base} size={TileSize} />
-                <ViewBaseDef base={base} size={TileSize} />
-                <ViewBaseOff base={base} size={TileSize} />
+                <div style={{ width: TileSize * Base.MaxX + 'px' }}>
+                    <ViewBaseMain base={base} size={TileSize} />
+                    <ViewBaseDef base={base} size={TileSize} />
+                    <ViewBaseOff base={base} size={TileSize} />
+                </div>
             </div>
         );
     }

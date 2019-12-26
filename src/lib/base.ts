@@ -207,6 +207,12 @@ export class Base {
         return this.upgrades.indexOf(unitId) !== -1;
     }
 
+    get commandCenter(): Buildable | null {
+        return this.base.filter(
+            b => b.type.id == BuildingType.GDI.CommandCenter.id || b.type.id == BuildingType.NOD.CommandCenter.id,
+        )[0];
+    }
+
     private _production: BaseOutput | null = null;
     get production() {
         if (this._production == null) {
@@ -259,10 +265,13 @@ export class Base {
         return this._stats;
     }
 
-    static buildingForEach(callback: (x: number, y: number) => void) {
+    static buildingForEach(callback: (x: number, y: number) => boolean | void) {
         for (let y = 0; y < Base.MaxBaseY; y++) {
             for (let x = 0; x < Base.MaxX; x++) {
-                callback(x, y);
+                const res = callback(x, y);
+                if (res === false) {
+                    return;
+                }
             }
         }
     }

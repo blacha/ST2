@@ -106,6 +106,15 @@ export const AllianceColumns = [
                 render: (main: Base) => <Link to={'/base/' + main.id}>{main.name}</Link>,
             },
             {
+                title: 'CC',
+                dataIndex: 'main',
+                key: 'command',
+                defaultSortOrder: 'descend' as const,
+                render: (main: Base) => formatNumber(main.commandCenter?.level),
+                sorter: (a: PlayerStats, b: PlayerStats) =>
+                    (a.main.commandCenter?.level || 0) - (b.main.commandCenter?.level || 0),
+            },
+            {
                 title: 'Off',
                 dataIndex: 'main',
                 key: 'off',
