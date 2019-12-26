@@ -122,8 +122,8 @@ export class LayoutScanner implements StModule {
 
         ClientLib.Data.MainData.GetInstance()
             .get_Cities()
-            .set_CurrentCityId(obj.$get_Id());
-        return obj.$get_Id();
+            .set_CurrentCityId(obj.$Id);
+        return obj.$Id;
     }
 
     /**
@@ -216,7 +216,7 @@ export class LayoutScanner implements StModule {
                     continue;
                 }
 
-                if (ClientLibPatcher.hasPatchedCampType(object) && object.$get_CampType() === NpcCampType.Destroyed) {
+                if (ClientLibPatcher.hasPatchedCampType(object) && object.$CampType === NpcCampType.Destroyed) {
                     continue;
                 }
 

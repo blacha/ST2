@@ -69,7 +69,7 @@ export class ShockrTools {
         }
 
         if (ClientLibPatcher.hasPatchedId(obj)) {
-            md.get_Cities().set_CurrentCityId(obj.$get_Id());
+            md.get_Cities().set_CurrentCityId(obj.$Id);
         }
     }
 

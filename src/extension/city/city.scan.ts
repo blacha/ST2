@@ -229,8 +229,8 @@ export class CityData {
             throw new Error('City has not been missing: $get_DefenseUnits');
         }
 
-        const defUnits = units.$get_DefenseUnits();
-        const offUnits = units.$get_OffenseUnits();
+        const defUnits = units.$DefenseUnits;
+        const offUnits = units.$OffenseUnits;
 
         const faction = Faction.fromId(city.get_CityFaction());
         if (faction === Faction.Nod || faction === Faction.Gdi) {

@@ -4,6 +4,7 @@ import { ClientLibPatcher, PatchedWorldObjectCity } from '../patch/patch';
 import { CityData } from '../city/city.scan';
 import { ShockrTools } from '..';
 import { ScannerState } from '../city/layout.scan';
+import { ClientLibIter } from '../util/iter';
 
 declare const ClientLib: ClientLibStatic;
 export class PlayerInfo implements StModule {
@@ -31,18 +32,28 @@ export class PlayerInfo implements StModule {
         }
     }
 
+    getAlliedCities(): PatchedWorldObjectCity[] {
+        const md = ClientLib.Data.MainData.GetInstance();
+        const allianceId = md.get_Alliance().get_Id();
+
+        const cities: PatchedWorldObjectCity[] = [];
+        for (const city of ClientLibIter.values(md.get_World().GetCities())) {
+            if (!ClientLibPatcher.hasPatchedAllianceId(city)) {
+                continue;
+            }
+            if (city.$AllianceId == allianceId) {
+                cities.push(city);
+            }
+        }
+        cities.sort((a, b) => a.$PlayerId - b.$PlayerId);
+        return cities;
+    }
+
     async scanAlliance() {
         const allPlayers = [];
         const md = ClientLib.Data.MainData.GetInstance();
         const cities = md.get_Cities();
-        const allianceId = md.get_Alliance().get_Id();
-
-        const allCities = (Object.values(md.get_World().GetCities().d).filter(city => {
-            if (!ClientLibPatcher.hasPatchedAllianceId(city)) {
-                return false;
-            }
-            return allianceId == city.$get_AllianceId();
-        }) as unknown) as PatchedWorldObjectCity[];
+        const allCities = this.getAlliedCities();
 
         let count = 0;
         for (const city of allCities) {
@@ -51,7 +62,7 @@ export class PlayerInfo implements StModule {
                 return allPlayers;
             }
 
-            const cityId = city.$get_Id();
+            const cityId = city.$Id;
             cities.set_CurrentCityId(cityId);
             const cityObj = await CityData.waitForCityReady(cityId, true);
             if (cityObj == null) {
