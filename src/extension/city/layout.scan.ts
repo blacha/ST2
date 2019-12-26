@@ -81,7 +81,7 @@ export class LayoutScanner implements StModule {
             output.push(layout);
             console.log(
                 'Scanned',
-                BaseBuilder.load(layout).stats.tiberium.score,
+                BaseBuilder.load(layout).info.stats.tiberium.score,
                 layout,
                 output.length,
                 '/',
@@ -106,13 +106,6 @@ export class LayoutScanner implements StModule {
     /** Should the scan be aborted */
     get isAborting() {
         return this.state === ScannerState.Abort;
-    }
-
-    /** Top bases sorted by tiberium score */
-    bestBases() {
-        return this.lastScan
-            .map(f => BaseBuilder.load(f))
-            .sort((a, b) => b.stats.tiberium.score - a.stats.tiberium.score);
     }
 
     /** Lookup cityId given the worldX/Y */

@@ -112,9 +112,9 @@ export const AllianceColumns = [
                 dataIndex: 'main',
                 key: 'command',
                 defaultSortOrder: 'descend' as const,
-                render: (main: Base) => formatNumber(main.commandCenter?.level),
+                render: (main: Base) => formatNumber(main.buildings.commandCenter?.level),
                 sorter: (a: PlayerStats, b: PlayerStats) =>
-                    (a.main.commandCenter?.level || 0) - (b.main.commandCenter?.level || 0),
+                    (a.main.buildings.commandCenter?.level || 0) - (b.main.buildings.commandCenter?.level || 0),
             },
             {
                 title: 'Off',
@@ -135,9 +135,9 @@ export const AllianceColumns = [
                 title: 'Power',
                 dataIndex: 'main',
                 key: 'power',
-                render: (main: Base) => formatNumber(main.production.total.power),
+                render: (main: Base) => formatNumber(main.info.production.total.power),
                 sorter: (a: PlayerStats, b: PlayerStats) =>
-                    a.main.production.total.power - b.main.production.total.power,
+                    a.main.info.production.total.power - b.main.info.production.total.power,
             },
         ],
     },
@@ -178,7 +178,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 current.main = base;
             }
             current.bases.push(base);
-            current.production.add(base.production.total);
+            current.production.add(base.info.production.total);
         }
         this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done });
     }

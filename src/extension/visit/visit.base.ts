@@ -5,6 +5,7 @@ import { VisObjectType } from '../@types/client.lib.const';
 import { CityData } from '../city/city.scan';
 import { StModule } from '../module';
 import { BaseBuilder } from '../../lib/base.builder';
+import { BaseExporter } from '../../lib/base.export';
 
 // Visit base can be used on anything in range
 // qx.core.Init.getApplication().getPlayArea().setView(ClientLib.Data.PlayerAreaViewMode.pavmAllianceBase, cities.get_CurrentCityId(),0,0)
@@ -117,7 +118,7 @@ export class VisitBaseButton implements StModule {
                     return;
                 }
                 const base = BaseBuilder.load(city);
-                window.open(`https://shockrtools.web.app/base/${base.toCncOpt()}`, '_blank');
+                window.open(`https://shockrtools.web.app/base/${BaseExporter.toCncOpt(base)}`, '_blank');
                 qx.core.Init.getApplication()
                     .getPlayArea()
                     .setView(13, this.lastBaseId, 0, 0);

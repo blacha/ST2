@@ -40,7 +40,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             const BaseCollection = FirestoreAdmin.collection('base');
             await BaseCollection.doc(baseId).set({
                 ...baseJson,
-                stats: base.stats,
+                stats: base.info.stats,
                 updatedAt: firestore.FieldValue.serverTimestamp(),
             });
             output.push(baseId);

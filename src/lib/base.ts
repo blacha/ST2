@@ -13,6 +13,8 @@ import { OffUnitType } from './unit/off.unit.type';
 import { Unit } from './unit/unit';
 import { color, ConsoleColor } from './util';
 import { Id } from './uuid';
+import { BaseStats } from './base.stats';
+import { BaseBuildings } from './base.buildings';
 
 export interface CncLocation {
     x: number;
@@ -21,20 +23,6 @@ export interface CncLocation {
 export interface CncBaseObject extends CncLocation {
     building?: Buildable;
     tile?: Tile;
-}
-export interface SiloCount {
-    [siloCount: number]: number;
-    '3': number;
-    '4': number;
-    '5': number;
-    '6': number;
-    /**
-     * Silo count shifted by 10
-     * @example
-     * - Base with 2x4 & 1x5 = 120
-     * - Base with 3x3 & 2x4 = 23
-     */
-    score: number;
 }
 
 export class PoiData extends GameResources {
@@ -56,23 +44,22 @@ export class Base {
     static readonly MaxDefY = 16;
     /** Max Y for O units */
     static readonly MaxOffY = 20;
+    buildings: BaseBuildings;
 
     static index(x: number, y: number) {
         return x + y * Base.MaxX;
     }
 
     id: string;
-
     name: string;
     faction: Faction;
     offFaction: Faction;
     base: Buildable[];
     owner: string | null;
-    private levels: {
-        base: number;
-        off: number;
-        def: number;
-    } = { base: 0, off: 0, def: 0 };
+
+    level = 0;
+    levelOffense = 0;
+    levelDefense = 0;
 
     poi: PoiData = new PoiData();
 
@@ -81,6 +68,8 @@ export class Base {
 
     tiles: Tile[];
     upgrades: number[];
+
+    info: BaseStats;
 
     constructor(name = 'Base', faction: Faction = Faction.Gdi) {
         this.name = name;
@@ -92,31 +81,16 @@ export class Base {
 
         this.id = Id.generate();
         this.owner = null;
+        this.info = new BaseStats(this);
+        this.buildings = new BaseBuildings(this);
     }
 
     setBaseLevels(base: number, off = 0, def = 0) {
-        this.levels = { base, off, def };
+        this.level = base;
+        this.levelOffense = off;
+        this.levelDefense = def;
     }
 
-    get level() {
-        if (this.levels.base) {
-            return this.levels.base;
-        }
-        return 0;
-    }
-
-    get levelOffense() {
-        if (this.levels.off) {
-            return this.levels.off;
-        }
-        return 0;
-    }
-    get levelDefense() {
-        if (this.levels.def) {
-            return this.levels.def;
-        }
-        return 0;
-    }
     /**
      * Build a object at a position
      * @param x x offset
@@ -139,28 +113,6 @@ export class Base {
         }
     }
 
-    getSupport(): Building | null {
-        const SUPPORTS = [
-            BuildingType.NOD.EyeOfKane.id,
-            BuildingType.NOD.FistOfKane.id,
-            BuildingType.NOD.BladeOfKane.id,
-            BuildingType.GDI.FalconSupport.id,
-            BuildingType.GDI.IonCannonSupport.id,
-            BuildingType.GDI.SkyStrikeSupport.id,
-        ];
-
-        for (const building of this.base) {
-            if (building == null) {
-                continue;
-            }
-
-            if (SUPPORTS.includes(building.type.id)) {
-                return building as Building;
-            }
-        }
-        return null;
-    }
-
     getTile(x: number, y: number) {
         return this.tiles[Base.index(x, y)] || Tile.Empty;
     }
@@ -175,19 +127,14 @@ export class Base {
         }
         return null;
     }
+
     clear() {
-        this.clearCache();
+        this.info.clear();
         this.base = [];
     }
 
-    clearCache() {
-        this._score = null;
-        this._stats = null;
-        this._production = null;
-    }
-
     setTile(x: number, y: number, tile: Tile) {
-        this.clearCache();
+        this.info.clear();
         this.tiles[Base.index(x, y)] = tile;
     }
 
@@ -199,74 +146,21 @@ export class Base {
         this.base[Base.index(x, y)] = buildable;
     }
 
-    setUpgrades(upgrades: number[]) {
-        this.upgrades = upgrades;
-    }
-
     hasUpgrade(unitId: number) {
         return this.upgrades.indexOf(unitId) !== -1;
     }
 
-    get commandCenter(): Buildable | null {
-        return this.base.filter(
-            b => b.type.id == BuildingType.GDI.CommandCenter.id || b.type.id == BuildingType.NOD.CommandCenter.id,
-        )[0];
-    }
+    findBuilding(buildingCodes: number[]): Building | null {
+        for (const building of this.base) {
+            if (building == null) {
+                continue;
+            }
 
-    private _production: BaseOutput | null = null;
-    get production() {
-        if (this._production == null) {
-            this._production = BaseProduction.getOutput(this);
+            if (buildingCodes.includes(building.type.id)) {
+                return building as Building;
+            }
         }
-        return this._production;
-    }
-
-    private _stats: { tiberium: SiloCount; crystal: SiloCount; mixed: SiloCount } | null = null;
-    private _score: number | null = null;
-    get score() {
-        this.stats;
-        return this._score;
-    }
-    get stats() {
-        if (this._stats != null) {
-            return this._stats;
-        }
-        const tiberium: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
-        const crystal: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
-        const mixed: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
-
-        const MIN_SILO = 3;
-        // TODO this is not super efficient, could be improved but generally runs in <1ms
-        Base.buildingForEach((x, y) => {
-            const tib = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Tiberium]).length;
-            const cry = BaseIter.getSurroundings(this, x, y, undefined, [Tile.Crystal]).length;
-
-            if (tib + cry > 3) {
-                mixed[tib + cry] = (mixed[tib + cry] || 0) + 1;
-            }
-
-            // No one cares about one or two silos
-            if (tib < MIN_SILO && cry < MIN_SILO) {
-                return;
-            }
-
-            if (cry == 0) {
-                tiberium[tib] = (tiberium[tib] || 0) + 1;
-            }
-            if (tib == 0) {
-                crystal[cry] = (crystal[cry] || 0) + 1;
-            }
-        });
-
-        for (let i = 0; i <= 6 - MIN_SILO; i++) {
-            tiberium.score += tiberium[i + MIN_SILO] * 10 ** i;
-            crystal.score += crystal[i + MIN_SILO] * 10 ** i;
-            mixed.score += mixed[i + MIN_SILO] * 10 ** i;
-        }
-
-        this._stats = { tiberium, crystal, mixed };
-        this._score = tiberium.score + crystal.score * 0.1 + mixed.score * 0.25;
-        return this._stats;
+        return null;
     }
 
     static buildingForEach(callback: (x: number, y: number) => boolean | void) {
@@ -289,80 +183,5 @@ export class Base {
             return GameDataObjectType.DefUnit;
         }
         return GameDataObjectType.OffUnit;
-    }
-
-    toCncOpt() {
-        const tiles = [];
-        for (let y = 0; y < Base.MaxY; y++) {
-            for (let x = 0; x < Base.MaxX; x++) {
-                const obj = this.getBase(x, y);
-                if (obj != null) {
-                    if (obj.level == 1) {
-                        tiles.push(obj.type.code);
-                    } else {
-                        tiles.push(obj.level + obj.type.code);
-                    }
-                    continue;
-                }
-                const tile = this.getTile(x, y);
-                if (tile != null) {
-                    tiles.push(tile.code);
-                    continue;
-                }
-                throw new Error('Everything should have a tile');
-            }
-        }
-        return [
-            3,
-            this.faction.code,
-            this.offFaction.code,
-            this.name,
-            tiles.join(''),
-            this.poi.tiberium,
-            this.poi.crystal,
-            this.poi.power,
-            this.poi.infantry,
-            this.poi.vehicle,
-            this.poi.air,
-            this.poi.defense,
-            'newEconomy',
-        ].join('|');
-    }
-
-    toStringColor(): string {
-        const output: string[] = [];
-        for (let y = 0; y < Base.MaxBaseY; y++) {
-            const row: string[] = [];
-            for (let x = 0; x < Base.MaxX; x++) {
-                const tile = this.getTile(x, y);
-
-                if (tile.code === Tile.Tiberium.code) {
-                    row.push(color(' # ', ConsoleColor.Green));
-                } else if (tile.code === Tile.Crystal.code) {
-                    row.push(color(' # ', ConsoleColor.Blue));
-                } else {
-                    row.push(' . ');
-                }
-            }
-            output.push(row.join(''));
-        }
-        return output.join('\n');
-    }
-
-    toString() {
-        function toStr(u: any) {
-            return u.toString();
-        }
-
-        function removeEmpty(o: any) {
-            return o != null;
-        }
-
-        return `[Base ${this.name}:${this.faction}
-    buildings: [${this.base
-        .filter(removeEmpty)
-        .map(toStr)
-        .join('\n\t')})}]
-        ]`;
     }
 }

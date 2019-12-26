@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import { GameData } from '../../data/loader';
 import { BaseBuilder } from '../base.builder';
 import { BaseProduction } from '../production';
+import { BaseExporter } from '../base.export';
 
 const codes: Record<string, string> = {
     shockA: `3|N|N|s-A|10b10p10p10p10r.12y.10d10rt15a10p10r11h...10r10p11p10p10r.11s11h..ccc10r.11s.14e.....11h.10nc..10h...13s.......10n.11h..........j..................kk.ll.kk....d..........k..jjjwjj.........hh.h.ll.....q.10z11m11m9v9v9v11v....10q...10t........10t........13t|0|0|0|0|0|0|0|newEconomy`,
@@ -19,7 +20,7 @@ o.spec('Base.cncOpt', () => {
         o('should round trip ' + key, () => {
             const code = codes[key];
             const base = BaseBuilder.fromCnCOpt(code);
-            o(base.toCncOpt()).equals(code);
+            o(BaseExporter.toCncOpt(base)).equals(code);
         });
     }
 

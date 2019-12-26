@@ -56,7 +56,7 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
         }
         console.log('Loaded', bases.length);
 
-        bases.sort((a: Base, b: Base) => b.stats.tiberium.score - a.stats.tiberium.score);
+        bases.sort((a: Base, b: Base) => b.info.stats.tiberium.score - a.info.stats.tiberium.score);
         this.setState({ bases });
     }
 

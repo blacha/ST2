@@ -2,6 +2,7 @@ import * as o from 'ospec';
 import { Base } from '../base';
 import { BaseBuilder } from '../base.builder';
 import { BasePacker } from '../base.packer';
+import { BaseExporter } from '../base.export';
 
 o.spec('BasePacker', () => {
     o('should pack/unpack a id', () => {
@@ -19,7 +20,7 @@ o.spec('BasePacker', () => {
         o(packed).equals('10.2c.t.c12.2c.t.t16.t.c2.2t15.j14.k.4h5.h11.k.2k2.l.h.l5.l2.l3.2j5.l');
         const base = new Base();
         base.tiles = BasePacker.layout.unpack(packed);
-        o(base.toCncOpt()).equals(cncOpt);
+        o(BaseExporter.toCncOpt(base)).equals(cncOpt);
     });
 
     o('should pack xy', () => {

@@ -113,7 +113,7 @@ export class BaseBuilder {
             }
         }
 
-        output.setUpgrades(cncBase.upgrades);
+        output.upgrades = cncBase.upgrades;
         return output;
     }
 }

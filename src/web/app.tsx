@@ -14,13 +14,15 @@ const AppCss = {
     Header: style({
         background: '#f4f5f6',
         borderBottom: '.1rem solid #d1d1d1',
-        display: 'block',
         height: '5.2rem',
-        left: 0,
         maxWidth: '100%',
-        right: 0,
-        top: 0,
         width: '100%',
+        padding: '0 4rem',
+    }),
+    Content: style({
+        margin: 'auto',
+        maxWidth: '100rem',
+        padding: '0 4rem',
     }),
 };
 

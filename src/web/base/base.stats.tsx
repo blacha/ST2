@@ -5,7 +5,7 @@ import { formatNumber } from '../../lib/util';
 
 export class ViewBaseStats extends React.Component<{ base: Base }> {
     render() {
-        const prod = this.props.base.production;
+        const prod = this.props.base.info.production;
         return (
             <div className={BaseCss.Base}>
                 <div>

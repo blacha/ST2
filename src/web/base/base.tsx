@@ -9,8 +9,9 @@ import { ViewBaseMain } from './base.main';
 import { ViewBaseOff } from './base.off';
 import { ViewBaseStats } from './base.stats';
 import { viewFaction } from './faction';
+import { Tile } from '../../lib/base/tile';
 
-const TileSize = 48;
+const TileSize = 64;
 
 export const BaseCss = {
     Size32: style({
@@ -39,29 +40,6 @@ export const BaseCss = {
     Title: style({
         fontWeight: 'bold',
     }),
-    Grid: {
-        Base: style({
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            outline: '1px solid rgba(0,0,0,0.4)',
-        }),
-        Crystal: style({ backgroundColor: 'rgba(0,0,150,0.47)' }),
-        Tiberium: style({ backgroundColor: 'rgba(0,200,0,0.47)' }),
-        Oil: style({ backgroundColor: 'rgba(20,20,20,0.47)' }),
-        Woods: style({ backgroundColor: 'rgba(140,80,0,0.47)' }),
-        Swamp: style({ backgroundColor: 'rgba(0,0,80,0.47)' }),
-        Scrub: style({ backgroundColor: 'rgba(100,80,80,0.47)' }),
-    },
-    Cell: {
-        Level: style({
-            position: 'absolute',
-            bottom: '2px',
-            right: '2px',
-            fontSize: '80%',
-        }),
-    },
 };
 export enum ComponentLoading {
     Ready,
@@ -121,6 +99,8 @@ export class ViewBase extends React.Component<ViewBaseProps> {
                     <div>{base.name} </div>
                     <div>{base.x > 0 ? `@ ${base.x}, ${base.y}` : ''}</div>
                     <div>{base.owner}</div>
+                    <div>{base.tiles.filter(f => f == Tile.Tiberium)}</div>
+                    <div>{base.tiles.filter(f => f == Tile.Crystal)}</div>
                 </div>
                 <ViewBaseStats base={base} />
                 <div style={{ width: TileSize * Base.MaxX + 'px' }}>

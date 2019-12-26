@@ -24,13 +24,6 @@
     justify-content: center;
 }
 
-.Faction {
-    width: 32px;
-    height: 32px;
-    background-size: 75%;
-    background-position: center;
-    background-repeat: no-repeat;
-}
 
 .Faction-Nod {
     background-image: url(../../static/icon/icon_nod.png);
@@ -40,7 +33,7 @@
     background-image: url(../../static/icon/icon_gdi.png);
 }
 
-.Faction-For {
+.Faction-Forgotten {
     background-image: url(../../static/icon/icon_for.png);
 }
 
@@ -58,4 +51,12 @@
 
 .Resource-Credits {
     background-image: url(../../static/icon/icon_credits.png);
+}
+
+.Tile-Tiberium {
+    background-image: url(../../static/icon/tile_tiberium.png);
+}
+
+.Tile-Crystal {
+    background-image: url(../../static/icon/tile_crystal.png);
 }
