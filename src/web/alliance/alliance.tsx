@@ -11,7 +11,7 @@ import { GameResources } from '../../lib/game.resources';
 import { formatNumber } from '../../lib/util';
 import { ComponentLoading } from '../base/base';
 import { viewFaction } from '../base/faction';
-import { FireStoreBases, FireStoreAlliance } from '../firebase';
+import { FireStoreBases, FireStorePlayer } from '../firebase';
 import { Id } from '../../lib/id';
 import { BasePacker } from '../../lib/base/base.packer';
 import { CityLayout } from '../../api/city.layout';
@@ -151,40 +151,46 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
-        console.log('LoadAlliance', this.props.match);
+        console.log('LoadAlliance', this.props.match.params);
         this.loadAlliance(Number(worldId), Number(allianceId));
     }
 
     async loadAlliance(worldId: number, allianceId: number) {
-        const docId = BasePacker.id.pack(worldId, allianceId);
+        const docId = BasePacker.multi.pack(worldId, allianceId);
+        console.log(docId);
         this.setState({ info: [], state: ComponentLoading.Loading });
-        const doc = await FireStoreAlliance.doc(docId).get();
-        const cities = (doc.get('cities') ?? {}) as Record<string, CityLayout>;
-        const bases = Object.values(cities).map(c => BaseBuilder.load(c));
-        const playerSet = new Map<string, PlayerStats>();
+        const result = await FireStorePlayer.where('allianceKey', '==', docId)
+            .limit(51)
+            .get();
+
         let name = '';
-        for (const base of bases) {
-            if (base.owner == null) {
-                continue;
-            }
-            let current = playerSet.get(base.owner);
-            if (current == null) {
-                current = {
-                    id: Id.generate(),
-                    name: base.owner,
-                    bases: [],
-                    production: new GameResources(),
-                    main: base,
-                };
-                playerSet.set(base.owner, current);
-            }
-            if (current.main.levelOffense < base.levelOffense) {
-                current.main = base;
-            }
-            current.bases.push(base);
-            current.production.add(base.info.production.total);
-            if (base.alliance) {
-                name = base.alliance.name;
+        const playerSet = new Map<string, PlayerStats>();
+        for (const doc of result.docs) {
+            const cities = (doc.get('bases') ?? {}) as Record<string, CityLayout>;
+            const bases = Object.values(cities).map(c => BaseBuilder.load(c));
+            for (const base of bases) {
+                if (base.owner == null) {
+                    continue;
+                }
+                let current = playerSet.get(base.owner);
+                if (current == null) {
+                    current = {
+                        id: Id.generate(),
+                        name: base.owner,
+                        bases: [],
+                        production: new GameResources(),
+                        main: base,
+                    };
+                    playerSet.set(base.owner, current);
+                }
+                if (current.main.levelOffense < base.levelOffense) {
+                    current.main = base;
+                }
+                current.bases.push(base);
+                current.production.add(base.info.production.total);
+                if (base.alliance) {
+                    name = base.alliance.name;
+                }
             }
         }
         this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done, name });

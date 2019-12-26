@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { DbBase, DbLayout } from '../backend/db/db.base';
+import { DbPlayer } from '../backend/db/db.player';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBm7H-ccEuECJXxP4hAPSnew0E6HyGmeoo',
@@ -17,6 +18,4 @@ export const firestore = FirebaseClient.firestore();
 
 export const FireStoreBases = firestore.collection('base') as firebase.firestore.CollectionReference<DbBase>;
 export const FireStoreLayouts = firestore.collection('layout') as firebase.firestore.CollectionReference<DbLayout>;
-export const FireStoreAlliance = firestore.collection('alliance') as firebase.firestore.CollectionReference<{
-    citites: Record<string, DbBase>;
-}>;
+export const FireStorePlayer = firestore.collection('player') as firebase.firestore.CollectionReference<DbPlayer>;

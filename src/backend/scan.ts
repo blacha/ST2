@@ -5,48 +5,56 @@ import { BaseBuilder } from '../lib/base/base.builder';
 import { BasePacker } from '../lib/base/base.packer';
 import { ApiCall, ApiRequest } from './api.call';
 import { FirestoreAdmin } from './db.admin';
-
-interface BaseLayout {
-    layout: string;
-    updatedAt: number;
-}
+import { Id } from '../lib/id';
+import { DbPlayer, BaseLayout } from './db/db.player';
+import { DbLayout } from './db/db.base';
 
 export class ApiScan extends ApiCall<ApiScanRequest> {
     path = '/api/v1/world/:worldId/scan/:scanId' as const;
     method = 'post' as const;
 
-    async storeAlliance(worldId: number, allianceId: number, bases?: CityLayout[]) {
-        if (bases == null) {
+    async storePlayer(worldId: number, playerId: number, baseList?: CityLayout[]) {
+        if (baseList == null) {
             return;
         }
 
-        const AllianceCollection = FirestoreAdmin.collection('alliance');
+        const [firstBase] = baseList;
+        const { ownerId, allianceId } = firstBase;
+        const PlayerCollection = FirestoreAdmin.collection('player');
         // TODO use a better random id or something
-        const allianceDocId = BasePacker.id.pack(worldId, allianceId);
-        const doc = AllianceCollection.doc(allianceDocId);
+        const playerDocId = BasePacker.id.pack(worldId, playerId);
+        const doc = PlayerCollection.doc(playerDocId);
 
         await FirestoreAdmin.runTransaction(async transaction => {
             const existing = await transaction.get(doc);
-            let cities: Record<string, CityLayout> = {};
+            let bases: Record<string, CityLayout> = {};
+            let allianceKey = BasePacker.multi.pack(worldId, allianceId ?? Id.generate());
+            let createdAt = Date.now();
+
             if (existing != null && existing.exists) {
-                cities = existing.get('cities') ?? {};
+                bases = existing.get('bases') ?? {};
+                allianceKey = existing.get('allianceKey');
+                createdAt = existing.get('createdAt') ?? Date.now();
             }
-            for (const base of bases) {
-                cities[BasePacker.number.pack(base.cityId)] = base;
+            for (const base of baseList) {
+                bases[BasePacker.number.pack(base.cityId)] = base;
             }
-            // TODO trim old bases out if havent been seen in one week?
-            await transaction.set(
-                doc,
-                {
-                    cities: cities,
-                },
-                { merge: true },
-            );
+            const updatedObject: Partial<DbPlayer> = {
+                allianceId,
+                allianceKey,
+                ownerId,
+                worldId,
+                bases,
+                createdAt,
+                updatedAt: Date.now(),
+            };
+            console.log('SetPlayer', { allianceKey, playerDocId, bases: bases.length });
+            await transaction.set(doc, updatedObject, { merge: true });
         });
     }
 
-    async storeLayouts(worldId: number, scanId: string, layouts: BaseLayout[]) {
-        if (layouts.length == 0) {
+    async storeLayouts(worldId: number, scanId: string, layoutsList: BaseLayout[]) {
+        if (layoutsList.length == 0) {
             return;
         }
         const LayoutCollection = FirestoreAdmin.collection('layout');
@@ -55,20 +63,17 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         const doc = LayoutCollection.doc(scanDoc);
         await FirestoreAdmin.runTransaction(async transaction => {
             const existing = await transaction.get(doc);
-            let existingLayouts: Record<string, BaseLayout> = {};
+            let layouts: Record<string, BaseLayout> = {};
+            let createdAt = Date.now();
             if (existing != null && existing.exists) {
-                existingLayouts = existing.get('layouts') ?? {};
+                layouts = existing.get('layouts') ?? {};
+                createdAt = existing.get('createdAt') ?? Date.now();
             }
-            for (const [xy, layout] of layouts.entries()) {
-                existingLayouts[xy] = layout;
+            for (const [xy, layout] of layoutsList.entries()) {
+                layouts[xy] = layout;
             }
-            await transaction.set(
-                doc,
-                {
-                    layouts: existingLayouts,
-                },
-                { merge: true },
-            );
+            const dbObject: DbLayout = { layouts, createdAt, updatedAt: Date.now() };
+            await transaction.set(doc, dbObject, { merge: true });
         });
     }
 
@@ -82,22 +87,20 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
 
         const output: string[] = [];
         const layouts: Map<string, BaseLayout> = new Map();
-        const alliance: Map<number, CityLayout[]> = new Map();
+        const players: Map<number, CityLayout[]> = new Map();
         for (const baseJson of bases) {
             const base = BaseBuilder.load(baseJson);
 
             if (baseJson.ownerId < 0) {
-                const xy = BasePacker.number.pack(BasePacker.xy.pack(base.x, base.y));
+                const xy = BasePacker.xy.packS(base.x, base.y);
                 layouts.set(xy, {
                     layout: BasePacker.layout.pack(base.tiles),
                     updatedAt: Date.now(),
                 });
-            }
-
-            if (baseJson.allianceId != null && baseJson.allianceId > 0) {
-                const existing = alliance.get(baseJson.allianceId) ?? [];
+            } else {
+                const existing = players.get(baseJson.ownerId) ?? [];
                 existing.push(baseJson);
-                alliance.set(baseJson.allianceId, existing);
+                players.set(baseJson.ownerId, existing);
             }
 
             const baseId = BasePacker.id.pack(worldId, baseJson.cityId);
@@ -107,10 +110,10 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             output.push(baseId);
         }
 
-        if (alliance.size > 0) {
-            for (const key of alliance.keys()) {
-                console.log('StoreAlliance', key, alliance.get(key)?.length);
-                await this.storeAlliance(worldId, key, alliance.get(key));
+        if (players.size > 0) {
+            for (const playerId of players.keys()) {
+                console.log('StorePlayer', { playerId }, players.get(playerId)?.length);
+                await this.storePlayer(worldId, playerId, players.get(playerId));
             }
         }
 

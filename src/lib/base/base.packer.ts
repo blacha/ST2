@@ -32,9 +32,17 @@ export class BasePacker {
         pack(x: number, y: number): number {
             return (y << 0x10) | x;
         },
+        /** Pack a XY as a string */
+        packS(x: number, y: number): string {
+            return BasePacker.number.pack(this.pack(x, y));
+        },
 
         unpack(num: number): Point {
             return { y: num >> 0x10, x: num & 0xffff };
+        },
+        /** Unpack a XY string */
+        unpackS(num: string): Point {
+            return this.unpack(BasePacker.number.unpack(num));
         },
     };
 
