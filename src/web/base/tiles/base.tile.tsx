@@ -11,7 +11,7 @@ const BaseTileCss = {
         justifyContent: 'center',
         alignItems: 'center',
         outline: '1px solid rgba(0,0,0,0.4)',
-        ...BackgroundImage,
+        ...BackgroundImage(90),
     }),
     Crystal: style({ backgroundColor: 'rgba(0,0,150,0.47)' }),
     Tiberium: style({ backgroundColor: 'rgba(0,200,0,0.47)' }),
