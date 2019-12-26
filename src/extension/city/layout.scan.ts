@@ -1,6 +1,6 @@
 import { ShockrTools } from '..';
 import { CityLayout, LayoutScanApi } from '../../api/city.layout';
-import { BaseBuilder } from '../../lib/base.builder';
+import { BaseBuilder } from '../../lib/base/base.builder';
 import { ClientLibCity, ClientLibStatic, PheStatic } from '../@types/client.lib';
 import { NpcCampType, WorldObjectType } from '../@types/client.lib.const';
 import { StModule } from '../module';

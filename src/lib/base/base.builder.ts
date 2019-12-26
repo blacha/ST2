@@ -1,8 +1,8 @@
-import { CityLayout, CityLayoutTileObject } from '../api/city.layout';
+import { CityLayout, CityLayoutTileObject } from '../../api/city.layout';
 import { Base } from './base';
-import { Tile } from './base/tile';
-import { Faction } from './data/faction';
-import { GameDataObject } from './data/game.data.object';
+import { Tile } from './tile';
+import { Faction } from '../data/faction';
+import { GameDataObject } from '../data/game.data.object';
 import { BasePacker } from './base.packer';
 
 const codeZero = '0'.charCodeAt(0);

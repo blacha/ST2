@@ -1,6 +1,6 @@
-import { Buildable } from './base/buildable';
-import { Building } from './building/building';
-import { BuildingType } from './building/building.type';
+import { Buildable } from './buildable';
+import { Building } from '../building/building';
+import { BuildingType } from '../building/building.type';
 import { Base } from './base';
 
 export class BaseBuildings {

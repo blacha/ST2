@@ -1,6 +1,6 @@
 import { Base } from './base';
-import { Tile } from './base/tile';
-import { color, ConsoleColor } from './util';
+import { Tile } from './tile';
+import { color, ConsoleColor } from '../util';
 
 export class BaseExporter {
     static toCncOpt(base: Base) {

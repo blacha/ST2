@@ -1,5 +1,5 @@
 import { CityLayout, CityLayoutTile, CacheObject } from '../../api/city.layout';
-import { Base } from '../../lib/base';
+import { Base } from '../../lib/base/base';
 import { Faction } from '../../lib/data/faction';
 import { ClientLibCity, ClientLibCityBuildable, ClientLibStatic } from '../@types/client.lib';
 import { ResearchType } from '../@types/client.lib.const';

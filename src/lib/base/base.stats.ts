@@ -1,12 +1,12 @@
-import { BaseOutput } from './production/calculator';
+import { BaseOutput } from '../production/calculator';
 
 import { Base } from './base';
 
-import { BaseProduction } from './production';
+import { BaseProduction } from '../production';
 
 import { BaseIter } from './base.iter';
 
-import { Tile } from './base/tile';
+import { Tile } from './tile';
 
 export interface SiloCount {
     [siloCount: number]: number;

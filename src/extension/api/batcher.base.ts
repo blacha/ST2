@@ -3,7 +3,7 @@ import { ApiScanResponse } from '../../api/request.scan';
 import { Batcher } from './batcher';
 import { ClientApi } from './client.api';
 import { ClientLibStatic } from '../@types/client.lib';
-import { BasePacker } from '../../lib/base.packer';
+import { BasePacker } from '../../lib/base/base.packer';
 
 declare const ClientLib: ClientLibStatic;
 

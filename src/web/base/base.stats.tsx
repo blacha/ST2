@@ -1,5 +1,5 @@
 import React = require('react');
-import { Base } from '../../lib/base';
+import { Base } from '../../lib/base/base';
 import { BaseCss } from './base';
 import { formatNumber } from '../../lib/util';
 

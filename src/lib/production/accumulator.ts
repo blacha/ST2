@@ -1,5 +1,5 @@
-import { Base } from '../base';
-import { BaseIter } from '../base.iter';
+import { Base } from '../base/base';
+import { BaseIter } from '../base/base.iter';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { GameResources } from '../game.resources';

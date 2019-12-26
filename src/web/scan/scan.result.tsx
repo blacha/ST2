@@ -1,11 +1,11 @@
 import React = require('react');
 import { RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { Base } from '../../lib/base';
-import { BaseBuilder } from '../../lib/base.builder';
+import { Base } from '../../lib/base/base';
+import { BaseBuilder } from '../../lib/base/base.builder';
 import { ViewBaseMain } from '../base/base.main';
 import { FireStoreBases, FireStoreLayouts } from '../firebase';
-import { BasePacker } from '../../lib/base.packer';
+import { BasePacker } from '../../lib/base/base.packer';
 import { DbLayout } from '../../backend/db/db.base';
 import { ComponentLoading } from '../base/base';
 

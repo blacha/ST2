@@ -1,5 +1,5 @@
 import * as Base62 from 'base62';
-import { Tile } from './base/tile';
+import { Tile } from './tile';
 
 export interface Point {
     x: number;

@@ -1,4 +1,4 @@
-import { Base } from '../base';
+import { Base } from '../base/base';
 import { Building } from '../building/building';
 import { GameResources } from '../game.resources';
 

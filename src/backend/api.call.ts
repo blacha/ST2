@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as expressCore from 'express-serve-static-core';
-import { Id } from '../lib/uuid';
+import { Id } from '../lib/id';
 
 export interface ApiFunc<Params = any, Body = any, Response = any> {
     path: string;

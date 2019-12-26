@@ -1,6 +1,6 @@
 import { ApiScanRequest, ApiScanResponse } from '../api/request.scan';
-import { BaseBuilder } from '../lib/base.builder';
-import { BasePacker } from '../lib/base.packer';
+import { BaseBuilder } from '../lib/base/base.builder';
+import { BasePacker } from '../lib/base/base.packer';
 import { ApiCall, ApiRequest } from './api.call';
 import { FirestoreAdmin } from './db.admin';
 import { firestore } from 'firebase-admin';

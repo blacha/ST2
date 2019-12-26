@@ -1,4 +1,4 @@
-import { Base } from '../base';
+import { Base } from '../base/base';
 import { Tile } from '../base/tile';
 import { Faction } from '../data/faction';
 import { GameDataObject } from '../data/game.data.object';

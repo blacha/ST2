@@ -1,5 +1,5 @@
 import { Tile } from '../base/tile';
-import { Base } from '../base';
+import { Base } from '../base/base';
 import { Faction } from '../data/faction';
 import { UnitType } from './unit.type';
 import { GameDataObjectType } from '../data/game.data.object';

@@ -1,7 +1,7 @@
 import * as o from 'ospec';
 import 'source-map-support/register';
 import { GameData } from '../../data/loader';
-import { Base } from '../base';
+import { Base } from '../base/base';
 import { Tile } from '../base/tile';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';

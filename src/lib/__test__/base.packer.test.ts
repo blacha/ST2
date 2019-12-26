@@ -1,8 +1,8 @@
 import * as o from 'ospec';
-import { Base } from '../base';
-import { BaseBuilder } from '../base.builder';
-import { BasePacker } from '../base.packer';
-import { BaseExporter } from '../base.export';
+import { Base } from '../base/base';
+import { BaseBuilder } from '../base/base.builder';
+import { BasePacker } from '../base/base.packer';
+import { BaseExporter } from '../base/base.export';
 
 o.spec('BasePacker', () => {
     o('should pack/unpack a id', () => {

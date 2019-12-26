@@ -1,6 +1,6 @@
 import { ModifierType } from '../../extension/@types/client.lib.const';
-import { Base } from '../base';
-import { BaseIter } from '../base.iter';
+import { Base } from '../base/base';
+import { BaseIter } from '../base/base.iter';
 import { Tile } from '../base/tile';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { Base } from '../../lib/base';
-import { BaseBuilder } from '../../lib/base.builder';
+import { Base } from '../../lib/base/base';
+import { BaseBuilder } from '../../lib/base/base.builder';
 import { FireStoreBases } from '../firebase';
 import { ViewBaseDef } from './base.def';
 import { ViewBaseMain } from './base.main';

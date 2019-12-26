@@ -4,14 +4,14 @@ import Table from 'antd/es/table';
 import BackTop from 'antd/es/back-top';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { Base } from '../../lib/base';
-import { BaseBuilder } from '../../lib/base.builder';
+import { Base } from '../../lib/base/base';
+import { BaseBuilder } from '../../lib/base/base.builder';
 import { GameResources } from '../../lib/game.resources';
 import { formatNumber } from '../../lib/util';
 import { ComponentLoading } from '../base/base';
 import { viewFaction } from '../base/faction';
 import { FireStoreBases } from '../firebase';
-import { Id } from '../../lib/uuid';
+import { Id } from '../../lib/id';
 
 export const AllianceCss = {
     Table: style({

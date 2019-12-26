@@ -1,6 +1,6 @@
 import React = require('react');
 import { style } from 'typestyle';
-import { Base } from '../../lib/base';
+import { Base } from '../../lib/base/base';
 import { Tile } from '../../lib/base/tile';
 import { BaseCss } from './base';
 import { BackgroundImage } from '../css.util';
