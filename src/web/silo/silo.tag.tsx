@@ -1,12 +1,15 @@
 import Tag from 'antd/es/tag';
+import { SiloCounts } from '../../lib/base/base.stats';
 import React = require('react');
-import { Base } from '../../lib/base/base';
 
-export class SiloTag extends React.Component<{ resource: 'tiberium' | 'crystal' | 'mixed'; base: Base; size: number }> {
+export class SiloTag extends React.Component<{
+    resource: 'tiberium' | 'crystal' | 'mixed';
+    silos: SiloCounts;
+    size: number;
+}> {
     render() {
-        const { resource, size, base } = this.props;
-        const stats = base.info.stats;
-        const count = stats[resource][size];
+        const { resource, size, silos } = this.props;
+        const count = silos[resource][size];
         if (count == 0) {
             return '';
         }
@@ -29,13 +32,13 @@ export class SiloTag extends React.Component<{ resource: 'tiberium' | 'crystal' 
 export class SiloTags extends React.Component<{
     resource: 'tiberium' | 'crystal' | 'mixed';
     minSize: number;
-    base: Base;
+    silos: SiloCounts;
 }> {
     render() {
-        const { minSize, resource, base } = this.props;
+        const { minSize, resource, silos } = this.props;
         const output = [];
         for (let i = minSize; i < 7; i++) {
-            output.push(<SiloTag resource={resource} size={i} base={base} key={`${resource}-${i}`} />);
+            output.push(<SiloTag resource={resource} size={i} silos={silos} key={`${resource}-${i}`} />);
         }
         return <React.Fragment>{...output}</React.Fragment>;
     }

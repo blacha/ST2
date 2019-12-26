@@ -80,9 +80,9 @@ function viewBaseLocation(base: Base) {
             <Row type="flex" justify="space-between" gutter={[4, 16]}>
                 <Col>Silos</Col>
                 <Col className={ResourceCountsCss}>
-                    <SiloTags minSize={4} resource={'tiberium'} base={base} />
-                    <SiloTags minSize={4} resource={'crystal'} base={base} />
-                    <SiloTags minSize={4} resource={'mixed'} base={base} />
+                    <SiloTags minSize={4} resource={'tiberium'} silos={silos} />
+                    <SiloTags minSize={4} resource={'crystal'} silos={silos} />
+                    <SiloTags minSize={4} resource={'mixed'} silos={silos} />
                 </Col>
             </Row>
         </React.Fragment>

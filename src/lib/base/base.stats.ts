@@ -20,6 +20,11 @@ export interface SiloCount {
      */
     score: number;
 }
+export interface SiloCounts {
+    tiberium: SiloCount;
+    crystal: SiloCount;
+    mixed: SiloCount;
+}
 export interface BaseCost {
     base: GameResources;
     def: GameResources;
@@ -30,7 +35,7 @@ export class BaseStats {
     private computed: Partial<{
         production: BaseOutput;
         score: number;
-        silos: { tiberium: SiloCount; crystal: SiloCount; mixed: SiloCount };
+        silos: SiloCounts;
         tiles: {
             tiberium: number;
             crystal: number;
