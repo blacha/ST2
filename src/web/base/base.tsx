@@ -11,8 +11,9 @@ import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
-import Tag from 'antd/es/tag';
+
 import { GameResource } from '../../lib/game.resources';
+import { SiloTags } from '../silo/silo.tag';
 const TileSize = 64;
 
 export const BaseCss = {
@@ -53,30 +54,6 @@ function viewBaseAlliance(base: Base) {
     );
 }
 
-export class SiloTag extends React.Component<{ resource: 'tiberium' | 'crystal' | 'mixed'; base: Base; size: number }> {
-    render() {
-        const { resource, size, base } = this.props;
-        const stats = base.info.stats;
-        const count = stats[resource][size];
-        if (count == 0) {
-            return '';
-        }
-        let color = 'green';
-        if (size == 6 && resource == 'tiberium') {
-            color = 'volcano';
-        } else if (resource == 'crystal') {
-            color = 'blue';
-        } else if (resource == 'mixed') {
-            color = 'purple';
-        }
-        return (
-            <Tag color={color} title={`${count} silo${count == 1 ? '' : 's'} touching ${size} ${resource} harvesters`}>
-                {count} x {size}
-            </Tag>
-        );
-    }
-}
-
 function viewBaseLocation(base: Base) {
     if (base.x < 0) {
         return '';
@@ -99,25 +76,13 @@ function viewBaseLocation(base: Base) {
                     {base.x}:{base.y}
                 </Col>
             </Row>
-            {/* <Row type="flex" justify="space-between" gutter={[4, 16]}>
-                <Col>Resources</Col>
-                <Col className={ResourceCountsCss}>
-                    {base.info.tiles.tiberium} <ResourceIcon resource="tiberium"></ResourceIcon>
-                    {base.info.tiles.crystal} <ResourceIcon resource="crystal"></ResourceIcon>
-                </Col>
-            </Row> */}
+
             <Row type="flex" justify="space-between" gutter={[4, 16]}>
                 <Col>Silos</Col>
                 <Col className={ResourceCountsCss}>
-                    <SiloTag resource="tiberium" size={6} base={base} />
-                    <SiloTag resource="tiberium" size={5} base={base} />
-                    <SiloTag resource="tiberium" size={4} base={base} />
-                    <SiloTag resource="crystal" size={6} base={base} />
-                    <SiloTag resource="crystal" size={5} base={base} />
-                    <SiloTag resource="crystal" size={4} base={base} />
-                    <SiloTag resource="mixed" size={6} base={base} />
-                    <SiloTag resource="mixed" size={5} base={base} />
-                    <SiloTag resource="mixed" size={4} base={base} />
+                    <SiloTags minSize={4} resource={'tiberium'} base={base} />
+                    <SiloTags minSize={4} resource={'crystal'} base={base} />
+                    <SiloTags minSize={4} resource={'mixed'} base={base} />
                 </Col>
             </Row>
         </React.Fragment>

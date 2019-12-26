@@ -7,16 +7,17 @@ import { BasePacker } from '../../lib/base/base.packer';
 import { ComponentLoading } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
 import { FireStoreLayouts } from '../firebase';
+import { SiloTags } from '../silo/silo.tag';
+import Divider from 'antd/es/divider';
+import { timeSince } from '../time.util';
 
-const ScanCss = {
-    ScanList: style({
-        display: 'flex',
-        flexWrap: 'wrap',
-    }),
-    BaseCard: style({
-        padding: '4px',
-    }),
-};
+const ScanListCss = style({
+    display: 'flex',
+    flexWrap: 'wrap',
+});
+const BaseCardCss = style({
+    padding: '4px',
+});
 
 interface ScanState {
     bases: Base[];
@@ -49,13 +50,21 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
             const base = new Base();
             base.x = xy.x;
             base.y = xy.y;
-            const layout = layoutData.layouts[key].layout;
+            const { layout, updatedAt } = layoutData.layouts[key];
             base.tiles = BasePacker.layout.unpack(layout);
+            base.updatedAt = updatedAt;
             bases.push(base);
         }
         console.log('Loaded', bases.length);
 
-        bases.sort((a: Base, b: Base) => b.info.stats.tiberium.score - a.info.stats.tiberium.score);
+        bases.sort((a: Base, b: Base) => {
+            const statsA = a.info.stats;
+            const statsB = b.info.stats;
+            if (statsA.tiberium.score == statsB.tiberium.score) {
+                return b.info.score - a.info.score;
+            }
+            return statsB.tiberium.score - statsA.tiberium.score;
+        });
         this.setState({ bases });
     }
 
@@ -67,16 +76,22 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
             return <div>Could not find scan</div>;
         }
         return (
-            <div className={ScanCss.ScanList}>
-                {this.state?.bases.slice(0, 50).map(base => {
+            <div className={ScanListCss}>
+                {this.state?.bases.slice(0, 100).map(base => {
                     return (
-                        <div className={ScanCss.BaseCard} key={base.id}>
-                            <div>
+                        <div className={BaseCardCss} key={base.id}>
+                            <Divider>
                                 {base.x}:{base.y}
-                            </div>
+                            </Divider>
                             <div style={{ width: 24 * Base.MaxX + 'px' }}>
                                 <ViewBaseMain base={base} key={base.id} size={24} />
                             </div>
+                            <div className={BaseCardCss}>
+                                <SiloTags minSize={4} resource={'tiberium'} base={base} />
+                                <SiloTags minSize={4} resource={'crystal'} base={base} />
+                                <SiloTags minSize={4} resource={'mixed'} base={base} />
+                            </div>
+                            {timeSince(base.updatedAt)}
                         </div>
                     );
                 })}
