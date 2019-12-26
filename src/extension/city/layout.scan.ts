@@ -1,13 +1,12 @@
+import { ShockrTools } from '..';
 import { CityLayout, LayoutScanApi } from '../../api/city.layout';
 import { BaseBuilder } from '../../lib/base.builder';
-import { Faction } from '../../lib/data/faction';
 import { ClientLibCity, ClientLibStatic, PheStatic } from '../@types/client.lib';
 import { NpcCampType, WorldObjectType } from '../@types/client.lib.const';
 import { StModule } from '../module';
 import { ClientLibPatcher } from '../patch/patch';
 import { ClientLibIter } from '../util/iter';
 import { CityData } from './city.scan';
-import { ShockrTools } from '..';
 
 declare const ClientLib: ClientLibStatic;
 declare const phe: PheStatic;
@@ -18,7 +17,7 @@ interface LayoutToScan {
     distance: number;
 }
 
-export enum LayoutScannerState {
+export enum ScannerState {
     Init,
     Ready,
     Scanning,
@@ -30,33 +29,33 @@ export class LayoutScanner implements StModule {
 
     lastCityId: number | null = null;
     lastScan: CityLayout[] = [];
-    state: LayoutScannerState = LayoutScannerState.Init;
+    state: ScannerState = ScannerState.Init;
     toScan: Record<string, LayoutToScan> = {};
     st: ShockrTools | null = null;
 
     async start(st: ShockrTools): Promise<void> {
         this.st = st;
-        this.state = LayoutScannerState.Ready;
+        this.state = ScannerState.Ready;
         CityData.removeStaleCache();
     }
 
     async stop(): Promise<void> {
-        this.state = LayoutScannerState.Abort;
+        this.state = ScannerState.Abort;
     }
 
     public async scan(): Promise<LayoutScanApi | null> {
-        if (this.state != LayoutScannerState.Ready) {
+        if (this.state != ScannerState.Ready) {
             return null;
         }
         try {
             return await this.doScan();
         } finally {
-            this.state = LayoutScannerState.Ready;
+            this.state = ScannerState.Ready;
         }
     }
 
     private async doScan(): Promise<LayoutScanApi | null> {
-        this.state = LayoutScannerState.Scanning;
+        this.state = ScannerState.Scanning;
         this.toScan = {};
         const cities = this.getAllCities();
         for (const city of cities) {
@@ -91,7 +90,7 @@ export class LayoutScanner implements StModule {
         }
         this.lastScan = output;
 
-        this.state = LayoutScannerState.Ready;
+        this.state = ScannerState.Ready;
         const md = ClientLib.Data.MainData.GetInstance();
         return {
             v: 1,
@@ -106,7 +105,7 @@ export class LayoutScanner implements StModule {
     }
     /** Should the scan be aborted */
     get isAborting() {
-        return this.state === LayoutScannerState.Abort;
+        return this.state === ScannerState.Abort;
     }
 
     /** Top bases sorted by tiberium score */
