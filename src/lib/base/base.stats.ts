@@ -4,6 +4,7 @@ import { BaseOutput } from '../production/calculator';
 import { Base } from './base';
 import { BaseIter } from './base.iter';
 import { Tile } from './tile';
+import { BuildingType } from '../building/building.type';
 
 export interface SiloCount {
     [siloCount: number]: number;
@@ -88,6 +89,10 @@ export class BaseStats {
     }
 
     private computeCost() {
+        // Gamedata hasn't loaded cannot compute the costs
+        if (!BuildingType.GDI.CommandCenter.isGameDataLoaded) {
+            return;
+        }
         const costs = (this.computed.cost = {
             base: new GameResources(),
             off: new GameResources(),

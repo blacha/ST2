@@ -55,6 +55,10 @@ export class GameDataObject {
         return this._data;
     }
 
+    get isGameDataLoaded() {
+        return this._data != null;
+    }
+
     get name() {
         return this.data.name;
     }
