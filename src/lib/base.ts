@@ -181,7 +181,7 @@ export class Base {
     }
 
     clearCache() {
-        this.score = null;
+        this._score = null;
         this._stats = null;
         this._production = null;
     }
@@ -222,7 +222,11 @@ export class Base {
     }
 
     private _stats: { tiberium: SiloCount; crystal: SiloCount; mixed: SiloCount } | null = null;
-    private score: number | null = null;
+    private _score: number | null = null;
+    get score() {
+        this.stats;
+        return this._score;
+    }
     get stats() {
         if (this._stats != null) {
             return this._stats;
@@ -261,7 +265,7 @@ export class Base {
         }
 
         this._stats = { tiberium, crystal, mixed };
-        this.score = tiberium.score + crystal.score * 0.1 + mixed.score * 0.25;
+        this._score = tiberium.score + crystal.score * 0.1 + mixed.score * 0.25;
         return this._stats;
     }
 

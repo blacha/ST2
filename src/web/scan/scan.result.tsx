@@ -69,13 +69,15 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
         }
         return (
             <div className={ScanCss.ScanList}>
-                {this.state?.bases.map(base => {
+                {this.state?.bases.slice(0, 50).map(base => {
                     return (
                         <div className={ScanCss.BaseCard} key={base.id}>
                             <div>
                                 {base.x}:{base.y}
                             </div>
-                            <ViewBaseMain base={base} key={base.id} size={24} />
+                            <div style={{ width: 24 * Base.MaxX + 'px' }}>
+                                <ViewBaseMain base={base} key={base.id} size={24} />
+                            </div>
                         </div>
                     );
                 })}
