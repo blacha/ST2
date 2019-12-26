@@ -11,8 +11,10 @@ import { GameResources } from '../../lib/game.resources';
 import { formatNumber } from '../../lib/util';
 import { ComponentLoading } from '../base/base';
 import { viewFaction } from '../base/faction';
-import { FireStoreBases } from '../firebase';
+import { FireStoreBases, FireStoreAlliance } from '../firebase';
 import { Id } from '../../lib/id';
+import { BasePacker } from '../../lib/base/base.packer';
+import { CityLayout } from '../../api/city.layout';
 
 export const AllianceCss = {
     Table: style({
@@ -154,12 +156,11 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
     }
 
     async loadAlliance(worldId: number, allianceId: number) {
+        const docId = BasePacker.id.pack(worldId, allianceId);
         this.setState({ info: [], state: ComponentLoading.Loading });
-        const doc = await FireStoreBases.where('worldId', '==', worldId)
-            .where('allianceId', '==', allianceId)
-            .limit(250)
-            .get();
-        const bases = doc.docs.map(c => BaseBuilder.load(c.data()));
+        const doc = await FireStoreAlliance.doc(docId).get();
+        const cities = (doc.get('cities') ?? {}) as Record<string, CityLayout>;
+        const bases = Object.values(cities).map(c => BaseBuilder.load(c));
         const playerSet = new Map<string, PlayerStats>();
         let name = '';
         for (const base of bases) {

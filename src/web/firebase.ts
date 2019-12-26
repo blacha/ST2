@@ -17,3 +17,6 @@ export const firestore = FirebaseClient.firestore();
 
 export const FireStoreBases = firestore.collection('base') as firebase.firestore.CollectionReference<DbBase>;
 export const FireStoreLayouts = firestore.collection('layout') as firebase.firestore.CollectionReference<DbLayout>;
+export const FireStoreAlliance = firestore.collection('alliance') as firebase.firestore.CollectionReference<{
+    citites: Record<string, DbBase>;
+}>;

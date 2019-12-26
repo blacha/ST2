@@ -5,12 +5,10 @@ import { ClientApi } from './client.api';
 import { ClientLibStatic } from '../@types/client.lib';
 import { BasePacker } from '../../lib/base/base.packer';
 
-declare const ClientLib: ClientLibStatic;
-
 export class BatchBaseSender extends Batcher<'cityId', CityLayout, string> {
     api: ClientApi;
     constructor(api: ClientApi) {
-        super('cityId', 250, 25);
+        super('cityId', 30 * 1000, 25);
         this.api = api;
     }
 
