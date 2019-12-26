@@ -36,17 +36,24 @@ export class ViewBaseResourcesHeader extends React.Component<{}> {
         );
     }
 }
-
-export class ViewResource extends React.Component<{ resource: GameResource }> {
-    titleCase(str: string): string {
-        return str.charAt(0).toUpperCase() + str.substr(1);
-    }
+function titleCase(str: string): string {
+    return str.charAt(0).toUpperCase() + str.substr(1);
+}
+export class ResourceIcon extends React.Component<{ resource: GameResource }> {
     render() {
         const resource = this.props.resource;
-        const title = this.titleCase(resource);
+        const title = titleCase(resource);
+
+        return <div className={`${BaseStatsCss.Resource} Resource-${title}`}></div>;
+    }
+}
+export class ViewResource extends React.Component<{ resource: GameResource }> {
+    render() {
+        const resource = this.props.resource;
+        const title = titleCase(resource);
         return (
             <div className={`${BaseStatsCss.Title}`}>
-                <div className={`${BaseStatsCss.Resource} Resource-${title}`}></div>
+                <ResourceIcon resource={this.props.resource}></ResourceIcon>
                 {title}
             </div>
         );

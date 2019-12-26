@@ -5,13 +5,14 @@ import { style } from 'typestyle';
 import { Base } from '../../lib/base/base';
 import { BaseBuilder } from '../../lib/base/base.builder';
 import { FireStoreBases } from '../firebase';
-import { ViewBaseStats } from './base.stats';
+import { ViewBaseStats, ResourceIcon } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
-
+import Tag from 'antd/es/tag';
+import { GameResource } from '../../lib/game.resources';
 const TileSize = 64;
 
 export const BaseCss = {
@@ -29,6 +30,7 @@ export const BaseCss = {
     Total: style({ fontWeight: 'bold' }),
     Title: style({ fontWeight: 'bold' }),
 };
+const ResourceCountsCss = style({ display: 'flex', alignItems: 'center' });
 export enum ComponentLoading {
     Ready,
     Loading,
@@ -50,10 +52,36 @@ function viewBaseAlliance(base: Base) {
         </Row>
     );
 }
+
+export class SiloTag extends React.Component<{ resource: 'tiberium' | 'crystal' | 'mixed'; base: Base; size: number }> {
+    render() {
+        const { resource, size, base } = this.props;
+        const stats = base.info.stats;
+        const count = stats[resource][size];
+        if (count == 0) {
+            return '';
+        }
+        let color = 'green';
+        if (size == 6 && resource == 'tiberium') {
+            color = 'volcano';
+        } else if (resource == 'crystal') {
+            color = 'blue';
+        } else if (resource == 'mixed') {
+            color = 'purple';
+        }
+        return (
+            <Tag color={color} title={`${count} Silo${count == 1 ? '' : 's'} touching ${size} ${resource} harvesters`}>
+                {count} x {size}
+            </Tag>
+        );
+    }
+}
+
 function viewBaseLocation(base: Base) {
     if (base.x < 0) {
         return '';
     }
+    const silos = base.info.stats;
     return (
         <React.Fragment>
             <Row type="flex" justify="space-between" gutter={[16, 16]}>
@@ -71,10 +99,25 @@ function viewBaseLocation(base: Base) {
                     {base.x}:{base.y}
                 </Col>
             </Row>
-            <Row type="flex" justify="space-between" gutter={[16, 16]}>
+            {/* <Row type="flex" justify="space-between" gutter={[4, 16]}>
                 <Col>Resources</Col>
-                <Col>
-                    {base.info.tiles.tiberium} / {base.info.tiles.crystal}
+                <Col className={ResourceCountsCss}>
+                    {base.info.tiles.tiberium} <ResourceIcon resource="tiberium"></ResourceIcon>
+                    {base.info.tiles.crystal} <ResourceIcon resource="crystal"></ResourceIcon>
+                </Col>
+            </Row> */}
+            <Row type="flex" justify="space-between" gutter={[4, 16]}>
+                <Col>Silos</Col>
+                <Col className={ResourceCountsCss}>
+                    <SiloTag resource="tiberium" size={6} base={base} />
+                    <SiloTag resource="tiberium" size={5} base={base} />
+                    <SiloTag resource="tiberium" size={4} base={base} />
+                    <SiloTag resource="crystal" size={6} base={base} />
+                    <SiloTag resource="crystal" size={5} base={base} />
+                    <SiloTag resource="crystal" size={4} base={base} />
+                    <SiloTag resource="mixed" size={6} base={base} />
+                    <SiloTag resource="mixed" size={5} base={base} />
+                    <SiloTag resource="mixed" size={4} base={base} />
                 </Col>
             </Row>
         </React.Fragment>

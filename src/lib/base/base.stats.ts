@@ -132,10 +132,10 @@ export class BaseStats {
             const tib = BaseIter.getSurroundings(this.base, x, y, undefined, [Tile.Tiberium]).length;
             const cry = BaseIter.getSurroundings(this.base, x, y, undefined, [Tile.Crystal]).length;
 
-            if (tib + cry > 3) {
+            if (tib + cry > 3 && tib < 5 && cry < 5) {
                 mixed[tib + cry] = (mixed[tib + cry] || 0) + 1;
+                return;
             }
-
             // No one cares about one or two silos
             if (tib < MIN_SILO && cry < MIN_SILO) {
                 return;
