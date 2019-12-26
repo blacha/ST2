@@ -95,6 +95,7 @@ export interface ClientLibCities {
 
 export interface ClientLibAlliance {
     get_Id(): number;
+    get_Name(): string;
 }
 
 export interface ClientLibPlayer {

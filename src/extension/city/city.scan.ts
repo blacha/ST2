@@ -43,7 +43,9 @@ export class CityData {
         const MainData = ClientLib.Data.MainData.GetInstance();
         const player = MainData.get_Player();
         const server = MainData.get_Server();
-        return {
+        const ownerId = city.get_OwnerId();
+
+        const cityData = {
             cityId: city.get_Id(),
             level: city.get_LvlBase(),
             levelOff: city.get_LvlOffense(),
@@ -62,6 +64,16 @@ export class CityData {
             upgrades: CityData.getUpgrades(city),
             timestamp: Date.now(),
         };
+        // If the base is owned by us it screws with the alliance info
+        if (ownerId == player.id) {
+            const alliance = MainData.get_Alliance();
+            if (alliance == null) {
+                return cityData;
+            }
+            cityData.alliance = alliance.name;
+            cityData.allianceId = alliance.get_Id();
+        }
+        return cityData;
     }
 
     static getLayout(city: ClientLibCity): CityLayoutTile[] {
