@@ -76,6 +76,10 @@ export class BaseBuilder {
         output.x = cncBase.x;
         output.y = cncBase.y;
         output.id = BasePacker.id.pack(cncBase.worldId, cncBase.cityId);
+        if (cncBase.alliance && cncBase.allianceId) {
+            output.alliance = { id: cncBase.allianceId, name: cncBase.alliance };
+        }
+        output.worldId = cncBase.worldId;
         output.setBaseLevels(cncBase.level, cncBase.levelOff, cncBase.levelDef);
 
         for (let y = 0; y < Base.MaxY; y++) {

@@ -1,11 +1,8 @@
-import { BaseOutput } from '../production/calculator';
-
-import { Base } from './base';
-
+import { GameResources } from '../game.resources';
 import { BaseProduction } from '../production';
-
+import { BaseOutput } from '../production/calculator';
+import { Base } from './base';
 import { BaseIter } from './base.iter';
-
 import { Tile } from './tile';
 
 export interface SiloCount {
@@ -22,6 +19,12 @@ export interface SiloCount {
      */
     score: number;
 }
+export interface BaseCost {
+    base: GameResources;
+    def: GameResources;
+    off: GameResources;
+    total: GameResources;
+}
 export class BaseStats {
     private computed: Partial<{
         production: BaseOutput;
@@ -31,6 +34,7 @@ export class BaseStats {
             tiberium: number;
             crystal: number;
         };
+        cost: BaseCost;
     }> = {};
     base: Base;
 
@@ -68,9 +72,42 @@ export class BaseStats {
         }
         return this.computed.silos!;
     }
+
+    /** Total cost to build this base */
+    get cost() {
+        if (this.computed.cost == null) {
+            this.compute();
+        }
+        return this.computed.cost!;
+    }
+
     private compute() {
         this.computeSilo();
         this.computeTiles();
+        this.computeCost();
+    }
+
+    private computeCost() {
+        const costs = (this.computed.cost = {
+            base: new GameResources(),
+            off: new GameResources(),
+            def: new GameResources(),
+            total: new GameResources(),
+        });
+        for (const unit of this.base.base) {
+            if (unit == null) {
+                continue;
+            }
+            const totalCost = unit.getTotalUpgradeCost();
+            costs.total.add(totalCost);
+            if (unit.type.isBuildingUnit()) {
+                costs.base.add(totalCost);
+            } else if (unit.type.isDefUnit()) {
+                costs.def.add(totalCost);
+            } else {
+                costs.off.add(totalCost);
+            }
+        }
     }
     private computeTiles() {
         const tiles = { tiberium: 0, crystal: 0 };

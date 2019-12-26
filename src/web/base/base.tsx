@@ -1,32 +1,24 @@
+import Divider from 'antd/es/divider';
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Link } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Base } from '../../lib/base/base';
 import { BaseBuilder } from '../../lib/base/base.builder';
 import { FireStoreBases } from '../firebase';
-import { ViewBaseDef } from './base.def';
-import { ViewBaseMain } from './base.main';
-import { ViewBaseOff } from './base.off';
 import { ViewBaseStats } from './base.stats';
-import { viewFaction } from './faction';
-import { Tile } from '../../lib/base/tile';
+import { ViewBaseDef } from './tiles/base.def';
+import { ViewBaseMain } from './tiles/base.main';
+import { ViewBaseOff } from './tiles/base.off';
+import Row from 'antd/es/row';
+import Col from 'antd/es/col';
 
 const TileSize = 64;
 
 export const BaseCss = {
-    Size32: style({
-        width: '32px',
-        height: '32px',
-    }),
-    Size48: style({
-        width: '48px',
-        height: '48px',
-    }),
-
     Base: style({
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
     }),
     BaseDef: style({
         margin: '16px 0',
@@ -34,12 +26,8 @@ export const BaseCss = {
         flexWrap: 'wrap',
         justifyContent: 'space-between',
     }),
-    Total: style({
-        fontWeight: 'bold',
-    }),
-    Title: style({
-        fontWeight: 'bold',
-    }),
+    Total: style({ fontWeight: 'bold' }),
+    Title: style({ fontWeight: 'bold' }),
 };
 export enum ComponentLoading {
     Ready,
@@ -48,6 +36,50 @@ export enum ComponentLoading {
     Done,
 }
 type ViewBaseProps = RouteComponentProps<{ baseId?: string }>;
+function viewBaseAlliance(base: Base) {
+    if (base.alliance == null) {
+        return '';
+    }
+
+    return (
+        <Row type="flex" justify="space-between" gutter={[16, 16]}>
+            <Col>Alliance</Col>
+            <Col>
+                <Link to={`/world/${base.worldId}/alliance/${base.alliance.id}`}>{base.alliance.name}</Link>
+            </Col>
+        </Row>
+    );
+}
+function viewBaseLocation(base: Base) {
+    if (base.x < 0) {
+        return '';
+    }
+    return (
+        <React.Fragment>
+            <Row type="flex" justify="space-between" gutter={[16, 16]}>
+                <Col>Owner</Col>
+                <Col>{base.owner}</Col>
+            </Row>
+            {viewBaseAlliance(base)}
+            <Row type="flex" justify="space-between" gutter={[16, 16]}>
+                <Col>World</Col>
+                <Col>{base.worldId}</Col>
+            </Row>
+            <Row type="flex" justify="space-between" gutter={[16, 16]}>
+                <Col>Location</Col>
+                <Col>
+                    {base.x}:{base.y}
+                </Col>
+            </Row>
+            <Row type="flex" justify="space-between" gutter={[16, 16]}>
+                <Col>Resources</Col>
+                <Col>
+                    {base.info.tiles.tiberium} / {base.info.tiles.crystal}
+                </Col>
+            </Row>
+        </React.Fragment>
+    );
+}
 
 export class ViewBase extends React.Component<ViewBaseProps> {
     state = { base: new Base(), state: ComponentLoading.Ready };
@@ -92,18 +124,19 @@ export class ViewBase extends React.Component<ViewBaseProps> {
             return <div>Could not find base</div>;
         }
 
+        const baseWidth = TileSize * Base.MaxX + 'px';
         return (
-            <div className="Base">
-                <div className={BaseCss.Title}>
-                    {viewFaction(base.faction)}
-                    <div>{base.name} </div>
-                    <div>{base.x > 0 ? `@ ${base.x}, ${base.y}` : ''}</div>
-                    <div>{base.owner}</div>
-                    <div>{base.tiles.filter(f => f == Tile.Tiberium)}</div>
-                    <div>{base.tiles.filter(f => f == Tile.Crystal)}</div>
+            <div className={BaseCss.Base}>
+                <Divider>{base.name}</Divider>
+
+                <div style={{ width: baseWidth }}>
+                    <div>{viewBaseLocation(base)}</div>
+                    <div style={{ width: baseWidth }}>
+                        <ViewBaseStats base={base} />
+                    </div>
                 </div>
-                <ViewBaseStats base={base} />
-                <div style={{ width: TileSize * Base.MaxX + 'px' }}>
+
+                <div style={{ width: baseWidth }}>
                     <ViewBaseMain base={base} size={TileSize} />
                     <ViewBaseDef base={base} size={TileSize} />
                     <ViewBaseOff base={base} size={TileSize} />

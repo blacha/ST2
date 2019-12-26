@@ -60,6 +60,7 @@ export class CityData {
             allianceId: city.get_OwnerAllianceId(),
             tiles: CityData.getLayout(city),
             upgrades: CityData.getUpgrades(city),
+            timestamp: Date.now(),
         };
     }
 

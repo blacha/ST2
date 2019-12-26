@@ -1,20 +1,16 @@
-import { BaseIter } from './base.iter';
-import { Buildable } from './buildable';
-import { Tile } from './tile';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { Faction } from '../data/faction';
 import { GameDataObject, GameDataObjectType } from '../data/game.data.object';
 import { GameResource, GameResources } from '../game.resources';
-import { BaseProduction } from '../production';
-import { BaseOutput } from '../production/calculator';
+import { Id } from '../id';
 import { DefUnitType } from '../unit/def.unit.type';
 import { OffUnitType } from '../unit/off.unit.type';
 import { Unit } from '../unit/unit';
-import { color, ConsoleColor } from '../util';
-import { Id } from '../id';
-import { BaseStats } from './base.stats';
 import { BaseBuildings } from './base.buildings';
+import { BaseStats } from './base.stats';
+import { Buildable } from './buildable';
+import { Tile } from './tile';
 
 export interface CncLocation {
     x: number;
@@ -65,11 +61,16 @@ export class Base {
 
     x = -1;
     y = -1;
+    worldId: number | null = null;
+    /** Time the base was last seen */
+    updatedAt: number;
 
     tiles: Tile[];
     upgrades: number[];
 
     info: BaseStats;
+
+    alliance: { id: number; name: string } | null = null;
 
     constructor(name = 'Base', faction: Faction = Faction.Gdi) {
         this.name = name;
@@ -83,6 +84,7 @@ export class Base {
         this.owner = null;
         this.info = new BaseStats(this);
         this.buildings = new BaseBuildings(this);
+        this.updatedAt = 0;
     }
 
     setBaseLevels(base: number, off = 0, def = 0) {

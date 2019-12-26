@@ -2,6 +2,7 @@ import React = require('react');
 import 'antd/dist/antd.css';
 import Table from 'antd/es/table';
 import BackTop from 'antd/es/back-top';
+import Divider from 'antd/es/divider';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Base } from '../../lib/base/base';
@@ -38,6 +39,7 @@ export interface PlayerStats {
 type AllianceProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
 interface AllianceState {
     info: PlayerStats[];
+    name: string;
     state: ComponentLoading;
 }
 
@@ -143,7 +145,7 @@ export const AllianceColumns = [
     },
 ];
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
-    state: AllianceState = { info: [], state: ComponentLoading.Ready };
+    state: AllianceState = { info: [], state: ComponentLoading.Ready, name: '' };
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
@@ -159,6 +161,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
             .get();
         const bases = doc.docs.map(c => BaseBuilder.load(c.data()));
         const playerSet = new Map<string, PlayerStats>();
+        let name = '';
         for (const base of bases) {
             if (base.owner == null) {
                 continue;
@@ -179,8 +182,11 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
             }
             current.bases.push(base);
             current.production.add(base.info.production.total);
+            if (base.alliance) {
+                name = base.alliance.name;
+            }
         }
-        this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done });
+        this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done, name });
     }
 
     get isLoading() {
@@ -190,6 +196,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
     render() {
         return (
             <React.Fragment>
+                <Divider>{this.state.name}</Divider>
                 <Table
                     rowKey="id"
                     dataSource={this.state.info}

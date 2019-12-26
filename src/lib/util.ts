@@ -4,7 +4,7 @@ export function pad(width: number, string: string): string {
 
 const Formats = ['', 'K', 'M', 'G', 'T'];
 export function formatNumber(num?: number): string {
-    if (num == 0 || num == null) {
+    if (num == null) {
         return '';
     }
     let current = 0;

@@ -6,7 +6,7 @@ import { BackgroundImage } from '../css.util';
 const FactionCss = style({
     width: '32px',
     height: '32px',
-    ...BackgroundImage,
+    ...BackgroundImage(75),
 });
 
 export function viewFaction(faction: Faction) {

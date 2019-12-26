@@ -62,18 +62,10 @@ export class BaseExporter {
     }
 
     static toString(base: Base) {
-        function toStr(u: any) {
-            return u.toString();
-        }
-
-        function removeEmpty(o: any) {
-            return o != null;
-        }
-
         return `[Base ${base.name}:${base.faction}
     buildings: [${base.base
-        .filter(removeEmpty)
-        .map(toStr)
+        .filter(x => x != null)
+        .map(x => String(x))
         .join('\n\t')})}]
         ]`;
     }

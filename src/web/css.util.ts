@@ -1,5 +1,7 @@
-export const BackgroundImage = {
-    backgroundSize: '75%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-};
+export function BackgroundImage(size = 75) {
+    return {
+        backgroundSize: `${size}%`,
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+    };
+}

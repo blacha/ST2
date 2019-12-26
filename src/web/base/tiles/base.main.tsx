@@ -1,6 +1,6 @@
 import React = require('react');
-import { Base } from '../../lib/base/base';
-import { BaseCss } from './base';
+import { Base } from '../../../lib/base/base';
+import { BaseCss } from '../base';
 import { ViewBaseItem } from './base.tile';
 import { viewRow } from './base.row';
 

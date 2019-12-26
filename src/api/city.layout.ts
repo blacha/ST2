@@ -61,6 +61,9 @@ export interface CityLayout {
     tiles: CityLayoutTile[];
     /** Units that have upgrades */
     upgrades: number[];
+
+    /** Time the base was last seen */
+    timestamp: number;
 }
 
 export interface CacheObject<T> {
