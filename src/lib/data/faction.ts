@@ -1,8 +1,8 @@
 import { FactionType } from '../../extension/@types/client.lib.const';
 
 export class Faction {
-    static Gdi: Faction = new Faction(FactionType.Gdi, 'G', 'GDI');
-    static Nod: Faction = new Faction(FactionType.Nod, 'N', 'NOD');
+    static Gdi: Faction = new Faction(FactionType.Gdi, 'G', 'Gdi');
+    static Nod: Faction = new Faction(FactionType.Nod, 'N', 'Nod');
     static Forgotten: Faction = new Faction(FactionType.Forgotten, 'F', 'Forgotten');
     id: FactionType;
     code: string;

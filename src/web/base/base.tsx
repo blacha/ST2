@@ -8,8 +8,9 @@ import { ViewBaseDef } from './base.def';
 import { ViewBaseMain } from './base.main';
 import { ViewBaseOff } from './base.off';
 import { ViewBaseStats } from './base.stats';
+import { viewFaction } from './faction';
 
-const TileSize = 32;
+const TileSize = 48;
 
 export const BaseCss = {
     Size32: style({
@@ -116,6 +117,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
         return (
             <div className="Base">
                 <div className={BaseCss.Title}>
+                    {viewFaction(base.faction)}
                     <div>{base.name} </div>
                     <div>{base.x > 0 ? `@ ${base.x}, ${base.y}` : ''}</div>
                     <div>{base.owner}</div>

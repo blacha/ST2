@@ -18,7 +18,6 @@ const AppCss = {
         height: '5.2rem',
         left: 0,
         maxWidth: '100%',
-        position: 'fixed',
         right: 0,
         top: 0,
         width: '100%',

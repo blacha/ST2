@@ -3,6 +3,7 @@ import { Base } from './base';
 import { Tile } from './base/tile';
 import { Faction } from './data/faction';
 import { GameDataObject } from './data/game.data.object';
+import { BasePacker } from './base.packer';
 
 const codeZero = '0'.charCodeAt(0);
 const codeNine = '9'.charCodeAt(0);
@@ -74,6 +75,7 @@ export class BaseBuilder {
         output.owner = cncBase.owner;
         output.x = cncBase.x;
         output.y = cncBase.y;
+        output.id = BasePacker.id.pack(cncBase.worldId, cncBase.cityId);
         output.setBaseLevels(cncBase.level, cncBase.levelOff, cncBase.levelDef);
 
         for (let y = 0; y < Base.MaxY; y++) {

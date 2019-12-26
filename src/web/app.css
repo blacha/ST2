@@ -7,10 +7,12 @@
 }
 
 .Container {
-    width: 100%;
     height: 100%;
+    max-width: 80rem;
+    margin: auto;
     display: flex;
     align-items: center;
+    font-size: 140%;
 }
 
 .Content {
@@ -18,8 +20,42 @@
     max-width: 112rem;
     padding: 0 2rem;
     width: 100%;
-    margin-top: 6rem;
     position: relative;
-    display: flex;
     justify-content: center;
+}
+
+.Faction {
+    width: 32px;
+    height: 32px;
+    background-size: 75%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.Faction-Nod {
+    background-image: url(../../static/icon/icon_nod.png);
+}
+
+.Faction-Gdi {
+    background-image: url(../../static/icon/icon_gdi.png);
+}
+
+.Faction-For {
+    background-image: url(../../static/icon/icon_for.png);
+}
+
+.Resource-Tiberium {
+    background-image: url(../../static/icon/icon_tiberium.png);
+}
+
+.Resource-Power {
+    background-image: url(../../static/icon/icon_power.png);
+}
+
+.Resource-Crystal {
+    background-image: url(../../static/icon/icon_crystal.png);
+}
+
+.Resource-Credits {
+    background-image: url(../../static/icon/icon_credits.png);
 }

@@ -23,7 +23,7 @@ export class ViewBaseItem extends React.Component<{ x: number; y: number; base: 
             classNames.push(BaseCss.Grid.Scrub);
         }
 
-        if (size !== 32) {
+        if (size !== 48) {
             classNames.push(style({ width: size + 'px', height: size + 'px' }));
         } else {
             classNames.push(BaseCss.Size48);
