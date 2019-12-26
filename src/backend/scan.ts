@@ -1,13 +1,12 @@
-import { firestore } from 'firebase-admin';
 import { CityLayout } from '../api/city.layout';
 import { ApiScanRequest, ApiScanResponse } from '../api/request.scan';
 import { BaseBuilder } from '../lib/base/base.builder';
 import { BasePacker } from '../lib/base/base.packer';
+import { Id } from '../lib/id';
 import { ApiCall, ApiRequest } from './api.call';
 import { FirestoreAdmin } from './db.admin';
-import { Id } from '../lib/id';
-import { DbPlayer, BaseLayout } from './db/db.player';
 import { DbLayout } from './db/db.base';
+import { BaseLayout, DbPlayer } from './db/db.player';
 
 export class ApiScan extends ApiCall<ApiScanRequest> {
     path = '/api/v1/world/:worldId/scan/:scanId' as const;

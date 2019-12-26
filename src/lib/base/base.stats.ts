@@ -5,6 +5,7 @@ import { Base } from './base';
 import { BaseIter } from './base.iter';
 import { Tile } from './tile';
 import { BuildingType } from '../building/building.type';
+import { assert } from '../util/assert';
 
 export interface SiloCount {
     [siloCount: number]: number;
@@ -56,7 +57,8 @@ export class BaseStats {
         if (this.computed.tiles == null) {
             this.compute();
         }
-        return this.computed.tiles!;
+        assert(this.computed.tiles != null, 'Failed to compute cost');
+        return this.computed.tiles;
     }
 
     get production(): BaseOutput {
@@ -70,13 +72,15 @@ export class BaseStats {
         if (this.computed.score == null) {
             this.compute();
         }
-        return this.computed.score!;
+        assert(this.computed.score != null, 'Failed to compute score');
+        return this.computed.score;
     }
     get stats() {
         if (this.computed.silos == null) {
             this.compute();
         }
-        return this.computed.silos!;
+        assert(this.computed.silos != null, 'Failed to compute stats');
+        return this.computed.silos;
     }
 
     /** Total cost to build this base */
@@ -84,7 +88,8 @@ export class BaseStats {
         if (this.computed.cost == null) {
             this.compute();
         }
-        return this.computed.cost!;
+        assert(this.computed.cost != null, 'Failed to compute cost');
+        return this.computed.cost;
     }
 
     private compute() {

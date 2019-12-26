@@ -1,9 +1,8 @@
 import { CityLayout } from '../../api/city.layout';
 import { ApiScanResponse } from '../../api/request.scan';
+import { BasePacker } from '../../lib/base/base.packer';
 import { Batcher } from './batcher';
 import { ClientApi } from './client.api';
-import { ClientLibStatic } from '../@types/client.lib';
-import { BasePacker } from '../../lib/base/base.packer';
 
 export class BatchBaseSender extends Batcher<'cityId', CityLayout, string> {
     api: ClientApi;

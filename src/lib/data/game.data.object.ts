@@ -69,7 +69,7 @@ export class GameDataObject {
     }
 
     getHealth(level: number) {
-        return 0;
+        return 0 * level;
         //return Util.getSingleGrowthValue(this.data.health, level,
         //    Constants.HEALTH_GROWTH);
     }

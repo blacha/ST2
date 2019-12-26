@@ -1,4 +1,5 @@
-class Base91 {
+/** Base91 is how the server communicates to the client */
+export class Base91 {
     data: string;
     offset: number;
 
