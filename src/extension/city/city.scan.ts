@@ -70,7 +70,7 @@ export class CityData {
             if (alliance == null) {
                 return cityData;
             }
-            cityData.alliance = alliance.name;
+            cityData.alliance = alliance.get_Name();
             cityData.allianceId = alliance.get_Id();
         }
         return cityData;

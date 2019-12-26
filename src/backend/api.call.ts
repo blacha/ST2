@@ -37,7 +37,8 @@ export abstract class ApiCall<T extends ApiFunc> {
             response = await this.handle(apiReq);
         } catch (e) {
             status = 500;
-            response = { status: 500, message: 'Internal server error' };
+            console.log('Failed', e);
+            response = { status: 500, message: 'Internal server error', error: e.message };
         }
 
         res.status(status);

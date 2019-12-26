@@ -15,5 +15,9 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /alliance/{document} {
+      allow read: if true;
+      allow write: if false;
+    }
   }
 }

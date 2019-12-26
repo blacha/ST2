@@ -15,6 +15,19 @@ export class BasePacker {
         },
     };
 
+    static multi = {
+        pack(...data: Array<number | string>) {
+            return data
+                .map(c => {
+                    if (typeof c === 'number') {
+                        return BasePacker.number.pack(c);
+                    }
+                    return c;
+                })
+                .join('.');
+        },
+    };
+
     static xy = {
         pack(x: number, y: number): number {
             return (y << 0x10) | x;
