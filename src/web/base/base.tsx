@@ -70,7 +70,7 @@ export class SiloTag extends React.Component<{ resource: 'tiberium' | 'crystal' 
             color = 'purple';
         }
         return (
-            <Tag color={color} title={`${count} Silo${count == 1 ? '' : 's'} touching ${size} ${resource} harvesters`}>
+            <Tag color={color} title={`${count} silo${count == 1 ? '' : 's'} touching ${size} ${resource} harvesters`}>
                 {count} x {size}
             </Tag>
         );

@@ -132,7 +132,7 @@ export class BaseStats {
             const tib = BaseIter.getSurroundings(this.base, x, y, undefined, [Tile.Tiberium]).length;
             const cry = BaseIter.getSurroundings(this.base, x, y, undefined, [Tile.Crystal]).length;
 
-            if (tib + cry > 3 && tib < 5 && cry < 5) {
+            if (tib + cry > 3 && tib > 0 && cry > 0) {
                 mixed[tib + cry] = (mixed[tib + cry] || 0) + 1;
                 return;
             }
