@@ -1,6 +1,7 @@
 import React = require('react');
 import 'antd/dist/antd.css';
 import Table from 'antd/es/table';
+import BackTop from 'antd/es/back-top';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Base } from '../../lib/base';
@@ -188,15 +189,18 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
 
     render() {
         return (
-            <Table
-                rowKey="id"
-                dataSource={this.state.info}
-                columns={AllianceColumns}
-                pagination={false}
-                bordered
-                loading={this.isLoading}
-                size="small"
-            />
+            <React.Fragment>
+                <Table
+                    rowKey="id"
+                    dataSource={this.state.info}
+                    columns={AllianceColumns}
+                    pagination={false}
+                    bordered
+                    loading={this.isLoading}
+                    size="small"
+                />
+                <BackTop></BackTop>
+            </React.Fragment>
         );
     }
 }
