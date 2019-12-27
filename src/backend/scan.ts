@@ -8,6 +8,12 @@ import { FirestoreAdmin } from './db.admin';
 import { DbLayout } from './db/db.base';
 import { BaseLayout, DbPlayer } from './db/db.player';
 
+const OneMinuteMs = 60 * 1000;
+const OneHourMs = 60 * OneMinuteMs;
+const OneDayMs = 25 * OneHourMs;
+/* Expire after 3 days */
+const LayoutExpireMs = 3 * OneDayMs;
+
 export class ApiScan extends ApiCall<ApiScanRequest> {
     path = '/api/v1/world/:worldId/scan/:scanId' as const;
     method = 'post' as const;
@@ -68,9 +74,15 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
                 layouts = existing.get('layouts') ?? {};
                 createdAt = existing.get('createdAt') ?? Date.now();
             }
-            for (const [xy, layout] of layoutsList.entries()) {
-                layouts[xy] = layout;
+            for (const [xy, layout] of Object.entries(layouts)) {
+                if (Date.now() - layout.updatedAt > LayoutExpireMs) {
+                    delete layouts[xy];
+                }
             }
+            for (const layout of layoutsList) {
+                layouts[layout.xy] = layout;
+            }
+
             const dbObject: DbLayout = { layouts, createdAt, updatedAt: Date.now() };
             await transaction.set(doc, dbObject, { merge: true });
         });
@@ -93,6 +105,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             if (baseJson.ownerId < 0) {
                 const xy = BasePacker.xy.packS(base.x, base.y);
                 layouts.set(xy, {
+                    xy,
                     layout: BasePacker.layout.pack(base.tiles),
                     updatedAt: Date.now(),
                 });

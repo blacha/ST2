@@ -10,6 +10,7 @@ export interface DbPlayer extends DbObject {
 }
 
 export interface BaseLayout {
+    xy: string;
     layout: string;
     updatedAt: number;
 }
