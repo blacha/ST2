@@ -14,6 +14,7 @@ import BackTop from 'antd/es/back-top';
 import { Base } from '../../lib/base/base';
 import { formatNumber } from '../../lib/util';
 import { StBreadCrumb } from '../util/breacrumb';
+import { timeSince } from '../time.util';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
@@ -21,6 +22,12 @@ interface PlayerState extends PlayerStats {
     state: ComponentLoading;
 }
 export const PlayerColumns = [
+    {
+        title: '#',
+        key: 'index',
+        render: (main: Base, record: any, index: number) => index + 1,
+        width: 35,
+    },
     {
         title: 'Name',
         dataIndex: '',
@@ -125,6 +132,13 @@ export const PlayerColumns = [
             },
         ],
     },
+    {
+        title: 'Updated',
+        dataIndex: '',
+        key: 'updated',
+        render: (base: Base) => timeSince(base.updatedAt),
+        sorter: (a: Base, b: Base) => a.updatedAt - b.updatedAt,
+    },
 ];
 
 export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
@@ -154,6 +168,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
             bases: [],
             production: new GameResources(),
             main: bases[0],
+            updatedAt: bases[0].updatedAt,
         };
         for (const base of bases) {
             if (base.owner == null) {

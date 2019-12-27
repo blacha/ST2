@@ -23,12 +23,13 @@ const BaseTileCss = {
     Cell: {
         Level: style({
             position: 'absolute',
-            bottom: '4px',
-            right: '4px',
+            top: '2px',
+            left: '2px',
             fontSize: '80%',
-            outline: '1px solid rgba(0,0,0,0.4)',
-            padding: '2px',
-            backgroundColor: 'rgba(209,209,209,0.4)',
+            border: '1px solid rgba(0,0,0,0.8)',
+            padding: '0 2px',
+            backgroundColor: 'rgba(209,209,209,0.8)',
+            borderRadius: '4px',
         }),
     },
 };

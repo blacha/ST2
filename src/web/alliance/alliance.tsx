@@ -16,6 +16,7 @@ import { Id } from '../../lib/id';
 import { BasePacker } from '../../lib/base/base.packer';
 import { CityLayout } from '../../api/city.layout';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
+import { timeSince } from '../time.util';
 
 export const AllianceCss = {
     Table: style({
@@ -37,6 +38,7 @@ export interface PlayerStats {
     bases: Base[];
     production: GameResources;
     main: Base;
+    updatedAt: number;
 }
 
 type AllianceProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
@@ -48,6 +50,12 @@ interface AllianceState {
 }
 
 export const AllianceColumns = [
+    {
+        title: '#',
+        key: 'index',
+        render: (main: Base, record: any, index: number) => index + 1,
+        width: 35,
+    },
     {
         title: 'Player',
         dataIndex: 'main',
@@ -155,6 +163,13 @@ export const AllianceColumns = [
             },
         ],
     },
+    {
+        title: 'Updated',
+        dataIndex: 'updatedAt',
+        key: 'updated',
+        render: (updatedAt: number) => timeSince(updatedAt),
+        sorter: (a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt,
+    },
 ];
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
     state: AllianceState = { info: [], state: ComponentLoading.Ready, alliance: { id: -1, name: '' }, worldId: -1 };
@@ -190,6 +205,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                         bases: [],
                         production: new GameResources(),
                         main: base,
+                        updatedAt: base.updatedAt,
                     };
                     playerSet.set(base.owner.id, current);
                 }
@@ -200,6 +216,9 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 current.production.add(base.info.production.total);
                 if (base.alliance) {
                     alliance.name = base.alliance.name;
+                }
+                if (base.updatedAt > current.updatedAt) {
+                    current.updatedAt = base.updatedAt;
                 }
             }
         }

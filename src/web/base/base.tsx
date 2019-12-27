@@ -1,20 +1,19 @@
+import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
+import Row from 'antd/es/row';
 import * as React from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Base } from '../../lib/base/base';
 import { BaseBuilder } from '../../lib/base/base.builder';
 import { FireStoreBases } from '../firebase';
-import { ViewBaseStats, ResourceIcon } from './base.stats';
+import { SiloTags } from '../silo/silo.tag';
+import { StBreadCrumb } from '../util/breacrumb';
+import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
-import Row from 'antd/es/row';
-import Col from 'antd/es/col';
 
-import { GameResource } from '../../lib/game.resources';
-import { SiloTags } from '../silo/silo.tag';
-import { StBreadCrumb } from '../util/breacrumb';
 const TileSize = 64;
 
 export const BaseCss = {
@@ -40,18 +39,6 @@ export enum ComponentLoading {
     Done,
 }
 type ViewBaseProps = RouteComponentProps<{ baseId?: string }>;
-function viewBaseAlliance(base: Base) {
-    if (base.alliance == null) {
-        return '';
-    }
-
-    return (
-        <Row type="flex" justify="space-between" gutter={[16, 16]}>
-            <Col>Alliance</Col>
-            <Col></Col>
-        </Row>
-    );
-}
 
 function FlexRow(key: string, value?: string | number | null | React.ReactNode, display = true) {
     if (value == null || display == false) {

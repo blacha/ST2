@@ -21,9 +21,9 @@ export abstract class ApiCall<T extends ApiFunc> {
     static bind<T>(app: express.Application, ApiFunc: ApiCall<any>) {
         app[ApiFunc.method](ApiFunc.path, ApiFunc.doRequest.bind(ApiFunc));
     }
-    static async validateRequest<T extends ApiFunc>(req: express.Request): Promise<ApiRequest<T>> {
+    static async validateRequest<T extends ApiFunc>(req: express.Request, id: string): Promise<ApiRequest<T>> {
         const apiReq = req as ApiRequest<any>;
-        apiReq.id = Id.generate();
+        apiReq.id = id;
         return apiReq;
     }
 
@@ -31,9 +31,10 @@ export abstract class ApiCall<T extends ApiFunc> {
         const startTime = Date.now();
         let status = 200;
         let response: T['response'] | null = null;
+        const id = Id.generate();
 
         try {
-            const apiReq = await ApiCall.validateRequest<T>(req);
+            const apiReq = await ApiCall.validateRequest<T>(req, id);
             response = await this.handle(apiReq);
         } catch (e) {
             status = 500;
@@ -41,6 +42,7 @@ export abstract class ApiCall<T extends ApiFunc> {
             response = { status: 500, message: 'Internal server error', error: e.message };
         }
 
+        res.header('x-request-id', id);
         res.status(status);
         res.json(response);
 

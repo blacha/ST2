@@ -14,7 +14,18 @@ import { SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
 
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
-const BaseCardCss = style({ padding: '4px' });
+const BaseCardCss = style({
+    padding: '4px',
+    //     boxShadow: `  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    // 0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    // 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    // 0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    // 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    // 0 100px 80px rgba(0, 0, 0, 0.12)`,
+    margin: '8px',
+    borderRadius: '8px',
+});
+const BaseCardInfoCss = style({ marginTop: '4px', padding: '0 4px' });
 
 interface ScanState {
     bases: Base[];
@@ -110,7 +121,7 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
                     <SiloTags minSize={4} resource={'mixed'} silos={this.state.silos} />
                 </div> */}
 
-                {this.state?.bases.slice(0, 34).map(base => {
+                {this.state?.bases.slice(0, 50).map(base => {
                     const timeAgo = timeSince(base.updatedAt);
                     const silos = base.info.stats;
                     return (
@@ -123,7 +134,7 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
                             <div style={{ width: 24 * Base.MaxX + 'px' }}>
                                 <ViewBaseMain base={base} key={base.id} size={24} />
                             </div>
-                            <div className={BaseCardCss}>
+                            <div className={BaseCardInfoCss}>
                                 <SiloTags minSize={4} resource={'tiberium'} silos={silos} />
                                 <SiloTags minSize={4} resource={'crystal'} silos={silos} />
                                 <SiloTags minSize={4} resource={'mixed'} silos={silos} />

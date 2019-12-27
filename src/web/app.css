@@ -16,13 +16,13 @@
 }
 
 .Content {
-    margin: auto;
+    margin: 24px auto;
     max-width: 112rem;
     padding: 0 2rem;
     width: 100%;
     position: relative;
     justify-content: center;
-    margin-top: 24px;
+    /* margin-top: 24px; */
 }
 
 .Faction-Nod {
