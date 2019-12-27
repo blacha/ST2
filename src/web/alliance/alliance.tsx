@@ -72,11 +72,12 @@ export const AllianceColumns = [
         sorter: (a: PlayerStats, b: PlayerStats) => a.main.faction.name.localeCompare(b.main.faction.name),
     },
     {
-        title: 'Bases',
+        title: 'B#',
         dataIndex: 'bases',
         key: 'bases',
         render: (bases: Base[]) => bases.length,
         sorter: (a: PlayerStats, b: PlayerStats) => a.bases.length - b.bases.length,
+        width: 70,
     },
     {
         title: 'Production',
