@@ -47,9 +47,19 @@ function viewBaseAlliance(base: Base) {
     return (
         <Row type="flex" justify="space-between" gutter={[16, 16]}>
             <Col>Alliance</Col>
-            <Col>
-                <Link to={`/world/${base.worldId}/alliance/${base.alliance.id}`}>{base.alliance.name}</Link>
-            </Col>
+            <Col></Col>
+        </Row>
+    );
+}
+
+function FlexRow(key: string, value?: string | number | null | React.ReactNode, display = true) {
+    if (value == null || display == false) {
+        return null;
+    }
+    return (
+        <Row type="flex" justify="space-between" gutter={[16, 16]}>
+            <Col>{key}</Col>
+            <Col>{value}</Col>
         </Row>
     );
 }
@@ -61,22 +71,14 @@ function viewBaseLocation(base: Base) {
     const silos = base.info.stats;
     return (
         <React.Fragment>
-            <Row type="flex" justify="space-between" gutter={[16, 16]}>
-                <Col>Owner</Col>
-                <Col>{base.owner}</Col>
-            </Row>
-            {viewBaseAlliance(base)}
-            <Row type="flex" justify="space-between" gutter={[16, 16]}>
-                <Col>World</Col>
-                <Col>{base.worldId}</Col>
-            </Row>
-            <Row type="flex" justify="space-between" gutter={[16, 16]}>
-                <Col>Location</Col>
-                <Col>
-                    {base.x}:{base.y}
-                </Col>
-            </Row>
-
+            {FlexRow('Owner', base.owner)}
+            {FlexRow(
+                'Alliance',
+                <Link to={`/world/${base.worldId}/alliance/${base.alliance?.id}`}>{base.alliance?.name}</Link>,
+                base.alliance != null,
+            )}
+            {FlexRow('World', base.worldId)}
+            {FlexRow('Location', `${base.x}:${base.y}`, base.x > 0)}
             <Row type="flex" justify="space-between" gutter={[4, 16]}>
                 <Col>Silos</Col>
                 <Col className={ResourceCountsCss}>

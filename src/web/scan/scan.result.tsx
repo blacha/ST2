@@ -1,24 +1,20 @@
 import React = require('react');
-import { RouteComponentProps } from 'react-router-dom';
+import Divider from 'antd/es/divider';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { DbLayout } from '../../backend/db/db.base';
 import { Base } from '../../lib/base/base';
+import { BaseExporter } from '../../lib/base/base.export';
 import { BasePacker } from '../../lib/base/base.packer';
+import { SiloCounts } from '../../lib/base/base.stats';
 import { ComponentLoading } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
 import { FireStoreLayouts } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
-import Divider from 'antd/es/divider';
 import { timeSince } from '../time.util';
-import { SiloCount, SiloCounts } from '../../lib/base/base.stats';
 
-const ScanListCss = style({
-    display: 'flex',
-    flexWrap: 'wrap',
-});
-const BaseCardCss = style({
-    padding: '4px',
-});
+const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
+const BaseCardCss = style({ padding: '4px' });
 
 interface ScanState {
     bases: Base[];
@@ -120,7 +116,9 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
                     return (
                         <div className={BaseCardCss} key={base.id}>
                             <Divider>
-                                {base.x}:{base.y}
+                                <Link to={`/base/${BaseExporter.toCncOpt(base)}`}>
+                                    {base.x}:{base.y}
+                                </Link>
                             </Divider>
                             <div style={{ width: 24 * Base.MaxX + 'px' }}>
                                 <ViewBaseMain base={base} key={base.id} size={24} />
