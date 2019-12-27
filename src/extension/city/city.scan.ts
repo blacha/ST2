@@ -145,13 +145,13 @@ export class CityData {
             }
 
             if (city.get_Version() > -1 && cached?.version == city.get_Version()) {
-                StStatic.Api.base(cached);
+                StStatic.api.base(cached);
                 return cached;
             }
 
             const layout = CityData.getCityData(city);
             if (layout != null) {
-                StStatic.Api.base(layout);
+                StStatic.api.base(layout);
                 this.setCache(city.get_Id(), layout);
                 return layout;
             }

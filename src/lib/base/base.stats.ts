@@ -65,6 +65,7 @@ export class BaseStats {
         if (this.computed.production == null) {
             this.computed.production = BaseProduction.getOutput(this.base);
         }
+        assert(this.computed.production != null, 'Failed to compute production');
         return this.computed.production;
     }
 

@@ -5,6 +5,7 @@ import { ViewAlliance } from './alliance/alliance';
 import { ViewBase } from './base/base';
 import { ViewLandingPage } from './landing/landing';
 import { ViewScan } from './scan/scan.result';
+import { ViewPlayer } from './player/player';
 
 const AppCss = {
     Main: style({
@@ -44,6 +45,8 @@ export class App extends React.Component {
                             <Route exact={true} path="/" component={ViewLandingPage} />
                             <Route path="/base/:baseId" component={ViewBase} />
                             <Route path="/base" component={ViewBase} />
+                            <Route path="/world/:worldId/base/:baseId" component={ViewBase} />
+                            <Route path="/world/:worldId/player/:playerId" component={ViewPlayer} />
                             <Route path="/world/:worldId/alliance/:allianceId" component={ViewAlliance} />
                             <Route path="/world/:worldId/layout/:scanId" component={ViewScan} />
                             <Redirect to="/" />

@@ -5,5 +5,5 @@ export const Version = {
     hash: '__HASH__',
 
     /** ST Icon */
-    icon: 'favicon.0012b310.png'
+    icon: 'favicon.0012b310.png',
 };

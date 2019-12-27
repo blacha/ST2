@@ -48,8 +48,9 @@ interface AllianceState {
 export const AllianceColumns = [
     {
         title: 'Player',
-        dataIndex: 'name',
+        dataIndex: 'main',
         key: 'name',
+        render: (main:Base) => <Link to={`/world/${main.worldId}/player/${main.owner?.id}`}>{main.owner?.name}</Link>,
         sorter: (a: PlayerStats, b: PlayerStats) => a.name.localeCompare(b.name),
     },
     {
@@ -164,7 +165,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
             .get();
 
         let name = '';
-        const playerSet = new Map<string, PlayerStats>();
+        const playerSet = new Map<number, PlayerStats>();
         for (const doc of result.docs) {
             const cities = (doc.get('bases') ?? {}) as Record<string, CityLayout>;
             const bases = Object.values(cities).map(c => BaseBuilder.load(c));
@@ -172,16 +173,16 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 if (base.owner == null) {
                     continue;
                 }
-                let current = playerSet.get(base.owner);
+                let current = playerSet.get(base.owner.id);
                 if (current == null) {
                     current = {
                         id: Id.generate(),
-                        name: base.owner,
+                        name: base.owner.name,
                         bases: [],
                         production: new GameResources(),
                         main: base,
                     };
-                    playerSet.set(base.owner, current);
+                    playerSet.set(base.owner.id, current);
                 }
                 if (current.main.levelOffense < base.levelOffense) {
                     current.main = base;

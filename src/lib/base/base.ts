@@ -51,7 +51,7 @@ export class Base {
     faction: Faction;
     offFaction: Faction;
     base: Buildable[];
-    owner: string | null;
+    owner: { id: number; name: string } | null;
 
     level = 0;
     levelOffense = 0;

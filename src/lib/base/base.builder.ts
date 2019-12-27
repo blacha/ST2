@@ -72,7 +72,7 @@ export class BaseBuilder {
      */
     static load(cncBase: CityLayout): Base {
         const output = new Base(cncBase.name, Faction.fromId(cncBase.faction));
-        output.owner = cncBase.owner;
+        output.owner = { name: cncBase.owner, id: cncBase.ownerId };
         output.x = cncBase.x;
         output.y = cncBase.y;
         output.id = BasePacker.id.pack(cncBase.worldId, cncBase.cityId);
@@ -80,6 +80,7 @@ export class BaseBuilder {
             output.alliance = { id: cncBase.allianceId, name: cncBase.alliance };
         }
         output.worldId = cncBase.worldId;
+        output.updatedAt = cncBase.timestamp;
         output.setBaseLevels(cncBase.level, cncBase.levelOff, cncBase.levelDef);
 
         for (let y = 0; y < Base.MaxY; y++) {

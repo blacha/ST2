@@ -16,17 +16,17 @@ declare const ClientLib: ClientLibStatic;
 
 export class ShockrTools {
     id = Id.generate();
-    Version = Version;
-    Base = Base;
-    Builder = BaseBuilder;
+    version = Version;
+    base = Base;
+    builder = BaseBuilder;
 
-    Api = new ClientApi();
-    Layout = new LayoutScanner();
-    KillInfo = new KillInfo();
-    VisitBase = new VisitBaseButton();
-    Player = new PlayerInfo();
+    api = new ClientApi();
+    layout = new LayoutScanner();
+    plunder = new KillInfo();
+    button = new VisitBaseButton();
+    player = new PlayerInfo();
 
-    Modules: StModule[] = [this.Api, this.Layout, this.KillInfo, this.VisitBase, this.Player];
+    Modules: StModule[] = [this.api, this.layout, this.plunder, this.button, this.player];
 
     async start() {
         let failCount = 0;

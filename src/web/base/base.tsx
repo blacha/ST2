@@ -71,7 +71,7 @@ function viewBaseLocation(base: Base) {
     const silos = base.info.stats;
     return (
         <React.Fragment>
-            {FlexRow('Owner', base.owner)}
+            {FlexRow('Owner', base.owner?.name, base.owner != null)}
             {FlexRow(
                 'Alliance',
                 <Link to={`/world/${base.worldId}/alliance/${base.alliance?.id}`}>{base.alliance?.name}</Link>,

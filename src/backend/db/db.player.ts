@@ -15,5 +15,5 @@ export interface BaseLayout {
 }
 
 export interface DbLayout extends DbObject {
-    layouts: Record<string, BaseLayout>;
+    layouts: Record<string, BaseLayout>; // xy
 }

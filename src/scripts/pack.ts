@@ -15,8 +15,8 @@ function writeAssets(dst: string, output: NccOutput) {
     const code = lines
         .join('\n')
         .replace(' __dirname + ', '') // Hack to make NCC pack for web!
-        .replace('__VERSION__', packageJson.version)
-        .replace('__HASH__', gitRev.long());
+        .replace(/__VERSION__/g, packageJson.version)
+        .replace(/__HASH__/g, gitRev.short());
 
     fs.writeFileSync(dst, code);
     if (output.map) {

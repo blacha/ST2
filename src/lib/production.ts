@@ -41,7 +41,6 @@ export class BaseProduction {
         Base.buildingForEach((x, y) => BaseProduction.getBuildingOutput(output, base, x, y));
         output.total.add(output.cont);
         output.total.add(output.pkg);
-        output.total.add(output.alliance);
         return output;
     }
 }

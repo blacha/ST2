@@ -5,8 +5,8 @@ const ExtensionHeader = `// ==UserScript==
 // @name            Shockr - Tiberium Alliances Tools
 // @author          Shockr <shockr@chard.com>
 // @description     Tools to work with Tiberium alliances https://shockrtools.web.app/
-// @include        http*://prodgame*.alliances.commandandconquer.com/*/index.aspx*
-// @include        http*://cncapp*.alliances.commandandconquer.com/*/index.aspx*
+// @include         http*://prodgame*.alliances.commandandconquer.com/*/index.aspx*
+// @include         http*://cncapp*.alliances.commandandconquer.com/*/index.aspx*
 // @grant           GM_updatingEnabled
 // @grant           unsafeWindow
 // @version         ${Version.version}
