@@ -1,6 +1,6 @@
 {
   "name": "shockrtools",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "scripts": {
     "package": "rm -fr dist/ && mkdir dist && npm run package-ext && npm run package-func && parcel build static/index.html",
