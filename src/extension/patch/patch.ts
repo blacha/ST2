@@ -22,16 +22,16 @@ export interface PatchedCityUnits {
 
 export class ClientLibPatcher {
     static hasPatchedCityUnits(obj: any): obj is PatchedCityUnits {
-        return obj != null && typeof obj['$OffenseUnits'] == 'function';
+        return obj != null && typeof obj['$OffenseUnits'] !== 'undefined';
     }
     static hasPatchedCampType(obj: any): obj is PatchedCampType {
-        return obj != null && typeof obj['$CampType'] == 'function';
+        return obj != null && typeof obj['$CampType'] !== 'undefined';
     }
     static hasPatchedId(obj: any): obj is PatchedId {
-        return obj != null && typeof obj['$Id'] == 'function';
+        return obj != null && typeof obj['$Id'] !== 'undefined';
     }
     static hasPatchedAllianceId(obj: any): obj is PatchedWorldObjectCity {
-        return obj != null && typeof obj['$AllianceId'] == 'function';
+        return obj != null && typeof obj['$AllianceId'] !== 'undefined';
     }
 
     static getFromKey(keys: string[], current: any = window): any {
@@ -77,8 +77,14 @@ export class ClientLibPatcher {
             return;
         }
 
-        console.log('DefineProperty', currentProto, funcName, matches[1]);
+        // Make sure the property does not already exist
+        if (typeof currentProto.prototype[funcName] !== 'undefined') {
+            console.log('PropertyExists', funcName, matches[1], typeof currentProto.prototype[funcName]);
+            return;
+        }
+        console.log('DefineProperty', funcName, matches[1], typeof currentProto.prototype[funcName]);
         Object.defineProperty(currentProto.prototype, funcName, {
+            configurable: true,
             get: function() {
                 return this[matches[1]];
             },

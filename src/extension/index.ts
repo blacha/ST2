@@ -10,10 +10,12 @@ import { VisitBaseButton } from './visit/visit.base';
 import { PlayerInfo } from './player/player.info';
 import { Version } from '../version';
 import { ClientApi } from './api/client.api';
+import { Id } from '../lib/id';
 
 declare const ClientLib: ClientLibStatic;
 
 export class ShockrTools {
+    id = Id.generate();
     Version = Version;
     Base = Base;
     Builder = BaseBuilder;
@@ -38,10 +40,10 @@ export class ShockrTools {
 
         // Patch the client lib before starting the modules
         ClientLibPatcher.patch();
-        console.log('st:starting');
+        console.log('st:starting', this.id);
         for (const mod of this.Modules) {
             if (mod.start) {
-                console.log('\tstart' + mod.name);
+                console.log('\tstart' + mod.name, this.id);
                 await mod.start(this);
             }
         }
@@ -74,14 +76,14 @@ export class ShockrTools {
     }
 
     async stop() {
-        console.log('st:stopping');
+        console.log('st:stopping', this.id);
         for (const mod of this.Modules) {
             if (mod.stop) {
-                console.log('\tstop', mod.name);
+                console.log('\tstop', mod.name, this.id);
                 await mod.stop();
             }
         }
-        console.log('st:stopped');
+        console.log('st:stopped', this.id);
     }
 }
 
