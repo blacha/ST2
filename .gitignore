@@ -6,3 +6,4 @@ dist/
 gamedata.*.json
 functions/lib
 .firebase
+output
