@@ -5,6 +5,7 @@ import { ClientLibStatic, RegionObject } from '../@types/client.lib';
 import { VisObjectType } from '../@types/client.lib.const';
 import { CityData } from '../city/city.scan';
 import { StModule } from '../module';
+import { Version } from '../../version';
 
 // Visit base can be used on anything in range
 // qx.core.Init.getApplication().getPlayArea().setView(ClientLib.Data.PlayerAreaViewMode.pavmAllianceBase, cities.get_CurrentCityId(),0,0)
@@ -105,7 +106,7 @@ export class VisitBaseButton implements StModule {
                 continue;
             }
 
-            const button = new qx.ui.form.Button('Scan', 'https://shockrtools.web.app/128.0012b310.png') as QxButton;
+            const button = new qx.ui.form.Button('Scan', `https://shockrtools.web.app/${Version.icon}`) as QxButton;
 
             button.getChildControl('icon').set({ width: 16, height: 16, scale: true }); // Force icon to be 16x16 px
             button.addListener('execute', async () => {

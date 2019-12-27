@@ -11,7 +11,7 @@ const ExtensionHeader = `// ==UserScript==
 // @grant           unsafeWindow
 // @version         ${Version.version}
 // @downloadURL     https://shockrtools.web.app/extension/st.user.js
-// @icon            https://shockrtools.web.app/128.bb5c315c.png
+// @icon            https://shockrtools.web.app/${Version.icon}
 // ==/UserScript==`;
 
 function makeInjector(code: string) {
