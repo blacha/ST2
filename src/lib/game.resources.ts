@@ -20,7 +20,7 @@ export class GameResources implements Resources {
     power = 0;
     credits = 0;
 
-    public total() {
+    public get total(): number {
         return this.power + this.tiberium + this.crystal + this.credits;
     }
 

@@ -14,6 +14,7 @@ import Col from 'antd/es/col';
 
 import { GameResource } from '../../lib/game.resources';
 import { SiloTags } from '../silo/silo.tag';
+import { StBreadCrumb } from '../util/breacrumb';
 const TileSize = 64;
 
 export const BaseCss = {
@@ -71,7 +72,11 @@ function viewBaseLocation(base: Base) {
     const silos = base.info.stats;
     return (
         <React.Fragment>
-            {FlexRow('Owner', base.owner?.name, base.owner != null)}
+            {FlexRow(
+                'Owner',
+                <Link to={`/world/${base.worldId}/player/${base.owner?.id}`}>{base.owner?.name}</Link>,
+                base.owner != null,
+            )}
             {FlexRow(
                 'Alliance',
                 <Link to={`/world/${base.worldId}/alliance/${base.alliance?.id}`}>{base.alliance?.name}</Link>,
@@ -136,22 +141,30 @@ export class ViewBase extends React.Component<ViewBaseProps> {
 
         const baseWidth = TileSize * Base.MaxX + 'px';
         return (
-            <div className={BaseCss.Base}>
-                <Divider>{base.name}</Divider>
+            <React.Fragment>
+                <StBreadCrumb
+                    worldId={base.worldId}
+                    alliance={base.alliance}
+                    player={base.owner}
+                    base={{ id: base.id, name: base.name }}
+                />
+                <div className={BaseCss.Base}>
+                    <Divider>{base.name}</Divider>
 
-                <div style={{ width: baseWidth }}>
-                    <div>{viewBaseLocation(base)}</div>
                     <div style={{ width: baseWidth }}>
-                        <ViewBaseStats base={base} />
+                        <div>{viewBaseLocation(base)}</div>
+                        <div style={{ width: baseWidth }}>
+                            <ViewBaseStats base={base} />
+                        </div>
+                    </div>
+
+                    <div style={{ width: baseWidth }}>
+                        <ViewBaseMain base={base} size={TileSize} />
+                        <ViewBaseDef base={base} size={TileSize} />
+                        <ViewBaseOff base={base} size={TileSize} />
                     </div>
                 </div>
-
-                <div style={{ width: baseWidth }}>
-                    <ViewBaseMain base={base} size={TileSize} />
-                    <ViewBaseDef base={base} size={TileSize} />
-                    <ViewBaseOff base={base} size={TileSize} />
-                </div>
-            </div>
+            </React.Fragment>
         );
     }
 }

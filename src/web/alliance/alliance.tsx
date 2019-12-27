@@ -15,6 +15,7 @@ import { FireStoreBases, FireStorePlayer } from '../firebase';
 import { Id } from '../../lib/id';
 import { BasePacker } from '../../lib/base/base.packer';
 import { CityLayout } from '../../api/city.layout';
+import { IdName, StBreadCrumb } from '../util/breacrumb';
 
 export const AllianceCss = {
     Table: style({
@@ -41,7 +42,8 @@ export interface PlayerStats {
 type AllianceProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
 interface AllianceState {
     info: PlayerStats[];
-    name: string;
+    worldId: number;
+    alliance: IdName;
     state: ComponentLoading;
 }
 
@@ -50,7 +52,7 @@ export const AllianceColumns = [
         title: 'Player',
         dataIndex: 'main',
         key: 'name',
-        render: (main:Base) => <Link to={`/world/${main.worldId}/player/${main.owner?.id}`}>{main.owner?.name}</Link>,
+        render: (main: Base) => <Link to={`/world/${main.worldId}/player/${main.owner?.id}`}>{main.owner?.name}</Link>,
         sorter: (a: PlayerStats, b: PlayerStats) => a.name.localeCompare(b.name),
     },
     {
@@ -144,11 +146,18 @@ export const AllianceColumns = [
                 sorter: (a: PlayerStats, b: PlayerStats) =>
                     a.main.info.production.total.power - b.main.info.production.total.power,
             },
+            {
+                title: 'Cost',
+                dataIndex: 'main',
+                key: 'mainCost',
+                render: (main: Base) => formatNumber(main.info.cost.total.total),
+                sorter: (a: PlayerStats, b: PlayerStats) => a.main.info.cost.total.total - b.main.info.cost.total.total,
+            },
         ],
     },
 ];
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
-    state: AllianceState = { info: [], state: ComponentLoading.Ready, name: '' };
+    state: AllianceState = { info: [], state: ComponentLoading.Ready, alliance: { id: -1, name: '' }, worldId: -1 };
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
@@ -164,7 +173,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
             .limit(51)
             .get();
 
-        let name = '';
+        const alliance = { id: allianceId, name: '' };
         const playerSet = new Map<number, PlayerStats>();
         for (const doc of result.docs) {
             const cities = (doc.get('bases') ?? {}) as Record<string, CityLayout>;
@@ -190,11 +199,11 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 current.bases.push(base);
                 current.production.add(base.info.production.total);
                 if (base.alliance) {
-                    name = base.alliance.name;
+                    alliance.name = base.alliance.name;
                 }
             }
         }
-        this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done, name });
+        this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done, alliance, worldId });
     }
 
     get isLoading() {
@@ -202,9 +211,22 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
     }
 
     render() {
+        if (this.state == null || this.isLoading) {
+            return (
+                <Table
+                    rowKey="id"
+                    dataSource={this.state.info}
+                    columns={AllianceColumns}
+                    pagination={false}
+                    bordered
+                    loading={this.isLoading}
+                    size="small"
+                />
+            );
+        }
         return (
             <React.Fragment>
-                <Divider>{this.state.name}</Divider>
+                <StBreadCrumb worldId={this.state.worldId} alliance={this.state.alliance} />
                 <Table
                     rowKey="id"
                     dataSource={this.state.info}

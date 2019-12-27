@@ -51,7 +51,9 @@ export class Base {
     faction: Faction;
     offFaction: Faction;
     base: Buildable[];
-    owner: { id: number; name: string } | null;
+
+    owner?: { id: number; name: string };
+    alliance?: { id: number; name: string };
 
     level = 0;
     levelOffense = 0;
@@ -61,7 +63,7 @@ export class Base {
 
     x = -1;
     y = -1;
-    worldId: number | null = null;
+    worldId = -1;
     /** Time the base was last seen */
     updatedAt: number;
 
@@ -69,8 +71,6 @@ export class Base {
     upgrades: number[];
 
     info: BaseStats;
-
-    alliance: { id: number; name: string } | null = null;
 
     constructor(name = 'Base', faction: Faction = Faction.Gdi) {
         this.name = name;
@@ -81,7 +81,6 @@ export class Base {
         this.base = [];
 
         this.id = Id.generate();
-        this.owner = null;
         this.info = new BaseStats(this);
         this.buildings = new BaseBuildings(this);
         this.updatedAt = 0;
