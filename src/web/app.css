@@ -1,5 +1,5 @@
 .Icon {
-    background: url(../../static/128.png) no-repeat;
+    background: url(../../static/favicon.png) no-repeat;
     width: 32px;
     height: 32px;
     background-size: 100%;
@@ -23,7 +23,6 @@
     position: relative;
     justify-content: center;
 }
-
 
 .Faction-Nod {
     background-image: url(../../static/icon/icon_nod.png);
