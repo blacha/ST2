@@ -126,12 +126,12 @@ function writeDeObs() {
     let foundClientLib = false;
     for (const line of clientLibLines) {
         // Qx data has started, split into separate file
-        if (line.startsWith('qx.$$packageData')) {
+        if (line.startsWith('(function()')) {
             output = outputQx;
         }
         // Skip the GAMEDATA at the start of the file
         if (!foundClientLib) {
-            if (line.startsWith('ClientLib')) {
+            if (line.startsWith('if (typeof($I)')) {
                 foundClientLib = true;
             } else {
                 continue;
@@ -185,7 +185,7 @@ function writeDeObs() {
     console.log('OutputLines', { clientLib: outputClientLib.length, qx: outputQx.length });
     const currentDay = new Date().toISOString().substr(0, 10);
     fs.writeFileSync(`${OutputPath}/${currentDay}-clientlib.js`, outputClientLib.join('\n'));
-    fs.writeFileSync(`${OutputPath}/${currentDay}-clientlib.js`, outputQx.join('\n'));
+    fs.writeFileSync(`${OutputPath}/${currentDay}-qx.js`, outputQx.join('\n'));
 }
 
 console.log('Mappings', Mappings.size);
