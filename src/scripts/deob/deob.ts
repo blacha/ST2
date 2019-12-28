@@ -66,7 +66,7 @@ for (const ll of clientLibLines) {
         // Attempt to find internal protonames
         const protoMatch = line.match(protoRegexp) || line.match(staticRegexp);
         if (protoMatch != null) {
-            const [fullLine, targetProto, functionName, otherProto, sourceFunctionName] = protoMatch;
+            const [, targetProto, functionName, , sourceFunctionName] = protoMatch;
 
             const otherMapping = Mappings.get(sourceFunctionName);
             if (otherMapping) {
