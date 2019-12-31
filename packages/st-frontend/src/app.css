@@ -1,0 +1,62 @@
+.Icon {
+    background: url(../static/favicon.png) no-repeat;
+    width: 32px;
+    height: 32px;
+    background-size: 100%;
+    margin-right: 16px;
+}
+
+.Container {
+    height: 100%;
+    max-width: 80rem;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    font-size: 140%;
+}
+
+.Content {
+    margin: 24px auto;
+    max-width: 112rem;
+    padding: 0 2rem;
+    width: 100%;
+    position: relative;
+    justify-content: center;
+    /* margin-top: 24px; */
+}
+
+.Faction-Nod {
+    background-image: url(../static/icon/icon_nod.png);
+}
+
+.Faction-Gdi {
+    background-image: url(../static/icon/icon_gdi.png);
+}
+
+.Faction-Forgotten {
+    background-image: url(../static/icon/icon_for.png);
+}
+
+.Resource-Tiberium {
+    background-image: url(../static/icon/icon_tiberium.png);
+}
+
+.Resource-Power {
+    background-image: url(../static/icon/icon_power.png);
+}
+
+.Resource-Crystal {
+    background-image: url(../static/icon/icon_crystal.png);
+}
+
+.Resource-Credits {
+    background-image: url(../static/icon/icon_credits.png);
+}
+
+.Tile-Tiberium {
+    background-image: url(../static/icon/tile_tiberium.png);
+}
+
+.Tile-Crystal {
+    background-image: url(../static/icon/tile_crystal.png);
+}

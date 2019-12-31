@@ -1,0 +1,20 @@
+{
+  "name": "@st/shared",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Shared utils for shockrtools",
+  "scripts": {
+    "build": "tsc --pretty"
+  },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "@cncta/clientlib": "0.1.0",
+    "base62": "^2.0.1",
+    "bblog": "^2.0.0",
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {},
+  "author": "Blayne Chard <blayne@chard.com>",
+  "license": "MIT"
+}

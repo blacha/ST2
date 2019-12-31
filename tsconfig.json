@@ -1,20 +1,16 @@
 {
-    "compilerOptions": {
-        "target": "es2017",
-        "module": "commonjs",
-        "removeComments": true,
-        "outDir": "build/",
-        "sourceMap": true,
-        "strict": true,
-        "declaration": true,
-        "declarationMap": true,
-        "resolveJsonModule": true,
-        "jsx": "react"
-    },
-    "exclude": [
-        "build/",
-        "node_modules",
-        "game"
-    ],
-    "include": ["src/**/*.ts*"]
+    "files": [],
+    "references": [{
+        "path": "./packages/clientlib"
+    }, {
+        "path": "./packages/shared"
+    },{
+        "path": "./packages/packer"
+    }, {
+        "path": "./packages/st-backend"
+    },{
+        "path": "./packages/st-frontend"
+    },{
+        "path": "./packages/st-extension"
+    }]
 }
