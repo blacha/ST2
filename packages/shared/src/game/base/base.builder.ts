@@ -75,6 +75,7 @@ export class BaseBuilder {
         output.x = city.x;
         output.y = city.y;
         output.id = NumberPacker.pack([city.worldId, city.cityId]);
+        output.cityId = city.cityId;
         output.alliance = city.alliance;
         output.worldId = city.worldId;
         output.updatedAt = city.timestamp;

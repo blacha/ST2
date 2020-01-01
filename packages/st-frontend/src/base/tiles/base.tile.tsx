@@ -4,6 +4,12 @@ import { BackgroundImage } from '../../css.util';
 import { Tile, Base } from '@st/shared';
 import { viewUnit } from '../units';
 
+const FlexCenter = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+};
+
 const BaseTileCss = {
     Base: style({
         position: 'relative',
@@ -26,15 +32,14 @@ const BaseTileCss = {
             top: '2px',
             left: '0px',
             fontSize: '80%',
-            // color: 'rgba(255,255,255,0.87)',
-            // border: '1px solid rgba(0,0,0,0.8)',
-            // padding: '0 2px',
-            // backgroundColor: 'rgba(209,209,209,0.8)',
-            // borderRadius: '4px',
-            minWidth: '16px',
-            fontWeight: 'bold',
+            border: '1px solid rgba(0,0,0,0.8)',
+            backgroundColor: 'rgba(209,209,209,0.8)',
+            borderRadius: '4px',
+            minWidth: '20px',
+            minHeight: '20px',
             textAlign: 'center',
             textShadow: '1px 1px 4px rgba(0,0,0,0.6)',
+            ...FlexCenter,
         }),
     },
 };

@@ -42,7 +42,7 @@ export class App extends React.Component {
                             <Route exact={true} path="/" component={ViewLandingPage} />
                             <Route path="/base/:baseId" component={ViewBase} />
                             <Route path="/base" component={ViewBase} />
-                            <Route path="/world/:worldId/base/:baseId" component={ViewBase} />
+                            <Route path="/world/:worldId/player/:playerId/base/:baseId" component={ViewBase} />
                             <Route path="/world/:worldId/player/:playerId" component={ViewPlayer} />
                             <Route path="/world/:worldId/alliance/:allianceId" component={ViewAlliance} />
                             <Route path="/world/:worldId/layout/:scanId" component={ViewScan} />

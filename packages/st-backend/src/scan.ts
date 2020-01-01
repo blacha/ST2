@@ -122,7 +122,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
                 players.set(baseJson.owner.id, existing);
             }
 
-            const baseId = NumberPacker.pack([worldId, baseJson.cityId]);
+            const baseId = NumberPacker.pack([worldId, baseJson.cityId, Math.floor(Date.now() / 1000)]);
             const BaseCollection = FirestoreAdmin.collection('base');
             await BaseCollection.doc(baseId).set(baseJson);
             output.push(baseId);

@@ -27,7 +27,9 @@ export const PlayerColumns = [
         title: 'Name',
         dataIndex: '',
         key: 'name',
-        render: (base: Base) => <Link to={`/world/${base.worldId}/base/${base.id}`}>{base.name}</Link>,
+        render: (base: Base) => (
+            <Link to={`/world/${base.worldId}/player/${base.owner?.id}/base/${base.cityId}`}>{base.name}</Link>
+        ),
         sorter: (a: Base, b: Base) => a.name.localeCompare(b.name),
     },
     {
@@ -147,7 +149,6 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
 
     async loadPlayer(worldId: number, playerId: number) {
         const docId = NumberPacker.pack([worldId, playerId]);
-        console.log(docId);
         this.setState({ state: ComponentLoading.Loading });
         const result = await FireStorePlayer.doc(docId).get();
         if (!result.exists) {
@@ -165,6 +166,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
             main: bases[0],
             updatedAt: bases[0].updatedAt,
         };
+
         for (const base of bases) {
             if (base.owner == null) {
                 continue;
@@ -175,7 +177,6 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
                 current.main = base;
             }
             current.bases.push(base);
-            console.log(base.info.production);
             current.production.add(base.info.production.total);
         }
 

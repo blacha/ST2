@@ -212,7 +212,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 if (base.alliance) {
                     alliance.name = base.alliance.name;
                 }
-                if (base.updatedAt > current.updatedAt) {
+                if (base.updatedAt < current.updatedAt) {
                     current.updatedAt = base.updatedAt;
                 }
             }

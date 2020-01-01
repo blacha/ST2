@@ -4,15 +4,15 @@ import Row from 'antd/es/row';
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { FireStoreBases } from '../firebase';
+import { FireStoreBases, FireStorePlayer } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { StBreadCrumb } from '../util/breacrumb';
 import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
-import { Base, BaseBuilder } from '@st/shared';
-import { BaseX, BaseY } from '@cncta/clientlib';
+import { Base, BaseBuilder, NumberPacker } from '@st/shared';
+import { BaseX, BaseY, StCity } from '@cncta/clientlib';
 const TileSize = 64;
 
 export const BaseCss = {
@@ -37,7 +37,7 @@ export enum ComponentLoading {
     Failed,
     Done,
 }
-type ViewBaseProps = RouteComponentProps<{ baseId?: string }>;
+type ViewBaseProps = RouteComponentProps<{ baseId?: string; playerId?: string; worldId?: string }>;
 
 function FlexRow(key: string, value?: string | number | null | React.ReactNode, display = true) {
     if (value == null || display == false) {
@@ -86,23 +86,41 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     state = { base: new Base(), state: ComponentLoading.Ready };
 
     componentDidMount() {
-        const { baseId } = this.props.match.params;
+        const { baseId, playerId, worldId } = this.props.match.params;
         if (baseId == null) {
             return;
         }
-
         if (baseId.indexOf('|') > -1) {
             this.setState({ base: BaseBuilder.fromCnCOpt(baseId), state: ComponentLoading.Done });
+            return;
+        }
+
+        this.setState({ base: new Base(), state: ComponentLoading.Loading });
+        if (playerId != null && worldId != null) {
+            this.loadPlayerBase(Number(playerId), Number(baseId), Number(worldId));
         } else {
-            this.setState({ base: new Base(), state: ComponentLoading.Loading });
             this.loadBase(baseId);
         }
     }
 
+    async loadPlayerBase(playerId: number, baseId: number, worldId: number) {
+        const docId = NumberPacker.pack([worldId, playerId]);
+        const result = await FireStorePlayer.doc(docId).get();
+        if (!result.exists) {
+            this.setState({ state: ComponentLoading.Failed });
+            return;
+        }
+        const cities = (result.get('bases') ?? {}) as Record<string, StCity>;
+        const cityId = NumberPacker.pack(baseId);
+        if (cities[cityId] == null) {
+            this.setState({ state: ComponentLoading.Failed });
+            return;
+        }
+        this.setState({ base: BaseBuilder.load(cities[cityId]), state: ComponentLoading.Done });
+    }
+
     async loadBase(baseId: string) {
-        console.log('LoadBase', baseId);
         const doc = await FireStoreBases.doc(baseId).get();
-        console.log('Loaded', doc, doc.exists, doc.data());
         if (!doc.exists) {
             this.setState({ base: this.state.base, state: ComponentLoading.Failed });
             return;

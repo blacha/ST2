@@ -49,6 +49,8 @@ export class Base {
 
     x = -1;
     y = -1;
+    /** Cnc CityId */
+    cityId: number = -1;
     worldId = -1;
     /** Time the base was last seen */
     updatedAt: number;
