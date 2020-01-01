@@ -6,7 +6,6 @@ import {
     NpcCampType,
     Point,
     VisViewMode,
-    LocalCache,
 } from '@cncta/clientlib';
 import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';

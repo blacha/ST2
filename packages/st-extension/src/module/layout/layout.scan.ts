@@ -1,7 +1,5 @@
 import { CityScannerUtil, CityUtil, ClientLibPatcher, NpcCampType, StCity, WorldObjectType } from '@cncta/clientlib';
-import { St } from '../../st';
 import { CityCache } from '../city.cache';
-import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
 
 export class LayoutScanner extends StModuleBase {

@@ -34,7 +34,7 @@ export interface QxElement {
     getDomElement(): Element;
 }
 
-export interface QxLabel extends QxWidget {}
+export type QxLabel = QxWidget;
 
 export interface QxPlayArea extends QxWidget {
     setView: (viewMode: PlayerAreaViewMode, cityId: number, a: unknown, b: unknown) => void;
@@ -82,7 +82,9 @@ export interface QxDecorator extends QxMSingleBorder {
     set(obj: Partial<QxDecoratorStyle>): void;
 }
 
-export interface QxLayout {}
+export interface QxLayout {
+    getSizeHint(): {} | null;
+}
 export interface QxLayoutHBox extends QxLayout {
     getSpacing(): number;
 }

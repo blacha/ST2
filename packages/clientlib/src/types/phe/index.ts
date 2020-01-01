@@ -1,4 +1,4 @@
-import { ClientLibEvent, ClientLibEventName, ClientLibEventSource } from '../clientlib';
+import { ClientLibEvent, ClientLibEventName, ClientLibEventEmitter } from '../clientlib';
 
 // TODO add more event names
 
@@ -6,14 +6,14 @@ export interface PheStatic {
     cnc: {
         Util: {
             attachNetEvent(
-                source: ClientLibEventSource,
+                source: ClientLibEventEmitter,
                 evtName: ClientLibEventName,
                 eventFunction: ClientLibEvent,
                 thisArg: any,
                 callback: Function,
             ): void;
             detachNetEvent(
-                source: ClientLibEventSource,
+                source: ClientLibEventEmitter,
                 evtName: ClientLibEventName,
                 eventFunction: ClientLibEvent,
                 thisArg: any,

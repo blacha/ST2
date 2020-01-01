@@ -1,4 +1,4 @@
-import { ClientLibEventSource, PlayerAreaViewMode } from './index';
+import { ClientLibEventEmitter } from './event';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -71,14 +71,14 @@ export interface VisObject {
     get_Coordinates(): number;
 }
 
-export interface ClientLibVisRegion extends ClientLibEventSource {
+export interface ClientLibVisRegion extends ClientLibEventEmitter {
     get_GridWidth(): number;
     get_GridHeight(): number;
     /** Number between 0-1, 1 is full zoomed in */
     get_ZoomFactor(): number;
 }
 
-export interface ClientLibVisMain extends ClientLibEventSource {
+export interface ClientLibVisMain extends ClientLibEventEmitter {
     CenterGridPosition(x: number, y: number): void;
     Update(): void;
     ViewUpdate(): void;

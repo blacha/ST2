@@ -2,6 +2,7 @@ import { ClientLibSingleton } from './util';
 import { ClientLibVisMain, VisObjectType } from './vis';
 import { ClientLibMathUtil } from './math';
 import { ClientLibMainData } from './main.data';
+import { ClientLibEvent } from './event';
 
 export enum PlayerAreaViewMode {
     pavmNone = 0,
@@ -20,10 +21,6 @@ export enum PlayerAreaViewMode {
     pavmAllianceBase = 13,
     pavmAllianceBaseDefense = 14,
 }
-
-export interface ClientLibEvent {}
-export type ClientLibEventName = 'SelectionChange' | 'PositionChange' | 'ZoomFactorChange' | 'ViewModeChange';
-export interface ClientLibEventSource {}
 
 export interface ClientLibStatic {
     API: {};
@@ -57,3 +54,4 @@ export * from './math';
 export * from './util';
 export * from './vis';
 export * from './main.data';
+export * from './event';

@@ -1,8 +1,6 @@
-import { StCity, CityScannerUtil, CityUtil, ClientLibStatic } from '@cncta/clientlib';
-import { St } from '../../st';
-import { StModuleState } from '../module';
-import { StModuleBase } from '../module.base';
+import { CityScannerUtil, CityUtil, ClientLibStatic, StCity } from '@cncta/clientlib';
 import { CityCache } from '../city.cache';
+import { StModuleBase } from '../module.base';
 
 declare const ClientLib: ClientLibStatic;
 

@@ -60,7 +60,7 @@ export class CityUtil {
             }
         }
 
-        return mainCity!;
+        return mainCity as ClientLibCity;
     }
     /**
      * Get a list of all known allied cities

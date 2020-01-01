@@ -2,7 +2,6 @@ import { StCity } from '@cncta/clientlib';
 import { Config } from '@st/shared';
 import { StModuleBase } from '../module/module.base';
 import { BatchBaseSender } from './batcher.base';
-import { StModuleState } from '../module/module';
 
 export class ClientApi extends StModuleBase {
     name = 'api';
@@ -13,8 +12,6 @@ export class ClientApi extends StModuleBase {
     async base(base: StCity): Promise<string> {
         return this.baseSender.queue(base);
     }
-
-    async onStart() {}
 
     async onStop() {
         await this.baseSender.flush();

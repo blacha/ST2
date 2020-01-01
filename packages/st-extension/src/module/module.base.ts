@@ -1,12 +1,12 @@
 import { StModuleHooks, StModuleState } from './module';
 import { St } from '../st';
 import { Id } from '@st/shared';
-import { ClientLibEvent, PheStatic, ClientLibEventSource, ClientLibEventName } from '@cncta/clientlib';
+import { ClientLibEvent, PheStatic, ClientLibEventEmitter, ClientLibEventName } from '@cncta/clientlib';
 
 declare const phe: PheStatic;
 
 export interface EventContext {
-    source: ClientLibEventSource;
+    source: ClientLibEventEmitter;
     name: ClientLibEventName;
     type: ClientLibEvent;
     cb: Function;
@@ -40,7 +40,7 @@ export abstract class StModuleBase implements StModuleHooks {
         this.state = StModuleState.Stopped;
     }
 
-    addEvent(source: ClientLibEventSource, name: ClientLibEventName, type: ClientLibEvent, cb: Function) {
+    addEvent(source: ClientLibEventEmitter, name: ClientLibEventName, type: ClientLibEvent, cb: Function) {
         this.events.push({ source, name, type, cb });
         phe.cnc.Util.attachNetEvent(source, name, type, this, cb);
     }
