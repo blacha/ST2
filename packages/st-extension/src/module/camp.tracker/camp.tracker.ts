@@ -58,7 +58,8 @@ export class CampTracker extends StModuleBase {
     }
 
     update() {
-        const nearByCamps = CityUtil.getNearByObjects().filter(
+        const mainBase = CityUtil.getMainCity();
+        const nearByCamps = Array.from(CityUtil.getObjectsNearCity(mainBase).values()).filter(
             f => ClientLibPatcher.hasPatchedCampType(f.object) && f.object.$CampType !== NpcCampType.Destroyed,
         );
         const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, this.maxToShow);

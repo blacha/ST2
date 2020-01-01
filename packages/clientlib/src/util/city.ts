@@ -45,6 +45,23 @@ export class CityUtil {
             md.get_Cities().set_CurrentCityId(obj.$Id);
         }
     }
+
+    /**
+     * Get the biggest offense city
+     */
+    static getMainCity(): ClientLibCity {
+        let mainCity: ClientLibCity | null = null;
+        const allCities = ClientLib.Data.MainData.GetInstance()
+            .get_Cities()
+            .get_AllCities();
+        for (const selectedBase of Object.values(allCities.d)) {
+            if (mainCity == null || mainCity.get_LvlOffense() < selectedBase.get_LvlOffense()) {
+                mainCity = selectedBase;
+            }
+        }
+
+        return mainCity!;
+    }
     /**
      * Get a list of all known allied cities
      *
