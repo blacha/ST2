@@ -113,12 +113,11 @@ export class ButtonScan extends StModuleBase {
                 if (cityObj == null) {
                     return;
                 }
-                CityCache.set(cityObj.cityId, cityObj);
-                const base = BaseBuilder.load(cityObj);
-                window.open(`${Config.api.url}/base/${BaseExporter.toCncOpt(base)}`, '_blank');
                 qx.core.Init.getApplication()
                     ?.getPlayArea()
                     ?.setView(PlayerAreaViewMode.pavmAllianceBase, this.lastBaseId, 0, 0);
+                const baseId = await CityCache.set(cityObj.cityId, cityObj, true);
+                window.open(`${Config.api.url}/base/${baseId}`, '_blank');
             });
             composite.add(button);
             this.buttons.push(button);

@@ -9,8 +9,12 @@ export class ClientApi extends StModuleBase {
 
     baseSender = new BatchBaseSender(this);
 
-    async base(base: StCity): Promise<string> {
-        return this.baseSender.queue(base);
+    async base(base: StCity, flush = false): Promise<string> {
+        const promise = this.baseSender.queue(base);
+        if (flush) {
+            await this.baseSender.flush();
+        }
+        return promise;
     }
 
     async onStop() {

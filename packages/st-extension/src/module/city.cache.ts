@@ -6,8 +6,9 @@ export class CityCache {
         return LocalCache.get(String(cityId), maxAge) as StCity;
     }
 
-    static set(cityId: number, layout: StCity) {
-        St.getInstance().api.base(layout);
-        return LocalCache.set(String(cityId), layout);
+    /** Returns the unique id stored in shockrtools */
+    static set(cityId: number, layout: StCity, flush = false): Promise<string> {
+        LocalCache.set(String(cityId), layout);
+        return St.getInstance().api.base(layout, flush);
     }
 }
