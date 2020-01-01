@@ -60,3 +60,19 @@
 .Tile-Crystal {
     background-image: url(../static/icon/tile_crystal.png);
 }
+
+.Tile-Oil {
+    background-image: url(../static/icon/tile_oil.png);
+}
+
+.Tile-Scrub {
+    background-image: url(../static/icon/tile_scrub.png);
+}
+
+.Tile-Swamp {
+    background-image: url(../static/icon/tile_swamp.png);
+}
+
+.Tile-Woods {
+    background-image: url(../static/icon/tile_woods.png);
+}
