@@ -11,6 +11,9 @@
         "@types/ospec": "^4.0.2",
         "ospec": "^4.0.1"
     },
+    "publishConfig": {
+        "access": "public"
+    },
     "author": "Blayne Chard <blayne@chard.com>",
     "license": "MIT"
 }
