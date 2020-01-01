@@ -3,10 +3,7 @@ import * as images from '../../static/images/*.png';
 import { style } from 'typestyle';
 import { Buildable } from '@st/shared';
 
-const UnitIconCss = style({
-    width: '75%',
-    height: '75%',
-});
+const UnitIconCss = style({ height: '90%', maxWidth: '95%' });
 
 export function viewUnit(unit: Buildable) {
     const imageName = images[unit.type.id];
