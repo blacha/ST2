@@ -8,7 +8,7 @@ import { GameResource, GameResources, formatNumber, Base } from '@st/shared';
 
 const BaseStatsCss = {
     ResourceGroup: style({}),
-    Resource: style({ width: '32px', height: '32px', ...BackgroundImage(75) }),
+    Resource: style({ width: '32px', height: '32px', minWidth: '32px', minHeight: '32px', ...BackgroundImage(75) }),
     Title: style({ display: 'flex', alignItems: 'center', fontWeight: 'bold' }),
     StatTotal: style({ fontWeight: 'bold' }),
 };

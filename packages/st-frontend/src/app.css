@@ -2,6 +2,8 @@
     background: url(../static/favicon.png) no-repeat;
     width: 32px;
     height: 32px;
+    min-width: 32px;
+    min-height: 32px;
     background-size: 100%;
     margin-right: 16px;
 }
