@@ -6,6 +6,7 @@ import {
     NpcCampType,
     Point,
     VisViewMode,
+    LocalCache,
 } from '@cncta/clientlib';
 import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
@@ -14,6 +15,8 @@ declare const ClientLib: ClientLibStatic;
 
 export class CampTracker extends StModuleBase {
     name = 'CampTracker';
+    /** Max number to show at one time */
+    maxToShow = 10;
 
     markers: Map<number, { el: HTMLDivElement; location: Point; index: number }> = new Map();
     updateInterval: number;
@@ -26,6 +29,7 @@ export class CampTracker extends StModuleBase {
         this.addEvent(visMain, 'ViewModeChange', ClientLib.Vis.ViewModeChange, this.updateView);
 
         this.updateInterval = window.setInterval(() => this.update(), 5 * 1000);
+
         this.update();
     }
 
@@ -53,11 +57,11 @@ export class CampTracker extends StModuleBase {
         }
     }
 
-    update(maxCount = 5) {
+    update() {
         const nearByCamps = CityUtil.getNearByObjects().filter(
             f => ClientLibPatcher.hasPatchedCampType(f.object) && f.object.$CampType !== NpcCampType.Destroyed,
         );
-        const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, maxCount);
+        const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, this.maxToShow);
 
         const existingMarkers = new Set(this.markers.keys());
         newestCamps.forEach((camp, index) => {
@@ -79,7 +83,7 @@ export class CampTracker extends StModuleBase {
         return newestCamps;
     }
 
-    updateElement(el: HTMLDivElement, location: Point) {
+    updateElement(el: HTMLDivElement, location: Point, index: number) {
         const visMain = ClientLib.Vis.VisMain.GetInstance();
         const region = visMain.get_Region();
         const gridWidth = region.get_GridWidth();
@@ -90,10 +94,11 @@ export class CampTracker extends StModuleBase {
 
         el.style.top = top + 'px';
         el.style.left = left + 'px';
+        el.innerHTML = '#' + (index + 1);
     }
 
     updatePosition() {
-        this.markers.forEach(({ el, location }) => this.updateElement(el, location));
+        this.markers.forEach(({ el, location, index }) => this.updateElement(el, location, index));
     }
 
     destroy(cityId: number) {
@@ -110,7 +115,6 @@ export class CampTracker extends StModuleBase {
         console.log('AddMarker', cityId, location);
 
         const el = document.createElement('div');
-        el.innerHTML = '#' + (index + 1);
         el.style.backgroundColor = 'rgba(0,240,0,0.9)';
         el.style.position = 'absolute';
         el.style.pointerEvents = 'none';
@@ -121,7 +125,7 @@ export class CampTracker extends StModuleBase {
         el.style.padding = '2px';
         el.title = `Object #${cityId}`;
 
-        this.updateElement(el, location);
+        this.updateElement(el, location, index);
 
         document.body.appendChild(el);
 
