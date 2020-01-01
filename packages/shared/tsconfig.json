@@ -1,0 +1,13 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "rootDir": "./src",
+        "outDir": "./build",
+        "resolveJsonModule": true,
+        "lib": []
+    },
+    "include": ["src/**/*", "src/**/*.json"],
+    "references": [{
+        "path": "../clientlib"
+    }]
+}

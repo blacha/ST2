@@ -1,0 +1,19 @@
+{
+    "name": "@st/packer",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Client lib utilities and types",
+    "scripts": {
+        "build": "tsc --pretty"
+    },
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "dependencies": {
+        "@types/git-rev-sync": "^1.12.0",
+        "@zeit/ncc": "^0.20.5",
+        "git-rev-sync": "^2.0.0"
+    },
+    "devDependencies": {},
+    "author": "Blayne Chard <blayne@chard.com>",
+    "license": "MIT"
+}
