@@ -16,12 +16,12 @@ export class LocationIter {
     /**
      * Yield XY Points for every within distance of the point
      */
-    static *xyDistance(x: number, y: number, distance: number): Generator<Point & { distance: number }> {
-        for (const point of LocationIter.xy(x - distance, x + distance, y - distance, y + distance)) {
+    static *xyDistance(x: number, y: number, maxDistance: number): Generator<Point & { distance: number }> {
+        for (const point of LocationIter.xy(x - maxDistance, x + maxDistance, y - maxDistance, y + maxDistance)) {
             const distX = Math.abs(point.x - x);
             const distY = Math.abs(point.y - y);
             const distance = Math.sqrt(distX * distX + distY * distY);
-            if (distance >= distance) {
+            if (distance >= maxDistance) {
                 continue;
             }
             yield { x: point.x, y: point.y, distance };
