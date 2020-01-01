@@ -5,6 +5,8 @@ import { LayoutScanner } from './module/layout/layout.scan';
 import { AllianceScanner } from './module/alliance/alliance.info';
 import { ClientApi } from './api/client.api';
 import { ButtonScan } from './module/button/button.scan';
+import { StModuleBase } from './module/module.base';
+import { CampTracker } from './module/camp.tracker/camp.tracker';
 
 declare const Clientlib: ClientLibStatic;
 
@@ -49,8 +51,9 @@ export class St {
     api = new ClientApi();
     layout = new LayoutScanner();
     alliance = new AllianceScanner();
+    camp = new CampTracker();
 
-    modules: StModule[] = [this.layout, this.alliance, this.api, new ButtonScan()];
+    modules: StModule[] = [this.api, this.layout, this.alliance, new ButtonScan(), this.camp];
 
     player: PlayerState = PlayerState.Idle;
     state: StState = StState.Idle;
@@ -67,9 +70,9 @@ export class St {
     /**
      * Run a function inside the state lock, so that only one thing can be scanning at a time.
      *
-     * This should be pausable if the user decides to move the mouse and click @see this.player state
+     * This should be pauseable if the user decides to move the mouse and click @see this.player state
      */
-    async run<T>(module: StModule, cb: () => AsyncGenerator<T>): Promise<T[]> {
+    async run<T>(module: StModuleBase, cb: () => AsyncGenerator<T>): Promise<T[]> {
         if (!this.isIdle) {
             throw new Error('ST is not idle');
         }
@@ -80,8 +83,11 @@ export class St {
             this.stateModule = module;
             for await (const res of cb()) {
                 output.push(res);
-                if (module) {
-                    // Acquire lock again
+                if (module.isStopping) {
+                    break;
+                }
+                if (this.stateModule.id !== module.id) {
+                    break;
                 }
             }
             return output;

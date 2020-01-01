@@ -2,19 +2,18 @@ import {
     CityScannerUtil,
     CityUtil,
     ClientLibStatic,
+    PlayerAreaViewMode,
+    QxButton,
+    QxComposite,
     QxStatic,
     RegionObject,
     VisObjectType,
     WebFrontEndStatic,
-    QxComposite,
-    QxButton,
-    PlayerAreaViewMode,
 } from '@cncta/clientlib';
 import { BaseBuilder, BaseExporter, Config } from '@st/shared';
-import { St, StState } from '../../st';
-import { StModuleBase } from '../module.base';
 import { CityCache } from '../city.cache';
 import { StModuleState } from '../module';
+import { StModuleBase } from '../module.base';
 
 // Visit base can be used on anything in range
 // qx.core.Init.getApplication().getPlayArea().setView(ClientLib.Data.PlayerAreaViewMode.pavmAllianceBase, cities.get_CurrentCityId(),0,0)

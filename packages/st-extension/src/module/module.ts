@@ -1,6 +1,8 @@
 import { St } from '../st';
 
 export interface StModule {
+    /** Module instance id */
+    id: string;
     /** Module name, should be unique */
     name: string;
     /** Current module lifecycle */

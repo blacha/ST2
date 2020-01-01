@@ -33,9 +33,12 @@ export class AllianceScanner extends StModuleBase {
         const cities = md.get_Cities();
         const allCities = CityUtil.getAlliedCities();
 
+        let current = 0;
         for (const city of allCities) {
+            current++;
             const cityId = city.$Id;
             cities.set_CurrentCityId(cityId);
+
             const cityObj = await CityUtil.waitForCity(cityId);
             if (cityObj == null) {
                 continue;
@@ -44,9 +47,9 @@ export class AllianceScanner extends StModuleBase {
             if (output == null) {
                 continue;
             }
-
+            this.st.log.debug({ cityId, owner: output.owner.name, current, count: allCities.length }, 'ScanAlliance');
             CityCache.set(cityId, output);
-            return output;
+            yield output;
         }
     }
 }

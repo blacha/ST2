@@ -1,11 +1,4 @@
-import {
-    CityScannerUtil,
-    CityUtil,
-    ClientLibCity,
-    ClientLibPatcher,
-    NpcCampType,
-    WorldObjectType,
-} from '@cncta/clientlib';
+import { CityScannerUtil, CityUtil, ClientLibPatcher, NpcCampType, StCity, WorldObjectType } from '@cncta/clientlib';
 import { St } from '../../st';
 import { CityCache } from '../city.cache';
 import { StModuleState } from '../module';
@@ -33,7 +26,7 @@ export class LayoutScanner extends StModuleBase {
         await this.st.run(this, () => this.scanLayout());
     }
 
-    async *scanLayout(): AsyncGenerator<ClientLibCity> {
+    async *scanLayout(): AsyncGenerator<StCity> {
         for (const { object } of CityUtil.getNearByObjects()) {
             if (object.Type !== WorldObjectType.NPCBase && object.Type !== WorldObjectType.NPCCamp) {
                 continue;
@@ -59,7 +52,7 @@ export class LayoutScanner extends StModuleBase {
             }
 
             CityCache.set(object.$Id, output);
-            return output;
+            yield output;
         }
     }
 }
