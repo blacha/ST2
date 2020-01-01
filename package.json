@@ -9,6 +9,7 @@
     "pack-ext": "node packages/packer/build/pack-extension.js",
     "pack-func": "node packages/packer/build/pack-function.js",
     "pack-front": "parcel build packages/st-frontend/static/index.html",
+    "version": "lerna version --conventional-commits --no-push --sign-git-commit --sign-git-tag",
     "package": "npm run pack-ext && npm run pack-func",
     "lint": "eslint 'packages/*/src/**/*.ts' --fix",
     "test": "ospec packages/*/**/*.test.js"
