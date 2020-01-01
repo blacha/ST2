@@ -1,6 +1,6 @@
 {
     "name": "@st/packer",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "private": true,
     "description": "Client lib utilities and types",
     "scripts": {
@@ -13,7 +13,6 @@
         "@zeit/ncc": "^0.20.5",
         "git-rev-sync": "^2.0.0"
     },
-    "devDependencies": {},
     "author": "Blayne Chard <blayne@chard.com>",
     "license": "MIT"
 }
