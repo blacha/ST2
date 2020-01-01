@@ -2,7 +2,7 @@ import * as o from 'ospec';
 import { LocationIter } from '../../location';
 import { BaseLocationPacker, UnitLocationPacker } from '../location.packer';
 
-o.spec('LayoutPacker', () => {
+o.spec('LocationPacker', () => {
     o('should pack a base location', () => {
         const startPoint = { x: 724, y: 368 };
         const xy = BaseLocationPacker.pack(startPoint);
