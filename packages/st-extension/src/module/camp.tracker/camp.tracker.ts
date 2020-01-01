@@ -95,6 +95,11 @@ export class CampTracker extends StModuleBase {
         el.style.top = top + 'px';
         el.style.left = left + 'px';
         el.innerHTML = '#' + (index + 1);
+        if (index < 3) {
+            el.style.backgroundColor = `rgba(0,240,0,0.9)`;
+        } else {
+            el.style.backgroundColor = `rgba(200,240,0,0.9)`;
+        }
     }
 
     updatePosition() {
@@ -112,10 +117,7 @@ export class CampTracker extends StModuleBase {
     }
 
     addMarker(cityId: number, location: Point, index: number) {
-        console.log('AddMarker', cityId, location);
-
         const el = document.createElement('div');
-        el.style.backgroundColor = 'rgba(0,240,0,0.9)';
         el.style.position = 'absolute';
         el.style.pointerEvents = 'none';
         el.style.fontFamily = 'm+ 1m';
