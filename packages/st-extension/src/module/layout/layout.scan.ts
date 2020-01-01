@@ -5,17 +5,7 @@ import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
 
 export class LayoutScanner extends StModuleBase {
-    name: 'LayoutScanner';
-    st: St;
-
-    async start(st: St): Promise<void> {
-        this.st = st;
-        this.state = StModuleState.Started;
-    }
-
-    async stop(): Promise<void> {
-        this.state = StModuleState.Stopped;
-    }
+    name = 'LayoutScanner';
 
     async scan(): Promise<void> {
         if (!this.st.isIdle) {

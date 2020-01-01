@@ -3,8 +3,8 @@ import {
     CityUtil,
     ClientLibStatic,
     PlayerAreaViewMode,
-    QxButton,
     QxComposite,
+    QxFormButton,
     QxStatic,
     RegionObject,
     VisObjectType,
@@ -12,7 +12,6 @@ import {
 } from '@cncta/clientlib';
 import { BaseBuilder, BaseExporter, Config } from '@st/shared';
 import { CityCache } from '../city.cache';
-import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
 
 // Visit base can be used on anything in range
@@ -31,12 +30,11 @@ export class ButtonScan extends StModuleBase {
     oldFunction: Function | null = null;
 
     isStarted = false;
-    buttons: QxButton[] = [];
+    buttons: QxFormButton[] = [];
     composite: QxComposite | null = null;
     lastBaseId: number | null = null;
 
-    async start(): Promise<void> {
-        this.state = StModuleState.Starting;
+    async onStart(): Promise<void> {
         const regionCity = webfrontend.gui.region.RegionCityMenu.prototype;
         const oldFunction = (this.oldFunction = regionCity.showMenu);
         /* eslint-disable @typescript-eslint/no-this-alias */
@@ -69,7 +67,6 @@ export class ButtonScan extends StModuleBase {
             }
             oldFunction.call(this, selectedBase);
         };
-        this.state = StModuleState.Started;
     }
 
     /** Enable the button if/when it can be enabled. */
@@ -101,7 +98,7 @@ export class ButtonScan extends StModuleBase {
                 continue;
             }
 
-            const button = new qx.ui.form.Button('Scan', `${Config.api.url}/${Config.icon}`) as QxButton;
+            const button = new qx.ui.form.Button('Scan', `${Config.api.url}/${Config.icon}`) as QxFormButton;
 
             button.getChildControl('icon').set({ width: 16, height: 16, scale: true }); // Force icon to be 16x16 px
             button.addListener('execute', async () => {
@@ -128,8 +125,7 @@ export class ButtonScan extends StModuleBase {
         }
     }
 
-    async stop(): Promise<void> {
-        this.state = StModuleState.Stopping;
+    async onStop(): Promise<void> {
         if (this.oldFunction) {
             webfrontend.gui.region.RegionCityMenu.prototype.showMenu = this.oldFunction;
             this.oldFunction = null;
@@ -139,6 +135,5 @@ export class ButtonScan extends StModuleBase {
             button.destroy();
         }
         this.buttons = [];
-        this.state = StModuleState.Stopped;
     }
 }

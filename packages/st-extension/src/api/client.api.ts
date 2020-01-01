@@ -14,14 +14,10 @@ export class ClientApi extends StModuleBase {
         return this.baseSender.queue(base);
     }
 
-    async start() {
-        this.state = StModuleState.Started;
-    }
+    async onStart() {}
 
-    async stop() {
-        this.state = StModuleState.Stopping;
+    async onStop() {
         await this.baseSender.flush();
-        this.state = StModuleState.Stopped;
     }
 
     flush() {

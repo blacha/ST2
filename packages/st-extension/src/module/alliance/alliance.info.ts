@@ -7,17 +7,7 @@ import { CityCache } from '../city.cache';
 declare const ClientLib: ClientLibStatic;
 
 export class AllianceScanner extends StModuleBase {
-    name: 'AllianceScanner';
-    st: St;
-
-    async start(st: St): Promise<void> {
-        this.st = st;
-        this.state = StModuleState.Started;
-    }
-
-    async stop(): Promise<void> {
-        this.state = StModuleState.Stopped;
-    }
+    name = 'AllianceScanner';
 
     async scan(): Promise<void> {
         if (!this.st.isIdle) {

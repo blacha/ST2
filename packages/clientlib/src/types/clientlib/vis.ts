@@ -1,3 +1,5 @@
+import { ClientLibEventSource, PlayerAreaViewMode } from './index';
+
 /* eslint-disable @typescript-eslint/camelcase */
 
 export enum MouseMode {
@@ -6,6 +8,18 @@ export enum MouseMode {
     Move = 2,
     Upgrade = 3,
     Sell = 4,
+}
+
+export enum VisViewMode {
+    UseCurrent = -1,
+    None = 0,
+    City = 1,
+    Region = 2,
+    Battleground = 3,
+    ArmySetup = 4,
+    DefenseSetup = 5,
+    World = 6,
+    CombatSetup = 7,
 }
 
 export enum VisObjectType {
@@ -57,12 +71,25 @@ export interface VisObject {
     get_Coordinates(): number;
 }
 
-export interface ClientLibVis {
+export interface ClientLibVisRegion extends ClientLibEventSource {
+    get_GridWidth(): number;
+    get_GridHeight(): number;
+    /** Number between 0-1, 1 is full zoomed in */
+    get_ZoomFactor(): number;
+}
+
+export interface ClientLibVisMain extends ClientLibEventSource {
     CenterGridPosition(x: number, y: number): void;
     Update(): void;
     ViewUpdate(): void;
 
     get_MouseMode(): MouseMode;
 
+    get_Mode(): VisViewMode; // what is this number?
+
+    ScreenPosFromWorldPosX(x: number): number;
+    ScreenPosFromWorldPosY(y: number): number;
+
+    get_Region(): ClientLibVisRegion;
     get_SelectedObject(): VisObject | null;
 }
