@@ -61,8 +61,7 @@ export class GrowthCalculator {
         growth = Constants.ResourceProductionGrowth,
     ): number {
         if (gdo.modifiers == null) {
-            console.log('Missing?', gdo.id, gdo.name, level, modifier);
-            throw new Error('Missing');
+            throw new Error('Missing gdo: ' + gdo.id);
         }
 
         const modifierKey = ModifierType[modifier] as keyof typeof ModifierType;

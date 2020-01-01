@@ -17,7 +17,6 @@ export class BatchBaseSender extends Batcher<'cityId', StCity, string> {
 
     async run(data: StCity[]): Promise<string[]> {
         St.getInstance().log.info({ bases: data.length, scanId: this.scanId }, 'SendingData');
-        console.log('Sending', data.length);
         const firstBase = data[0];
         const url = [this.api.baseUrl, 'api', 'v1', 'world', firstBase.worldId, 'scan', this.scanId].join('/');
         const res = await fetch(url, {
