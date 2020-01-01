@@ -1,14 +1,15 @@
 {
-  "name": "@st/extension",
-  "version": "0.1.0",
-  "description": "Client lib utilities and types",
-  "scripts": {
-    "build": "tsc --pretty"
-  },
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
-  "dependencies": {},
-  "devDependencies": {},
-  "author": "Blayne Chard <blayne@chard.com>",
-  "license": "MIT"
+    "name": "@st/extension",
+    "version": "0.1.0",
+    "description": "Client lib utilities and types",
+    "private": true,
+    "scripts": {
+        "build": "tsc --pretty"
+    },
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "dependencies": {},
+    "devDependencies": {},
+    "author": "Blayne Chard <blayne@chard.com>",
+    "license": "MIT"
 }

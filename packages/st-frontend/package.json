@@ -2,6 +2,7 @@
     "name": "@st/frontend",
     "version": "0.1.0",
     "description": "Client lib utilities and types",
+    "private": true,
     "scripts": {
         "build": "tsc --pretty"
     },
