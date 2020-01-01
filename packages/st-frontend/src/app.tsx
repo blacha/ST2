@@ -8,10 +8,7 @@ import { ViewScan } from './scan/scan.result';
 import { ViewPlayer } from './player/player';
 
 const AppCss = {
-    Main: style({
-        fontFamily: '"Roboto Condensed"',
-        color: 'rgba(0,0,0,0.87)',
-    }),
+    Main: style({}),
     Header: style({
         background: '#f4f5f6',
         borderBottom: '.1rem solid #d1d1d1',

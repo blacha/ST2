@@ -15,10 +15,10 @@ export class CampTracker extends StModuleBase {
         this.state = StModuleState.Stopped;
     }
 
-    scan() {
+    update() {
         const nearByCamps = CityUtil.getNearByObjects();
-        nearByCamps.sort((a, b) => a.id - b.id);
+        const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, 10);
 
-        return nearByCamps;
+        return newestCamps;
     }
 }
