@@ -5,12 +5,14 @@
     }, {
         "path": "./packages/shared"
     },{
+        "path": "./packages/deobsfucate"
+    }, {
         "path": "./packages/packer"
     }, {
         "path": "./packages/st-backend"
-    },{
+    }, {
         "path": "./packages/st-frontend"
-    },{
+    }, {
         "path": "./packages/st-extension"
     }]
 }

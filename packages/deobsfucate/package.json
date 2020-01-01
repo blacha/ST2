@@ -1,0 +1,16 @@
+{
+    "name": "@cncta/deobsfucate",
+    "version": "0.2.0",
+    "description": "ClientLib deobsfucator",
+    "scripts": {
+        "build": "tsc --pretty"
+    },
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "devDependencies": {},
+    "publishConfig": {
+        "access": "public"
+    },
+    "author": "Blayne Chard <blayne@chard.com>",
+    "license": "MIT"
+}

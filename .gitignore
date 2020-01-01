@@ -8,3 +8,4 @@ functions/lib
 .firebase
 output
 *.tsbuildinfo
+tmp
