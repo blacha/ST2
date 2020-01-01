@@ -1,4 +1,5 @@
 import * as gitRev from 'git-rev-sync';
+
 export const Config = {
     hash: gitRev.short(),
     version: '',

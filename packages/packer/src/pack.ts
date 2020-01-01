@@ -1,7 +1,9 @@
 import * as ncc from '@zeit/ncc';
 import * as fs from 'fs';
 import * as path from 'path';
-import { replaceConfig } from './config';
+import findAndReadPackageJSON from 'find-and-read-package-json';
+
+import { replaceConfig, Config } from './config';
 
 export interface NccOutput {
     code: string;
@@ -37,6 +39,9 @@ export async function pack(
     externals: string[] = [],
     callback: (output: NccOutput) => NccOutput = noop,
 ) {
+    const pkgJson = await findAndReadPackageJSON(src);
+    Config.version = pkgJson.json.version;
+
     const dstPath = path.dirname(dst);
     if (!fs.existsSync(dstPath)) {
         fs.mkdirSync(dstPath, { recursive: true });
