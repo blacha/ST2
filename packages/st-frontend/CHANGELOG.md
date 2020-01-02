@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/blacha/st/compare/v0.2.0...v0.3.0) (2020-01-02)
+
+
+### Bug Fixes
+
+* dont show alliance if they are not part of one ([40d6fd2](https://github.com/blacha/st/commit/40d6fd28d529365707eddaa38974bd0a79879888))
+* star size should be small in chrome ([a2c4e0e](https://github.com/blacha/st/commit/a2c4e0ec1fcb01f0d5b52b550d8801254d780006))
+
+
+### Features
+
+* initial work on research display ([046b864](https://github.com/blacha/st/commit/046b86432748fd8a4df1dc5c074ef8e9f5a1f8e7))
+* show upgraded on alliance page ([277a5cd](https://github.com/blacha/st/commit/277a5cd3d958a02af0ec8ed2f9238147926f4ac6))
+* show upgraded star for upgraded units ([2e9eee8](https://github.com/blacha/st/commit/2e9eee8fe214a236c4032860e5be0a5dcd255ed0))
+
+
+
+
+
 # [0.2.0](https://github.com/blacha/st/compare/v0.1.2...v0.2.0) (2020-01-01)
 
 

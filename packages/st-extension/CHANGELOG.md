@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/blacha/st/compare/v0.2.0...v0.3.0) (2020-01-02)
+
+
+### Bug Fixes
+
+* add unit tests for research ([eac8e36](https://github.com/blacha/st/commit/eac8e369857d205f37ab549779b3e50085ba3ee1))
+
+
+### Features
+
+* extract research information from bases ([3ffc216](https://github.com/blacha/st/commit/3ffc216f304f2856d55284aaa7b0461635fd80d9))
+* initial work on research display ([046b864](https://github.com/blacha/st/commit/046b86432748fd8a4df1dc5c074ef8e9f5a1f8e7))
+* show upgraded star for upgraded units ([2e9eee8](https://github.com/blacha/st/commit/2e9eee8fe214a236c4032860e5be0a5dcd255ed0))
+
+
+
+
+
 # [0.2.0](https://github.com/blacha/st/compare/v0.1.2...v0.2.0) (2020-01-01)
 
 

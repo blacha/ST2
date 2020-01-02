@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/blacha/st/compare/v0.2.0...v0.3.0) (2020-01-02)
+
+
+### Bug Fixes
+
+* add unit tests for research ([eac8e36](https://github.com/blacha/st/commit/eac8e369857d205f37ab549779b3e50085ba3ee1))
+* dont show alliance if they are not part of one ([40d6fd2](https://github.com/blacha/st/commit/40d6fd28d529365707eddaa38974bd0a79879888))
+* star size should be small in chrome ([a2c4e0e](https://github.com/blacha/st/commit/a2c4e0ec1fcb01f0d5b52b550d8801254d780006))
+
+
+### Features
+
+* deobsfucator ([5b8f2f0](https://github.com/blacha/st/commit/5b8f2f0a017b5a3640dfd2867bc3e41dd7718f44))
+* don't allow base ids to be unpacked ([4e54b1a](https://github.com/blacha/st/commit/4e54b1a0a8b8411985a67aab71f3d80e51117f2a))
+* extract research information from bases ([3ffc216](https://github.com/blacha/st/commit/3ffc216f304f2856d55284aaa7b0461635fd80d9))
+* initial work on research display ([046b864](https://github.com/blacha/st/commit/046b86432748fd8a4df1dc5c074ef8e9f5a1f8e7))
+* layouts should not be defaulting to 0 ([609b6e6](https://github.com/blacha/st/commit/609b6e6dab31f4d53d01eb4bf4d3d989e139e822))
+* overwrite updatedAt timestamp ([187c931](https://github.com/blacha/st/commit/187c931b07e5c73dded5cd67dde9e12b50f5a05f))
+* show upgraded on alliance page ([277a5cd](https://github.com/blacha/st/commit/277a5cd3d958a02af0ec8ed2f9238147926f4ac6))
+* show upgraded star for upgraded units ([2e9eee8](https://github.com/blacha/st/commit/2e9eee8fe214a236c4032860e5be0a5dcd255ed0))
+
+
+
+
+
 # [0.2.0](https://github.com/blacha/st/compare/v0.1.2...v0.2.0) (2020-01-01)
 
 

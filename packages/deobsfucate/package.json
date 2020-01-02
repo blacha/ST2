@@ -1,13 +1,12 @@
 {
     "name": "@cncta/deobsfucate",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "ClientLib deobsfucator",
     "scripts": {
         "build": "tsc --pretty"
     },
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
-    "devDependencies": {},
     "publishConfig": {
         "access": "public"
     },
