@@ -61,12 +61,12 @@ function viewBaseLocation(base: Base) {
             {FlexRow(
                 'Owner',
                 <Link to={`/world/${base.worldId}/player/${base.owner?.id}`}>{base.owner?.name}</Link>,
-                base.owner != null,
+                base.owner != null && base.owner.name != '',
             )}
             {FlexRow(
                 'Alliance',
                 <Link to={`/world/${base.worldId}/alliance/${base.alliance?.id}`}>{base.alliance?.name}</Link>,
-                base.alliance != null,
+                base.alliance != null && base.alliance.id != 0,
             )}
             {FlexRow('World', base.worldId)}
             {FlexRow('Location', `${base.x}:${base.y}`, base.x > 0)}

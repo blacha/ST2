@@ -113,8 +113,6 @@ export class ViewBaseItem extends React.Component<{
         if (building == null) {
             return <div className={classNames.join(' ')} title={tile.name} />;
         }
-        classNames.push(`Unit-${building.type.id}`);
-
         return (
             <div className={classNames.join(' ')} title={building.type.data.display + ` (${building.level})`}>
                 {viewUnit(building)}
