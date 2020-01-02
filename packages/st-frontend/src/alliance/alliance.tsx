@@ -167,7 +167,6 @@ export const AllianceColumns = [
         render: (stats: PlayerStats) => (
             <ViewResearch faction={stats.main.faction} upgrades={stats.upgrades} style="square" />
         ),
-        sorter: (a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt,
     },
     {
         title: 'Updated',
