@@ -124,5 +124,3 @@ o.spec('PatchTest', () => {
         o(window.NpcCamp.$Level).equals('Level');
     });
 });
-
-o.run();

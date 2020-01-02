@@ -32,7 +32,7 @@ export class CampTracker extends StModuleBase {
         this.addEvent(region, 'ZoomFactorChange', ClientLib.Vis.ZoomFactorChange, this.updatePosition);
         this.addEvent(visMain, 'ViewModeChange', ClientLib.Vis.ViewModeChange, this.updateView);
 
-        this.updateInterval = window.setInterval(() => this.update(), 5 * 1000);
+        this.updateInterval = window.setInterval(() => this.update(), 2 * 1000);
 
         this.update();
     }
@@ -62,6 +62,7 @@ export class CampTracker extends StModuleBase {
     }
 
     update() {
+        console.time('UpdateView');
         const mainBase = CityUtil.getMainCity();
         const offLevel = mainBase.get_LvlOffense();
         const minBaseHighlight = offLevel - this.MaxOffDiff;
@@ -100,6 +101,7 @@ export class CampTracker extends StModuleBase {
 
         this.updatePosition();
         this.updateView();
+        console.timeEnd('UpdateView');
         return newestCamps;
     }
 
@@ -140,11 +142,24 @@ export class CampTracker extends StModuleBase {
         const el = document.createElement('div');
         el.style.position = 'absolute';
         el.style.pointerEvents = 'none';
-        el.style.fontFamily = 'm+ 1m';
+
+        el.style.fontFamily = 'Roboto condensed';
         el.style.fontWeight = 'bold';
+        el.style.fontSize = '110%';
+
         el.style.zIndex = '10';
-        el.style.borderRadius = '8px';
+
+        el.style.borderRadius = '24px';
+        el.style.width = '24px';
+        el.style.height = '24px';
+
         el.style.padding = '2px';
+        el.style.display = 'flex';
+        el.style.justifyContent = 'center';
+        el.style.alignItems = 'center';
+
+        el.style.border = '2px solid rgba(0,0,0,0.87)';
+
         el.title = `Object #${cityId}`;
 
         this.updateElement(el, location, index);

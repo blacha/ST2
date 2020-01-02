@@ -15,7 +15,6 @@ export class NumberPacker {
         if (typeof data === 'number') {
             return Base62.encode(data);
         }
-        console.log('Packing', data);
         return data.map(c => NumberPacker.number.pack(c)).join(join);
     }
 

@@ -109,17 +109,19 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
                 </div> */}
 
                 {this.state?.bases.slice(0, 50).map(base => {
+                    const baseId = BaseLocationPacker.pack(base.x, base.y);
+
                     const timeAgo = timeSince(base.updatedAt);
                     const silos = base.info.stats;
                     return (
-                        <div className={BaseCardCss} key={base.id}>
+                        <div className={BaseCardCss} key={baseId}>
                             <Divider>
                                 <Link to={`/base/${BaseExporter.toCncOpt(base)}`}>
                                     {base.x}:{base.y}
                                 </Link>
                             </Divider>
                             <div style={{ width: 24 * BaseX.Max + 'px' }}>
-                                <ViewBaseMain base={base} key={base.id} size={24} />
+                                <ViewBaseMain base={base} key={baseId} size={24} />
                             </div>
                             <div className={BaseCardInfoCss}>
                                 <SiloTags minSize={4} resource={'tiberium'} silos={silos} />
