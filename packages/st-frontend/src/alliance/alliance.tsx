@@ -110,7 +110,9 @@ export const AllianceColumns = [
                 title: 'Name',
                 dataIndex: 'main',
                 key: 'mainName',
-                render: (main: Base) => <Link to={'/base/' + main.id}>{main.name}</Link>,
+                render: (main: Base) => (
+                    <Link to={`/world/${main.worldId}/player/${main.owner?.id}/base/${main.cityId}`}>{main.name}</Link>
+                ),
             },
             {
                 title: 'Level',

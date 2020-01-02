@@ -1,3 +1,4 @@
+import { BaseX, BaseY, GameDataResearchLevel, GameDataUnitId, UnitLocationPacker } from '@cncta/clientlib';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { Faction } from '../data/faction';
@@ -10,8 +11,6 @@ import { BaseBuildings } from './base.buildings';
 import { BaseStats } from './base.stats';
 import { Buildable } from './buildable';
 import { Tile } from './tile';
-import { Id } from '../../id';
-import { BaseX, BaseY, UnitLocationPacker, GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
 
 export interface CncLocation {
     x: number;
@@ -32,7 +31,6 @@ export class PoiData extends GameResources {
 export class Base {
     buildings: BaseBuildings;
 
-    id: string;
     name: string;
     faction: Faction;
     offFaction: Faction;
@@ -68,7 +66,6 @@ export class Base {
         this.upgrades = {};
         this.base = [];
 
-        this.id = Id.generate();
         this.info = new BaseStats(this);
         this.buildings = new BaseBuildings(this);
         this.updatedAt = 0;

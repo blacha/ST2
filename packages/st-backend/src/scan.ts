@@ -8,6 +8,7 @@ import {
     DbLayout,
     DbPlayer,
     NumberPacker,
+    BaseIdPacker,
 } from '@st/shared';
 import { ApiCall, ApiRequest } from './api.call';
 import { FirestoreAdmin } from './db.admin';
@@ -123,7 +124,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
                 players.set(baseJson.owner.id, existing);
             }
 
-            const baseId = NumberPacker.pack([worldId, baseJson.cityId, Math.floor(base.updatedAt / 1000)], '');
+            const baseId = BaseIdPacker.pack(base);
             const BaseCollection = FirestoreAdmin.collection('base');
             await BaseCollection.doc(baseId).set(baseJson);
             output.push(baseId);

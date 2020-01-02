@@ -1,8 +1,8 @@
-import { BaseY, StCity, UnitLocationPacker, UnitPacker, BaseX } from '@cncta/clientlib';
+import { BaseX, BaseY, StCity, UnitLocationPacker, UnitPacker } from '@cncta/clientlib';
 import { Faction } from '../data/faction';
 import { GameDataObject } from '../data/game.data.object';
 import { Base } from './base';
-import { BaseLayoutPacker, NumberPacker } from './base.packer';
+import { BaseLayoutPacker } from './base.packer';
 import { Tile } from './tile';
 
 const codeZero = '0'.charCodeAt(0);
@@ -74,7 +74,6 @@ export class BaseBuilder {
         output.owner = city.owner;
         output.x = city.x;
         output.y = city.y;
-        output.id = NumberPacker.pack([city.worldId, city.cityId]);
         output.cityId = city.cityId;
         output.alliance = city.alliance;
         output.worldId = city.worldId;

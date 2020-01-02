@@ -15,6 +15,7 @@ export class NumberPacker {
         if (typeof data === 'number') {
             return Base62.encode(data);
         }
+        console.log('Packing', data);
         return data.map(c => NumberPacker.number.pack(c)).join(join);
     }
 
@@ -30,6 +31,12 @@ export class NumberPacker {
             return Base62.decode(s);
         },
     };
+}
+
+export class BaseIdPacker {
+    static pack(base: Base) {
+        return NumberPacker.pack([base.worldId, base.cityId, Math.floor(base.updatedAt / 1000)], '');
+    }
 }
 
 /**

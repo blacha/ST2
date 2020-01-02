@@ -1,19 +1,21 @@
+import { BaseX, StCity, BaseLocationPacker } from '@cncta/clientlib';
+import { Base, BaseBuilder, NumberPacker, BaseIdPacker } from '@st/shared';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
+import Icon from 'antd/es/icon';
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { FireStoreBases, FireStorePlayer } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { StBreadCrumb } from '../util/breacrumb';
+import { FactionName } from '../util/faction';
 import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
-import { Base, BaseBuilder, NumberPacker } from '@st/shared';
-import { BaseX, BaseY, StCity } from '@cncta/clientlib';
-import { FactionName } from '../util/faction';
+
 const TileSize = 64;
 
 export const BaseCss = {
@@ -144,6 +146,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
             return <div>Could not find base</div>;
         }
 
+        const baseId = BaseIdPacker.pack(base);
         const baseWidth = TileSize * BaseX.Max + 'px';
         return (
             <React.Fragment>
@@ -151,11 +154,14 @@ export class ViewBase extends React.Component<ViewBaseProps> {
                     worldId={base.worldId}
                     alliance={base.alliance}
                     player={base.owner}
-                    base={{ id: base.id, name: base.name }}
+                    base={{ id: baseId, name: base.name }}
                 />
                 <div className={BaseCss.Base}>
                     <Divider>
                         <FactionName name={base.name} faction={base.faction} />
+                        <Link to={`/base/${baseId}`}>
+                            <Icon type="link" />
+                        </Link>
                     </Divider>
 
                     <div style={{ width: baseWidth }}>
