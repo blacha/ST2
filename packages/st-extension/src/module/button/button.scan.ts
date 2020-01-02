@@ -83,6 +83,8 @@ export class ButtonScan extends StModuleBase {
             if (city == null) {
                 return;
             }
+            const cityObj = CityScannerUtil.get(city);
+            console.log(cityObj);
         }
 
         if (waitId == this.lastBaseId) {
@@ -110,6 +112,7 @@ export class ButtonScan extends StModuleBase {
                     return;
                 }
                 const cityObj = CityScannerUtil.get(city);
+                console.log(cityObj);
                 if (cityObj == null) {
                     return;
                 }

@@ -1,4 +1,4 @@
-import { ClientLibStatic, ClientLibLoader, ClientLibPatcher, ClientLib } from '@cncta/clientlib';
+import { ClientLibStatic, ClientLibLoader, ClientLibPatcher, ClientLib, CityScannerUtil } from '@cncta/clientlib';
 import { Id, StLog } from '@st/shared';
 import { StModule, hasStModuleHooks, StModuleState } from './module/module';
 import { LayoutScanner } from './module/layout/layout.scan';
@@ -52,6 +52,10 @@ export class St {
     layout = new LayoutScanner();
     alliance = new AllianceScanner();
     camp = new CampTracker();
+
+    util = {
+        city: CityScannerUtil,
+    };
 
     modules: StModule[] = [this.api, this.layout, this.alliance, new ButtonScan(), this.camp];
 

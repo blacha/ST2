@@ -1,4 +1,4 @@
-import { GameDataUnit } from '../../game';
+import { GameDataUnit, GameDataUnitModuleId } from '../../game';
 import { ClientLibPlayerResearch } from './player';
 import { ClientLibMap } from '../util';
 import { ResourceType } from '../../game/resource';
@@ -52,7 +52,7 @@ export interface ClientLibCity {
 
     get_Name(): string;
     /** Null if current player's base */
-    get_ActiveModules(): number[] | null;
+    get_ActiveModules(): GameDataUnitModuleId[] | null;
     get_Buildings(): ClientLibMap<ClientLibCityBuilding>;
     get_CityFaction(): FactionType;
     get_CityUnitsData(): ClientLibCityUnits;

@@ -1,7 +1,10 @@
 import { MovementType } from './unit';
 import { ResourceType, ModifierType } from './resource';
+import { GameDataUnitId } from './unit.id';
+import { GameDataTechId } from './tech.id';
 
 /* eslint-disable @typescript-eslint/camelcase */
+export type GameDataUnitModuleId = number;
 export interface GameDataResourceCost {
     t: ResourceType;
     /** Resource count */
@@ -62,12 +65,30 @@ export interface GameDataResources {
     rr: GameDataResourceCost[];
 }
 
-export interface GameDataUnitM {
-    t: number;
-    i: number;
+export enum GameDataResearchLevel {
+    NotResearched = 0,
+    Researched = 1,
+    Upgraded = 2,
 }
-export type UnitId = number;
-export type TechId = number;
+
+export interface GameDataUnitModulesResearch {
+    /**
+     * TechId
+     * @see GameDataStatic.Tech
+     */
+    i: GameDataTechId;
+    /**
+     *  Level
+     */
+    l: GameDataResearchLevel;
+}
+export interface GameDataUnitModules {
+    /** Requirements to activate the module */
+    r: GameDataUnitModulesResearch[];
+    t: number;
+    i: GameDataUnitModuleId;
+}
+
 /**
  * Location of a asset
  * @example 'battleground/gdi/units/off/APC/APC_detail.png'
@@ -75,7 +96,7 @@ export type TechId = number;
 export type GameDataAssetLocation = string;
 export interface GameDataUnit {
     /** Unit Id */
-    i: UnitId;
+    i: GameDataUnitId;
     /**
      * Display name
      * @example "Militants"
@@ -94,14 +115,14 @@ export interface GameDataUnit {
      */
     n: string;
     /** Tech Id */
-    tl: TechId | -1;
+    tl: GameDataTechId | -1;
 
     /** Base Life */
     lp: number;
 
     mt: MovementType;
     r: GameDataResources[];
-    m: GameDataUnitM[];
+    m: GameDataUnitModules[];
 
     /**
      * Battleground image
@@ -122,7 +143,7 @@ export interface GameDataUnit {
 
 export interface GameDataStatic {
     /** UnitId -> GameDataUnit */
-    units: Record<UnitId, GameDataUnit>;
+    units: Record<GameDataUnitId, GameDataUnit>;
     /** TechId -> GameDataTech */
     Tech: Record<string, GameDataTech>;
 
@@ -142,3 +163,4 @@ export interface GameDataStatic {
 export * from './faction';
 export * from './resource';
 export * from './unit';
+export * from './unit.id';

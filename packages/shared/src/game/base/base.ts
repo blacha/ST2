@@ -11,7 +11,7 @@ import { BaseStats } from './base.stats';
 import { Buildable } from './buildable';
 import { Tile } from './tile';
 import { Id } from '../../id';
-import { BaseX, BaseY, UnitLocationPacker } from '@cncta/clientlib';
+import { BaseX, BaseY, UnitLocationPacker, GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
 
 export interface CncLocation {
     x: number;
@@ -56,7 +56,7 @@ export class Base {
     updatedAt: number;
 
     tiles: Tile[];
-    upgrades: number[];
+    upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>> = {};
 
     info: BaseStats;
 
@@ -65,7 +65,7 @@ export class Base {
         this.faction = faction;
         this.offFaction = faction;
         this.tiles = [];
-        this.upgrades = [];
+        this.upgrades = {};
         this.base = [];
 
         this.id = Id.generate();
@@ -135,8 +135,9 @@ export class Base {
         this.base[UnitLocationPacker.pack(x, y)] = buildable;
     }
 
-    hasUpgrade(unitId: number) {
-        return this.upgrades.indexOf(unitId) !== -1;
+    /** Is the unitId upgraded passed this level */
+    isUpgraded(unitId: GameDataUnitId, level: GameDataResearchLevel) {
+        return (this.upgrades[unitId] ?? 0) >= level;
     }
 
     findBuilding(buildingCodes: number[]): Building | null {
