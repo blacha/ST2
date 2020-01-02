@@ -15,7 +15,12 @@ declare const ClientLib: ClientLibStatic;
 export class CampTracker extends StModuleBase {
     name = 'CampTracker';
     /** Max number to show at one time */
-    maxToShow = 10;
+    MaxToShow = 10;
+    /**
+     * Max level difference to highlight
+     * (MainOffLevel - MaxOffDiff)
+     **/
+    MaxOffDiff = 1;
 
     markers: Map<number, { el: HTMLDivElement; location: Point; index: number }> = new Map();
     updateInterval: number;
@@ -58,10 +63,24 @@ export class CampTracker extends StModuleBase {
 
     update() {
         const mainBase = CityUtil.getMainCity();
-        const nearByCamps = Array.from(CityUtil.getObjectsNearCity(mainBase).values()).filter(
-            f => ClientLibPatcher.hasPatchedCampType(f.object) && f.object.$CampType !== NpcCampType.Destroyed,
-        );
-        const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, this.maxToShow);
+        const offLevel = mainBase.get_LvlOffense();
+        const minBaseHighlight = offLevel - this.MaxOffDiff;
+        const nearByCamps = Array.from(CityUtil.getObjectsNearCity(mainBase).values()).filter(f => {
+            // All outposts are camps
+            if (!ClientLibPatcher.hasPatchedCampType(f.object)) {
+                return false;
+            }
+            if (f.object.$CampType === NpcCampType.Destroyed) {
+                return false;
+            }
+
+            // Remove low level camps/outposts
+            if (f.object.$Level < minBaseHighlight) {
+                return false;
+            }
+            return true;
+        });
+        const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, this.MaxToShow);
 
         const existingMarkers = new Set(this.markers.keys());
         newestCamps.forEach((camp, index) => {

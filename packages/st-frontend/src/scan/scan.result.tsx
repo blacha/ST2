@@ -7,8 +7,8 @@ import { ViewBaseMain } from '../base/tiles/base.main';
 import { FireStoreLayouts } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
-import { Base, SiloCounts, BaseExporter, DbLayout, NumberPacker } from '@st/shared';
-import { BaseX } from '@cncta/clientlib';
+import { Base, SiloCounts, BaseExporter, DbLayout, NumberPacker, BaseLayoutPacker } from '@st/shared';
+import { BaseX, BaseLocationPacker } from '@cncta/clientlib';
 
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({
@@ -68,12 +68,12 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
         const bases: Base[] = [];
         const layouts = Object.keys(layoutData.layouts ?? {});
         for (const key of layouts) {
-            // const xy = BasePacker.xy.unpack(BasePacker.number.unpack(key));
+            const xy = BaseLocationPacker.unpack(NumberPacker.unpack(key)[0]);
             const base = new Base();
-            // base.x = xy.x;
-            // base.y = xy.y;
+            base.x = xy.x;
+            base.y = xy.y;
             const { layout, updatedAt } = layoutData.layouts[key];
-            // BasePacker.layout.unpack(base, BasePacker.unpack(layout));
+            base.tiles = BaseLayoutPacker.unpack(layout);
             base.updatedAt = updatedAt;
             bases.push(base);
             addStats(base.info.stats, silos);

@@ -15,7 +15,10 @@ export class LayoutScanner extends StModuleBase {
     }
 
     async *scanLayout(): AsyncGenerator<StCity> {
-        for (const { object } of CityUtil.getNearByObjects()) {
+        let current = 0;
+        const nearByObjects = CityUtil.getNearByObjects();
+        for (const { object } of nearByObjects) {
+            current++;
             if (object.Type !== WorldObjectType.NPCBase && object.Type !== WorldObjectType.NPCCamp) {
                 continue;
             }
@@ -26,7 +29,8 @@ export class LayoutScanner extends StModuleBase {
 
             const existing = CityCache.get(object.$Id);
             if (existing) {
-                return existing;
+                CityCache.set(object.$Id, existing);
+                yield existing;
             }
 
             const cityObj = await CityUtil.waitForCity(object.$Id);
@@ -38,7 +42,7 @@ export class LayoutScanner extends StModuleBase {
             if (output == null) {
                 continue;
             }
-
+            this.st.log.debug({ current, count: nearByObjects.length }, 'ScanLayout');
             CityCache.set(object.$Id, output);
             yield output;
         }
