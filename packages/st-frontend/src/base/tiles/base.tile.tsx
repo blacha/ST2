@@ -100,7 +100,7 @@ export class ViewBaseItem extends React.Component<{
 
         return (
             <div className={BaseUnitUpgradedCss}>
-                <img src={starIcon} />
+                <img src={starIcon} width="16px" height="16px" />
             </div>
         );
     }
