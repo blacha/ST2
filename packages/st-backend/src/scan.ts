@@ -109,8 +109,8 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         const layouts: Map<string, BaseLayout> = new Map();
         const players: Map<number, StCity[]> = new Map();
         for (const baseJson of bases) {
+            baseJson.timestamp = Date.now();
             const base = BaseBuilder.load(baseJson);
-            base.updatedAt = Date.now();
 
             if (baseJson.owner.id < 0) {
                 const xy = BaseLocationPacker.pack(base.x, base.y);
