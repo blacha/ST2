@@ -1,7 +1,9 @@
 import { GameDataUnitId } from '@cncta/clientlib';
 import * as o from 'ospec';
+import { GameData } from '../../data/loader';
 import { BaseBuilder, BaseExporter } from '../base';
-import { BaseExampleForgotten, BaseExampleNod } from './base.example';
+import { BaseProduction } from '../production';
+import { BaseExampleForgotten, BaseExampleNod, ExampleNodBase2 } from './base.example';
 
 o.spec('BaseBuilder', () => {
     o('should load example base', () => {
@@ -24,5 +26,20 @@ o.spec('BaseBuilder', () => {
 
         o(base.isResearched(GameDataUnitId.NodCommando)).equals(false);
         o(base.isResearchUpgraded(GameDataUnitId.NodCommando)).equals(false);
+    });
+
+    o('should load crystal bases', () => {
+        GameData.load();
+        const base = BaseBuilder.load(ExampleNodBase2);
+        o(BaseExporter.toCncOpt(base)).equals(
+            `3|N|N|s-B|.16r16r14p17r16r21y.14w.t14p23a14pt....16r17r15p16r16r20rt..ccc17r18p20r13i...16r16r17r23h16r19hc..t17p16r16p23s16q...16r16r15r19h16r22h..........j...15q15f14q.14q...15q15m14q14q14q15f.kk15wll15mkk..16q16d16d16q15q14d....16q16m16dk16q15zjjj14wjj16m14w.......hh.h.ll.........................................|0|0|0|0|0|0|0|newEconomy`,
+        );
+
+        const production = BaseProduction.getOutput(base);
+
+        o(Math.floor(production.cont.tiberium)).equals(31408);
+        o(Math.floor(production.cont.crystal)).equals(23302);
+        o(Math.floor(production.cont.power)).equals(29983);
+        o(Math.floor(production.cont.credits)).equals(109342);
     });
 });

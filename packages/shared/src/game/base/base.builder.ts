@@ -80,8 +80,6 @@ export class BaseBuilder {
         output.updatedAt = city.timestamp;
         output.setBaseLevels(city.level.base, city.level.off, city.level.def);
 
-        output.tiles = BaseLayoutPacker.unpackLayout(city.tiles);
-
         for (const building of city.base) {
             const unit = UnitPacker.unpack(building);
             const point = UnitLocationPacker.unpack(unit.xy);
@@ -99,6 +97,7 @@ export class BaseBuilder {
             const point = UnitLocationPacker.unpack(unit.xy + BaseX.Max * BaseY.MaxDef);
             output.build(point.x, point.y, unit.level, GameDataObject.getById(unit.id));
         }
+        output.tiles = BaseLayoutPacker.unpackLayout(city.tiles);
 
         output.upgrades = city.upgrades;
         return output;
