@@ -52,7 +52,6 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
 
     async loadScan(worldId: number, scanId: string) {
         const scanDocId = NumberPacker.pack(worldId) + '.' + scanId;
-        console.log('LoadLayouts', worldId, scanId, scanDocId);
 
         const result = await FireStoreLayouts.doc(scanDocId).get();
         if (!result.exists) {
@@ -66,7 +65,6 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
             mixed: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
         };
 
-        console.log(layoutData);
         const bases: Base[] = [];
         const layouts = Object.keys(layoutData.layouts ?? {});
         for (const key of layouts) {
@@ -80,7 +78,6 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
             bases.push(base);
             addStats(base.info.stats, silos);
         }
-        console.log('Loaded', bases.length);
 
         bases.sort((a: Base, b: Base) => {
             const statsA = a.info.stats;
@@ -93,7 +90,6 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
             }
             return statsB.tiberium.score - statsA.tiberium.score;
         });
-        console.log(silos);
         this.setState({ bases, silos, state: ComponentLoading.Done });
     }
 

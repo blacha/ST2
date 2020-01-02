@@ -33,6 +33,7 @@ export class ButtonScan extends StModuleBase {
     buttons: QxFormButton[] = [];
     composite: QxComposite | null = null;
     lastBaseId: number | null = null;
+    lastBaseLinkId: string | null = null;
 
     async onStart(): Promise<void> {
         const regionCity = webfrontend.gui.region.RegionCityMenu.prototype;
@@ -57,6 +58,7 @@ export class ButtonScan extends StModuleBase {
 
             self.buttons.forEach(b => b.exclude());
             self.lastBaseId = currentId;
+            self.lastBaseLinkId = null;
 
             switch (selectedBase.get_VisObjectType()) {
                 case VisObjectType.RegionNPCBase:
@@ -84,7 +86,10 @@ export class ButtonScan extends StModuleBase {
                 return;
             }
             const cityObj = CityScannerUtil.get(city);
-            console.log(cityObj);
+            if (cityObj == null) {
+                return;
+            }
+            this.lastBaseLinkId = await CityCache.set(cityObj.cityId, cityObj, true);
         }
 
         if (waitId == this.lastBaseId) {
@@ -112,15 +117,16 @@ export class ButtonScan extends StModuleBase {
                     return;
                 }
                 const cityObj = CityScannerUtil.get(city);
-                console.log(cityObj);
                 if (cityObj == null) {
                     return;
                 }
                 qx.core.Init.getApplication()
                     ?.getPlayArea()
                     ?.setView(PlayerAreaViewMode.pavmAllianceBase, this.lastBaseId, 0, 0);
-                const baseId = await CityCache.set(cityObj.cityId, cityObj, true);
-                window.open(`${Config.api.url}/base/${baseId}`, '_blank');
+                if (this.lastBaseLinkId == null) {
+                    this.lastBaseLinkId = await CityCache.set(cityObj.cityId, cityObj, true);
+                }
+                window.open(`${Config.api.url}/base/${this.lastBaseLinkId}`, '_blank');
             });
             composite.add(button);
             this.buttons.push(button);

@@ -143,7 +143,6 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
 
     componentDidMount() {
         const { worldId, playerId } = this.props.match.params;
-        console.log('LoadPlayer', this.props.match.params);
         this.loadPlayer(Number(worldId), Number(playerId));
     }
 

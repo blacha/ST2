@@ -3,12 +3,26 @@ import { style } from 'typestyle';
 import { BackgroundImage } from '../../css.util';
 import { Tile, Base } from '@st/shared';
 import { viewUnit } from '../units';
+import * as starIcon from '../../../static/icon/icon_star.png';
 
 const FlexCenter = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
 };
+
+const BaseUnitUpgradedCss = style({
+    position: 'absolute',
+    bottom: '2px',
+    right: '2px',
+    ...FlexCenter,
+    minWidth: '16px',
+    minHeight: '16px',
+    height: '16px',
+    width: '16px',
+    borderRadius: '16px',
+    backgroundColor: 'rgba(225, 170, 78, 0.25)',
+});
 
 const BaseTileCss = {
     Base: style({
@@ -30,7 +44,7 @@ const BaseTileCss = {
         Level: style({
             position: 'absolute',
             top: '2px',
-            left: '0px',
+            left: '2px',
             fontSize: '80%',
             border: '1px solid rgba(0,0,0,0.8)',
             backgroundColor: 'rgba(209,209,209,0.8)',
@@ -38,7 +52,7 @@ const BaseTileCss = {
             minWidth: '20px',
             minHeight: '20px',
             textAlign: 'center',
-            textShadow: '1px 1px 4px rgba(0,0,0,0.6)',
+            fontWeight: 'bold',
             ...FlexCenter,
         }),
     },
@@ -79,6 +93,17 @@ export class ViewBaseItem extends React.Component<{
     size: number;
     useImages?: boolean;
 }> {
+    renderUpgrade(isUpgraded: boolean) {
+        if (!isUpgraded) {
+            return '';
+        }
+
+        return (
+            <div className={BaseUnitUpgradedCss}>
+                <img src={starIcon} />
+            </div>
+        );
+    }
     render() {
         const { x, y, base, size, useImages } = this.props;
         const tile = base.getTile(x, y);
@@ -94,6 +119,7 @@ export class ViewBaseItem extends React.Component<{
             <div className={classNames.join(' ')} title={building.type.data.display + ` (${building.level})`}>
                 {viewUnit(building)}
                 <div className={BaseTileCss.Cell.Level}>{building.level}</div>
+                {this.renderUpgrade(base.isResearchUpgraded(building.type.id))}
             </div>
         );
     }

@@ -171,13 +171,11 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
-        console.log('LoadAlliance', this.props.match.params);
         this.loadAlliance(Number(worldId), Number(allianceId));
     }
 
     async loadAlliance(worldId: number, allianceId: number) {
         const docId = NumberPacker.pack([worldId, allianceId]);
-        console.log(docId);
         this.setState({ info: [], state: ComponentLoading.Loading });
         const result = await FireStorePlayer.where('allianceKey', '==', docId)
             .limit(51)

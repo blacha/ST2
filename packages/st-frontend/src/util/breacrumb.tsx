@@ -20,7 +20,7 @@ export class StBreadCrumb extends React.Component<BreadCrumbProps> {
     viewAlliance() {
         const { alliance, worldId } = this.props;
 
-        if (alliance == null) {
+        if (alliance == null || alliance.id == 0 || alliance.name == '') {
             return null;
         }
         return (
