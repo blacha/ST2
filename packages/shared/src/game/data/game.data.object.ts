@@ -6,6 +6,7 @@ import { DefUnitType } from '../unit/def.unit.type';
 import { OffUnitType } from '../unit/off.unit.type';
 import { Faction } from './faction';
 import { GameDataJson } from './game.data';
+import { GameDataUnitId } from '@cncta/clientlib';
 
 export enum GameDataObjectType {
     Building = 'building',
@@ -15,17 +16,25 @@ export enum GameDataObjectType {
 
 export class GameDataObject {
     static UnknownCode = '?';
-    id = -1;
+    id: GameDataUnitId = -1;
     className = '';
     faction: Faction;
     code: string;
     objectType: GameDataObjectType;
 
-    static Id: Record<number, GameDataObject> = {};
+    static Id: Partial<Record<GameDataUnitId, GameDataObject>> = {};
     static Type: Record<string, GameDataObject> = {};
 
-    static getById(id: number): GameDataObject {
-        return GameDataObject.Id[id];
+    static hasGameObject(id: GameDataUnitId): boolean {
+        return GameDataObject.Id[id] != null;
+    }
+
+    static getById(id: GameDataUnitId): GameDataObject {
+        const obj = GameDataObject.Id[id];
+        if (obj == null) {
+            throw new Error(`Unable to find game object for ${id} ${GameDataUnitId[id]}`);
+        }
+        return obj;
     }
 
     static getByCode(objectType: GameDataObjectType, faction: Faction, code: string) {

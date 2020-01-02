@@ -20,6 +20,7 @@ import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
 import React = require('react');
+import { NodResearch, ViewResearch } from '../util/research';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
@@ -197,12 +198,6 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
     get isLoading() {
         return this.state.state == ComponentLoading.Loading;
     }
-
-    viewResearch(base: Base) {
-        if (base.faction == Faction.Nod) {
-        }
-    }
-
     render() {
         if (this.state == null || this.isLoading || this.state.main == null) {
             return <div>Loading...</div>;
@@ -227,6 +222,8 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
                     loading={this.isLoading}
                     size="small"
                 />
+                <Divider>Research</Divider>
+                <ViewResearch faction={this.state.main.faction} upgrades={this.state.upgrades} style="icon" />
                 <BackTop></BackTop>
             </React.Fragment>
         );

@@ -2,21 +2,7 @@ import React = require('react');
 import { style } from 'typestyle';
 import { BackgroundImage, FlexCenter } from '../../css.util';
 import { Tile, Base } from '@st/shared';
-import { viewUnit } from '../units';
-import * as starIcon from '../../../static/icon/icon_star.png';
-
-const BaseUnitUpgradedCss = style({
-    position: 'absolute',
-    bottom: '2px',
-    right: '2px',
-    ...FlexCenter,
-    minWidth: '16px',
-    minHeight: '16px',
-    height: '16px',
-    width: '16px',
-    borderRadius: '16px',
-    backgroundColor: 'rgba(225, 170, 78, 0.25)',
-});
+import { UnitIcon, UnitUpgradeIcon } from '../units';
 
 const BaseTileCss = {
     Base: style({
@@ -87,17 +73,6 @@ export class ViewBaseItem extends React.Component<{
     size: number;
     useImages?: boolean;
 }> {
-    renderUpgrade(isUpgraded: boolean) {
-        if (!isUpgraded) {
-            return '';
-        }
-
-        return (
-            <div className={BaseUnitUpgradedCss}>
-                <img src={starIcon} width="16px" height="16px" />
-            </div>
-        );
-    }
     render() {
         const { x, y, base, size, useImages } = this.props;
         const tile = base.getTile(x, y);
@@ -109,9 +84,9 @@ export class ViewBaseItem extends React.Component<{
         }
         return (
             <div className={classNames.join(' ')} title={building.type.data.display + ` (${building.level})`}>
-                {viewUnit(building)}
+                <UnitIcon unitId={building.type.id} />
                 <div className={BaseTileCss.Cell.Level}>{building.level}</div>
-                {this.renderUpgrade(base.isResearchUpgraded(building.type.id))}
+                <UnitUpgradeIcon isUpgraded={base.isResearchUpgraded(building.type.id)} />
             </div>
         );
     }

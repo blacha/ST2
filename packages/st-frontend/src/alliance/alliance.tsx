@@ -11,6 +11,7 @@ import { timeSince } from '../time.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { Base, GameResources, formatNumber, BaseBuilder, Id, NumberPacker, mergeBaseUpgrade } from '@st/shared';
 import { StCity, GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
+import { ViewResearch } from '../util/research';
 
 export const AllianceCss = {
     Table: style({
@@ -158,6 +159,15 @@ export const AllianceColumns = [
                 sorter: (a: PlayerStats, b: PlayerStats) => a.main.info.cost.total.total - b.main.info.cost.total.total,
             },
         ],
+    },
+    {
+        title: 'Research',
+        dataIndex: '',
+        key: 'research',
+        render: (stats: PlayerStats) => (
+            <ViewResearch faction={stats.main.faction} upgrades={stats.upgrades} style="square" />
+        ),
+        sorter: (a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt,
     },
     {
         title: 'Updated',

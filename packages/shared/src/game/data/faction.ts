@@ -51,8 +51,4 @@ export class Faction {
 
         throw new Error(`Unknown faction: "${char}"`);
     }
-
-    toString() {
-        return '<Faction:' + this.name + '>';
-    }
 }
