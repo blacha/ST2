@@ -7,3 +7,4 @@ export * from './base.stats';
 export * from './base';
 export * from './buildable';
 export * from './tile';
+export * from './base.upgrade';

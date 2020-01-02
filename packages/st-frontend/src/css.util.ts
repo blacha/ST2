@@ -5,3 +5,9 @@ export function BackgroundImage(size = 75) {
         backgroundRepeat: 'no-repeat',
     };
 }
+
+export const FlexCenter = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+};

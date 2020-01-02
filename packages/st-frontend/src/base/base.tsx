@@ -13,6 +13,7 @@ import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
 import { Base, BaseBuilder, NumberPacker } from '@st/shared';
 import { BaseX, BaseY, StCity } from '@cncta/clientlib';
+import { FactionName } from '../util/faction';
 const TileSize = 64;
 
 export const BaseCss = {
@@ -30,7 +31,7 @@ export const BaseCss = {
     Total: style({ fontWeight: 'bold' }),
     Title: style({ fontWeight: 'bold' }),
 };
-const ResourceCountsCss = style({ display: 'flex', alignItems: 'center' });
+const ResourceCountsCss = style({ display: 'flex', alignItems: 'center', marginRight: '-8px' });
 export enum ComponentLoading {
     Ready,
     Loading,
@@ -153,7 +154,9 @@ export class ViewBase extends React.Component<ViewBaseProps> {
                     base={{ id: base.id, name: base.name }}
                 />
                 <div className={BaseCss.Base}>
-                    <Divider>{base.name}</Divider>
+                    <Divider>
+                        <FactionName name={base.name} faction={base.faction} />
+                    </Divider>
 
                     <div style={{ width: baseWidth }}>
                         <div>{viewBaseLocation(base)}</div>

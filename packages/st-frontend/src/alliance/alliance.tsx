@@ -9,8 +9,8 @@ import { viewFaction } from '../base/faction';
 import { FireStorePlayer } from '../firebase';
 import { timeSince } from '../time.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
-import { Base, GameResources, formatNumber, BaseBuilder, Id, NumberPacker } from '@st/shared';
-import { StCity } from '@cncta/clientlib';
+import { Base, GameResources, formatNumber, BaseBuilder, Id, NumberPacker, mergeBaseUpgrade } from '@st/shared';
+import { StCity, GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
 
 export const AllianceCss = {
     Table: style({
@@ -33,6 +33,7 @@ export interface PlayerStats {
     production: GameResources;
     main: Base;
     updatedAt: number;
+    upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
 }
 
 type AllianceProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
@@ -122,7 +123,7 @@ export const AllianceColumns = [
                 dataIndex: 'main',
                 key: 'command',
                 defaultSortOrder: 'descend' as const,
-                render: (main: Base) => formatNumber(main.buildings.commandCenter?.level),
+                render: (main: Base) => Math.floor(main.buildings.commandCenter?.level ?? 0) || '',
                 sorter: (a: PlayerStats, b: PlayerStats) =>
                     (a.main.buildings.commandCenter?.level || 0) - (b.main.buildings.commandCenter?.level || 0),
             },
@@ -199,6 +200,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                         production: new GameResources(),
                         main: base,
                         updatedAt: base.updatedAt,
+                        upgrades: {},
                     };
                     playerSet.set(base.owner.id, current);
                 }
@@ -213,6 +215,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 if (base.updatedAt < current.updatedAt) {
                     current.updatedAt = base.updatedAt;
                 }
+                mergeBaseUpgrade(base.upgrades, current.upgrades);
             }
         }
         this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done, alliance, worldId });

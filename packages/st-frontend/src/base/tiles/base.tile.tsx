@@ -1,15 +1,9 @@
 import React = require('react');
 import { style } from 'typestyle';
-import { BackgroundImage } from '../../css.util';
+import { BackgroundImage, FlexCenter } from '../../css.util';
 import { Tile, Base } from '@st/shared';
 import { viewUnit } from '../units';
 import * as starIcon from '../../../static/icon/icon_star.png';
-
-const FlexCenter = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-};
 
 const BaseUnitUpgradedCss = style({
     position: 'absolute',

@@ -78,23 +78,22 @@ export class ButtonScan extends StModuleBase {
             return;
         }
 
-        // Accept cached data up to 5 minutes old
-        const cached = CityCache.get(waitId, 5 * 60 * 1000);
-        if (cached == null) {
-            const city = await CityUtil.waitForCity(waitId);
-            if (city == null) {
-                return;
-            }
-            const cityObj = CityScannerUtil.get(city);
-            if (cityObj == null) {
-                return;
-            }
-            this.lastBaseLinkId = await CityCache.set(cityObj.cityId, cityObj, true);
+        const city = await CityUtil.waitForCity(waitId);
+        if (city == null) {
+            return;
+        }
+        const cityObj = CityScannerUtil.get(city);
+        if (cityObj == null) {
+            return;
         }
 
-        if (waitId == this.lastBaseId) {
-            this.buttons.forEach(b => b.show());
+        CityCache.set(cityObj.cityId, cityObj);
+        if (waitId != this.lastBaseId) {
+            return;
         }
+
+        this.lastBaseLinkId = await CityCache.set(cityObj.cityId, cityObj, true);
+        this.buttons.forEach(b => b.show());
     }
 
     registerButtons(obj: any) {
@@ -109,23 +108,13 @@ export class ButtonScan extends StModuleBase {
 
             button.getChildControl('icon').set({ width: 16, height: 16, scale: true }); // Force icon to be 16x16 px
             button.addListener('execute', async () => {
-                if (this.lastBaseId == null) {
+                if (this.lastBaseId == null || this.lastBaseLinkId == null) {
                     return;
                 }
-                const city = await CityUtil.waitForCity(this.lastBaseId);
-                if (city == null) {
-                    return;
-                }
-                const cityObj = CityScannerUtil.get(city);
-                if (cityObj == null) {
-                    return;
-                }
+
                 qx.core.Init.getApplication()
                     ?.getPlayArea()
                     ?.setView(PlayerAreaViewMode.pavmAllianceBase, this.lastBaseId, 0, 0);
-                if (this.lastBaseLinkId == null) {
-                    this.lastBaseLinkId = await CityCache.set(cityObj.cityId, cityObj, true);
-                }
                 window.open(`${Config.api.url}/base/${this.lastBaseLinkId}`, '_blank');
             });
             composite.add(button);

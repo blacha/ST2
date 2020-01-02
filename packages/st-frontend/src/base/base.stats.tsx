@@ -88,7 +88,7 @@ export class ViewBaseStats extends React.Component<{ base: Base }> {
                 <ViewBaseResourcesHeader />
                 <ViewBaseResources title="Cont" resources={prod.cont} />
                 <ViewBaseResources title="Package" resources={prod.pkg} />
-                <ViewBaseResources title="Alliance" resources={prod.alliance} />
+                {/* <ViewBaseResources title="Alliance" resources={prod.alliance} /> */}
                 <ViewBaseResources title="Total" resources={prod.total} className={BaseStatsCss.StatTotal} />
 
                 <Divider>Base Cost</Divider>

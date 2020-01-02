@@ -1,4 +1,14 @@
-import { Base, BaseBuilder, formatNumber, GameResources, Id, NumberPacker } from '@st/shared';
+import { StCity } from '@cncta/clientlib';
+import {
+    Base,
+    BaseBuilder,
+    formatNumber,
+    GameResources,
+    Id,
+    mergeBaseUpgrade,
+    NumberPacker,
+    Faction,
+} from '@st/shared';
 import BackTop from 'antd/es/back-top';
 import Divider from 'antd/es/divider';
 import Table from 'antd/es/table';
@@ -8,7 +18,7 @@ import { ComponentLoading } from '../base/base';
 import { FireStorePlayer } from '../firebase';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
-import { StCity } from '@cncta/clientlib';
+import { FactionName } from '../util/faction';
 import React = require('react');
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
@@ -81,7 +91,7 @@ export const PlayerColumns = [
                 title: 'CC',
                 dataIndex: '',
                 key: 'command',
-                render: (main: Base) => formatNumber(main.buildings.commandCenter?.level),
+                render: (main: Base) => Math.floor(main.buildings.commandCenter?.level ?? 0) || '',
                 sorter: (a: Base, b: Base) =>
                     (a.buildings.commandCenter?.level || 0) - (b.buildings.commandCenter?.level || 0),
             },
@@ -164,6 +174,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
             production: new GameResources(),
             main: bases[0],
             updatedAt: bases[0].updatedAt,
+            upgrades: {},
         };
 
         for (const base of bases) {
@@ -177,6 +188,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
             }
             current.bases.push(base);
             current.production.add(base.info.production.total);
+            mergeBaseUpgrade(base.upgrades, current.upgrades);
         }
 
         this.setState({ ...current, state: ComponentLoading.Done });
@@ -184,6 +196,11 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
 
     get isLoading() {
         return this.state.state == ComponentLoading.Loading;
+    }
+
+    viewResearch(base: Base) {
+        if (base.faction == Faction.Nod) {
+        }
     }
 
     render() {
@@ -198,7 +215,9 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
                     alliance={this.state.main.alliance}
                     player={this.state.main.owner}
                 />
-                <Divider>{this.state.name}</Divider>
+                <Divider>
+                    <FactionName name={this.state.name} faction={this.state.main.faction} />
+                </Divider>
                 <Table
                     rowKey="id"
                     dataSource={bases}
