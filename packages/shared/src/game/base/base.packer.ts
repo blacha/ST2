@@ -10,12 +10,12 @@ export interface Point {
 export class NumberPacker {
     // pack([23,24])
     static pack(data: number): string;
-    static pack(data: Array<number>): string;
-    static pack(data: Array<number> | number): string {
+    static pack(data: Array<number>, join?: string): string;
+    static pack(data: Array<number> | number, join = '.'): string {
         if (typeof data === 'number') {
             return Base62.encode(data);
         }
-        return data.map(c => NumberPacker.number.pack(c)).join('.');
+        return data.map(c => NumberPacker.number.pack(c)).join(join);
     }
 
     static unpack(str: string): number[] {
