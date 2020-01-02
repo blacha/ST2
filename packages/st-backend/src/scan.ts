@@ -1,4 +1,4 @@
-import { StCity } from '@cncta/clientlib';
+import { StCity, BaseLocationPacker } from '@cncta/clientlib';
 import {
     ApiScanRequest,
     ApiScanResponse,
@@ -112,8 +112,8 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             base.updatedAt = Date.now();
 
             if (baseJson.owner.id < 0) {
-                const xy = String(0); // BasePacker.xy.packS(base.x, base.y);
-                layouts.set(xy, {
+                const xy = BaseLocationPacker.pack(base.x, base.y);
+                layouts.set(NumberPacker.pack(xy), {
                     layout: BaseLayoutPacker.pack(base),
                     updatedAt: Date.now(),
                 });
