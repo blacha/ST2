@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/blacha/st/compare/v0.3.0...v0.4.0) (2020-01-02)
+
+
+### Bug Fixes
+
+* baselayout scanner ([a15c9e4](https://github.com/blacha/st/commit/a15c9e4259d7a5095cbcfa6180fbd285beef5dd2))
+* disable sort by research ([f3650df](https://github.com/blacha/st/commit/f3650df830799c758b88004cf6b600d6a6bfd59e))
+
+
+### Features
+
+* patch npc camps to show camp/outpost level ([5db6443](https://github.com/blacha/st/commit/5db6443315ebd81307675b644e31aa3ee023306d))
+* use the layer near the canvas for overlays ([f94ffa9](https://github.com/blacha/st/commit/f94ffa9713d8892bb4b73ab70d0492d63f2e0390))
+
+
+
+
+
 # [0.3.0](https://github.com/blacha/st/compare/v0.2.0...v0.3.0) (2020-01-02)
 
 

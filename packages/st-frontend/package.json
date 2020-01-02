@@ -1,6 +1,6 @@
 {
     "name": "@st/frontend",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Client lib utilities and types",
     "private": true,
     "scripts": {
