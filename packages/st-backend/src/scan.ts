@@ -109,6 +109,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         const players: Map<number, StCity[]> = new Map();
         for (const baseJson of bases) {
             const base = BaseBuilder.load(baseJson);
+            base.updatedAt = Date.now();
 
             if (baseJson.owner.id < 0) {
                 const xy = String(0); // BasePacker.xy.packS(base.x, base.y);
@@ -122,7 +123,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
                 players.set(baseJson.owner.id, existing);
             }
 
-            const baseId = NumberPacker.pack([worldId, baseJson.cityId, Math.floor(Date.now() / 1000)], '');
+            const baseId = NumberPacker.pack([worldId, baseJson.cityId, Math.floor(base.updatedAt / 1000)], '');
             const BaseCollection = FirestoreAdmin.collection('base');
             await BaseCollection.doc(baseId).set(baseJson);
             output.push(baseId);
