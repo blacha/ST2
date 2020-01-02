@@ -50,7 +50,7 @@ export class Base {
     x = -1;
     y = -1;
     /** Cnc CityId */
-    cityId: number = -1;
+    cityId = -1;
     worldId = -1;
     /** Time the base was last seen */
     updatedAt: number;
@@ -135,8 +135,14 @@ export class Base {
         this.base[UnitLocationPacker.pack(x, y)] = buildable;
     }
 
+    isResearched(unitId: GameDataUnitId) {
+        return this.isResearchLevel(unitId, GameDataResearchLevel.Researched);
+    }
+    isResearchUpgraded(unitId: GameDataUnitId) {
+        return this.isResearchLevel(unitId, GameDataResearchLevel.Upgraded);
+    }
     /** Is the unitId upgraded passed this level */
-    isUpgraded(unitId: GameDataUnitId, level: GameDataResearchLevel) {
+    isResearchLevel(unitId: GameDataUnitId, level: GameDataResearchLevel.Researched | GameDataResearchLevel.Upgraded) {
         return (this.upgrades[unitId] ?? 0) >= level;
     }
 

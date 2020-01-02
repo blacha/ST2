@@ -136,7 +136,7 @@ function writeDeObs() {
                 outputGameData.push(line);
                 continue;
             }
-            outputGameData.push('module.exports = { GAMEDATA };')
+            outputGameData.push('module.exports = { GAMEDATA };');
             foundClientLib = true;
         }
         // Useless line, just remove

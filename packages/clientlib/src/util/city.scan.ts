@@ -56,7 +56,7 @@ export interface StCity extends CityArmy {
     base: number[];
 
     /** Units that have upgrades */
-    upgrades: Record<GameDataUnitId, GameDataResearchLevel>;
+    upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
 
     /** Time the base was last seen */
     timestamp: number;
