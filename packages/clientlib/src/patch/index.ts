@@ -16,6 +16,7 @@ export interface PatchedWorldObjectCity extends PatchedId {
 
 export interface PatchedCampType {
     $CampType: NpcCampType;
+    $Level: number;
 }
 
 export interface PatchedCityUnits {
