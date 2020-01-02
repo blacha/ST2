@@ -53,7 +53,7 @@ export class CampTracker extends StModuleBase {
         if (visMain.get_Mode() == VisViewMode.Region) {
             this.markers.forEach(f => {
                 if (f.el.parentElement == null) {
-                    document.body.appendChild(f.el);
+                    this.addMarkerToDom(f.el);
                 }
             });
         } else {
@@ -99,6 +99,7 @@ export class CampTracker extends StModuleBase {
         }
 
         this.updatePosition();
+        this.updateView();
         return newestCamps;
     }
 
@@ -147,9 +148,10 @@ export class CampTracker extends StModuleBase {
         el.title = `Object #${cityId}`;
 
         this.updateElement(el, location, index);
-
-        document.body.appendChild(el);
-
         this.markers.set(cityId, { el, location, index });
+    }
+
+    addMarkerToDom(el: HTMLDivElement) {
+        document.querySelector('canvas')?.parentElement?.appendChild(el);
     }
 }
