@@ -159,6 +159,11 @@ export interface ClientLibVisRegion extends ClientLibEventEmitter {
     /** Number between 0-1, 1 is full zoomed in */
     get_ZoomFactor(): number;
 
+    /* height in pixels */
+    get_ViewHeight(): number;
+    /** width in pixels */
+    get_ViewWidth(): number;
+
     GetObjectFromPosition(regionX: number, regionY: number): RegionObjectType;
 }
 

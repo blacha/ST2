@@ -12,3 +12,7 @@ export interface ClientLibList<T> {
 export interface ClientLibSingleton<T> {
     GetInstance(): T;
 }
+
+export interface ClientLibClass<T> {
+    new (): T;
+}

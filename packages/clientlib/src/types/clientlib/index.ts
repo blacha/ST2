@@ -1,5 +1,5 @@
-import { ClientLibSingleton } from './util';
-import { ClientLibVisMain, VisObjectType } from './vis';
+import { ClientLibSingleton, ClientLibClass } from './util';
+import { ClientLibVisMain, VisObjectType, RegionNpcCamp, RegionNpcBase, RegionCity } from './vis';
 import { ClientLibMathUtil } from './math';
 import { ClientLibMainData } from './main.data';
 import { ClientLibEvent } from './event';
@@ -38,6 +38,11 @@ export interface ClientLibStatic {
     Res: {};
     Sound: {};
     Vis: {
+        Region: {
+            RegionNPCCamp: ClientLibClass<RegionNpcCamp>;
+            RegionNPCBase: ClientLibClass<RegionNpcBase>;
+            RegionCity: ClientLibClass<RegionCity>;
+        };
         PositionChange: ClientLibEvent;
         SelectionChange: ClientLibEvent;
         ZoomFactorChange: ClientLibEvent;
