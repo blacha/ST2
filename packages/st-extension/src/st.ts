@@ -8,6 +8,7 @@ import { LayoutScanner } from './module/layout/layout.scan';
 import { hasStModuleHooks, StModule, StModuleState } from './module/module';
 import { StModuleBase } from './module/module.base';
 import { KillInfo } from './module/kill.info/kill.info';
+import { PlayerStatus } from './module/player.status/player.status';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -59,7 +60,15 @@ export class St {
         city: CityUtil,
     };
 
-    modules: StModule[] = [this.api, this.layout, this.alliance, new ButtonScan(), this.camp, new KillInfo()];
+    modules: StModule[] = [
+        this.api,
+        this.layout,
+        this.alliance,
+        new ButtonScan(),
+        this.camp,
+        new KillInfo(),
+        new PlayerStatus(),
+    ];
 
     player: PlayerState = PlayerState.Idle;
     state: StState = StState.Idle;
@@ -127,7 +136,7 @@ export class St {
         this.log.trace('StPatch');
         for (const patch of Object.values(Patches)) {
             this.log.info({ path: patch.path }, 'Patch:Apply');
-            patch.patch({ ClientLib });
+            patch.patch();
         }
 
         for (const module of this.modules) {
@@ -149,7 +158,7 @@ export class St {
     async stop() {
         for (const patch of Object.values(Patches)) {
             this.log.info({ path: patch.path }, 'Patch:Remove');
-            patch.remove({ ClientLib });
+            patch.remove();
         }
         for (const module of this.modules) {
             this.log.debug({ module: module.name }, 'StModule:Stop');

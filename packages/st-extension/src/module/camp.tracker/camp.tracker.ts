@@ -37,7 +37,7 @@ export class CampTracker extends StModuleBase {
         this.addEvent(region, 'PositionChange', ClientLib.Vis.PositionChange, this.updatePosition);
         this.addEvent(region, 'ZoomFactorChange', ClientLib.Vis.ZoomFactorChange, this.updatePosition);
 
-        this.updateInterval = window.setInterval(() => this.update(), 10 * 1000);
+        this.interval(() => this.update(), 10 * 1000);
 
         // Use floating point base numbers for tool tips
         replaceBaseLevel(ClientLib.Vis.Region.RegionNPCBase);
@@ -48,7 +48,6 @@ export class CampTracker extends StModuleBase {
 
     async onStop(): Promise<void> {
         this.state = StModuleState.Stopping;
-        window.clearInterval(this.updateInterval);
         for (const cityId of Array.from(this.markers.keys())) {
             this.destroy(cityId);
         }

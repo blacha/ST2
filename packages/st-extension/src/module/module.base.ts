@@ -19,6 +19,7 @@ export abstract class StModuleBase implements StModuleHooks {
     st: St;
 
     events: EventContext[] = [];
+    timers: number[] = [];
 
     onStart?(): Promise<void>;
     onStop?(): Promise<void>;
@@ -37,7 +38,14 @@ export abstract class StModuleBase implements StModuleHooks {
         for (const event of this.events) {
             phe.cnc.Util.detachNetEvent(event.source, event.name, event.type, this, event.cb);
         }
+        for (const timer of this.timers) {
+            clearInterval(timer);
+        }
         this.state = StModuleState.Stopped;
+    }
+
+    interval(func: Function, timeout: number) {
+        this.timers.push(setInterval(func, timeout));
     }
 
     addEvent(source: ClientLibEventEmitter, name: ClientLibEventName, type: ClientLibEvent, cb: Function) {
