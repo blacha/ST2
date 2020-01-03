@@ -1,4 +1,5 @@
 import { ClientLibEventEmitter } from './event';
+import { ClientLibWorldObject } from './main.data/world';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -60,8 +61,76 @@ export enum VisObjectType {
     WorldCityNotOwn = 36,
 }
 
-export type RegionNpcCamp = VisObject;
-export type RegionObject = VisObject;
+export interface RegionObject {
+    /** rawX offset by GridWidth */
+    get_X(): number;
+    /** rawY offset by GridHeight */
+    get_Y(): number;
+    get_RawX(): number;
+    get_RawY(): number;
+
+    /** XY Encoded */
+    get_Coordinates(): number;
+}
+
+export interface RegionGhostCity extends RegionObject {
+    get_VisObjectType(): number;
+}
+
+export type RegionHub = RegionObject;
+export type RegionHubCenter = RegionObject;
+export type RegionHubControl = RegionObject;
+export type RegionHubServer = RegionObject;
+export type RegionRuin = RegionObject;
+export type RegionAllianceMarker = RegionObject;
+export type RegionPointOfInterest = RegionObject;
+
+/** Shared between all Base, City & Camp */
+export interface RegionObjectBase extends RegionObject {
+    /** CityId @see ClientLibCity.CityId */
+    get_Id(): number;
+    /**
+     * @example
+     * "Outpost"
+     */
+    get_Name(): string;
+    /* Level rounded down */
+    get_BaseLevel(): number;
+    /** Base building health between 0-100 */
+    get_ConditionBuildings(): number;
+    /** Defense health between 0-100 */
+    get_ConditionDefense(): number;
+
+    get_PlayerId(): number;
+    get_AllianceId(): number;
+
+    /* Show info about base */
+    ShowInfos(): void;
+    /** Hide info about base */
+    HideInfos(): void;
+}
+
+/** Player base */
+export interface RegionCity extends RegionObjectBase {
+    get_AllianceName(): string;
+    get_TargetObject(): ClientLibWorldObject;
+
+    /** Current command center level, 0 if out of range */
+    get_CommandCenterLevel(): number | 0;
+}
+/** Forgotten base */
+export interface RegionNpcBase extends RegionObjectBase {
+    CalculateBuildingAndDefenseCondition(a): unknown;
+    get_IsHubBase(): boolean;
+    get_BaseLevelFloat(): number;
+    get_TargetObject(): ClientLibWorldObject;
+}
+
+/** Forgotten Camp or Outpost */
+export interface RegionNpcCamp extends RegionObjectBase {
+    get_BaseLevelFloat(): number;
+    get_TargetObject(): ClientLibWorldObject;
+}
 
 export interface VisObject {
     get_Id(): number;
@@ -70,12 +139,25 @@ export interface VisObject {
     get_VisObjectType(): VisObjectType;
     get_Coordinates(): number;
 }
+export type RegionObjectType =
+    | RegionNpcCamp
+    | RegionNpcBase
+    | RegionCity
+    | RegionHub
+    | RegionHubCenter
+    | RegionHubControl
+    | RegionHubServer
+    | RegionRuin
+    | RegionAllianceMarker
+    | RegionPointOfInterest;
 
 export interface ClientLibVisRegion extends ClientLibEventEmitter {
     get_GridWidth(): number;
     get_GridHeight(): number;
     /** Number between 0-1, 1 is full zoomed in */
     get_ZoomFactor(): number;
+
+    GetObjectFromPosition(regionX: number, regionY: number): RegionObjectType;
 }
 
 export interface ClientLibVisMain extends ClientLibEventEmitter {
@@ -84,8 +166,7 @@ export interface ClientLibVisMain extends ClientLibEventEmitter {
     ViewUpdate(): void;
 
     get_MouseMode(): MouseMode;
-
-    get_Mode(): VisViewMode; // what is this number?
+    get_Mode(): VisViewMode;
 
     ScreenPosFromWorldPosX(x: number): number;
     ScreenPosFromWorldPosY(y: number): number;
