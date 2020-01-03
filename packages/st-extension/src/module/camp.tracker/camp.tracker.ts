@@ -1,8 +1,22 @@
-import { BaseLocationPacker, CityUtil, ClientLibStatic, NpcCampType, Patches, Point } from '@cncta/clientlib';
+import {
+    BaseLocationPacker,
+    CityUtil,
+    ClientLibClass,
+    ClientLibStatic,
+    NpcCampType,
+    Patches,
+    Point,
+    RegionNpcCamp,
+} from '@cncta/clientlib';
 import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
 
 declare const ClientLib: ClientLibStatic;
+
+function replaceBaseLevel(t: ClientLibClass<RegionNpcCamp | RegionNpcCamp>) {
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    t.prototype.get_BaseLevel = t.prototype.get_BaseLevelFloat;
+}
 
 export class CampTracker extends StModuleBase {
     name = 'CampTracker';
@@ -24,6 +38,10 @@ export class CampTracker extends StModuleBase {
         this.addEvent(region, 'ZoomFactorChange', ClientLib.Vis.ZoomFactorChange, this.updatePosition);
 
         this.updateInterval = window.setInterval(() => this.update(), 10 * 1000);
+
+        // Use floating point base numbers for tool tips
+        replaceBaseLevel(ClientLib.Vis.Region.RegionNPCBase);
+        replaceBaseLevel(ClientLib.Vis.Region.RegionNPCCamp);
 
         this.update();
     }
@@ -47,14 +65,16 @@ export class CampTracker extends StModuleBase {
             if (!Patches.WorldObjectNPCCamp.isPatched(f.object)) {
                 return false;
             }
+
             if (f.object.$CampType === NpcCampType.Destroyed) {
                 return false;
             }
 
-            // Remove low level camps/outposts
+            // Ignore low level camps/outposts
             if (f.object.$Level < minBaseHighlight) {
                 return false;
             }
+
             return true;
         });
         const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, this.MaxToShow);
@@ -87,14 +107,29 @@ export class CampTracker extends StModuleBase {
 
         const top = visMain.ScreenPosFromWorldPosY((location.y + 0.1) * gridHeight);
         const left = visMain.ScreenPosFromWorldPosX((location.x + 0.1) * gridWidth);
+        const bottom = region.get_ViewHeight();
+        const right = region.get_ViewWidth();
+
+        // Out of bounds disable
+        if (top < 0 || left < 0 || top > bottom || left > right) {
+            el.remove();
+            return;
+        }
 
         el.style.top = top + 'px';
         el.style.left = left + 'px';
-        el.innerHTML = '#' + (index + 1);
-        if (index < 3) {
-            el.style.backgroundColor = `rgba(0,240,0,0.9)`;
-        } else {
-            el.style.backgroundColor = `rgba(200,240,0,0.9)`;
+        if (el.getAttribute('st-last-index') != String(index)) {
+            el.innerHTML = '#' + (index + 1);
+            if (index < 3) {
+                el.style.backgroundColor = `rgba(0,240,0,0.9)`;
+            } else {
+                el.style.backgroundColor = `rgba(200,240,0,0.9)`;
+            }
+            el.setAttribute('st-last-index', String(index));
+        }
+
+        if (el.parentElement == null) {
+            this.addMarkerToDom(el);
         }
     }
 
@@ -135,7 +170,6 @@ export class CampTracker extends StModuleBase {
         el.style.border = '2px solid rgba(0,0,0,0.87)';
 
         el.title = `Object #${cityId}`;
-
         this.updateElement(el, location, index);
         this.markers.set(cityId, { el, location, index });
         this.addMarkerToDom(el);
