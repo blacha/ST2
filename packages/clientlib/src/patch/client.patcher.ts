@@ -1,4 +1,3 @@
-import { ClientLibStatic } from '../types/clientlib';
 import { ClientLibPatchGetter } from './patch.getter';
 import { ClientLibPatchFunction } from './patch.replacement';
 
