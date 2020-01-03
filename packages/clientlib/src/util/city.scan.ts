@@ -1,4 +1,3 @@
-import { ClientLibPatcher } from '../patch';
 import { ClientLibStatic } from '../types/clientlib';
 import { ClientLibCity, ClientLibCityBuildable } from '../types/clientlib/main.data/cities';
 import { FactionType } from '../types/game/faction';
@@ -8,6 +7,7 @@ import { UnitPacker } from './pack/unit.packer';
 import { BaseY, BaseX } from '../base.const';
 import { UnitLocationPacker } from './pack';
 import { GameDataStatic, GameDataResearchLevel, GameDataUnitId } from '../types';
+import { Patches } from '../patch';
 
 declare const GAMEDATA: GameDataStatic;
 
@@ -129,7 +129,7 @@ export class CityScannerUtil {
 
     static getUnits(city: ClientLibCity): CityArmy {
         const units = city.get_CityUnitsData();
-        if (!ClientLibPatcher.hasPatchedCityUnits(units)) {
+        if (!Patches.CityUnits.isPatched(units)) {
             throw new Error('City is not patched, missing: $DefenseUnits');
         }
 

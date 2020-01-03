@@ -23,6 +23,12 @@ export interface ClientLibAllianceMemberData {
     VeteranPointContribution: number;
 }
 
+export enum AllianceDiplomacyStatus {
+    Friend = 1,
+    NAP = 2,
+    Foe = 3,
+}
+
 export interface ClientLibAlliance {
     /**
      * Get alliance Id
@@ -37,4 +43,7 @@ export interface ClientLibAlliance {
     get_Name(): string | '';
 
     get_MemberData(): ClientLibMap<ClientLibAllianceMemberData>;
+
+    /** Get the relationship of your alliance to their alliance */
+    GetRelation(allianceId: number): AllianceDiplomacyStatus;
 }

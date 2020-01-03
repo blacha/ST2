@@ -3,6 +3,7 @@ import { ClientLibPlayer } from './player';
 import { ClientLibCities } from './cities';
 import { ClientLibWorld } from './world';
 import { ClientLibAlliance } from './alliance';
+import { ClientLibBaseColor } from './color';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibMainData {
@@ -17,7 +18,7 @@ export interface ClientLibMainData {
     get_Mail(): unknown;
     get_Reports(): unknown;
     get_Missions(): unknown;
-    get_BaseColors(): unknown;
+    get_BaseColors(): ClientLibBaseColor;
     get_Gift(): unknown;
     get_Forum(): unknown;
     get_Notifications(): unknown;

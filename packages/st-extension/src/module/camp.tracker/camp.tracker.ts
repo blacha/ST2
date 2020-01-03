@@ -1,11 +1,11 @@
 import {
     BaseLocationPacker,
     CityUtil,
-    ClientLibPatcher,
     ClientLibStatic,
     NpcCampType,
     Point,
     VisViewMode,
+    Patches,
 } from '@cncta/clientlib';
 import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
@@ -32,7 +32,7 @@ export class CampTracker extends StModuleBase {
         this.addEvent(region, 'ZoomFactorChange', ClientLib.Vis.ZoomFactorChange, this.updatePosition);
         this.addEvent(visMain, 'ViewModeChange', ClientLib.Vis.ViewModeChange, this.updateView);
 
-        this.updateInterval = window.setInterval(() => this.update(), 2 * 1000);
+        this.updateInterval = window.setInterval(() => this.update(), 10 * 1000);
 
         this.update();
     }
@@ -62,13 +62,12 @@ export class CampTracker extends StModuleBase {
     }
 
     update() {
-        console.time('UpdateView');
         const mainBase = CityUtil.getMainCity();
         const offLevel = mainBase.get_LvlOffense();
         const minBaseHighlight = offLevel - this.MaxOffDiff;
         const nearByCamps = Array.from(CityUtil.getObjectsNearCity(mainBase).values()).filter(f => {
             // All outposts are camps
-            if (!ClientLibPatcher.hasPatchedCampType(f.object)) {
+            if (!Patches.WorldObjectNPCCamp.isPatched(f.object)) {
                 return false;
             }
             if (f.object.$CampType === NpcCampType.Destroyed) {
@@ -101,7 +100,6 @@ export class CampTracker extends StModuleBase {
 
         this.updatePosition();
         this.updateView();
-        console.timeEnd('UpdateView');
         return newestCamps;
     }
 

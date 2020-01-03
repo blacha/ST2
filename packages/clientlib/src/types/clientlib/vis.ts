@@ -60,12 +60,18 @@ export enum VisObjectType {
     WorldPOI = 35,
     WorldCityNotOwn = 36,
 }
+export interface VisObject {
+    get_Id?(): number;
 
-export interface RegionObject {
     /** rawX offset by GridWidth */
     get_X(): number;
     /** rawY offset by GridHeight */
     get_Y(): number;
+    get_VisObjectType(): VisObjectType;
+    get_Coordinates(): number;
+}
+
+export interface RegionObject extends VisObject {
     get_RawX(): number;
     get_RawY(): number;
 
@@ -108,6 +114,9 @@ export interface RegionObjectBase extends RegionObject {
     ShowInfos(): void;
     /** Hide info about base */
     HideInfos(): void;
+
+    /** Update the color of the info panel */
+    UpdateColor(): void;
 }
 
 /** Player base */
@@ -120,7 +129,7 @@ export interface RegionCity extends RegionObjectBase {
 }
 /** Forgotten base */
 export interface RegionNpcBase extends RegionObjectBase {
-    CalculateBuildingAndDefenseCondition(a): unknown;
+    CalculateBuildingAndDefenseCondition(a: unknown): unknown;
     get_IsHubBase(): boolean;
     get_BaseLevelFloat(): number;
     get_TargetObject(): ClientLibWorldObject;
@@ -132,13 +141,6 @@ export interface RegionNpcCamp extends RegionObjectBase {
     get_TargetObject(): ClientLibWorldObject;
 }
 
-export interface VisObject {
-    get_Id(): number;
-    get_X(): number;
-    get_Y(): number;
-    get_VisObjectType(): VisObjectType;
-    get_Coordinates(): number;
-}
 export type RegionObjectType =
     | RegionNpcCamp
     | RegionNpcBase

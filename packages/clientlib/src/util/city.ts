@@ -1,4 +1,4 @@
-import { ClientLibPatcher, PatchedWorldObjectCity, PatchedId } from '../patch';
+import { ClientLibPatch, PatchedId, PatchedWorldObjectCity, Patches } from '../patch';
 import { ClientLibStatic } from '../types/clientlib';
 import { ClientLibCity } from '../types/clientlib/main.data/cities';
 import { ClientLibWorldObject } from '../types/clientlib/main.data/world';
@@ -41,7 +41,7 @@ export class CityUtil {
             return;
         }
 
-        if (ClientLibPatcher.hasPatchedId(obj)) {
+        if (ClientLibPatch.hasPatchedId(obj)) {
             md.get_Cities().set_CurrentCityId(obj.$Id);
         }
     }
@@ -74,7 +74,7 @@ export class CityUtil {
 
         const cities: PatchedWorldObjectCity[] = [];
         for (const city of ClientLibIter.values(md.get_World().GetCities())) {
-            if (!ClientLibPatcher.hasPatchedAllianceId(city)) {
+            if (!Patches.WorldObjectCity.isPatched(city)) {
                 continue;
             }
             if (city.$AllianceId == allianceId) {
@@ -135,7 +135,7 @@ export class CityUtil {
                 continue;
             }
 
-            if (!ClientLibPatcher.hasPatchedId(object)) {
+            if (!ClientLibPatch.hasPatchedId(object)) {
                 continue;
             }
 

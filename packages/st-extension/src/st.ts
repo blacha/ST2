@@ -1,21 +1,14 @@
-import {
-    ClientLibStatic,
-    ClientLibLoader,
-    ClientLibPatcher,
-    ClientLib,
-    CityScannerUtil,
-    CityUtil,
-} from '@cncta/clientlib';
+import { CityScannerUtil, CityUtil, ClientLibLoader, ClientLibStatic, Patches } from '@cncta/clientlib';
 import { Id, StLog } from '@st/shared';
-import { StModule, hasStModuleHooks, StModuleState } from './module/module';
-import { LayoutScanner } from './module/layout/layout.scan';
-import { AllianceScanner } from './module/alliance/alliance.info';
 import { ClientApi } from './api/client.api';
+import { AllianceScanner } from './module/alliance/alliance.info';
 import { ButtonScan } from './module/button/button.scan';
-import { StModuleBase } from './module/module.base';
 import { CampTracker } from './module/camp.tracker/camp.tracker';
+import { LayoutScanner } from './module/layout/layout.scan';
+import { hasStModuleHooks, StModule, StModuleState } from './module/module';
+import { StModuleBase } from './module/module.base';
 
-declare const Clientlib: ClientLibStatic;
+declare const ClientLib: ClientLibStatic;
 
 /** What is the player currently upto */
 export enum PlayerState {
@@ -131,7 +124,10 @@ export class St {
         }
 
         this.log.trace('StPatch');
-        ClientLibPatcher.patch(ClientLib);
+        for (const patch of Object.values(Patches)) {
+            this.log.info({ path: patch.path }, 'Patch:Apply');
+            patch.patch({ ClientLib });
+        }
 
         for (const module of this.modules) {
             this.log.debug({ module: module.name }, 'StModule:Start');
@@ -150,6 +146,10 @@ export class St {
     }
 
     async stop() {
+        for (const patch of Object.values(Patches)) {
+            this.log.info({ path: patch.path }, 'Patch:Remove');
+            patch.remove({ ClientLib });
+        }
         for (const module of this.modules) {
             this.log.debug({ module: module.name }, 'StModule:Stop');
 
