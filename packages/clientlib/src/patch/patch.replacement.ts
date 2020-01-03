@@ -12,19 +12,29 @@ export class ClientLibPatchFunction implements ClientPatch {
         this.targetFunction = targetFunction;
     }
 
+    get backupFunctionName() {
+        return `__st__${this.sourceFunctionName}`;
+    }
+
     isPatched(): boolean {
         return false;
     }
 
-    apply(): boolean {
-        // TODO
-        return false;
+    apply(baseObject: Function): boolean {
+        if (typeof baseObject.prototype[this.backupFunctionName] != 'undefined') {
+            return false;
+        }
+        baseObject.prototype[this.backupFunctionName] = baseObject.prototype[this.sourceFunctionName];
+        baseObject.prototype[this.sourceFunctionName] = this.targetFunction;
+        return true;
     }
-    remove() {
-        return false;
+
+    remove(baseObject: Function) {
+        if (typeof baseObject.prototype[this.backupFunctionName] == 'undefined') {
+            return false;
+        }
+        baseObject.prototype[this.sourceFunctionName] = baseObject.prototype[this.backupFunctionName];
+        delete baseObject.prototype[this.backupFunctionName];
+        return true;
     }
 }
-
-// const PatchedWorldObjectNpcCampId = new ClientLibPatcher<{$Id: string}> {
-//     'ClientLib.Data.WorldSector.WorldObjectNPCCamp'
-// }

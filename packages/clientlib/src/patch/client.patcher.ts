@@ -105,7 +105,7 @@ export class ClientLibPatch<T = {}> {
         return extracted[1];
     }
 
-    public getPrototype(baseObject: { ClientLib: ClientLibStatic }): Function {
+    public getPrototype(baseObject: any = window): Function {
         this.currentClass = ClientLibPatch.getObjectFromPath(baseObject, this.path);
         if (this.currentClass == null) {
             throw new Error(`Unable to find target prototype to patch path: ${this.path}`);
@@ -113,14 +113,14 @@ export class ClientLibPatch<T = {}> {
         return this.currentClass;
     }
 
-    public patch(baseObject: { ClientLib: ClientLibStatic }) {
+    public patch(baseObject: any = window) {
         const currentClass = this.getPrototype(baseObject);
         for (const patch of this.patches) {
             patch.apply(currentClass);
         }
     }
 
-    public remove(baseObject: { ClientLib: ClientLibStatic }) {
+    public remove(baseObject: any = window) {
         const currentClass = this.getPrototype(baseObject);
         for (const patch of this.patches) {
             patch.remove(currentClass);

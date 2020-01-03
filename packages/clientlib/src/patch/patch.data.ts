@@ -40,20 +40,6 @@ WorldObjectCity.addGetter('$PlayerId', '$ctor', /&0x3ff\);this.([A-Z]{6})/);
 WorldObjectCity.addGetter('$AllianceId', '$ctor', /.*d\+=f;this\.([A-Z]{6})=\(/);
 WorldObjectCity.addGetter('$Id', '$ctor', /.*d\+=f;this\.([A-Z]{6})=\(.*d\+=f.*d\+=/);
 
-// TODO
-// const BaseColors = new ClientLibPatch('ClientLib.Data.BaseColors');
-// BaseColors.replaceFunction(
-//     (obj: any) => {
-//         return ClientLibPatch.extractValueFromFunction(
-//             obj,
-//             'ClientLib.Vis.Region.RegionCity',
-//             'Color=',
-//             /.*\.([A-Z]{6})\(this.*Color=.*/,
-//         );
-//     },
-//     (a: number, b: number) => console.log('a,b'),
-// );
-
 export const Patches = {
     CityUnits,
     WorldObjectNPCCamp,
