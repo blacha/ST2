@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/blacha/st/compare/v0.4.0...v0.5.0) (2020-01-03)
+
+
+### Bug Fixes
+
+* build/lint issues ([25c92c4](https://github.com/blacha/st/commit/25c92c484e31c4cdfacbe7309db8ce285f0f6abc))
+* remove unused var ([1782925](https://github.com/blacha/st/commit/1782925778de76f64c4163b6746d742f38b83f0d))
+
+
+### Features
+
+* explain what kill info does ([3419a2b](https://github.com/blacha/st/commit/3419a2bd8982929874ed66b0fd5417dfa5d37b83))
+* explain what the camp tracker does ([69ac016](https://github.com/blacha/st/commit/69ac01646f9a5fa3803b715a320c593a06345740))
+* improve coloring of bases ([a08eee3](https://github.com/blacha/st/commit/a08eee317756f2a70c5fcd51f376bedf6a4d7652))
+* new online tracker for alliance members ([99e6692](https://github.com/blacha/st/commit/99e6692c8ef7caabca11492fa9bc1e29f1877fb4))
+* readd kill info module. ([c7744b7](https://github.com/blacha/st/commit/c7744b781353756d0951fd509c49b34e86f0f06e))
+
+
+
+
+
 # [0.4.0](https://github.com/blacha/st/compare/v0.3.0...v0.4.0) (2020-01-02)
 
 

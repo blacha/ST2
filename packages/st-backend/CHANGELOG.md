@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/blacha/st/compare/v0.4.0...v0.5.0) (2020-01-03)
+
+
+### Bug Fixes
+
+* broken routes ([20d88d5](https://github.com/blacha/st/commit/20d88d520e1b5f8fb736d98569dae05837e49f02))
+* reset the timestamp to submitted time ([ff6eeec](https://github.com/blacha/st/commit/ff6eeec91f75c70e5b71f2e73f30a05707d9b675))
+
+
+
+
+
 # [0.4.0](https://github.com/blacha/st/compare/v0.3.0...v0.4.0) (2020-01-02)
 
 **Note:** Version bump only for package @st/backend

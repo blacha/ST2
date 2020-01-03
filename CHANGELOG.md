@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/blacha/st/compare/v0.4.0...v0.5.0) (2020-01-03)
+
+
+### Bug Fixes
+
+* allow bases to produce crystal ([ba1a5a3](https://github.com/blacha/st/commit/ba1a5a30d4f285575872c4ce2711ef74c001549e))
+* broken routes ([20d88d5](https://github.com/blacha/st/commit/20d88d520e1b5f8fb736d98569dae05837e49f02))
+* build/lint issues ([25c92c4](https://github.com/blacha/st/commit/25c92c484e31c4cdfacbe7309db8ce285f0f6abc))
+* duration functions should be static ([5c6bb4a](https://github.com/blacha/st/commit/5c6bb4a639b8701982f43b5acf8f895189d93777))
+* incorrect patch data for offense/defense units ([4c65bf4](https://github.com/blacha/st/commit/4c65bf4f4b1ba0ec4c9bb9506eb6eeb6e112cf9b))
+* remove unused var ([1782925](https://github.com/blacha/st/commit/1782925778de76f64c4163b6746d742f38b83f0d))
+* remove unused vars ([9037a45](https://github.com/blacha/st/commit/9037a45d096ed7a17b0a6b92a67b7c537bb80744))
+* reset the timestamp to submitted time ([ff6eeec](https://github.com/blacha/st/commit/ff6eeec91f75c70e5b71f2e73f30a05707d9b675))
+
+
+### Features
+
+* add types for region cities ([24521cb](https://github.com/blacha/st/commit/24521cb5e48da3aa500e150b889005dc69427cc8))
+* alliance member data fetching/events ([066f627](https://github.com/blacha/st/commit/066f62736ea540e452c8ce3724bacce7f034b16a))
+* allow patcher to replace functions ([8b8db1c](https://github.com/blacha/st/commit/8b8db1c8a96d7abbeb5614d4c1b4929dcde3a4da))
+* expand on vis typings ([612ff48](https://github.com/blacha/st/commit/612ff48ede3797b6cf8fa988e63cbff21719a5b6))
+* explain what kill info does ([3419a2b](https://github.com/blacha/st/commit/3419a2bd8982929874ed66b0fd5417dfa5d37b83))
+* explain what the camp tracker does ([69ac016](https://github.com/blacha/st/commit/69ac01646f9a5fa3803b715a320c593a06345740))
+* improve coloring of bases ([a08eee3](https://github.com/blacha/st/commit/a08eee317756f2a70c5fcd51f376bedf6a4d7652))
+* new online tracker for alliance members ([99e6692](https://github.com/blacha/st/commit/99e6692c8ef7caabca11492fa9bc1e29f1877fb4))
+* readd kill info module. ([c7744b7](https://github.com/blacha/st/commit/c7744b781353756d0951fd509c49b34e86f0f06e))
+
+
+
+
+
 # [0.4.0](https://github.com/blacha/st/compare/v0.3.0...v0.4.0) (2020-01-02)
 
 
