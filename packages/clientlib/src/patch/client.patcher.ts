@@ -56,14 +56,12 @@ export class ClientLibPatch<T = {}> {
     public static getObjectFromPath(obj: any, path: string): Function | null {
         const keys = path.split('.');
 
-        console.log('GetObject', keys);
         let currentProto = obj as any;
         while (keys.length > 0) {
             const currentKey = keys.shift();
             if (currentKey == null) {
                 return null;
             }
-            console.log(currentKey, currentProto);
             currentProto = currentProto[currentKey];
             if (currentKey == null) {
                 throw new Error(`Cannot find path : ${path} @ ${currentKey}`);

@@ -7,6 +7,7 @@ import { CampTracker } from './module/camp.tracker/camp.tracker';
 import { LayoutScanner } from './module/layout/layout.scan';
 import { hasStModuleHooks, StModule, StModuleState } from './module/module';
 import { StModuleBase } from './module/module.base';
+import { KillInfo } from './module/kill.info/kill.info';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -58,7 +59,7 @@ export class St {
         city: CityUtil,
     };
 
-    modules: StModule[] = [this.api, this.layout, this.alliance, new ButtonScan(), this.camp];
+    modules: StModule[] = [this.api, this.layout, this.alliance, new ButtonScan(), this.camp, new KillInfo()];
 
     player: PlayerState = PlayerState.Idle;
     state: StState = StState.Idle;
