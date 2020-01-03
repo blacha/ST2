@@ -10,8 +10,8 @@ export class PlayerStatus extends StModuleBase {
     static PlayerColor: Record<AllianceMemberOnlineState, string> = {
         [AllianceMemberOnlineState.Online]: '#76ff03',
         [AllianceMemberOnlineState.Away]: '#ffd600',
-        [AllianceMemberOnlineState.Offline]: '#e0e0e055',
-        [AllianceMemberOnlineState.Hidden]: 'purple', // Does anyone every hide?
+        [AllianceMemberOnlineState.Offline]: '#5a5653',
+        [AllianceMemberOnlineState.Hidden]: '#ffff00', // Does anyone every hide?
     };
     async onStart() {
         // Lookup the name of the 'get_BaseColors' function to patch
@@ -46,7 +46,7 @@ export class PlayerStatus extends StModuleBase {
         const myAllianceId = alliance.get_Id();
         // Color for my base
         if (md.get_Player().id == playerId) {
-            return 'rgba(0,0,0, 0.87)';
+            return '#000000';
         }
 
         // Color for alliance bases
@@ -55,19 +55,19 @@ export class PlayerStatus extends StModuleBase {
             if (memberData != null) {
                 return PlayerStatus.PlayerColor[memberData.OnlineState];
             }
-            return 'rgba(200, 200, 0, 0.87)';
+            return '#c8c800';
         }
 
         // Color for other alliances
         switch (md.get_Alliance().GetRelation(allianceId)) {
             case ClientLib.Data.EAllianceDiplomacyStatus.Friend:
-                return '#76ff03dd';
+                return '#76ff03';
             case ClientLib.Data.EAllianceDiplomacyStatus.NAP:
-                return '#bbdefbdd';
+                return '#bbdefb';
             case ClientLib.Data.EAllianceDiplomacyStatus.Foe:
-                return '#f44336dd';
+                return '#f44336';
         }
 
-        return 'rgba(255,255,255, 0.87)';
+        return '#ffffff';
     }
 }
