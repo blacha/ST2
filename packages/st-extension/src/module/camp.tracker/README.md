@@ -1,4 +1,4 @@
-# ST: CampTracker
+# ST Module: CampTracker
 
 Track new spawning camps and outposts near the player's main offense
 
