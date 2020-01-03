@@ -21,8 +21,8 @@ export interface PatchedWorldObjectCity {
 }
 
 const CityUnits = new ClientLibPatch<PatchedCityUnits>('ClientLib.Data.CityUnits');
-CityUnits.addGetter('$OffenseUnits', 'HasUnitMdbId', /for \(var c in \{d:this\.([A-Z]{6})/);
-CityUnits.addGetter('$DefenseUnits', 'HasUnitMdbId', /for \(var b in \{d:this\.([A-Z]{6})/);
+CityUnits.addGetter('$OffenseUnits', 'HasUnitMdbId', /for \(var b in \{d:this\.([A-Z]{6})/);
+CityUnits.addGetter('$DefenseUnits', 'HasUnitMdbId', /for \(var c in \{d:this\.([A-Z]{6})/);
 
 const WorldObjectNPCCamp = new ClientLibPatch<PatchedWorldObjectNPCCamp>(
     'ClientLib.Data.WorldSector.WorldObjectNPCCamp',
