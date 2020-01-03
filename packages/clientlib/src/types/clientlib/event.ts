@@ -5,4 +5,9 @@ export interface ClientLibEvent {
 export interface ClientLibEventEmitter {
     // Place holder for objects that can emit events
 }
-export type ClientLibEventName = 'SelectionChange' | 'PositionChange' | 'ZoomFactorChange' | 'ViewModeChange';
+export type ClientLibEventName =
+    | 'SelectionChange'
+    | 'PositionChange'
+    | 'ZoomFactorChange'
+    | 'ViewModeChange'
+    | 'Change';

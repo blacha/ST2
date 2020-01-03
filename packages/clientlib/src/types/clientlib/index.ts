@@ -1,8 +1,9 @@
 import { ClientLibSingleton, ClientLibClass } from './util';
 import { ClientLibVisMain, VisObjectType, RegionNpcCamp, RegionNpcBase, RegionCity } from './vis';
 import { ClientLibMathUtil } from './math';
-import { ClientLibMainData } from './main.data';
+import { ClientLibMainData, AllianceDiplomacyStatus } from './main.data';
 import { ClientLibEvent } from './event';
+import { ClientLibBaseColor } from './main.data/color';
 
 export enum PlayerAreaViewMode {
     pavmNone = 0,
@@ -27,6 +28,9 @@ export interface ClientLibStatic {
     Base: { MathUtil: ClientLibMathUtil };
     Config: {};
     Data: {
+        AllianceChange: ClientLibEvent;
+        BaseColors: ClientLibClass<ClientLibBaseColor>;
+        EAllianceDiplomacyStatus: typeof AllianceDiplomacyStatus;
         PlayerAreaViewMode: typeof PlayerAreaViewMode;
         MainData: ClientLibSingleton<ClientLibMainData>;
     };

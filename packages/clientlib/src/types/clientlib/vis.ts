@@ -165,6 +165,9 @@ export interface ClientLibVisRegion extends ClientLibEventEmitter {
     get_ViewWidth(): number;
 
     GetObjectFromPosition(regionX: number, regionY: number): RegionObjectType;
+
+    /* Force a redraw of bases */
+    SetColorDirty(): void;
 }
 
 export interface ClientLibVisMain extends ClientLibEventEmitter {
