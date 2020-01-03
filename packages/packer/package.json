@@ -12,7 +12,8 @@
         "@types/git-rev-sync": "^1.12.0",
         "@zeit/ncc": "^0.20.5",
         "find-and-read-package-json": "^2.0.2",
-        "git-rev-sync": "^2.0.0"
+        "git-rev-sync": "^2.0.0",
+        "strip-indent": "^3.0.0"
     },
     "author": "Blayne Chard <blayne@chard.com>",
     "license": "MIT"
