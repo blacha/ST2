@@ -30,7 +30,6 @@ export class CampTracker extends StModuleBase {
         const region = visMain.get_Region();
         this.addEvent(region, 'PositionChange', ClientLib.Vis.PositionChange, this.updatePosition);
         this.addEvent(region, 'ZoomFactorChange', ClientLib.Vis.ZoomFactorChange, this.updatePosition);
-        this.addEvent(visMain, 'ViewModeChange', ClientLib.Vis.ViewModeChange, this.updateView);
 
         this.updateInterval = window.setInterval(() => this.update(), 10 * 1000);
 
@@ -45,20 +44,6 @@ export class CampTracker extends StModuleBase {
         }
         this.markers.clear();
         this.state = StModuleState.Stopped;
-    }
-
-    /** Hide and show the markers if the view mode changes  */
-    updateView() {
-        const visMain = ClientLib.Vis.VisMain.GetInstance();
-        if (visMain.get_Mode() == VisViewMode.Region) {
-            this.markers.forEach(f => {
-                if (f.el.parentElement == null) {
-                    this.addMarkerToDom(f.el);
-                }
-            });
-        } else {
-            this.markers.forEach(f => f.el.remove());
-        }
     }
 
     update() {
@@ -99,7 +84,6 @@ export class CampTracker extends StModuleBase {
         }
 
         this.updatePosition();
-        this.updateView();
         return newestCamps;
     }
 
@@ -162,6 +146,7 @@ export class CampTracker extends StModuleBase {
 
         this.updateElement(el, location, index);
         this.markers.set(cityId, { el, location, index });
+        this.addMarkerToDom(el);
     }
 
     addMarkerToDom(el: HTMLDivElement) {
