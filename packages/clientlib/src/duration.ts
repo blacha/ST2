@@ -1,13 +1,18 @@
 export class Duration {
-    static OneMinute = 1000 * 60;
+    static OneSecond = 1000;
+    static OneMinute = Duration.OneSecond * 60;
     static OneHour = Duration.OneMinute * 60;
     static OneDay = Duration.OneHour * 24;
 
-    day(days: number): number {
+    static seconds(seconds: number): number {
+        return Duration.OneSecond * seconds;
+    }
+
+    static days(days: number): number {
         return Duration.OneDay * days;
     }
 
-    minute(minutes: number): number {
+    static minutes(minutes: number): number {
         return Duration.OneMinute * minutes;
     }
 }
