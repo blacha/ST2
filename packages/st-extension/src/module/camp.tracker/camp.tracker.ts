@@ -3,6 +3,7 @@ import {
     CityUtil,
     ClientLibClass,
     ClientLibStatic,
+    Duration,
     NpcCampType,
     Patches,
     Point,
@@ -37,7 +38,7 @@ export class CampTracker extends StModuleBase {
         this.addEvent(region, 'PositionChange', ClientLib.Vis.PositionChange, this.updatePosition);
         this.addEvent(region, 'ZoomFactorChange', ClientLib.Vis.ZoomFactorChange, this.updatePosition);
 
-        this.interval(() => this.update(), 10 * 1000);
+        this.interval(() => this.update(), Duration.seconds(10));
 
         // Use floating point base numbers for tool tips
         replaceBaseLevel(ClientLib.Vis.Region.RegionNPCBase);

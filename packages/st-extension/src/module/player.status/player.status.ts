@@ -8,10 +8,10 @@ export class PlayerStatus extends StModuleBase {
     patch = new ClientLibPatch('ClientLib.Data.BaseColors');
 
     static PlayerColor: Record<AllianceMemberOnlineState, string> = {
-        [AllianceMemberOnlineState.Online]: '#76ff03dd',
-        [AllianceMemberOnlineState.Away]: '#ffd600aa',
-        [AllianceMemberOnlineState.Offline]: '#e0e0e099',
-        [AllianceMemberOnlineState.Hidden]: 'purple',
+        [AllianceMemberOnlineState.Online]: '#76ff03',
+        [AllianceMemberOnlineState.Away]: '#ffd600',
+        [AllianceMemberOnlineState.Offline]: '#e0e0e055',
+        [AllianceMemberOnlineState.Hidden]: 'purple', // Does anyone every hide?
     };
     async onStart() {
         // Lookup the name of the 'get_BaseColors' function to patch
