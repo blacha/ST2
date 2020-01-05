@@ -8,6 +8,7 @@ import { BaseY, BaseX } from '../base.const';
 import { UnitLocationPacker } from './pack';
 import { GameDataStatic, GameDataResearchLevel, GameDataUnitId } from '../types';
 import { Patches } from '../patch';
+import { ClientLibResearchUtil } from './city.research';
 
 declare const GAMEDATA: GameDataStatic;
 
@@ -97,7 +98,7 @@ export class CityScannerUtil {
             alliance: { id: city.get_OwnerAllianceId() || 0, name: city.get_OwnerAllianceName() || '' },
             tiles: CityScannerUtil.getLayout(city),
             base: Object.values(city.get_Buildings().d).map(unit => CityScannerUtil.packUnit(unit)),
-            upgrades: CityScannerUtil.getUpgrades(city),
+            upgrades: ClientLibResearchUtil.getUpgrades(city),
             ...CityScannerUtil.getUnits(city),
             timestamp: Date.now(),
         };
@@ -148,43 +149,5 @@ export class CityScannerUtil {
             def: Object.values(defUnits.d).map(unit => CityScannerUtil.packUnit(unit)),
             off: [],
         };
-    }
-
-    static _unitModules: Map<number, { id: number; level: number }> = new Map();
-    static get unitModules() {
-        if (this._unitModules.size > 0) {
-            return this._unitModules;
-        }
-        for (const unit of Object.values(GAMEDATA.units)) {
-            for (const mod of unit.m) {
-                if (mod.r.length == 0) {
-                    this._unitModules.set(mod.i, { id: unit.i, level: 1 });
-                } else {
-                    this._unitModules.set(mod.i, { id: unit.i, level: 2 });
-                }
-            }
-        }
-        return this._unitModules;
-    }
-
-    static getUpgrades(city: ClientLibCity): Record<number, number> {
-        const modules = city.get_ActiveModules();
-        if (modules == null) {
-            return {};
-        }
-        const upgrades: Record<number, number> = {};
-        for (const mod of modules) {
-            const unitMod = this.unitModules.get(mod);
-            if (unitMod == null) {
-                continue;
-            }
-            const { id, level } = unitMod;
-
-            if (upgrades[id] == null || upgrades[id] < level) {
-                upgrades[id] = level;
-            }
-        }
-
-        return upgrades;
     }
 }

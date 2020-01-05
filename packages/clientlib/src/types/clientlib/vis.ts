@@ -60,6 +60,12 @@ export enum VisObjectType {
     WorldPOI = 35,
     WorldCityNotOwn = 36,
 }
+export enum RegionCityType {
+    Own = 0,
+    Alliance = 1,
+    Enemy = 2,
+}
+
 export interface VisObject {
     get_Id?(): number;
 

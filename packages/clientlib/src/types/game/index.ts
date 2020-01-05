@@ -65,7 +65,7 @@ export interface GameDataResources {
     rr: GameDataResourceCost[];
 }
 
-export enum GameDataResearchLevel {
+export const enum GameDataResearchLevel {
     NotResearched = 0,
     Researched = 1,
     Upgraded = 2,

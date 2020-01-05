@@ -1,15 +1,21 @@
-import { GameDataUnit, GameDataTech } from '../../game';
+import { GameDataUnit, GameDataTech, GameDataResearchLevel } from '../../game';
 import { ClientLibList } from '../util';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibPlayerResearchResult {
-    get_CurrentLevel(): 0 | 1 | 2;
+    get_CurrentLevel(): GameDataResearchLevel;
     get_GameDataUnit_Obj(): GameDataUnit;
     get_GameDataTech_Obj(): GameDataTech;
 }
 
+export const enum ClientLibTechType {
+    TechOffense = 1,
+    TechDefense = 2,
+    TechSpecial = 5,
+}
+
 export interface ClientLibPlayerResearch {
-    GetResearchItemListByType(type: number): ClientLibList<ClientLibPlayerResearchResult>;
+    GetResearchItemListByType(type: ClientLibTechType): ClientLibList<ClientLibPlayerResearchResult>;
 }
 
 export interface ClientLibPlayer {
