@@ -5,10 +5,11 @@ import { ClientLibWorld } from './world';
 import { ClientLibAlliance } from './alliance';
 import { ClientLibBaseColor } from './color';
 import { ClientLibChat } from './chat';
+import { ClientLibTime } from './time';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibMainData {
-    get_Time(): unknown;
+    get_Time(): ClientLibTime;
     get_Chat(): ClientLibChat;
     get_Server(): ClientLibServer;
     get_World(): ClientLibWorld;
