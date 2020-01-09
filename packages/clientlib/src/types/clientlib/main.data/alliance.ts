@@ -1,7 +1,6 @@
-import { ClientLibMap } from '../util';
-import { FactionType } from '../../game/faction';
 import { ClientLibStatic } from '..';
-import { ClientLibEventEmitter } from '../event';
+import { FactionType } from '../../game/faction';
+import { ClientLibMap } from '../util';
 
 export type GameStep = number;
 /* eslint-disable @typescript-eslint/camelcase */
