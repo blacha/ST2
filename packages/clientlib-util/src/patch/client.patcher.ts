@@ -40,6 +40,13 @@ export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
         return true;
     }
 
+    /**
+     * Patch a object to provide a new getter
+     *
+     * @param key name of getter to create
+     * @param sourceFunctionName name of function to use as the source information
+     * @param re text to find inside of source function to find the correct 'KJNGHF'
+     */
     public addGetter(key: keyof Pi, sourceFunctionName: string, re: RegExp): ClientLibPatchGetter<Pi> {
         const getter = new ClientLibPatchGetter(key, sourceFunctionName, re);
         this.patches.push(getter);
@@ -70,6 +77,12 @@ export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
         return null;
     }
 
+    /**
+     * Look for a function inside the target's prototype where it contains toFind, then extract the first match.
+     * @param target Class to search inside
+     * @param toFind text to find
+     * @param extract text to extract
+     */
     public static extractValueFromFunction(target: Function, toFind: string | RegExp, extract: RegExp): string {
         const source = ClientLibPatch.findFunctionInProto(target, toFind);
         if (source == null) {
@@ -82,6 +95,9 @@ export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
         return extracted[1];
     }
 
+    /**
+     * Apply all patches
+     */
     public apply() {
         const currentClass = this.getBaseObject();
         for (const patch of this.patches) {
@@ -89,6 +105,7 @@ export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
         }
     }
 
+    /** Remove all patches */
     public remove() {
         const currentClass = this.getBaseObject();
         for (const patch of this.patches) {
