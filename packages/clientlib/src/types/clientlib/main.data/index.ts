@@ -4,11 +4,12 @@ import { ClientLibCities } from './cities';
 import { ClientLibWorld } from './world';
 import { ClientLibAlliance } from './alliance';
 import { ClientLibBaseColor } from './color';
+import { ClientLibChat } from './chat';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibMainData {
     get_Time(): unknown;
-    get_Chat(): unknown;
+    get_Chat(): ClientLibChat;
     get_Server(): ClientLibServer;
     get_World(): ClientLibWorld;
     get_Player(): ClientLibPlayer;

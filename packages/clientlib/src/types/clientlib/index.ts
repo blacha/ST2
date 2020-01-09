@@ -28,6 +28,7 @@ export interface ClientLibStatic {
     Base: { MathUtil: ClientLibMathUtil; ETechType: typeof ClientLibTechType };
     Config: {};
     Data: {
+        ChatMessage: ClientLibEvent;
         AllianceChange: ClientLibEvent;
         BaseColors: ClientLibClass<ClientLibBaseColor>;
         EAllianceDiplomacyStatus: typeof AllianceDiplomacyStatus;
