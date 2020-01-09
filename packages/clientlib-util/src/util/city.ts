@@ -3,7 +3,7 @@ import { ClientLibIter } from './iter';
 import { LocationIter } from './location';
 import { BaseLocationPacker } from './pack';
 import { PatchedId, ClientLibPatch } from '../patch/client.patcher';
-import { PatchedWorldObjectCity, Patches } from '../patch/patch.data';
+import { PatchedWorldObjectCity, PatchWorldObjectCity } from '../patch/patch.data';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -73,7 +73,7 @@ export class CityUtil {
 
         const cities: PatchedWorldObjectCity[] = [];
         for (const city of ClientLibIter.values(md.get_World().GetCities())) {
-            if (!Patches.WorldObjectCity.isPatched(city)) {
+            if (!PatchWorldObjectCity.isPatched(city)) {
                 continue;
             }
             if (city.$AllianceId == allianceId) {

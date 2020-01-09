@@ -1,12 +1,12 @@
-import { ClientPatch, StringFunc } from './client.patcher';
+import { ClientPatch } from './client.patcher';
 
-export class ClientLibPatchFunction implements ClientPatch {
+export class ClientLibPatchFunction<T> implements ClientPatch {
     path: string;
-    sourceFunctionName: any;
+    sourceFunctionName: keyof T;
     targetFunction: Function;
     oldFunction: Function | null;
 
-    constructor(sourceFunctionName: string | StringFunc, targetFunction: Function) {
+    constructor(sourceFunctionName: keyof T, targetFunction: Function) {
         this.sourceFunctionName = sourceFunctionName;
         this.targetFunction = targetFunction;
     }

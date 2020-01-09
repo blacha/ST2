@@ -1,5 +1,6 @@
 import { ClientLibPatchGetter } from './patch.getter';
 import { ClientLibPatchFunction } from './patch.replacement';
+import { ClientLibClass } from '@cncta/clientlib';
 
 export type StringFunc = (obj: any) => string;
 
@@ -13,20 +14,24 @@ export interface ClientPatch {
 export interface PatchedId {
     $Id: number;
 }
-export class ClientLibPatch<T = {}> {
+/**
+ * Pi Interface for the new patches
+ * Po Object that is being patched
+ */
+export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
     patches: ClientPatch[] = [];
-    path: string;
     currentClass: Function | null;
+    getBaseObject: () => ClientLibClass<Po>;
 
-    constructor(path: string) {
-        this.path = path;
+    constructor(obj: () => ClientLibClass<Po>) {
+        this.getBaseObject = obj;
     }
 
     static hasPatchedId(k: any): k is PatchedId {
         return k != null && typeof k['$Id'] != 'undefined';
     }
 
-    public isPatched(k: any): k is T {
+    public isPatched(k: any): k is Pi {
         for (const patch of this.patches) {
             if (!patch.isPatched(k)) {
                 return false;
@@ -35,11 +40,13 @@ export class ClientLibPatch<T = {}> {
         return true;
     }
 
-    public addGetter(key: keyof T, sourceFunctionName: string, re: RegExp) {
-        this.patches.push(new ClientLibPatchGetter(key, sourceFunctionName, re));
+    public addGetter(key: keyof Pi, sourceFunctionName: string, re: RegExp): ClientLibPatchGetter<Pi> {
+        const getter = new ClientLibPatchGetter(key, sourceFunctionName, re);
+        this.patches.push(getter);
+        return getter;
     }
 
-    public replaceFunction(sourceFunctionName: string | StringFunc, targetFunction: Function): ClientLibPatchFunction {
+    public replaceFunction(sourceFunctionName: keyof Po, targetFunction: Function): ClientLibPatchFunction<Po> {
         const replacement = new ClientLibPatchFunction(sourceFunctionName, targetFunction);
         this.patches.push(replacement);
         return replacement;
@@ -106,24 +113,15 @@ export class ClientLibPatch<T = {}> {
         return extracted[1];
     }
 
-    public getPrototype(baseObject: any = window): Function {
-        this.currentClass = ClientLibPatch.getObjectFromPath(baseObject, this.path);
-        if (this.currentClass == null) {
-            throw new Error(`Unable to find target prototype to patch path: ${this.path}`);
-        }
-        return this.currentClass;
-    }
-
-    public patch(baseObject: any = window) {
-        const currentClass = this.getPrototype(baseObject);
+    public apply() {
+        const currentClass = this.getBaseObject();
         for (const patch of this.patches) {
-            const ret = patch.apply(currentClass);
-            console.log(patch, ret);
+            patch.apply(currentClass);
         }
     }
 
-    public remove(baseObject: any = window) {
-        const currentClass = this.getPrototype(baseObject);
+    public remove() {
+        const currentClass = this.getBaseObject();
         for (const patch of this.patches) {
             patch.remove(currentClass);
         }

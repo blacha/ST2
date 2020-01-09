@@ -1,8 +1,14 @@
 import { ClientLibSingleton, ClientLibClass } from './util';
 import { ClientLibVisMain, VisObjectType, RegionNpcCamp, RegionNpcBase, RegionCity, RegionCityType } from './vis';
 import { ClientLibMathUtil } from './math';
-import { ClientLibMainData, AllianceDiplomacyStatus, ClientLibTechType } from './main.data';
-import { ClientLibEvent, ClientLibEvents } from './event';
+import {
+    ClientLibMainData,
+    AllianceDiplomacyStatus,
+    ClientLibTechType,
+    ClientLibCityUnits,
+    ClientLibWorldObject,
+} from './main.data';
+import { ClientLibEvent } from './event';
 import { ClientLibBaseColor } from './main.data/color';
 
 export const enum PlayerAreaViewMode {
@@ -34,10 +40,16 @@ export interface ClientLibStatic {
         GhostModeChanged: ClientLibEvent;
         ChatMessage: ClientLibEvent;
         AllianceChange: ClientLibEvent;
+        CityUnits: ClientLibClass<ClientLibCityUnits>;
         BaseColors: ClientLibClass<ClientLibBaseColor>;
         EAllianceDiplomacyStatus: typeof AllianceDiplomacyStatus;
         PlayerAreaViewMode: typeof PlayerAreaViewMode;
         MainData: ClientLibSingleton<ClientLibMainData>;
+        WorldSector: {
+            WorldObjectNPCCamp: ClientLibClass<ClientLibWorldObject>;
+            WorldObjectNPCBase: ClientLibClass<ClientLibWorldObject>;
+            WorldObjectCity: ClientLibClass<ClientLibWorldObject>;
+        };
     };
     Draw: {};
     Effect: {};

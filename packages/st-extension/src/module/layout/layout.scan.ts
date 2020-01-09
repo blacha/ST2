@@ -1,5 +1,5 @@
 import { ClientLibStatic, NpcCampType, WorldObjectType } from '@cncta/clientlib';
-import { CityScannerUtil, CityUtil, Patches, StCity } from '@cncta/util';
+import { CityScannerUtil, CityUtil, PatchWorldObjectNPCCamp, StCity } from '@cncta/util';
 import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
 
@@ -39,7 +39,7 @@ export class LayoutScanner extends StModuleBase {
                 continue;
             }
 
-            if (Patches.WorldObjectNPCCamp.isPatched(object) && object.$CampType === NpcCampType.Destroyed) {
+            if (PatchWorldObjectNPCCamp.isPatched(object) && object.$CampType === NpcCampType.Destroyed) {
                 continue;
             }
 

@@ -1,7 +1,7 @@
-import { ClientLibClass, ClientLibStatic, NpcCampType, RegionNpcCamp, Point } from '@cncta/clientlib';
+import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp } from '@cncta/clientlib';
+import { BaseLocationPacker, CityUtil, PatchWorldObjectNPCCamp } from '@cncta/util';
 import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
-import { CityUtil, Patches, BaseLocationPacker } from '@cncta/util';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -73,7 +73,7 @@ export class CampTracker extends StModuleBase {
         const minBaseHighlight = offLevel - this.MaxOffDiff;
         const nearByCamps = Array.from(CityUtil.getObjectsNearCity(mainBase).values()).filter(f => {
             // All outposts are camps
-            if (!Patches.WorldObjectNPCCamp.isPatched(f.object)) {
+            if (!PatchWorldObjectNPCCamp.isPatched(f.object)) {
                 return false;
             }
 
