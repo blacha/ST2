@@ -61,7 +61,7 @@ export interface QxMChildrenHandling {
     remove(widget: QxLayoutItem): void;
     removeAll(): QxLayoutItem[];
     indexOf(widget: QxLayoutItem): number;
-    add(widget: QxLayoutItem): void;
+    add(widget: QxLayoutItem, opts?: any): void;
     addAt(widget: QxLayoutItem, index: number, opts?: any): void;
     addBefore(widget: QxLayoutItem, before: QxLayoutItem, opts?: any): void;
     addAfter(widget: QxLayoutItem, after: QxLayoutItem, opts?: any): void;
@@ -88,9 +88,19 @@ export interface QxLayout {
 export interface QxLayoutHBox extends QxLayout {
     getSpacing(): number;
 }
+export type QxLayoutDock = QxLayout;
+export interface QxLayoutGrid extends QxLayout {
+    spacingX: number;
+    spacingY: number;
+}
 
 export interface QxStatic {
     ui: {
+        core: {
+            Widget: {
+                new (): QxWidget;
+            };
+        };
         basic: {
             Label: {
                 new (text: string): QxLabel;
@@ -109,6 +119,12 @@ export interface QxStatic {
         layout: {
             HBox: {
                 new (spacing?: number, alignX?: string): QxLayoutHBox;
+            };
+            Dock: {
+                new (): QxLayoutDock;
+            };
+            Grid: {
+                new (spacingX: number, spacingY: number): QxLayoutGrid;
             };
         };
         form: {

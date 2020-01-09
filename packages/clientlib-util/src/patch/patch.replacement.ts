@@ -1,11 +1,10 @@
 import { ClientPatch, StringFunc } from './client.patcher';
 
 export class ClientLibPatchFunction implements ClientPatch {
-    oldFunction: Function | null;
-    newFunction: Function;
     path: string;
     sourceFunctionName: any;
     targetFunction: Function;
+    oldFunction: Function | null;
 
     constructor(sourceFunctionName: string | StringFunc, targetFunction: Function) {
         this.sourceFunctionName = sourceFunctionName;
@@ -25,6 +24,7 @@ export class ClientLibPatchFunction implements ClientPatch {
             return false;
         }
         baseObject.prototype[this.backupFunctionName] = baseObject.prototype[this.sourceFunctionName];
+        this.oldFunction = baseObject.prototype[this.backupFunctionName];
         baseObject.prototype[this.sourceFunctionName] = this.targetFunction;
         return true;
     }
@@ -35,6 +35,7 @@ export class ClientLibPatchFunction implements ClientPatch {
         }
         baseObject.prototype[this.sourceFunctionName] = baseObject.prototype[this.backupFunctionName];
         delete baseObject.prototype[this.backupFunctionName];
+        delete this.oldFunction;
         return true;
     }
 }

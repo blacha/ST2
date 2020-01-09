@@ -39,8 +39,10 @@ export class ClientLibPatch<T = {}> {
         this.patches.push(new ClientLibPatchGetter(key, sourceFunctionName, re));
     }
 
-    public replaceFunction(sourceFunctionName: string | StringFunc, targetFunction: Function) {
-        this.patches.push(new ClientLibPatchFunction(sourceFunctionName, targetFunction));
+    public replaceFunction(sourceFunctionName: string | StringFunc, targetFunction: Function): ClientLibPatchFunction {
+        const replacement = new ClientLibPatchFunction(sourceFunctionName, targetFunction);
+        this.patches.push(replacement);
+        return replacement;
     }
 
     /**
@@ -115,7 +117,8 @@ export class ClientLibPatch<T = {}> {
     public patch(baseObject: any = window) {
         const currentClass = this.getPrototype(baseObject);
         for (const patch of this.patches) {
-            patch.apply(currentClass);
+            const ret = patch.apply(currentClass);
+            console.log(patch, ret);
         }
     }
 
