@@ -47,7 +47,7 @@ export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
      * @param sourceFunctionName name of function to use as the source information
      * @param re text to find inside of source function to find the correct 'KJNGHF'
      */
-    public addGetter(key: keyof Pi, sourceFunctionName: string, re: RegExp): ClientLibPatchGetter<Pi> {
+    public addGetter(key: keyof Pi, sourceFunctionName: keyof Po, re: RegExp): ClientLibPatchGetter<Pi, Po> {
         const getter = new ClientLibPatchGetter(key, sourceFunctionName, re);
         this.patches.push(getter);
         return getter;

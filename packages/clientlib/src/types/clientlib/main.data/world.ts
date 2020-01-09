@@ -24,6 +24,7 @@ export const enum NpcCampType {
 }
 
 export interface ClientLibWorldObject {
+    $ctor: Function;
     Type: WorldObjectType;
 }
 

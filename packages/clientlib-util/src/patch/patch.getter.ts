@@ -1,14 +1,14 @@
 import { ClientPatch } from './client.patcher';
 
-export class ClientLibPatchGetter<T> implements ClientPatch {
+export class ClientLibPatchGetter<Pi, Po> implements ClientPatch {
     path: string;
-    sourceFunctionName: string;
-    targetFunctionName: keyof T;
+    sourceFunctionName: keyof Po;
+    targetFunctionName: keyof Pi;
     re: RegExp;
 
     matchedVar: string | null;
 
-    constructor(targetFunctionName: keyof T, sourceFunctionName: string, re: RegExp) {
+    constructor(targetFunctionName: keyof Pi, sourceFunctionName: keyof Po, re: RegExp) {
         this.sourceFunctionName = sourceFunctionName;
         this.targetFunctionName = targetFunctionName;
         this.re = re;
