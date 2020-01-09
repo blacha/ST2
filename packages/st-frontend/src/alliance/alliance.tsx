@@ -10,8 +10,9 @@ import { FireStorePlayer } from '../firebase';
 import { timeSince } from '../time.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { Base, GameResources, formatNumber, BaseBuilder, Id, NumberPacker, mergeBaseUpgrade } from '@st/shared';
-import { StCity, GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
+import { GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
 import { ViewResearch } from '../util/research';
+import { StCity } from '@cncta/plugin';
 
 export const AllianceCss = {
     Table: style({

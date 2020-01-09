@@ -1,9 +1,10 @@
-import { BaseX, BaseY, StCity, UnitLocationPacker, UnitPacker } from '@cncta/clientlib';
+import { StCity, UnitLocationPacker, UnitPacker } from '@cncta/plugin';
 import { Faction } from '../data/faction';
 import { GameDataObject } from '../data/game.data.object';
 import { Base } from './base';
 import { BaseLayoutPacker } from './base.packer';
 import { Tile } from './tile';
+import { BaseY, BaseX } from '@cncta/clientlib';
 
 const codeZero = '0'.charCodeAt(0);
 const codeNine = '9'.charCodeAt(0);

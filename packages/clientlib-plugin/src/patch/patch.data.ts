@@ -1,6 +1,4 @@
-import { ClientLibMap } from '../types/clientlib/util';
-import { ClientLibCityUnit } from '../types/clientlib/main.data/cities';
-import { NpcCampType } from '../types/clientlib/main.data/world';
+import { NpcCampType, ClientLibCityUnit, ClientLibMap } from '@cncta/clientlib';
 import { ClientLibPatch } from './client.patcher';
 
 export interface PatchedIdLevel {

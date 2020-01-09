@@ -1,4 +1,4 @@
-import { StCity, BaseLocationPacker } from '@cncta/clientlib';
+import { StCity, BaseLocationPacker } from '@cncta/plugin';
 import {
     ApiScanRequest,
     ApiScanResponse,

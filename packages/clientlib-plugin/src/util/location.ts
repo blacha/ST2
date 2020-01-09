@@ -1,9 +1,4 @@
-import { BaseY, BaseX } from '../base.const';
-
-export interface Point {
-    x: number;
-    y: number;
-}
+import { BaseY, BaseX, Point } from '@cncta/clientlib';
 
 export class LocationIter {
     static *xy(xMin: number, xMax: number, yMin: number, yMax: number): Generator<Point> {

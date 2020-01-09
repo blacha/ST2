@@ -1,4 +1,5 @@
-import { CityScannerUtil, CityUtil, ClientLibStatic, StCity } from '@cncta/clientlib';
+import { ClientLibStatic } from '@cncta/clientlib';
+import { CityScannerUtil, CityUtil, StCity } from '@cncta/plugin';
 import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
 

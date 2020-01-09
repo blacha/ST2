@@ -1,4 +1,4 @@
-export enum MovementType {
+export const enum MovementType {
     None = 0,
     Feet = 1,
     Wheel = 2,

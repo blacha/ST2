@@ -9,5 +9,7 @@
     "include": ["src/**/*", "src/**/*.json"],
     "references": [{
         "path": "../clientlib"
+    }, {
+        "path": "../clientlib-plugin"
     }]
 }

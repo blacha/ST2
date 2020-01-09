@@ -1,4 +1,4 @@
-export enum ResourceType {
+export const enum ResourceType {
     Tiberium = 1,
     Crystal = 2,
     Credits = 3,
@@ -18,7 +18,7 @@ export enum ResourceType {
     VeteranPoints = 18,
 }
 
-export enum ModifierType {
+export const enum ModifierType {
     None = -1,
     TiberiumProduction = 1,
     TiberiumStorage = 2,

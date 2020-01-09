@@ -3,7 +3,7 @@ import { ClientLibWorldObject } from './main.data/world';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
-export enum MouseMode {
+export const enum MouseMode {
     Default = 0,
     Repair = 1,
     Move = 2,
@@ -11,7 +11,7 @@ export enum MouseMode {
     Sell = 4,
 }
 
-export enum VisViewMode {
+export const enum VisViewMode {
     UseCurrent = -1,
     None = 0,
     City = 1,
@@ -23,7 +23,7 @@ export enum VisViewMode {
     CombatSetup = 7,
 }
 
-export enum VisObjectType {
+export const enum VisObjectType {
     UnknownType = 0,
     CityBuildingType = 1,
     CityResourceFieldType = 2,

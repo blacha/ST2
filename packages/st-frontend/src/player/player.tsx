@@ -1,14 +1,5 @@
-import { StCity } from '@cncta/clientlib';
-import {
-    Base,
-    BaseBuilder,
-    formatNumber,
-    GameResources,
-    Id,
-    mergeBaseUpgrade,
-    NumberPacker,
-    Faction,
-} from '@st/shared';
+import { StCity } from '@cncta/plugin';
+import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade, NumberPacker } from '@st/shared';
 import BackTop from 'antd/es/back-top';
 import Divider from 'antd/es/divider';
 import Table from 'antd/es/table';
@@ -19,8 +10,8 @@ import { FireStorePlayer } from '../firebase';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
+import { ViewResearch } from '../util/research';
 import React = require('react');
-import { NodResearch, ViewResearch } from '../util/research';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 

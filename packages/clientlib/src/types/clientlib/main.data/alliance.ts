@@ -4,7 +4,7 @@ import { FactionType } from '../../game/faction';
 export type GameStep = number;
 /* eslint-disable @typescript-eslint/camelcase */
 
-export enum AllianceMemberOnlineState {
+export const enum AllianceMemberOnlineState {
     Online = 1,
     Away = 2,
     Offline = 0,
@@ -30,7 +30,7 @@ export interface ClientLibAllianceMemberData {
     VeteranPointContribution: number;
 }
 
-export enum AllianceDiplomacyStatus {
+export const enum AllianceDiplomacyStatus {
     Friend = 1,
     NAP = 2,
     Foe = 3,

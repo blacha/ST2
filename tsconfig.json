@@ -3,8 +3,10 @@
     "references": [{
         "path": "./packages/clientlib"
     }, {
+        "path": "./packages/clientlib-plugin"
+    }, {
         "path": "./packages/shared"
-    },{
+    }, {
         "path": "./packages/deobsfucate"
     }, {
         "path": "./packages/packer"

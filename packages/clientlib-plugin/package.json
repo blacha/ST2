@@ -1,0 +1,22 @@
+{
+    "name": "@cncta/plugin",
+    "version": "0.5.0",
+    "description": "Client lib utilities",
+    "scripts": {
+        "build": "tsc --pretty"
+    },
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "dependencies": {
+        "@cncta/clientlib": "0.5.0"
+    },
+    "devDependencies": {
+        "@types/ospec": "^4.0.2",
+        "ospec": "^4.0.1"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "author": "Blayne Chard <blayne@chard.com>",
+    "license": "MIT"
+}

@@ -1,4 +1,5 @@
-import { CityScannerUtil, CityUtil, NpcCampType, StCity, WorldObjectType, Patches } from '@cncta/clientlib';
+import { NpcCampType, WorldObjectType } from '@cncta/clientlib';
+import { CityScannerUtil, CityUtil, Patches, StCity } from '@cncta/plugin';
 import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
 

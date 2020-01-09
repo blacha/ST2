@@ -1,6 +1,6 @@
 import { ClientLibMap } from '../util';
 
-export enum WorldObjectType {
+export const enum WorldObjectType {
     None = 0,
     City = 1,
     NPCBase = 2,
@@ -13,7 +13,7 @@ export enum WorldObjectType {
     FreeSlot = 255,
 }
 
-export enum NpcCampType {
+export const enum NpcCampType {
     Destroyed = 0,
     Beginner = 1,
     Random = 2,

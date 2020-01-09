@@ -1,4 +1,4 @@
-import { BaseX, BaseY, GameDataResearchLevel, GameDataUnitId, UnitLocationPacker } from '@cncta/clientlib';
+import { BaseX, BaseY, GameDataResearchLevel, GameDataUnitId } from '@cncta/clientlib';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { Faction } from '../data/faction';
@@ -11,6 +11,7 @@ import { BaseBuildings } from './base.buildings';
 import { BaseStats } from './base.stats';
 import { Buildable } from './buildable';
 import { Tile } from './tile';
+import { UnitLocationPacker } from '@cncta/plugin';
 
 export interface CncLocation {
     x: number;

@@ -1,6 +1,5 @@
-import { Point } from '../location';
 import { BinaryPacker } from './binary.packer';
-import { BaseX } from '../../base.const';
+import { BaseX, Point } from '@cncta/clientlib';
 
 export const BaseLocationPacker = new BinaryPacker({ x: 16, y: 16 });
 

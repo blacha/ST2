@@ -17,7 +17,7 @@ export class UnitIcon extends React.Component<UnitIconProps> {
         const imageName = images[unitId];
 
         if (imageName == null) {
-            console.error('Missing unit icon:' + GameDataUnitId[unitId] + ' id:' + unitId);
+            console.error('Missing unit id:' + unitId);
         }
         return <img src={imageName} className={UnitIconCss} />;
     }

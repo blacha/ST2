@@ -1,4 +1,4 @@
-import { BaseX, StCity, BaseLocationPacker } from '@cncta/clientlib';
+import { StCity, BaseLocationPacker } from '@cncta/plugin';
 import { Base, BaseBuilder, NumberPacker, BaseIdPacker } from '@st/shared';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
@@ -15,6 +15,7 @@ import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
+import { BaseX } from '@cncta/clientlib';
 
 const TileSize = 64;
 

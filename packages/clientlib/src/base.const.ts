@@ -1,11 +1,11 @@
 /** Min/Max X coordinates */
-export enum BaseX {
+export const enum BaseX {
     Min = 0,
     Max = 9,
 }
 
 /** Min/Max Y coordinates  */
-export enum BaseY {
+export const enum BaseY {
     Min = 0,
     MaxBuilding = 8,
     MaxOff = 20,

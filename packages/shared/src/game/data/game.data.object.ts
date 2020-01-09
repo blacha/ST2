@@ -32,7 +32,7 @@ export class GameDataObject {
     static getById(id: GameDataUnitId): GameDataObject {
         const obj = GameDataObject.Id[id];
         if (obj == null) {
-            throw new Error(`Unable to find game object for ${id} ${GameDataUnitId[id]}`);
+            throw new Error(`Unable to find game object for ${id}`);
         }
         return obj;
     }

@@ -1,6 +1,4 @@
 import {
-    CityScannerUtil,
-    CityUtil,
     ClientLibStatic,
     PlayerAreaViewMode,
     QxComposite,
@@ -10,6 +8,7 @@ import {
     VisObjectType,
     WebFrontEndStatic,
 } from '@cncta/clientlib';
+import { CityScannerUtil, CityUtil } from '@cncta/plugin';
 import { Config } from '@st/shared';
 import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';

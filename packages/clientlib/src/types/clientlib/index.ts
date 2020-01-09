@@ -5,7 +5,7 @@ import { ClientLibMainData, AllianceDiplomacyStatus, ClientLibTechType } from '.
 import { ClientLibEvent } from './event';
 import { ClientLibBaseColor } from './main.data/color';
 
-export enum PlayerAreaViewMode {
+export const enum PlayerAreaViewMode {
     pavmNone = 0,
     pavmPlayerBase = 1,
     pavmPlayerDefense = 2,

@@ -1,6 +1,7 @@
-import { LocalCache, StCity, OneDayMs } from '@cncta/clientlib';
+import { LocalCache, StCity, Duration } from '@cncta/plugin';
 import { St } from '../st';
 
+const OneDayMs = Duration.days(1);
 export class CityCache {
     static get(cityId: number, maxAge: number = OneDayMs): StCity {
         return LocalCache.get(String(cityId), maxAge) as StCity;

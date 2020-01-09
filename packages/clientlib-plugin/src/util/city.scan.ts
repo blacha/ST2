@@ -1,14 +1,19 @@
-import { ClientLibStatic } from '../types/clientlib';
-import { ClientLibCity, ClientLibCityBuildable } from '../types/clientlib/main.data/cities';
-import { FactionType } from '../types/game/faction';
-import { ResourceType } from '../types/game/resource';
+import {
+    BaseX,
+    BaseY,
+    ClientLibCity,
+    ClientLibCityBuildable,
+    ClientLibStatic,
+    FactionType,
+    GameDataResearchLevel,
+    GameDataStatic,
+    GameDataUnitId,
+    ResourceType,
+} from '@cncta/clientlib';
+import { UnitLocationPacker } from './pack';
 import { LayoutPacker } from './pack/layout.packer';
 import { UnitPacker } from './pack/unit.packer';
-import { BaseY, BaseX } from '../base.const';
-import { UnitLocationPacker } from './pack';
-import { GameDataStatic, GameDataResearchLevel, GameDataUnitId } from '../types';
-import { Patches } from '../patch';
-import { ClientLibResearchUtil } from './city.research';
+import { Patches } from '../patch/patch.data';
 
 declare const GAMEDATA: GameDataStatic;
 

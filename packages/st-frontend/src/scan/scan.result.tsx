@@ -8,8 +8,8 @@ import { FireStoreLayouts } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
 import { Base, SiloCounts, BaseExporter, DbLayout, NumberPacker, BaseLayoutPacker } from '@st/shared';
-import { BaseX, BaseLocationPacker } from '@cncta/clientlib';
-
+import { BaseX } from '@cncta/clientlib';
+import { BaseLocationPacker } from '@cncta/plugin';
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({
     padding: '4px',

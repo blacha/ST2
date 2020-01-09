@@ -1,6 +1,7 @@
+import { ResourceType } from '@cncta/clientlib';
 import * as o from 'ospec';
 import { LayoutPacker } from '../layout.packer';
-import { ResourceType } from '../../../types/game/resource';
+
 o.spec('LayoutPacker', () => {
     o('should unpack a single row', () => {
         const inputData = [

@@ -1,5 +1,4 @@
-import { ClientLibStatic } from '../types/clientlib';
-import { QxStatic } from '../types/qx';
+import { ClientLibStatic, QxStatic } from '@cncta/clientlib';
 
 declare let qx: QxStatic;
 declare const ClientLib: ClientLibStatic;

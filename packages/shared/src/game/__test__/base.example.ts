@@ -1,4 +1,4 @@
-import { StCity } from '@cncta/clientlib';
+import { StCity } from '@cncta/plugin';
 
 export const BaseExampleForgotten: StCity = {
     cityId: 2829118,

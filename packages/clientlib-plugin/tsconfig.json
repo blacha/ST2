@@ -3,14 +3,10 @@
     "compilerOptions": {
         "rootDir": "./src",
         "outDir": "./build",
-        "lib": ["DOM"]
+        "lib": ["dom"]
     },
-    "include": ["src/**/*"],
+    "include": ["src"],
     "references": [{
         "path": "../clientlib"
-    }, {
-        "path": "../shared"
-    }, {
-        "path": "../clientlib-plugin"
     }]
 }

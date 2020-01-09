@@ -1,4 +1,4 @@
-export enum GameDataUnitId {
+export const enum GameDataUnitId {
     GdiRiflemen = 81,
     GdiMissileSquad = 82,
     GdiSniperTeam = 83,

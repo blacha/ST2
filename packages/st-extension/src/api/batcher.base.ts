@@ -1,6 +1,6 @@
 import { Batcher } from './batcher';
 import { ClientApi } from './client.api';
-import { StCity } from '@cncta/clientlib';
+import { StCity } from '@cncta/plugin';
 import { ApiScanResponse } from '@st/shared';
 import { St } from '../st';
 

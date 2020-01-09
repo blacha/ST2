@@ -1,4 +1,4 @@
-export enum FactionType {
+export const enum FactionType {
     NotInitialized = 0,
     Gdi = 1,
     Nod = 2,

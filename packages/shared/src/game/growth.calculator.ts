@@ -3,6 +3,46 @@ import { GameDataJson } from './data/game.data';
 import { PartialResourceMap } from './game.resources';
 import { ResourceType, ModifierType } from '@cncta/clientlib';
 
+export enum GrowthModifierType {
+    None = -1,
+    TiberiumProduction = 1,
+    TiberiumStorage = 2,
+    CrystalProduction = 4,
+    CrystalStorage = 5,
+    PowerProduction = 6,
+    BuildingSlots = 14,
+    HeadCountArmy = 22,
+    TiberiumPackageSize = 25,
+    CrystalPackageSize = 26,
+    PowerPackageSize = 28,
+    PowerStorage = 29,
+    CreditsProduction = 30,
+    HeadCountDefense = 31,
+    CreditsPackageSize = 32,
+    TiberiumBonusTimeToComplete = 33,
+    CrystalBonusTimeToComplete = 34,
+    PowerBonusTimeToComplete = 35,
+    CreditsBonusTimeToComplete = 36,
+    RepairEfficiencyBase = 37,
+    RepairChargeBaseStorage = 38,
+    RepairEfficiencyAir = 39,
+    RepairProductionPerHourBase = 40,
+    RepairEfficiencyInf = 41,
+    RepairEfficiencyVeh = 43,
+    RepairPotentialOffenseStorage = 47,
+    RepairProductionPerHourOffense = 48,
+    SupportMinPrepTime = 51,
+    SupportTimePerField = 52,
+    SupportRadius = 53,
+    SupportDamageAir = 54,
+    SupportDamageInf = 55,
+    SupportDamageVehicle = 56,
+    FoundBaseTiberium = 57,
+    FoundBaseCrystal = 58,
+    FoundBasePower = 59,
+    PlayerPackageCount = 64,
+}
+
 export class GrowthCalculator {
     /**
      * Calculate the value after growth
@@ -64,7 +104,7 @@ export class GrowthCalculator {
             throw new Error('Missing gdo: ' + gdo.id);
         }
 
-        const modifierKey = ModifierType[modifier] as keyof typeof ModifierType;
+        const modifierKey = GrowthModifierType[modifier] as keyof typeof ModifierType;
         if (modifierKey == null) {
             throw new Error('Invalid modifier :' + modifier);
         }

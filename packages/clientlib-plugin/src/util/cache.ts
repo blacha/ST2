@@ -1,4 +1,5 @@
-import { ClientLibStatic } from '../types';
+import { ClientLibStatic } from '@cncta/clientlib';
+import { Duration } from '../duration';
 declare const ClientLib: ClientLibStatic;
 
 export const CacheVersion = 0;
@@ -8,8 +9,7 @@ export interface CachedObject<T> {
     timestamp: number;
 }
 
-export const OneDayMs = 24 * 60 * 60 * 1000;
-export const OneWeekMs = 7 * OneDayMs;
+const OneWeekMs = Duration.days(7);
 
 export class LocalCache {
     static prefixStr = 'st-';
@@ -20,7 +20,7 @@ export class LocalCache {
         return `${LocalCache.prefixStr}-${worldId}-`;
     }
 
-    static MaxAgeMs = 3 * OneDayMs; // 3 days
+    static MaxAgeMs = Duration.days(3); // 3 days
     static get<T>(key: string, maxAge = LocalCache.MaxAgeMs) {
         const obj = localStorage.getItem(LocalCache.prefix + key);
         if (obj == null) {

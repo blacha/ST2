@@ -1,4 +1,4 @@
-import { ClientLibMap } from '../types/clientlib/util';
+import { ClientLibMap } from '@cncta/clientlib';
 
 export class ClientLibIter {
     static values<T>(obj: ClientLibMap<T>): T[] {

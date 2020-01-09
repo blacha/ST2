@@ -1,4 +1,4 @@
-export enum GameDataTechId {
+export const enum GameDataTechId {
     GdiConstructionYard = 1,
     GdiRefinery = 2,
     GdiSilo = 5,

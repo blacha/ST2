@@ -1,4 +1,4 @@
-import { CityScannerUtil, CityUtil, ClientLibLoader, ClientLibStatic, Patches } from '@cncta/clientlib';
+import { ClientLibStatic } from '@cncta/clientlib';
 import { Id, StLog } from '@st/shared';
 import { ClientApi } from './api/client.api';
 import { AllianceScanner } from './module/alliance/alliance.info';
@@ -9,6 +9,7 @@ import { hasStModuleHooks, StModule, StModuleState } from './module/module';
 import { StModuleBase } from './module/module.base';
 import { KillInfo } from './module/kill.info/kill.info';
 import { PlayerStatus } from './module/player.status/player.status';
+import { CityScannerUtil, CityUtil, ClientLibLoader, Patches } from '@cncta/plugin';
 
 declare const ClientLib: ClientLibStatic;
 

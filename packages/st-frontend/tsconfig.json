@@ -7,12 +7,11 @@
         "lib": ["DOM"]
     },
     "include": ["src/**/*"],
-    "references": [
-        {
-            "path": "../shared"
-        },
-        {
-            "path": "../clientlib"
-        }
-    ]
+    "references": [{
+        "path": "../shared"
+    }, {
+        "path": "../clientlib"
+    }, {
+        "path": "../clientlib-plugin"
+    }]
 }

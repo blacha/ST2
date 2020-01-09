@@ -1,10 +1,9 @@
-import { ClientLibPatch, PatchedId, PatchedWorldObjectCity, Patches } from '../patch';
-import { ClientLibStatic } from '../types/clientlib';
-import { ClientLibCity } from '../types/clientlib/main.data/cities';
-import { ClientLibWorldObject } from '../types/clientlib/main.data/world';
+import { ClientLibStatic, ClientLibWorldObject, ClientLibCity } from '@cncta/clientlib';
 import { ClientLibIter } from './iter';
 import { LocationIter } from './location';
 import { BaseLocationPacker } from './pack';
+import { PatchedId, ClientLibPatch } from '../patch/client.patcher';
+import { PatchedWorldObjectCity, Patches } from '../patch/patch.data';
 
 declare const ClientLib: ClientLibStatic;
 

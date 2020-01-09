@@ -1,5 +1,4 @@
-import { ResourceType } from '../../types/game/resource';
-import { BaseX } from '../../base.const';
+import { BaseX, ResourceType } from '@cncta/clientlib';
 
 /**
  *  Pack up a layout into a number per row
