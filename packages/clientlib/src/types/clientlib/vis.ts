@@ -163,7 +163,7 @@ export type RegionObjectType =
 export interface ClientLibVisRegionEvents {
     PositionChange: ClientLibStatic['Vis']['PositionChange'];
     ZoomFactorChange: ClientLibStatic['Vis']['ZoomFactorChange'];
-    SectorUpdated: ClientLibStatic['Vis']['SectorUpdated'];
+    SectorUpdated: ClientLibStatic['Vis']['Region']['SectorUpdated'];
 }
 export interface ClientLibVisRegion extends ClientLibEventEmitter<ClientLibVisRegionEvents> {
     __events: ClientLibVisRegionEvents;

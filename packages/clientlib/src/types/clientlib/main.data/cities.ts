@@ -3,6 +3,8 @@ import { ClientLibPlayerResearch } from './player';
 import { ClientLibMap } from '../util';
 import { ResourceType } from '../../game/resource';
 import { FactionType } from '../../game/faction';
+import { ClientLibEventEmitter } from '../event';
+import { ClientLibStatic } from '..';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -71,7 +73,15 @@ export interface ClientLibCity {
     GetResourceType(x: number, y: number): ResourceType;
 }
 
-export interface ClientLibCities {
+export interface ClientLibCitiesEvents {
+    Change: ClientLibStatic['Data']['CitiesChange'];
+    CurrentChange: ClientLibStatic['Data']['CurrentCityChange'];
+    CurrentOwnChange: ClientLibStatic['Data']['CurrentOwnCityChange'];
+    GhostModeChanged: ClientLibStatic['Data']['GhostModeChanged'];
+}
+export interface ClientLibCities extends ClientLibEventEmitter<ClientLibCitiesEvents> {
+    __events: ClientLibCitiesEvents;
+
     get_PlayerResearch(): ClientLibPlayerResearch;
     get_CurrentCity(): ClientLibCity | null;
     get_AllCities(): ClientLibMap<ClientLibCity>;

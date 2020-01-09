@@ -2,7 +2,7 @@ import { ClientLibSingleton, ClientLibClass } from './util';
 import { ClientLibVisMain, VisObjectType, RegionNpcCamp, RegionNpcBase, RegionCity, RegionCityType } from './vis';
 import { ClientLibMathUtil } from './math';
 import { ClientLibMainData, AllianceDiplomacyStatus, ClientLibTechType } from './main.data';
-import { ClientLibEvent } from './event';
+import { ClientLibEvent, ClientLibEvents } from './event';
 import { ClientLibBaseColor } from './main.data/color';
 
 export const enum PlayerAreaViewMode {
@@ -28,6 +28,10 @@ export interface ClientLibStatic {
     Base: { MathUtil: ClientLibMathUtil; ETechType: typeof ClientLibTechType };
     Config: {};
     Data: {
+        CitiesChange: ClientLibEvent;
+        CurrentCityChange: ClientLibEvent;
+        CurrentOwnCityChange: ClientLibEvent;
+        GhostModeChanged: ClientLibEvent;
         ChatMessage: ClientLibEvent;
         AllianceChange: ClientLibEvent;
         BaseColors: ClientLibClass<ClientLibBaseColor>;
@@ -44,6 +48,7 @@ export interface ClientLibStatic {
     Sound: {};
     Vis: {
         Region: {
+            SectorUpdated: ClientLibEvent;
             ERegionCityType: typeof RegionCityType;
             RegionNPCCamp: ClientLibClass<RegionNpcCamp>;
             RegionNPCBase: ClientLibClass<RegionNpcBase>;
@@ -51,7 +56,6 @@ export interface ClientLibStatic {
         };
         PositionChange: ClientLibEvent;
         SelectionChange: ClientLibEvent;
-        SectorUpdated: ClientLibEvent;
         ZoomFactorChange: ClientLibEvent;
         ViewModeChange: ClientLibEvent;
         VisMain: ClientLibSingleton<ClientLibVisMain>;
