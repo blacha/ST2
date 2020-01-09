@@ -1,14 +1,14 @@
-import { StModuleHooks, StModuleState } from './module';
-import { St } from '../st';
+import { ClientLibEventEmitter, ClientLibEvents, PheStatic } from '@cncta/clientlib';
 import { Id } from '@st/shared';
-import { ClientLibEvent, PheStatic, ClientLibEventEmitter, ClientLibEventName } from '@cncta/clientlib';
+import { St } from '../st';
+import { StModuleHooks, StModuleState } from './module';
 
 declare const phe: PheStatic;
 
-export interface EventContext {
-    source: ClientLibEventEmitter;
-    name: ClientLibEventName;
-    type: ClientLibEvent;
+export interface EventContext<T extends ClientLibEvents<T>, K extends keyof T> {
+    source: ClientLibEventEmitter<T>;
+    name: K;
+    type: T[K];
     cb: Function;
 }
 
@@ -18,7 +18,7 @@ export abstract class StModuleBase implements StModuleHooks {
     state = StModuleState.Init;
     st: St;
 
-    events: EventContext[] = [];
+    events: EventContext<any, any>[] = [];
     timers: number[] = [];
 
     onStart?(): Promise<void>;
@@ -48,7 +48,12 @@ export abstract class StModuleBase implements StModuleHooks {
         this.timers.push(setInterval(func, timeout));
     }
 
-    addEvent(source: ClientLibEventEmitter, name: ClientLibEventName, type: ClientLibEvent, cb: Function) {
+    addEvent<T extends ClientLibEvents<T>, K extends keyof T>(
+        source: ClientLibEventEmitter<T>,
+        name: K,
+        type: T[K],
+        cb: Function,
+    ) {
         this.events.push({ source, name, type, cb });
         phe.cnc.Util.attachNetEvent(source, name, type, this, cb);
     }

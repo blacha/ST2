@@ -1,24 +1,24 @@
-import { ClientLibEvent, ClientLibEventName, ClientLibEventEmitter } from '../clientlib';
+import { ClientLibEventEmitter, ClientLibEvents } from '../clientlib';
 
-// TODO add more event names
+export interface PheStaticUtil {
+    attachNetEvent<T extends ClientLibEvents<T>, K extends keyof T>(
+        source: ClientLibEventEmitter<T>,
+        evtName: K,
+        eventFunction: T[K],
+        thisArg: any,
+        callback: Function,
+    ): void;
+    detachNetEvent<T extends ClientLibEvents<T>, K extends keyof T>(
+        source: ClientLibEventEmitter<T>,
+        evtName: K,
+        eventFunction: T[K],
+        thisArg: any,
+        callback: Function,
+    ): void;
+}
 
 export interface PheStatic {
     cnc: {
-        Util: {
-            attachNetEvent(
-                source: ClientLibEventEmitter,
-                evtName: ClientLibEventName,
-                eventFunction: ClientLibEvent,
-                thisArg: any,
-                callback: Function,
-            ): void;
-            detachNetEvent(
-                source: ClientLibEventEmitter,
-                evtName: ClientLibEventName,
-                eventFunction: ClientLibEvent,
-                thisArg: any,
-                callback: Function,
-            ): void;
-        };
+        Util: PheStaticUtil;
     };
 }

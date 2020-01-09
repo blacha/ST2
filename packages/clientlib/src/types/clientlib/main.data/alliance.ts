@@ -1,5 +1,7 @@
 import { ClientLibMap } from '../util';
 import { FactionType } from '../../game/faction';
+import { ClientLibStatic } from '..';
+import { ClientLibEventEmitter } from '../event';
 
 export type GameStep = number;
 /* eslint-disable @typescript-eslint/camelcase */
@@ -36,7 +38,13 @@ export const enum AllianceDiplomacyStatus {
     Foe = 3,
 }
 
+export interface ClientLibAllianceEvents {
+    Change: ClientLibStatic['Data']['AllianceChange'];
+}
+
 export interface ClientLibAlliance {
+    __events: ClientLibAllianceEvents;
+
     /**
      * Get alliance Id
      * @returns allianceId or 0 if not part of an alliance

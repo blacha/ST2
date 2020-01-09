@@ -15,4 +15,5 @@ export interface ClientLibSingleton<T> {
 
 export interface ClientLibClass<T> {
     new (): T;
+    prototype: T;
 }

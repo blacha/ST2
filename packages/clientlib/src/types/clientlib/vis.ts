@@ -1,5 +1,6 @@
 import { ClientLibEventEmitter } from './event';
 import { ClientLibWorldObject } from './main.data/world';
+import { ClientLibStatic } from '.';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -159,7 +160,13 @@ export type RegionObjectType =
     | RegionAllianceMarker
     | RegionPointOfInterest;
 
-export interface ClientLibVisRegion extends ClientLibEventEmitter {
+export interface ClientLibVisRegionEvents {
+    PositionChange: ClientLibStatic['Vis']['PositionChange'];
+    ZoomFactorChange: ClientLibStatic['Vis']['ZoomFactorChange'];
+}
+export interface ClientLibVisRegion extends ClientLibEventEmitter<ClientLibVisRegionEvents> {
+    __events: ClientLibVisRegionEvents;
+
     get_GridWidth(): number;
     get_GridHeight(): number;
     /** Number between 0-1, 1 is full zoomed in */
@@ -176,7 +183,11 @@ export interface ClientLibVisRegion extends ClientLibEventEmitter {
     SetColorDirty(): void;
 }
 
-export interface ClientLibVisMain extends ClientLibEventEmitter {
+export interface ClientLibVisMainEvents {
+    PositionChange: ClientLibStatic['Vis']['PositionChange'];
+    ZoomFactorChange: ClientLibStatic['Vis']['ZoomFactorChange'];
+}
+export interface ClientLibVisMain extends ClientLibEventEmitter<ClientLibVisMainEvents> {
     CenterGridPosition(x: number, y: number): void;
     Update(): void;
     ViewUpdate(): void;

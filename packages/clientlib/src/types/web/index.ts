@@ -1,3 +1,5 @@
+import { ClientLibClass } from '../clientlib/util';
+
 export interface WebFrontEndRegionMenu {
     showMenu: Function;
 }
@@ -5,7 +7,7 @@ export interface WebFrontEndRegionMenu {
 export interface WebFrontEndStatic {
     gui: {
         region: {
-            RegionCityMenu: { prototype: WebFrontEndRegionMenu };
+            RegionCityMenu: ClientLibClass<WebFrontEndRegionMenu>;
         };
     };
 }
