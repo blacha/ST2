@@ -6,7 +6,6 @@ declare const ClientLib: ClientLibStatic;
 
 export class PlayerStatus extends StModuleBase {
     name = 'PlayerStatus';
-    patch = new ClientLibPatch('ClientLib.Data.BaseColors');
 
     static PlayerColor: Record<AllianceMemberOnlineState, string> = {
         [AllianceMemberOnlineState.Online]: '#76ff03',
@@ -15,6 +14,7 @@ export class PlayerStatus extends StModuleBase {
         [AllianceMemberOnlineState.Hidden]: '#ffff00', // Does anyone every hide?
     };
     async onStart() {
+        const patch = this.patch('ClientLib.Data.BaseColors');
         // Lookup the name of the 'get_BaseColors' function to patch
         const patchKey = ClientLibPatch.extractValueFromFunction(
             window,
@@ -22,8 +22,7 @@ export class PlayerStatus extends StModuleBase {
             'Color=',
             /.*\.([A-Z]{6})\(this.*Color=.*/,
         );
-        this.patch.replaceFunction(patchKey, PlayerStatus.getPlayerColor);
-        this.patch.patch();
+        patch.replaceFunction(patchKey, PlayerStatus.getPlayerColor);
 
         const alliance = ClientLib.Data.MainData.GetInstance().get_Alliance();
         this.addEvent(alliance, 'Change', ClientLib.Data.AllianceChange, this.allianceChange);
@@ -35,10 +34,6 @@ export class PlayerStatus extends StModuleBase {
         ClientLib.Vis.VisMain.GetInstance()
             .get_Region()
             .SetColorDirty();
-    }
-
-    async onStop() {
-        this.patch.remove();
     }
 
     static getPlayerColor(playerId: number, allianceId: number) {

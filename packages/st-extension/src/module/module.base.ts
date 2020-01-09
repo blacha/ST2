@@ -2,6 +2,7 @@ import { ClientLibEventEmitter, ClientLibEvents, PheStatic } from '@cncta/client
 import { Id } from '@st/shared';
 import { St } from '../st';
 import { StModuleHooks, StModuleState } from './module';
+import { ClientLibPatch } from '@cncta/util/src';
 
 declare const phe: PheStatic;
 
@@ -20,6 +21,7 @@ export abstract class StModuleBase implements StModuleHooks {
 
     events: EventContext<any, any>[] = [];
     timers: number[] = [];
+    patches: ClientLibPatch[] = [];
 
     onStart?(): Promise<void>;
     onStop?(): Promise<void>;
@@ -28,6 +30,12 @@ export abstract class StModuleBase implements StModuleHooks {
         this.state = StModuleState.Starting;
         this.st = st;
         await this.onStart?.();
+
+        for (const patch of this.patches) {
+            st.log.info({ path: patch.path }, 'Patch:Apply');
+            patch.patch();
+        }
+
         this.state = StModuleState.Started;
     }
 
@@ -41,7 +49,16 @@ export abstract class StModuleBase implements StModuleHooks {
         for (const timer of this.timers) {
             clearInterval(timer);
         }
+        for (const patch of this.patches) {
+            patch.remove();
+        }
         this.state = StModuleState.Stopped;
+    }
+
+    patch(path: string): ClientLibPatch {
+        const patch = new ClientLibPatch(path);
+        this.patches.push(patch);
+        return patch;
     }
 
     interval(func: Function, timeout: number) {
