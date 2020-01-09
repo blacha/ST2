@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/blacha/st/compare/v0.5.0...v0.6.0) (2020-01-09)
+
+
+### Bug Fixes
+
+* change name to cncta/util ([060039a](https://github.com/blacha/st/commit/060039aad280dfa64f4d293319d4248b7bf40beb))
+* layout scanner ([f77d76a](https://github.com/blacha/st/commit/f77d76a02b95a87d85cdd2051b71efb62b76991b))
+* packer should include bundled version number ([9ba2ea9](https://github.com/blacha/st/commit/9ba2ea917c7deb5750174ea3aca72e6b616b90dd))
+* webgl version does not support alpha ([83faa99](https://github.com/blacha/st/commit/83faa99ecb02eeceb814e413b28df5c76a5294c9))
+
+
+### Features
+
+* add sector updated event ([f08a94b](https://github.com/blacha/st/commit/f08a94b4dadc116419892a252616160bf8e355e2))
+* adding cities events ([07874eb](https://github.com/blacha/st/commit/07874eb386027186d63381256a60f82fdccbe4f5))
+* adding clientlib time ([99b31ef](https://github.com/blacha/st/commit/99b31efce5cd6478aef4eddca1861587adfd71e6))
+* break up into smaller packages ([2574c34](https://github.com/blacha/st/commit/2574c34eb9205a95a63395d8948d8529e4a94fa0))
+* load own player research data ([c6c127e](https://github.com/blacha/st/commit/c6c127e16daca16e10ee04148b74390da5ec08fc))
+* support chat events ([bfff91b](https://github.com/blacha/st/commit/bfff91b04bda365f65a1ff57015a483baae7da18))
+* support player research ([4ea62f8](https://github.com/blacha/st/commit/4ea62f80184158c102a6637c4a26b867a475bc90))
+* support typing events ([83e696e](https://github.com/blacha/st/commit/83e696e7d201dfc1cd885bb93153930638ca5c59))
+* use city and region events to determine when to update the tracker ([487a35c](https://github.com/blacha/st/commit/487a35c09b63fbc6f71e125a617c9aff774c7277))
+
+
+
+
+
 # [0.5.0](https://github.com/blacha/st/compare/v0.4.0...v0.5.0) (2020-01-03)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/blacha/st/compare/v0.5.0...v0.6.0) (2020-01-09)
+
+
+### Bug Fixes
+
+* packer should include bundled version number ([9ba2ea9](https://github.com/blacha/st/commit/9ba2ea917c7deb5750174ea3aca72e6b616b90dd))
+
+
+
+
+
 # [0.5.0](https://github.com/blacha/st/compare/v0.4.0...v0.5.0) (2020-01-03)
 
 **Note:** Version bump only for package @st/packer
