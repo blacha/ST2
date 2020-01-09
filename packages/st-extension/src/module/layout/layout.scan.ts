@@ -15,6 +15,9 @@ export class LayoutScanner extends StModuleBase {
 
         // Acquire the module lock and run the scan
         await this.st.run(this, () => this.scanLayout());
+        if (this.isStopping) {
+            return;
+        }
 
         const worldId = ClientLib.Data.MainData.GetInstance()
             .get_Server()
@@ -44,6 +47,7 @@ export class LayoutScanner extends StModuleBase {
             if (existing) {
                 CityCache.set(object.$Id, existing);
                 yield existing;
+                continue;
             }
 
             cities.set_CurrentCityId(object.$Id);
