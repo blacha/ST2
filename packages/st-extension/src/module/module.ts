@@ -19,9 +19,9 @@ export function hasStModuleHooks(x: any): x is StModuleHooks {
 }
 
 export enum StModuleState {
-    Init,
-    Starting,
-    Started,
-    Stopping,
-    Stopped,
+    Init = 'init',
+    Starting = 'starting',
+    Started = 'started',
+    Stopping = 'stopping',
+    Stopped = 'stopped',
 }
