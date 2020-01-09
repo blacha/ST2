@@ -14,6 +14,7 @@ import { UnitLocationPacker } from './pack';
 import { LayoutPacker } from './pack/layout.packer';
 import { UnitPacker } from './pack/unit.packer';
 import { Patches } from '../patch/patch.data';
+import { ClientLibResearchUtil } from './city.research';
 
 declare const GAMEDATA: GameDataStatic;
 

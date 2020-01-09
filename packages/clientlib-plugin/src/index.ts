@@ -1,6 +1,7 @@
 export * from './util/cache';
 export * from './util/city';
 export * from './util/city.scan';
+export * from './util/city.research';
 export * from './util/iter';
 export * from './util/loader';
 export * from './util/location';
