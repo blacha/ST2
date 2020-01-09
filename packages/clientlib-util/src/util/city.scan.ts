@@ -1,4 +1,15 @@
-import { BaseX, BaseY, ClientLibCity, ClientLibCityBuildable, ClientLibStatic, FactionType, GameDataResearchLevel, GameDataStatic, GameDataUnitId, ResourceType } from '@cncta/clientlib';
+import {
+    BaseX,
+    BaseY,
+    ClientLibCity,
+    ClientLibCityBuildable,
+    ClientLibStatic,
+    FactionType,
+    GameDataResearchLevel,
+    GameDataStatic,
+    GameDataUnitId,
+    ResourceType,
+} from '@cncta/clientlib';
 import { PatchCityUnits } from '../patch/patch.data';
 import { ClientLibResearchUtil } from './city.research';
 import { UnitLocationPacker } from './pack';
