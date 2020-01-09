@@ -1,4 +1,4 @@
-import { LocalCache, StCity, Duration } from '@cncta/plugin';
+import { LocalCache, StCity, Duration } from '@cncta/util';
 import { St } from '../st';
 
 const OneDayMs = Duration.days(1);

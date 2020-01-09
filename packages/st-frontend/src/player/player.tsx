@@ -1,4 +1,4 @@
-import { StCity } from '@cncta/plugin';
+import { StCity } from '@cncta/util';
 import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade, NumberPacker } from '@st/shared';
 import BackTop from 'antd/es/back-top';
 import Divider from 'antd/es/divider';

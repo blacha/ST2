@@ -1,7 +1,7 @@
 import { ClientLibClass, ClientLibStatic, NpcCampType, RegionNpcCamp, Point } from '@cncta/clientlib';
 import { StModuleState } from '../module';
 import { StModuleBase } from '../module.base';
-import { Duration, CityUtil, Patches, BaseLocationPacker } from '@cncta/plugin';
+import { Duration, CityUtil, Patches, BaseLocationPacker } from '@cncta/util';
 
 declare const ClientLib: ClientLibStatic;
 

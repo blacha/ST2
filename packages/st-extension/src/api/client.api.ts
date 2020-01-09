@@ -1,4 +1,4 @@
-import { StCity } from '@cncta/plugin';
+import { StCity } from '@cncta/util';
 import { Config } from '@st/shared';
 import { StModuleBase } from '../module/module.base';
 import { BatchBaseSender } from './batcher.base';

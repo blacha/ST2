@@ -12,7 +12,7 @@ import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { Base, GameResources, formatNumber, BaseBuilder, Id, NumberPacker, mergeBaseUpgrade } from '@st/shared';
 import { GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
 import { ViewResearch } from '../util/research';
-import { StCity } from '@cncta/plugin';
+import { StCity } from '@cncta/util';
 
 export const AllianceCss = {
     Table: style({

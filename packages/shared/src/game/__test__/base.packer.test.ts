@@ -3,7 +3,7 @@ import { Base } from '../base/base';
 import { BaseBuilder } from '../base/base.builder';
 import { BaseExporter } from '../base/base.export';
 import { NumberPacker, BaseLayoutPacker } from '../base';
-import { BaseLocationPacker } from '@cncta/plugin';
+import { BaseLocationPacker } from '@cncta/util';
 
 o.spec('NumberPacker', () => {
     o('should pack/unpack a id', () => {

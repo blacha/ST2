@@ -11,6 +11,6 @@
     }, {
         "path": "../shared"
     }, {
-        "path": "../clientlib-plugin"
+        "path": "../clientlib-util"
     }]
 }

@@ -1,4 +1,4 @@
-import { IdName, StCity } from '@cncta/plugin';
+import { IdName, StCity } from '@cncta/util';
 import { DbObject } from './db.object';
 
 export interface DbPlayer extends DbObject {

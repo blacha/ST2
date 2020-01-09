@@ -3,7 +3,7 @@
     "references": [{
         "path": "./packages/clientlib"
     }, {
-        "path": "./packages/clientlib-plugin"
+        "path": "./packages/clientlib-util"
     }, {
         "path": "./packages/shared"
     }, {

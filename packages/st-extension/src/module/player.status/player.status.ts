@@ -1,6 +1,6 @@
 import { AllianceMemberOnlineState, ClientLibStatic } from '@cncta/clientlib';
 import { StModuleBase } from '../module.base';
-import { ClientLibPatch, Duration } from '@cncta/plugin';
+import { ClientLibPatch, Duration } from '@cncta/util';
 
 declare const ClientLib: ClientLibStatic;
 

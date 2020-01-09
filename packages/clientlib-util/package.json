@@ -1,5 +1,5 @@
 {
-    "name": "@cncta/plugin",
+    "name": "@cncta/util",
     "version": "0.5.0",
     "description": "Client lib utilities",
     "scripts": {

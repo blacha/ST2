@@ -1,4 +1,4 @@
-import { LocationIter } from '@cncta/plugin';
+import { LocationIter } from '@cncta/util';
 import { Base } from './base';
 
 export class BaseExporter {

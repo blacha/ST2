@@ -9,7 +9,7 @@ import { SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
 import { Base, SiloCounts, BaseExporter, DbLayout, NumberPacker, BaseLayoutPacker } from '@st/shared';
 import { BaseX } from '@cncta/clientlib';
-import { BaseLocationPacker } from '@cncta/plugin';
+import { BaseLocationPacker } from '@cncta/util';
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({
     padding: '4px',

@@ -1,4 +1,4 @@
-import { StCity } from '@cncta/plugin';
+import { StCity } from '@cncta/util';
 
 export interface ApiScanResponse {
     id: string[];

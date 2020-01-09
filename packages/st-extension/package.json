@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "@cncta/clientlib": "^0.5.0",
-        "@cncta/plugin": "^0.5.0"
+        "@cncta/util": "^0.5.0"
     },
     "main": "./build/index.js",
     "types": "./build/index.d.ts",

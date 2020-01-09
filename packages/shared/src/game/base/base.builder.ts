@@ -1,4 +1,4 @@
-import { StCity, UnitLocationPacker, UnitPacker } from '@cncta/plugin';
+import { StCity, UnitLocationPacker, UnitPacker } from '@cncta/util';
 import { Faction } from '../data/faction';
 import { GameDataObject } from '../data/game.data.object';
 import { Base } from './base';

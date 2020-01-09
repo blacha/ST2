@@ -1,4 +1,4 @@
-import { StCity, BaseLocationPacker } from '@cncta/plugin';
+import { StCity, BaseLocationPacker } from '@cncta/util';
 import { Base, BaseBuilder, NumberPacker, BaseIdPacker } from '@st/shared';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';

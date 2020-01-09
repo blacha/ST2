@@ -2,7 +2,7 @@ import * as Base62 from 'base62';
 import { Tile } from './tile';
 import { Base } from './base';
 import { BaseY, ResourceType, BaseX } from '@cncta/clientlib';
-import { LayoutPacker } from '@cncta/plugin';
+import { LayoutPacker } from '@cncta/util';
 
 export interface Point {
     x: number;

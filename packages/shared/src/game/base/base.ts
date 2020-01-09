@@ -11,7 +11,7 @@ import { BaseBuildings } from './base.buildings';
 import { BaseStats } from './base.stats';
 import { Buildable } from './buildable';
 import { Tile } from './tile';
-import { UnitLocationPacker } from '@cncta/plugin';
+import { UnitLocationPacker } from '@cncta/util';
 
 export interface CncLocation {
     x: number;

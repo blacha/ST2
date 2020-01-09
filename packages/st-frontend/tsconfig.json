@@ -12,6 +12,6 @@
     }, {
         "path": "../clientlib"
     }, {
-        "path": "../clientlib-plugin"
+        "path": "../clientlib-util"
     }]
 }

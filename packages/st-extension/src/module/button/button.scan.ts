@@ -8,7 +8,7 @@ import {
     VisObjectType,
     WebFrontEndStatic,
 } from '@cncta/clientlib';
-import { CityScannerUtil, CityUtil } from '@cncta/plugin';
+import { CityScannerUtil, CityUtil } from '@cncta/util';
 import { Config } from '@st/shared';
 import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
