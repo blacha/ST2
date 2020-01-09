@@ -51,6 +51,7 @@ export interface ClientLibStatic {
         };
         PositionChange: ClientLibEvent;
         SelectionChange: ClientLibEvent;
+        SectorUpdated: ClientLibEvent;
         ZoomFactorChange: ClientLibEvent;
         ViewModeChange: ClientLibEvent;
         VisMain: ClientLibSingleton<ClientLibVisMain>;
