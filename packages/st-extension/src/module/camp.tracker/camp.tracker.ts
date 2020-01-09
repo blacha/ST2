@@ -22,14 +22,18 @@ export class CampTracker extends StModuleBase {
 
     markers: Map<number, { el: HTMLDivElement; location: Point; index: number }> = new Map();
     updateInterval: number;
+    lastUpdatedStep: number;
+    updateCb: number | null;
 
     async onStart(): Promise<void> {
+        const md = ClientLib.Data.MainData.GetInstance();
         const visMain = ClientLib.Vis.VisMain.GetInstance();
         const region = visMain.get_Region();
         this.addEvent(region, 'PositionChange', ClientLib.Vis.PositionChange, this.updatePosition);
         this.addEvent(region, 'ZoomFactorChange', ClientLib.Vis.ZoomFactorChange, this.updatePosition);
 
-        this.interval(() => this.update(), Duration.seconds(10));
+        this.addEvent(region, 'SectorUpdated', ClientLib.Vis.Region.SectorUpdated, this.update);
+        this.addEvent(md.get_Cities(), 'Change', ClientLib.Data.CitiesChange, this.update);
 
         // Use floating point base numbers for tool tips
         replaceBaseLevel(ClientLib.Vis.Region.RegionNPCBase);
@@ -48,6 +52,22 @@ export class CampTracker extends StModuleBase {
     }
 
     update() {
+        // Update already triggering
+        if (this.updateCb != null) {
+            return;
+        }
+        const serverStep = ClientLib.Data.MainData.GetInstance()
+            .get_Time()
+            .GetServerStep();
+        if (serverStep == this.lastUpdatedStep) {
+            return;
+        }
+        this.lastUpdatedStep = serverStep;
+        this.updateCb = requestAnimationFrame(() => this.doUpdate());
+    }
+
+    doUpdate() {
+        this.updateCb = null;
         const mainBase = CityUtil.getMainCity();
         const offLevel = mainBase.get_LvlOffense();
         const minBaseHighlight = offLevel - this.MaxOffDiff;
@@ -72,12 +92,12 @@ export class CampTracker extends StModuleBase {
 
         const existingMarkers = new Set(this.markers.keys());
         newestCamps.forEach((camp, index) => {
-            const location = BaseLocationPacker.unpack(camp.location);
             const existing = this.markers.get(camp.id);
             if (existing != null) {
                 existing.index = index;
                 existingMarkers.delete(camp.id);
             } else {
+                const location = BaseLocationPacker.unpack(camp.location);
                 this.addMarker(camp.id, location, index);
             }
         });
