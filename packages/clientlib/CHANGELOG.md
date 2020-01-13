@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/blacha/st/compare/v0.6.0...v0.7.0) (2020-01-13)
+
+
+### Features
+
+* expand types for qx widgets and docs ([665a33d](https://github.com/blacha/st/commit/665a33d642e7f6f53c7832289372deb325368d00))
+* restrict patched functions to functions that exist on the prototype ([f992fa2](https://github.com/blacha/st/commit/f992fa2c45223efdde8ee1ac2309c5f529a6036a))
+* switching to a typed patcher ([ed74f8d](https://github.com/blacha/st/commit/ed74f8d06db1c65417bd9db5938dda0898bbe0c6))
+
+
+
+
+
 # [0.6.0](https://github.com/blacha/st/compare/v0.5.0...v0.6.0) (2020-01-09)
 
 

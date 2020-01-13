@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/blacha/st/compare/v0.6.0...v0.7.0) (2020-01-13)
+
+
+### Bug Fixes
+
+* layout scanner should use the cache ([558daac](https://github.com/blacha/st/commit/558daacb3a70e07ea8a25e5a718bf4b99a7cbcb4))
+* remove unused import ([acfd1f9](https://github.com/blacha/st/commit/acfd1f924293e300d7fdcc1f760b82fa0e056846))
+
+
+### Features
+
+* expand types for qx widgets and docs ([665a33d](https://github.com/blacha/st/commit/665a33d642e7f6f53c7832289372deb325368d00))
+* move custom patches to base module impl ([acf9191](https://github.com/blacha/st/commit/acf9191b7d592898299f1a2b22e44f0ead89872b))
+* restrict patched functions to functions that exist on the prototype ([f992fa2](https://github.com/blacha/st/commit/f992fa2c45223efdde8ee1ac2309c5f529a6036a))
+* switch to text for statu's so its easier to debug ([e37f402](https://github.com/blacha/st/commit/e37f4024e3fedee843c1e7375ff3306b7e36159c))
+* switch to typed extractors ([d0bbf6d](https://github.com/blacha/st/commit/d0bbf6d0f4464a3e405faae60158f6b1724aa509))
+* switching to a typed patcher ([ed74f8d](https://github.com/blacha/st/commit/ed74f8d06db1c65417bd9db5938dda0898bbe0c6))
+
+
+
+
+
 # [0.6.0](https://github.com/blacha/st/compare/v0.5.0...v0.6.0) (2020-01-09)
 
 
