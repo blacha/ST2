@@ -10,11 +10,11 @@ import {
     GameDataUnitId,
     ResourceType,
 } from '@cncta/clientlib';
+import { PatchCityUnits } from '../patch/patch.data';
+import { ClientLibResearchUtil } from './city.research';
 import { UnitLocationPacker } from './pack';
 import { LayoutPacker } from './pack/layout.packer';
 import { UnitPacker } from './pack/unit.packer';
-import { Patches } from '../patch/patch.data';
-import { ClientLibResearchUtil } from './city.research';
 
 declare const GAMEDATA: GameDataStatic;
 
@@ -136,7 +136,7 @@ export class CityScannerUtil {
 
     static getUnits(city: ClientLibCity): CityArmy {
         const units = city.get_CityUnitsData();
-        if (!Patches.CityUnits.isPatched(units)) {
+        if (!PatchCityUnits.isPatched(units)) {
             throw new Error('City is not patched, missing: $DefenseUnits');
         }
 

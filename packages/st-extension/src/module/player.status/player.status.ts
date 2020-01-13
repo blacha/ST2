@@ -11,17 +11,16 @@ export class PlayerStatus extends StModuleBase {
         [AllianceMemberOnlineState.Online]: '#76ff03',
         [AllianceMemberOnlineState.Away]: '#ffd600',
         [AllianceMemberOnlineState.Offline]: '#5a5653',
-        [AllianceMemberOnlineState.Hidden]: '#ffff00', // Does anyone every hide?
+        [AllianceMemberOnlineState.Hidden]: '#ffff00', // Does anyone even hide?
     };
     async onStart() {
-        const patch = this.patch('ClientLib.Data.BaseColors');
+        const patch = this.patch(ClientLib.Data.BaseColors);
         // Lookup the name of the 'get_BaseColors' function to patch
         const patchKey = ClientLibPatch.extractValueFromFunction(
-            window,
-            'ClientLib.Vis.Region.RegionCity',
+            ClientLib.Vis.Region.RegionCity,
             'Color=',
             /.*\.([A-Z]{6})\(this.*Color=.*/,
-        );
+        ) as any;
         patch.replaceFunction(patchKey, PlayerStatus.getPlayerColor);
 
         const alliance = ClientLib.Data.MainData.GetInstance().get_Alliance();

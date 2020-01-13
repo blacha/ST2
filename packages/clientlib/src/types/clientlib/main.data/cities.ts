@@ -37,6 +37,7 @@ export interface ClientLibBattleViewUnit {
 }
 
 export interface ClientLibCityUnits {
+    HasUnitMdbId(id: number): boolean;
     get_TotalDefenseHeadCount(): number;
 }
 

@@ -1,12 +1,17 @@
-import { ClientPatch, StringFunc } from './client.patcher';
+import { ClientPatch } from './client.patcher';
 
-export class ClientLibPatchFunction implements ClientPatch {
+/**
+ * Replace a function on a prototype with a new function
+ *
+ * stores a backup inside the `backupFunctionName` so it can be revered
+ */
+export class ClientLibPatchFunction<T> implements ClientPatch {
     path: string;
-    sourceFunctionName: any;
+    sourceFunctionName: keyof T;
     targetFunction: Function;
     oldFunction: Function | null;
 
-    constructor(sourceFunctionName: string | StringFunc, targetFunction: Function) {
+    constructor(sourceFunctionName: keyof T, targetFunction: Function) {
         this.sourceFunctionName = sourceFunctionName;
         this.targetFunction = targetFunction;
     }
@@ -33,7 +38,7 @@ export class ClientLibPatchFunction implements ClientPatch {
         if (typeof baseObject.prototype[this.backupFunctionName] == 'undefined') {
             return false;
         }
-        baseObject.prototype[this.sourceFunctionName] = baseObject.prototype[this.backupFunctionName];
+        baseObject.prototype[this.sourceFunctionName] = this.oldFunction;
         delete baseObject.prototype[this.backupFunctionName];
         delete this.oldFunction;
         return true;

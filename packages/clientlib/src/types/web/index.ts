@@ -1,8 +1,9 @@
 import { ClientLibClass } from '../clientlib/util';
 import { QxComposite } from '../qx';
+import { RegionObject } from '../clientlib';
 
 export interface WebFrontEndRegionMenu extends QxComposite {
-    showMenu: Function;
+    showMenu: (selectedObject: RegionObject) => void;
 }
 
 export interface WebFrontEndRegionInfo extends QxComposite {

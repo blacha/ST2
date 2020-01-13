@@ -136,8 +136,8 @@ export class St {
 
         this.log.trace('StPatch');
         for (const patch of Object.values(Patches)) {
-            this.log.info({ path: patch.path }, 'Patch:Apply');
-            patch.patch();
+            this.log.info({ patch }, 'Patch:Apply');
+            patch.apply();
         }
 
         for (const module of this.modules) {
@@ -158,7 +158,7 @@ export class St {
 
     async stop() {
         for (const patch of Object.values(Patches)) {
-            this.log.info({ path: patch.path }, 'Patch:Remove');
+            this.log.info({ patch }, 'Patch:Remove');
             patch.remove();
         }
         for (const module of this.modules) {

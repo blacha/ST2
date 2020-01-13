@@ -26,7 +26,7 @@ function isQxComposite(x: any): x is QxComposite {
 
 export class ButtonScan extends StModuleBase {
     name = 'ButtonScan';
-    oldFunction: Function | null = null;
+    oldFunction?: (o: RegionObject) => void;
 
     isStarted = false;
     buttons: QxFormButton[] = [];
@@ -124,7 +124,7 @@ export class ButtonScan extends StModuleBase {
     async onStop(): Promise<void> {
         if (this.oldFunction) {
             webfrontend.gui.region.RegionCityMenu.prototype.showMenu = this.oldFunction;
-            this.oldFunction = null;
+            delete this.oldFunction;
         }
 
         for (const button of this.buttons) {

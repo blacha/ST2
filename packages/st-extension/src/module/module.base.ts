@@ -1,8 +1,8 @@
-import { ClientLibEventEmitter, ClientLibEvents, PheStatic } from '@cncta/clientlib';
+import { ClientLibEventEmitter, ClientLibEvents, PheStatic, ClientLibClass } from '@cncta/clientlib';
 import { Id } from '@st/shared';
 import { St } from '../st';
 import { StModuleHooks, StModuleState } from './module';
-import { ClientLibPatch } from '@cncta/util/src';
+import { ClientLibPatch } from '@cncta/util';
 
 declare const phe: PheStatic;
 
@@ -21,7 +21,7 @@ export abstract class StModuleBase implements StModuleHooks {
 
     events: EventContext<any, any>[] = [];
     timers: number[] = [];
-    patches: ClientLibPatch[] = [];
+    patches: ClientLibPatch<{}, any>[] = [];
 
     onStart?(): Promise<void>;
     onStop?(): Promise<void>;
@@ -32,8 +32,8 @@ export abstract class StModuleBase implements StModuleHooks {
         await this.onStart?.();
 
         for (const patch of this.patches) {
-            st.log.info({ path: patch.path }, 'Patch:Apply');
-            patch.patch();
+            st.log.info({ patch }, 'Patch:Apply');
+            patch.apply();
         }
 
         this.state = StModuleState.Started;
@@ -55,8 +55,8 @@ export abstract class StModuleBase implements StModuleHooks {
         this.state = StModuleState.Stopped;
     }
 
-    patch(path: string): ClientLibPatch {
-        const patch = new ClientLibPatch(path);
+    patch<T extends {}>(obj: ClientLibClass<T>): ClientLibPatch<{}, T> {
+        const patch = new ClientLibPatch(() => obj);
         this.patches.push(patch);
         return patch;
     }

@@ -13,7 +13,7 @@ export interface ClientLibSingleton<T> {
     GetInstance(): T;
 }
 
-export interface ClientLibClass<T> {
+export interface ClientLibClass<T> extends Function {
     new (): T;
-    prototype: T;
+    readonly prototype: T;
 }
