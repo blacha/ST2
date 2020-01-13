@@ -12,7 +12,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * layout scanner ([f77d76a](https://github.com/blacha/st/commit/f77d76a02b95a87d85cdd2051b71efb62b76991b))
 * packer should include bundled version number ([9ba2ea9](https://github.com/blacha/st/commit/9ba2ea917c7deb5750174ea3aca72e6b616b90dd))
 * webgl version does not support alpha ([83faa99](https://github.com/blacha/st/commit/83faa99ecb02eeceb814e413b28df5c76a5294c9))
-
+* :bug: Additional Change log message
 
 ### Features
 
