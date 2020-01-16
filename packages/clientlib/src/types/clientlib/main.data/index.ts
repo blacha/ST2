@@ -6,6 +6,7 @@ import { ClientLibAlliance } from './alliance';
 import { ClientLibBaseColor } from './color';
 import { ClientLibChat } from './chat';
 import { ClientLibTime } from './time';
+import { ClientLibAllianceSupport } from './alliance.support';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibMainData {
@@ -26,7 +27,7 @@ export interface ClientLibMainData {
     get_Notifications(): unknown;
     get_Combat(): unknown;
     get_AllianceCombatState(): unknown;
-    get_AllianceSupportState(): unknown;
+    get_AllianceSupportState(): ClientLibAllianceSupport;
     get_AllianceTargetWatcher(): unknown;
     get_Inventory(): unknown;
     get_ShopCatalog(): unknown;
@@ -41,3 +42,7 @@ export * from './player';
 export * from './cities';
 export * from './world';
 export * from './alliance';
+export * from './color';
+export * from './chat';
+export * from './time';
+export * from './alliance.support';
