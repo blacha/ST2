@@ -33,6 +33,9 @@ export class IdleScanner extends StModuleBase {
     }
 
     checkIdle() {
+        if (this.st.player == PlayerState.Idle) {
+            return;
+        }
         if (Date.now() - this.lastActionTime > this.IdleTime) {
             this.st.player = PlayerState.Idle;
             this.st.log.debug({ lastAction: new Date(this.lastActionTime).toISOString() }, 'PlayerIdle');
