@@ -10,6 +10,7 @@ import { StModuleBase } from './module/module.base';
 import { KillInfo } from './module/kill.info/kill.info';
 import { PlayerStatus } from './module/player.status/player.status';
 import { CityScannerUtil, CityUtil, ClientLibLoader, Patches } from '@cncta/util';
+import { IdleScanner } from './module/idle/idle.module';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -66,9 +67,10 @@ export class St {
         this.layout,
         this.alliance,
         new ButtonScan(),
-        this.camp,
+        new CampTracker(),
         new KillInfo(),
         new PlayerStatus(),
+        new IdleScanner(),
     ];
 
     player: PlayerState = PlayerState.Idle;
