@@ -12,7 +12,7 @@ import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { Base, GameResources, formatNumber, BaseBuilder, Id, NumberPacker, mergeBaseUpgrade } from '@st/shared';
 import { GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
 import { ViewResearch } from '../util/research';
-import { StCity } from '@cncta/util';
+import { StCity, Duration } from '@cncta/util';
 
 export const AllianceCss = {
     Table: style({
@@ -191,12 +191,18 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
         const docId = NumberPacker.pack([worldId, allianceId]);
         this.setState({ info: [], state: ComponentLoading.Loading });
         const result = await FireStorePlayer.where('allianceKey', '==', docId)
-            .limit(51)
+            .limit(60)
             .get();
 
         const alliance = { id: allianceId, name: '' };
         const playerSet = new Map<number, PlayerStats>();
-        for (const doc of result.docs) {
+        // Grab at most the 50 most recently updated
+        const docs = result.docs
+            .sort((a, b) => a.get('updatedAt') - b.get('updatedAt'))
+            .filter(f => Date.now() - f.get('updatedAt') < Duration.days(2))
+            .slice(0, 55);
+
+        for (const doc of docs) {
             const cities = (doc.get('bases') ?? {}) as Record<string, StCity>;
             const bases = Object.values(cities).map(c => BaseBuilder.load(c));
             for (const base of bases) {
