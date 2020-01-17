@@ -4,6 +4,7 @@ export const StLog = Log.createLogger({ name: 'st', hostname: '' });
 
 const IGNORE_KEYS: Record<string, boolean> = {
     msg: true,
+    id: true,
     level: true,
     v: true,
     time: true,
@@ -30,8 +31,15 @@ function getLogStatus(level: number): string {
     return 'FATAL';
 }
 
+function getShortId(msg: any): string {
+    if (typeof msg.id == 'string') {
+        return msg.id.substr(-5);
+    }
+    return '';
+}
+
 export const StLogStream = {
-    level: Log.INFO,
+    level: Log.TRACE,
     setLevel(level: LogLevel) {
         this.level = level;
     },
@@ -74,7 +82,8 @@ export const StLogStream = {
             console.log(JSON.stringify(msg));
         } else {
             const kvString = this.formatObject(msg);
-            console.log(`[${msg.time.toISOString()}] ${getLogStatus(msg.level)} ${msg.msg} ${kvString}`);
+            const idShort = getShortId(msg);
+            console.log(msg.time.toISOString(), getLogStatus(msg.level), idShort, msg.msg, kvString.join(', '));
         }
     },
 };

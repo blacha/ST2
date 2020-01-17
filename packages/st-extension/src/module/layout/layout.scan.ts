@@ -1,5 +1,5 @@
 import { ClientLibStatic, NpcCampType, WorldObjectType } from '@cncta/clientlib';
-import { CityScannerUtil, CityUtil, PatchWorldObjectNPCCamp, StCity } from '@cncta/util';
+import { CityScannerUtil, CityUtil, Duration, PatchWorldObjectNPCCamp, BaseLocationPacker } from '@cncta/util';
 import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
 
@@ -8,62 +8,54 @@ declare const ClientLib: ClientLibStatic;
 export class LayoutScanner extends StModuleBase {
     name = 'LayoutScanner';
 
-    async scan(): Promise<void> {
-        if (!this.st.isIdle) {
-            return;
-        }
-
-        // Acquire the module lock and run the scan
-        await this.st.run(this, () => this.scanLayout());
-        if (this.isStopping) {
-            return;
-        }
-
-        const worldId = ClientLib.Data.MainData.GetInstance()
-            .get_Server()
-            .get_WorldId();
-
-        window.open([this.st.api.baseUrl, 'world', worldId, '/layout', this.st.instanceId].join('/'));
+    async onStart(): Promise<void> {
+        this.interval(() => this.scanAll(), Duration.OneHour);
     }
 
-    async *scanLayout(): AsyncGenerator<StCity> {
-        let current = 0;
-
-        const md = ClientLib.Data.MainData.GetInstance();
-        const cities = md.get_Cities();
-
+    scanAll(): void {
+        this.clearActions();
         const nearByObjects = CityUtil.getNearByObjects();
-        for (const { object } of nearByObjects) {
-            current++;
+        for (const { object, location } of nearByObjects) {
             if (object.Type !== WorldObjectType.NPCBase && object.Type !== WorldObjectType.NPCCamp) {
                 continue;
             }
-
-            if (PatchWorldObjectNPCCamp.isPatched(object) && object.$CampType === NpcCampType.Destroyed) {
-                continue;
-            }
-
             const existing = CityCache.get(object.$Id);
             if (existing) {
                 CityCache.set(object.$Id, existing);
-                yield existing;
                 continue;
             }
-
-            cities.set_CurrentCityId(object.$Id);
-            const cityObj = await CityUtil.waitForCity(object.$Id);
-            if (cityObj == null) {
-                continue;
-            }
-
-            const output = CityScannerUtil.get(cityObj);
-            if (output == null) {
-                continue;
-            }
-
-            this.st.log.debug({ current, count: nearByObjects.length }, 'ScanLayout');
-            CityCache.set(object.$Id, output);
-            yield output;
+            this.queue(
+                (index: number, total: number): Promise<void> => this.scanLayout(object.$Id, location, index, total),
+            );
         }
+    }
+
+    async scanLayout(cityId: number, location: number, current: number, count: number): Promise<void> {
+        const md = ClientLib.Data.MainData.GetInstance();
+        const cities = md.get_Cities();
+        const world = md.get_World();
+
+        const { x, y } = BaseLocationPacker.unpack(location);
+        const worldObject = world.GetObjectFromPosition(x, y);
+        if (worldObject == null) {
+            return;
+        }
+        if (PatchWorldObjectNPCCamp.isPatched(worldObject) && worldObject.$CampType === NpcCampType.Destroyed) {
+            return;
+        }
+
+        cities.set_CurrentCityId(cityId);
+        const cityObj = await CityUtil.waitForCity(cityId);
+        if (cityObj == null) {
+            return;
+        }
+
+        const output = CityScannerUtil.get(cityObj);
+        if (output == null) {
+            return;
+        }
+
+        this.st.log.debug({ cityId, index: current, count }, 'ScanLayout');
+        CityCache.set(cityId, output);
     }
 }

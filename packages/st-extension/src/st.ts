@@ -1,20 +1,18 @@
-import { ClientLibStatic } from '@cncta/clientlib';
+import { CityScannerUtil, CityUtil, ClientLibLoader, Patches } from '@cncta/util';
 import { Id, StLog } from '@st/shared';
+import { StModuleAction } from './actions';
 import { ClientApi } from './api/client.api';
 import { AllianceScanner } from './module/alliance/alliance.info';
 import { ButtonScan } from './module/button/button.scan';
 import { CampTracker } from './module/camp.tracker/camp.tracker';
+import { IdleScanner } from './module/idle/idle.module';
+import { KillInfo } from './module/kill.info/kill.info';
 import { LayoutScanner } from './module/layout/layout.scan';
 import { hasStModuleHooks, StModule, StModuleState } from './module/module';
 import { StModuleBase } from './module/module.base';
-import { KillInfo } from './module/kill.info/kill.info';
 import { PlayerStatus } from './module/player.status/player.status';
-import { CityScannerUtil, CityUtil, ClientLibLoader, Patches } from '@cncta/util';
-import { IdleScanner } from './module/idle/idle.module';
 
-declare const ClientLib: ClientLibStatic;
-
-/** What is the player currently upto */
+/** What is the player currently up to */
 export enum PlayerState {
     /** Has recently done something */
     Active,
@@ -25,6 +23,7 @@ export enum PlayerState {
 export enum StState {
     Idle,
     Active,
+    Stopped,
 }
 
 const InstanceIdKey = 'st-instance-id';
@@ -50,12 +49,14 @@ export class St {
         return instanceId;
     }
 
+    player: PlayerState = PlayerState.Active;
+    state: StState = StState.Idle;
+
     log: typeof StLog;
 
     api = new ClientApi();
     layout = new LayoutScanner();
     alliance = new AllianceScanner();
-    camp = new CampTracker();
 
     util = {
         scan: CityScannerUtil,
@@ -73,9 +74,9 @@ export class St {
         new IdleScanner(),
     ];
 
-    player: PlayerState = PlayerState.Idle;
-    state: StState = StState.Idle;
-    stateModule: StModule | null;
+    constructor() {
+        this.log = StLog.child({ id: this.id });
+    }
 
     get isIdle(): boolean {
         return this.state == StState.Idle;
@@ -85,38 +86,80 @@ export class St {
         return this.player == PlayerState.Idle;
     }
 
-    /**
-     * Run a function inside the state lock, so that only one thing can be scanning at a time.
-     *
-     * This should be pauseable if the user decides to move the mouse and click @see this.player state
-     */
-    async run<T>(module: StModuleBase, cb: () => AsyncGenerator<T>): Promise<T[]> {
-        if (!this.isIdle) {
-            throw new Error('ST is not idle');
-        }
-        try {
-            const output: T[] = [];
-
-            this.state = StState.Active;
-            this.stateModule = module;
-            for await (const res of cb()) {
-                output.push(res);
-                if (module.isStopping) {
-                    break;
-                }
-                if (this.stateModule.id !== module.id) {
-                    break;
-                }
-            }
-            return output;
-        } finally {
-            this.state = StState.Idle;
-            this.stateModule = null;
+    actions: StModuleAction[] = [];
+    queue(action: StModuleAction) {
+        this.actions.push(action);
+        if (this.isIdle && this.isPlayerIdle) {
+            this.run();
         }
     }
 
-    constructor() {
-        this.log = StLog.child({ id: this.id });
+    /** Remove any queued actions from a module */
+    clearActions(stModule?: StModuleBase) {
+        if (stModule == null) {
+            this.actions = [];
+        } else {
+            this.actions = this.actions.filter(f => f.module.id != stModule.id);
+        }
+    }
+
+    async scan() {
+        this.layout.scanAll();
+        await this.run(true);
+    }
+
+    /**
+     * Run the queued actions, each action will be run once at a time
+     *
+     * This should be pauseable if the user decides to move the mouse and click @see this.player state
+     */
+    async run(playerTriggered = false): Promise<void> {
+        if (!this.isIdle) {
+            throw new Error('ST is not idle');
+        }
+        if (this.actions.length == 0) {
+            return;
+        }
+        this.state = StState.Active;
+        // Force a async callback
+        await new Promise(resolve => setTimeout(resolve, 0));
+        const startTime = Date.now();
+        this.log.info('RunStart');
+        let reason = 'None';
+        try {
+            let count = 0;
+            while (this.actions.length > 0) {
+                const action = this.actions.shift();
+                if (action == null) {
+                    break;
+                }
+
+                if (this.state != StState.Active) {
+                    reason = 'StExit';
+                    break;
+                }
+
+                if (action.module.isStopping) {
+                    reason = 'ModuleStopping';
+                    break;
+                }
+
+                if (!playerTriggered && this.player == PlayerState.Active) {
+                    this.log.info('AbortScan');
+                    reason = 'PlayerActive';
+                    break;
+                }
+
+                count++;
+                await action.run(count, this.actions.length + count);
+            }
+            if (this.actions.length == 0) {
+                reason = 'Finished';
+            }
+        } finally {
+            this.log.info({ duration: Date.now() - startTime, reason }, 'RunFinished');
+            this.state = StState.Idle;
+        }
     }
 
     get isClientLoaded(): boolean {
@@ -159,6 +202,7 @@ export class St {
     }
 
     async stop() {
+        this.state = StState.Stopped;
         for (const patch of Object.values(Patches)) {
             this.log.info({ patch }, 'Patch:Remove');
             patch.remove();

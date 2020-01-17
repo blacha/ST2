@@ -15,4 +15,7 @@ export class Duration {
     static minutes(minutes: number): number {
         return Duration.OneMinute * minutes;
     }
+    static hours(hours: number) {
+        return Duration.OneHour * hours;
+    }
 }

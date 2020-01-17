@@ -23,8 +23,8 @@ export class IdleScanner extends StModuleBase {
         for (const evt of PlayerEvents) {
             document.addEventListener(evt, this.playerAction, true);
         }
-
-        this.interval(() => this.checkIdle(), 1000);
+        this.lastActionTime = Date.now();
+        this.interval(() => this.checkIdle(), Duration.OneSecond);
     }
     async onStop() {
         for (const evt of PlayerEvents) {
@@ -36,9 +36,12 @@ export class IdleScanner extends StModuleBase {
         if (this.st.player == PlayerState.Idle) {
             return;
         }
+
         if (Date.now() - this.lastActionTime > this.IdleTime) {
             this.st.player = PlayerState.Idle;
             this.st.log.debug({ lastAction: new Date(this.lastActionTime).toISOString() }, 'PlayerIdle');
+            // Start processing background actions
+            this.st.run();
         }
     }
 }
