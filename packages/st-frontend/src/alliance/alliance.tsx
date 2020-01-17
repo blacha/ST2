@@ -51,7 +51,7 @@ export const AllianceColumns = [
         title: '#',
         key: 'index',
         render: (main: Base, record: any, index: number) => index + 1,
-        width: 35,
+        width: 45,
     },
     {
         title: 'Player',
