@@ -152,11 +152,11 @@ export class CityUtil {
     }
 
     /** Wait for a city to load */
-    static async waitForCity(cityId: number, maxFailCount = 10): Promise<ClientLibCity | null> {
+    static async waitForCity(cityId: number, maxFailCount = 100): Promise<ClientLibCity | null> {
         for (let i = 0; i < maxFailCount; i++) {
             const city = CityUtil.isReady(cityId);
             if (city == null) {
-                await new Promise(resolve => setTimeout(resolve, 100 * i));
+                await new Promise(resolve => setTimeout(resolve, 5 * i));
                 continue;
             }
             return city;
