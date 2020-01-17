@@ -7,7 +7,7 @@ const PlayerEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart
 
 export class IdleScanner extends StModuleBase {
     name = 'IdleScanner';
-    /** No user actions within 20 minutes, means to player is idle */
+    /** No user actions within 20 minutes, means player is idle */
     IdleTime = Duration.minutes(20);
 
     lastActionTime: number;
