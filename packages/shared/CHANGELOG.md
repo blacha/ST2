@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/blacha/st/compare/v0.7.0...v0.8.0) (2020-01-17)
+
+
+### Bug Fixes
+
+* remove tsconfig.tsbuildinfo from npm ([88c2f46](https://github.com/blacha/st/commit/88c2f4668a3b7e3d5659381101c52c1e948637aa))
+
+
+### Features
+
+* auto scan when player is idle. ([f6cbd13](https://github.com/blacha/st/commit/f6cbd13b2fb15d6bec48b5359884d30d28fcd17f))
+* improve console logging in the browser ([23381b0](https://github.com/blacha/st/commit/23381b0458f5cdd9df7eadbe2b213e173d22c5de))
+
+
+
+
+
 # [0.7.0](https://github.com/blacha/st/compare/v0.6.0...v0.7.0) (2020-01-13)
 
 **Note:** Version bump only for package @st/shared

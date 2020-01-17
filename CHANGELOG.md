@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/blacha/st/compare/v0.7.0...v0.8.0) (2020-01-17)
+
+
+### Bug Fixes
+
+* make the scanner much faster to see if the base is loaded ([5e9d1f3](https://github.com/blacha/st/commit/5e9d1f3223ef6dcba08d50820e5d5c73d306ff62))
+* may #  size slightly larger to stop wrapping ([b141473](https://github.com/blacha/st/commit/b1414732119c106c36cb42034cbd3609e51077ad))
+* only log idle changes ([8b5aa23](https://github.com/blacha/st/commit/8b5aa2307b9c120169b3fab98f8b6a4791a885b8))
+* remove tsconfig.tsbuildinfo from npm ([88c2f46](https://github.com/blacha/st/commit/88c2f4668a3b7e3d5659381101c52c1e948637aa))
+* show only the most updated alliance members ([8026d79](https://github.com/blacha/st/commit/8026d79342f2ff71311c65e4f743a26edd17ef67))
+
+
+### Features
+
+* adding a util to track when a player is idle. ([28e701e](https://github.com/blacha/st/commit/28e701eea81432952545315814b9bb71c26d1223))
+* adding alliance support state types ([062c0e7](https://github.com/blacha/st/commit/062c0e78c0119ea398e0526f26bde889f1ee71f9))
+* auto scan when player is idle. ([f6cbd13](https://github.com/blacha/st/commit/f6cbd13b2fb15d6bec48b5359884d30d28fcd17f))
+* improve console logging in the browser ([23381b0](https://github.com/blacha/st/commit/23381b0458f5cdd9df7eadbe2b213e173d22c5de))
+
+
+
+
+
 # [0.7.0](https://github.com/blacha/st/compare/v0.6.0...v0.7.0) (2020-01-13)
 
 

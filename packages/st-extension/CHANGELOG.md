@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/blacha/st/compare/v0.7.0...v0.8.0) (2020-01-17)
+
+
+### Bug Fixes
+
+* only log idle changes ([8b5aa23](https://github.com/blacha/st/commit/8b5aa2307b9c120169b3fab98f8b6a4791a885b8))
+* remove tsconfig.tsbuildinfo from npm ([88c2f46](https://github.com/blacha/st/commit/88c2f4668a3b7e3d5659381101c52c1e948637aa))
+
+
+### Features
+
+* adding a util to track when a player is idle. ([28e701e](https://github.com/blacha/st/commit/28e701eea81432952545315814b9bb71c26d1223))
+* auto scan when player is idle. ([f6cbd13](https://github.com/blacha/st/commit/f6cbd13b2fb15d6bec48b5359884d30d28fcd17f))
+
+
+
+
+
 # [0.7.0](https://github.com/blacha/st/compare/v0.6.0...v0.7.0) (2020-01-13)
 
 

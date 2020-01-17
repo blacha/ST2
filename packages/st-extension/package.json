@@ -1,14 +1,14 @@
 {
     "name": "@st/extension",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "description": "Client lib utilities and types",
     "private": true,
     "scripts": {
         "build": "tsc --pretty"
     },
     "dependencies": {
-        "@cncta/clientlib": "^0.7.0",
-        "@cncta/util": "^0.7.0"
+        "@cncta/clientlib": "^0.8.0",
+        "@cncta/util": "^0.8.0"
     },
     "main": "./build/index.js",
     "types": "./build/index.d.ts",

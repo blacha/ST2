@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/blacha/st/compare/v0.7.0...v0.8.0) (2020-01-17)
+
+
+### Bug Fixes
+
+* remove tsconfig.tsbuildinfo from npm ([88c2f46](https://github.com/blacha/st/commit/88c2f4668a3b7e3d5659381101c52c1e948637aa))
+
+
+
+
+
 # [0.7.0](https://github.com/blacha/st/compare/v0.6.0...v0.7.0) (2020-01-13)
 
 **Note:** Version bump only for package @cncta/deobsfucate
