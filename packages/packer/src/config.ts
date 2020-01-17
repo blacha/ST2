@@ -4,7 +4,7 @@ export const Config = {
     hash: gitRev.short(),
     version: '',
     icon: 'favicon.0012b310.png',
-    baseUrl: 'https://shockrtools.web.app',
+    baseUrl: 'https://shockr.dev',
     apiKey: 'AIzaSyBm7H-ccEuECJXxP4hAPSnew0E6HyGmeoo',
 };
 
