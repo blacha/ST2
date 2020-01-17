@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/blacha/st/compare/v0.8.0...v0.9.0) (2020-01-17)
+
+
+### Features
+
+* switch to new domain ([ec137a7](https://github.com/blacha/st/commit/ec137a7071eff4ac41b01025c680cbcd8f834206))
+
+
+
+
+
 # [0.8.0](https://github.com/blacha/st/compare/v0.7.0...v0.8.0) (2020-01-17)
 
 
