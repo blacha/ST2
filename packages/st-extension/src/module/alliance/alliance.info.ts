@@ -9,7 +9,7 @@ export class AllianceScanner extends StModuleBase {
     name = 'AllianceScanner';
 
     async onStart(): Promise<void> {
-        this.interval(() => this.fullScan(), Duration.OneHour);
+        this.interval(() => this.scanAll(), Duration.OneHour);
         this.interval(() => this.playerScan(), Duration.minutes(20));
     }
 
@@ -31,7 +31,7 @@ export class AllianceScanner extends StModuleBase {
         }
     }
 
-    fullScan(): void {
+    scanAll(): void {
         this.clearActions();
         const allCities = CityUtil.getAlliedCities();
         for (const city of allCities) {
