@@ -6,6 +6,7 @@ import { OpenSessionRequest } from './requests/open.session';
 import { PlayerInfoRequest } from './requests/player.info';
 import { SendMessageRequest } from './requests/send.message';
 import { TaClient } from '../client';
+import { PollRequest } from './requests/poll';
 
 export enum GameWorldState {
     Init,
@@ -22,6 +23,8 @@ export class GameWorldClient {
     logger: typeof Logger;
     gameSessionId: string;
     playerName: string;
+    requestId = 0;
+    sequenceId = 0;
 
     constructor(game: TaClient, worldId: number, worldUrl: string) {
         this.game = game;
@@ -30,7 +33,7 @@ export class GameWorldClient {
         this.logger = Logger.child({ worldId });
     }
 
-    url(method: string) {
+    private url(method: string) {
         return [this.worldUrl, 'Presentation/Service.svc/ajaxEndpoint', method].join('/');
     }
 
@@ -45,6 +48,9 @@ export class GameWorldClient {
         return await res.json();
     }
 
+    /**
+     * Open a connection to the game world
+     */
     async open() {
         if (this.state != GameWorldState.Init) {
             throw new Error('Invalid open call, currentState: ' + GameWorldState[this.state]);
@@ -71,6 +77,18 @@ export class GameWorldClient {
         if (this.state != GameWorldState.Opened) {
             throw new Error('Failed to open game world');
         }
+    }
+
+    async poll(requests: string) {
+        const res = await this.fetch<PollRequest>('Poll', {
+            requests,
+            requestid: this.requestId,
+            sequenceid: this.sequenceId,
+            session: this.gameSessionId,
+        });
+        this.requestId++;
+        this.sequenceId++;
+        return res;
     }
 
     async getPlayerInfo() {
