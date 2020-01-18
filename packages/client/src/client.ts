@@ -22,7 +22,6 @@ export class TaClient {
     async login(): Promise<void> {
         if (this.sessionId == null) {
             this.sessionId = await this.session.login();
-            console.log(this.sessionId);
         }
     }
 

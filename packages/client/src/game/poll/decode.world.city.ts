@@ -1,13 +1,35 @@
 import { Base91 } from '@cncta/util';
 import { DecodeWorldXy } from './decode.world.xy';
+import { WorldSectorDecoder } from './decode.world.sector';
+import { Point } from '@cncta/clientlib';
+
+export interface WorldSectorObjectCity extends Point {
+    type: 'city';
+    id: number;
+    allianceId: number;
+    name: string;
+    level: number;
+    radius: number;
+    healthBase: number;
+    healthDef: number;
+    ownerId: number;
+    lockDownEndStep: number;
+    protectionEndStep: number;
+    supportAlertStartStep: number;
+    supportAlertEndStep: number;
+    moveCooldownEndStep: number;
+    moveRestrictionEndStep: number;
+    moveRestrictionCoord: number;
+    recoveryEndStep: number;
+}
 
 export class DecodeWorldCity {
-    static decode(data: string) {
+    static decode(sector: WorldSectorDecoder, data: string): WorldSectorObjectCity {
         const ctx = { data, offset: 2 };
         const header = Base91.dec(ctx, 5);
         const city = {
-            type: 'city',
-            ...DecodeWorldXy.decode(data),
+            type: 'city' as const,
+            ...DecodeWorldXy.decode(sector, data),
             id: -1,
             allianceId: -1,
             name: '',
@@ -15,8 +37,7 @@ export class DecodeWorldCity {
             radius: (header >> 16) & 15,
             healthBase: -1,
             healthDef: -1,
-            sectorPlayerId: (header >> 22) & 0x3ff,
-            defenseCondition: -1,
+            ownerId: sector.players[(header >> 22) & 0x3ff]?.id ?? -1,
             lockDownEndStep: 0,
             protectionEndStep: 0,
             supportAlertStartStep: 0,
@@ -57,7 +78,7 @@ export class DecodeWorldCity {
         }
         city.healthBase = Base91.dec(ctx);
         if (isDefenseDamaged) {
-            city.defenseCondition = Base91.dec(ctx);
+            city.healthDef = Base91.dec(ctx);
         }
 
         Base91.dec(ctx); // Unknown

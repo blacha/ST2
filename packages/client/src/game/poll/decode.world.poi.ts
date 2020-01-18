@@ -1,19 +1,25 @@
-import { PoiType } from '@cncta/clientlib';
+import { Point, PoiType } from '@cncta/clientlib';
 import { Base91 } from '@cncta/util';
+import { WorldSectorDecoder } from './decode.world.sector';
 import { DecodeWorldXy } from './decode.world.xy';
-
+export interface WorldSectorObjectPoi extends Point {
+    type: 'poi';
+    id: number;
+    level: number;
+    poi: PoiType;
+    allianceId: number;
+}
 export class DecodeWorldPoi {
-    static decode(data: string) {
+    static decode(sector: WorldSectorDecoder, data: string): WorldSectorObjectPoi {
         const ctx = { data, offset: 2 };
         const header = Base91.dec(ctx, 4);
-        const poi = {
+        return {
             type: 'poi',
-            ...DecodeWorldXy.decode(data),
+            ...DecodeWorldXy.decode(sector, data),
             level: header & 0xff,
-            poiType: (header >> 8) & PoiType.Defense,
-            allianceId: (header >> 11) & 0x3ff,
+            poi: (header >> 8) & PoiType.Defense,
+            allianceId: sector.alliances[(header >> 11) & 0x3ff]?.id ?? 0,
+            id: Base91.dec(ctx),
         };
-        Base91.dec(ctx); // Unknown
-        return poi;
     }
 }

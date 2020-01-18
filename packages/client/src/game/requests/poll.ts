@@ -31,7 +31,7 @@ export interface PollWorldData {
     /** Objects */
     d?: string[];
     /** Players */
-    p?: unknown[];
+    p?: string[];
     /** Terrain */
     t?: string;
     /** Terrain details */
