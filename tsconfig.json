@@ -5,6 +5,8 @@
     }, {
         "path": "./packages/clientlib-util"
     }, {
+        "path": "./packages/client"
+    }, {
         "path": "./packages/shared"
     }, {
         "path": "./packages/deobsfucate"
