@@ -9,3 +9,4 @@ export * from './util/pack';
 export * from './util/pack/layout.packer';
 export * from './duration';
 export * from './patch';
+export * from './util/base.91';
