@@ -22,6 +22,16 @@ export const enum NpcCampType {
     Fortress = 6,
     Event = 10,
 }
+export const enum PoiType {
+    TunnelExit = 0,
+    Tiberium = 1,
+    Crystal = 2,
+    Power = 3,
+    Infantry = 4,
+    Vehicle = 5,
+    Air = 6,
+    Defense = 7,
+}
 
 export interface ClientLibWorldObject {
     $ctor: Function;
