@@ -1,20 +1,23 @@
 {
-  "name": "@st/shared",
-  "private": true,
-  "version": "0.10.0",
-  "description": "Shared utils for shockrtools",
-  "scripts": {
-    "build": "tsc --pretty"
-  },
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
-  "dependencies": {
-    "@cncta/clientlib": "^0.10.0",
-    "@cncta/util": "^0.10.0",
-    "base62": "^2.0.1",
-    "bblog": "^2.0.0",
-    "ulid": "^2.3.0"
-  },
-  "author": "Blayne Chard <blayne@chard.com>",
-  "license": "MIT"
+    "name": "@st/shared",
+    "private": true,
+    "version": "0.10.0",
+    "description": "Shared utils for shockrtools",
+    "scripts": {
+        "build": "tsc --pretty"
+    },
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "dependencies": {
+        "@cncta/clientlib": "^0.10.0",
+        "@cncta/util": "^0.10.0",
+        "base62": "^2.0.1",
+        "bblog": "^2.0.0",
+        "ulid": "^2.3.0"
+    },
+    "files": [
+        "/build"
+    ],
+    "author": "Blayne Chard <blayne@chard.com>",
+    "license": "MIT"
 }

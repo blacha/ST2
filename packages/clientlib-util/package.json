@@ -17,6 +17,9 @@
     "publishConfig": {
         "access": "public"
     },
+    "files": [
+        "/build"
+    ],
     "author": "Blayne Chard <blayne@chard.com>",
     "license": "MIT"
 }

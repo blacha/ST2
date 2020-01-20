@@ -7,6 +7,14 @@
     },
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
+    "dependencies": {
+        "@cncta/util": "^0.10.0",
+        "cookie": "^0.4.0",
+        "node-fetch": "^2.6.0",
+        "pino": "^5.16.0",
+        "pretty-json-log": "^0.2.2",
+        "ulid": "^2.3.0"
+    },
     "devDependencies": {
         "@types/cookie": "^0.3.3",
         "@types/node": "^13.1.8",
@@ -18,14 +26,9 @@
     "publishConfig": {
         "access": "public"
     },
+    "files": [
+        "/build"
+    ],
     "author": "Blayne Chard <blayne@chard.com>",
-    "license": "MIT",
-    "dependencies": {
-        "@cncta/util": "^0.10.0",
-        "cookie": "^0.4.0",
-        "node-fetch": "^2.6.0",
-        "pino": "^5.16.0",
-        "pretty-json-log": "^0.2.2",
-        "ulid": "^2.3.0"
-    }
+    "license": "MIT"
 }

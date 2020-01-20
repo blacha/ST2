@@ -10,6 +10,9 @@
         "@cncta/clientlib": "^0.10.0",
         "@cncta/util": "^0.10.0"
     },
+    "files": [
+        "/build"
+    ],
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "author": "Blayne Chard <blayne@chard.com>",
