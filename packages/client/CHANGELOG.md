@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.1](https://github.com/blacha/st/compare/v0.10.0...v0.10.1) (2020-01-20)
+
+
+### Bug Fixes
+
+* switch away from npmignore to limit what is published ([26b4cbe](https://github.com/blacha/st/commit/26b4cbe4ffdd5595aba6153e752b41b3d3fb4638))
+
+
+
+
+
 # [0.10.0](https://github.com/blacha/st/compare/v0.9.0...v0.10.0) (2020-01-20)
 
 

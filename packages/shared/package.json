@@ -1,7 +1,7 @@
 {
     "name": "@st/shared",
     "private": true,
-    "version": "0.10.0",
+    "version": "0.10.1",
     "description": "Shared utils for shockrtools",
     "scripts": {
         "build": "tsc --pretty"
@@ -9,8 +9,8 @@
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "dependencies": {
-        "@cncta/clientlib": "^0.10.0",
-        "@cncta/util": "^0.10.0",
+        "@cncta/clientlib": "^0.10.1",
+        "@cncta/util": "^0.10.1",
         "base62": "^2.0.1",
         "bblog": "^2.0.0",
         "ulid": "^2.3.0"

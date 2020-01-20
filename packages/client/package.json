@@ -1,6 +1,6 @@
 {
     "name": "@cncta/client",
-    "version": "0.10.0",
+    "version": "0.10.1",
     "description": "Game client",
     "scripts": {
         "build": "tsc --pretty"
@@ -8,7 +8,7 @@
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "dependencies": {
-        "@cncta/util": "^0.10.0",
+        "@cncta/util": "^0.10.1",
         "cookie": "^0.4.0",
         "node-fetch": "^2.6.0",
         "pino": "^5.16.0",
