@@ -1,7 +1,7 @@
-import { GameWorldRequest } from './game';
+import { GameWorldCommand } from './command';
 
-export interface OpenSessionRequest extends GameWorldRequest {
-    path: 'OpenSession';
+export interface CommandOpenSession extends GameWorldCommand {
+    command: 'OpenSession';
     request: {
         platformId: number;
         refId: number;

@@ -1,6 +1,6 @@
-import { GameWorldRequest } from './game';
+import { GameWorldCommand } from './command';
 
-export interface PollRequest extends GameWorldRequest {
+export interface CommandPoll extends GameWorldCommand {
     path: 'Poll';
     request: {
         requestid: number;

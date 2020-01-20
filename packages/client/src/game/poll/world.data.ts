@@ -1,5 +1,4 @@
-import { FactionType } from '@cncta/clientlib';
-import { PollWorldData } from '../requests/poll';
+import { FactionType, PollWorldData } from '@cncta/clientlib';
 import { WorldSectorObjectCity } from './decode.world.city';
 import { WorldSectorObjectBase } from './decode.world.npc.base';
 import { WorldSectorObjectPoi } from './decode.world.poi';
@@ -19,7 +18,7 @@ export interface WorldSectorAlliance {
 }
 export type WorldSectorObject = WorldSectorObjectCity | WorldSectorObjectBase | WorldSectorObjectPoi;
 
-export class WorldDecoder {
+export class WorldData {
     static SectorSize = 32;
 
     players: WorldSectorPlayer[] = [];

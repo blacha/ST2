@@ -1,7 +1,6 @@
-import { Point, WorldObjectType } from '@cncta/clientlib';
+import { Point, WorldObjectType, PollWorldData } from '@cncta/clientlib';
 import { Base91, BaseLocationPacker } from '@cncta/util';
-import { PollWorldData } from '../requests/poll';
-import { WorldDecoder, WorldSectorAlliance, WorldSectorPlayer } from './decode.world';
+import { WorldData, WorldSectorAlliance, WorldSectorPlayer } from './world.data';
 import { DecodeWorldNpcBase } from './decode.world.npc.base';
 import { DecodeWorldCity } from './decode.world.city';
 import { DecodeWorldPoi } from './decode.world.poi';
@@ -10,14 +9,13 @@ export class WorldSectorDecoder {
     players: WorldSectorPlayer[] = [];
     alliances: WorldSectorAlliance[] = [];
     offset: Point;
-    data: PollWorldData;
-    world: WorldDecoder;
+    world: WorldData;
 
-    constructor(world: WorldDecoder, data: PollWorldData) {
+    constructor(world: WorldData, data: PollWorldData) {
         this.world = world;
         const x = data.i & 0xff;
         const y = data.i >> 8;
-        this.offset = { x: x * WorldDecoder.SectorSize, y: y * WorldDecoder.SectorSize };
+        this.offset = { x: x * WorldData.SectorSize, y: y * WorldData.SectorSize };
 
         if (data.a) this.decodeAlliances(data.a);
         if (data.p) this.decodePlayers(data.p);

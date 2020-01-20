@@ -1,12 +1,10 @@
+import { CommandIgmBulkSendMsg, CommandOpenSession, CommandPlayerInfo, CommandPoll } from '@cncta/clientlib';
+import { GameCommands } from '@cncta/clientlib/src/types/clientlib/net';
 import fetch from 'node-fetch';
+import { TaClient } from '../client';
 import { FetchArgs } from '../headers';
 import { Logger } from '../log';
-import { GameWorldRequest } from './requests/game';
-import { OpenSessionRequest } from './requests/open.session';
-import { PlayerInfoRequest } from './requests/player.info';
-import { SendMessageRequest } from './requests/send.message';
-import { TaClient } from '../client';
-import { PollRequest } from './requests/poll';
+import { WorldData } from './poll/world.data';
 
 export enum GameWorldState {
     Init,
@@ -16,15 +14,18 @@ export enum GameWorldState {
 
 export class GameWorldClient {
     static MaxRetries = 5;
-    state: GameWorldState = GameWorldState.Init;
-    game: TaClient;
-    worldId: number;
-    worldUrl: string;
+    private state: GameWorldState = GameWorldState.Init;
+    private game: TaClient;
+    private worldId: number;
+    private worldUrl: string;
+    private playerName: string;
     logger: typeof Logger;
     gameSessionId: string;
-    playerName: string;
-    requestId = 0;
-    sequenceId = 0;
+
+    public data: WorldData = new WorldData();
+
+    private requestId = 0;
+    private sequenceId = 0;
 
     constructor(game: TaClient, worldId: number, worldUrl: string) {
         this.game = game;
@@ -37,7 +38,7 @@ export class GameWorldClient {
         return [this.worldUrl, 'Presentation/Service.svc/ajaxEndpoint', method].join('/');
     }
 
-    private async fetch<T extends GameWorldRequest>(method: T['method'], body: T['request']): Promise<T['response']> {
+    private async fetch<T extends GameCommands>(method: T['command'], body: T['request']): Promise<T['response']> {
         const url = this.url(method);
         const res = await fetch(url, FetchArgs.json(body));
         Logger.trace({ url, status: res.status }, 'Fetch');
@@ -57,7 +58,7 @@ export class GameWorldClient {
         }
 
         for (let i = 0; i < GameWorldClient.MaxRetries; i++) {
-            const res = await this.fetch<OpenSessionRequest>('OpenSession', {
+            const res = await this.fetch<CommandOpenSession>('OpenSession', {
                 platformId: 1,
                 refId: -1,
                 reset: true,
@@ -80,7 +81,7 @@ export class GameWorldClient {
     }
 
     async poll(requests: string) {
-        const res = await this.fetch<PollRequest>('Poll', {
+        const res = await this.fetch<CommandPoll>('Poll', {
             requests,
             requestid: this.requestId,
             sequenceid: this.sequenceId,
@@ -92,7 +93,7 @@ export class GameWorldClient {
     }
 
     async getPlayerInfo() {
-        const playerInfo = await this.fetch<PlayerInfoRequest>('GetPlayerInfo', { session: this.gameSessionId });
+        const playerInfo = await this.fetch<CommandPlayerInfo>('GetPlayerInfo', { session: this.gameSessionId });
         this.playerName = playerInfo.Name;
         return playerInfo;
     }
@@ -102,7 +103,7 @@ export class GameWorldClient {
             await this.getPlayerInfo();
         }
         const messageBody = `<cnc><cncs>${this.playerName}</cncs><cncd>${Date.now()}</cncd><cnct>${body}</cnct></cnc>`;
-        return this.fetch<SendMessageRequest>('IGMBulkSendMsg', {
+        return this.fetch<CommandIgmBulkSendMsg>('IGMBulkSendMsg', {
             alliances: '',
             body: messageBody,
             players: to,

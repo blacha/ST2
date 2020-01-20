@@ -1,7 +1,7 @@
-import { GameWorldRequest } from './game';
+import { GameWorldCommand } from './command';
 
-export interface SendMessageRequest extends GameWorldRequest {
-    path: 'IGMBulkSendMsg';
+export interface CommandIgmBulkSendMsg extends GameWorldCommand {
+    command: 'IGMBulkSendMsg';
     request: {
         alliances: string;
         body: string;
@@ -9,6 +9,5 @@ export interface SendMessageRequest extends GameWorldRequest {
         subject: string;
         session: string;
     };
-    /** Successful send is [1,1] */
     response: [number, number];
 }

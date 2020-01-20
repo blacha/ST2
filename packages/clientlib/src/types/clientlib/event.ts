@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface ClientLibEvent {
     // Place holder for events
+    data: unknown;
 }
 
 export type ClientLibEvents<T> = Record<keyof T, ClientLibEvent>;

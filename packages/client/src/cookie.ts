@@ -3,6 +3,7 @@ import { Response } from 'node-fetch';
 
 export class Cookies {
     static HeaderSet = 'set-cookie';
+
     private static getAll(res: Response): string[] | null {
         const resCookies = res.headers.raw()[Cookies.HeaderSet];
         if (resCookies == null) {
@@ -13,6 +14,8 @@ export class Cookies {
         }
         return resCookies;
     }
+
+    /** Extract cookies from a response */
     static get(res: Response): Record<string, string> | undefined {
         const resCookies = Cookies.getAll(res);
         if (resCookies == null) {
@@ -27,6 +30,7 @@ export class Cookies {
         return output;
     }
 
+    /** Convert a cookie object into the "Cookie" header */
     static header(cookies?: Record<string, string>): { Cookie: string } | undefined {
         if (cookies == null) {
             return;

@@ -8,6 +8,7 @@ import {
 } from './main.data';
 import { ClientLibBaseColor } from './main.data/color';
 import { ClientLibMathUtil } from './math';
+import { ClientLibCommunicationManager } from './net';
 import { ClientLibClass, ClientLibSingleton } from './util';
 import { ClientLibVisMain, RegionCity, RegionCityType, RegionNpcBase, RegionNpcCamp, VisObjectType } from './vis';
 
@@ -57,7 +58,10 @@ export interface ClientLibStatic {
     Effect: {};
     File: {};
     Host: {};
-    Net: {};
+    Net: {
+        CommandResult: ClientLibEvent;
+        CommunicationManager: ClientLibSingleton<ClientLibCommunicationManager>;
+    };
     Res: {};
     Sound: {};
     Vis: {
@@ -84,3 +88,5 @@ export * from './main.data';
 export * from './math';
 export * from './util';
 export * from './vis';
+export * from './commands';
+export * from './net';

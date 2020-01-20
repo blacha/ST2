@@ -1,8 +1,8 @@
-import { GameWorldRequest } from './game';
-import { GameDataResearchLevel } from '@cncta/clientlib';
+import { GameWorldCommand } from './command';
+import { GameDataResearchLevel } from '../../game';
 
-export interface PlayerInfoRequest extends GameWorldRequest {
-    method: 'GetPlayerInfo';
+export interface CommandPlayerInfo extends GameWorldCommand {
+    command: 'GetPlayerInfo';
     request: {
         session: string;
     };

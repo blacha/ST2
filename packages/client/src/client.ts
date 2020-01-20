@@ -13,6 +13,7 @@ export class TaClient {
         this.session = new ClientLogin(username, password);
     }
 
+    /** Create a client from an existing session id */
     static fromSessionId(sessionId: string) {
         const client = new TaClient('', '');
         client.sessionId = sessionId;

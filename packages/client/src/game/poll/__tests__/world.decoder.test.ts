@@ -2,12 +2,12 @@ import { FactionType } from '@cncta/clientlib';
 import { BaseLocationPacker } from '@cncta/util';
 import * as o from 'ospec';
 import 'source-map-support/register';
-import { WorldDecoder } from '../decode.world';
+import { WorldData } from '../world.data';
 
 o.spec('WorldDecoder', () => {
-    let decoder: WorldDecoder;
+    let decoder: WorldData;
     o.beforeEach(() => {
-        decoder = new WorldDecoder();
+        decoder = new WorldData();
     });
 
     o('should decode a player city', () => {
