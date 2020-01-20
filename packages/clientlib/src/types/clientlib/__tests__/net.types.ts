@@ -5,6 +5,7 @@ import { CommandIgmGetMsg } from '../commands';
 declare const phe: PheStatic;
 declare const ClientLib: ClientLibStatic;
 
+// Validate these types exist
 const instance = ClientLib.Net.CommunicationManager.GetInstance();
 instance.SendSimpleCommand<CommandIgmGetMsg>(
     'IGMGetMsg',
