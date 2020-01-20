@@ -1,22 +1,19 @@
+import { observer } from 'mobx-react';
 import * as React from 'react';
-import { BrowserRouter, Redirect, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter, Link, Redirect, Route, Switch } from 'react-router-dom';
 import { style } from 'typestyle';
 import { ViewAlliance } from './alliance/alliance';
+import { PrivateRoute } from './auth/auth.route';
+import { Login } from './auth/login/login';
 import { ViewBase } from './base/base';
 import { ViewLandingPage } from './landing/landing';
-import { ViewScan } from './scan/scan.result';
 import { ViewPlayer } from './player/player';
+import { ViewScan } from './scan/scan.result';
+import { NavHeader } from './nav';
 
 const AppCss = {
     Main: style({}),
-    Header: style({
-        background: '#f4f5f6',
-        borderBottom: '.1rem solid #d1d1d1',
-        height: '5.2rem',
-        maxWidth: '100%',
-        width: '100%',
-        padding: '0 4rem',
-    }),
+
     Content: style({
         margin: 'auto',
         maxWidth: '100rem',
@@ -29,23 +26,17 @@ export class App extends React.Component {
         return (
             <BrowserRouter>
                 <div className={AppCss.Main}>
-                    <div className={AppCss.Header}>
-                        <section className="Container">
-                            <div className="Icon"></div>
-                            <div className="IconTitle">
-                                <Link to="/">ShockrTools</Link>
-                            </div>
-                        </section>
-                    </div>
+                    <NavHeader />
                     <div className="Content">
                         <Switch>
                             <Route exact={true} path="/" component={ViewLandingPage} />
                             <Route path="/base/:baseId" component={ViewBase} />
-                            <Route path="/base" component={ViewBase} />
-                            <Route path="/world/:worldId/player/:playerId/base/:baseId" component={ViewBase} />
-                            <Route path="/world/:worldId/player/:playerId" component={ViewPlayer} />
-                            <Route path="/world/:worldId/alliance/:allianceId" component={ViewAlliance} />
-                            <Route path="/world/:worldId/layout/:scanId" component={ViewScan} />
+                            <Route path="/login" component={Login} />
+                            <PrivateRoute path="/base" component={ViewBase} />
+                            <PrivateRoute path="/world/:worldId/player/:playerId/base/:baseId" component={ViewBase} />
+                            <PrivateRoute path="/world/:worldId/player/:playerId" component={ViewPlayer} />
+                            <PrivateRoute path="/world/:worldId/alliance/:allianceId" component={ViewAlliance} />
+                            <PrivateRoute path="/world/:worldId/layout/:scanId" component={ViewScan} />
                             <Redirect to="/" />
                         </Switch>
                     </div>
