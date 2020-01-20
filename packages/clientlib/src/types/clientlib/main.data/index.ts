@@ -7,6 +7,7 @@ import { ClientLibBaseColor } from './color';
 import { ClientLibChat } from './chat';
 import { ClientLibTime } from './time';
 import { ClientLibAllianceSupport } from './alliance.support';
+import { ClientLibMail } from './mail';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibMainData {
@@ -18,7 +19,7 @@ export interface ClientLibMainData {
     get_Alliance(): ClientLibAlliance;
     get_Cities(): ClientLibCities;
     get_CitiesSupport(): unknown;
-    get_Mail(): unknown;
+    get_Mail(): ClientLibMail;
     get_Reports(): unknown;
     get_Missions(): unknown;
     get_BaseColors(): ClientLibBaseColor;
@@ -40,6 +41,7 @@ export interface ClientLibMainData {
 export * from './server';
 export * from './player';
 export * from './cities';
+export * from './mail';
 export * from './world';
 export * from './alliance';
 export * from './color';

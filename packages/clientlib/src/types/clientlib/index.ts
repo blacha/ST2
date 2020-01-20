@@ -34,6 +34,8 @@ export interface ClientLibStatic {
     Base: { MathUtil: ClientLibMathUtil; ETechType: typeof ClientLibTechType };
     Config: {};
     Data: {
+        MailFetched: ClientLibEvent;
+        MailDataChange: ClientLibEvent;
         CitiesChange: ClientLibEvent;
         CurrentCityChange: ClientLibEvent;
         CurrentOwnCityChange: ClientLibEvent;
