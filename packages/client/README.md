@@ -5,10 +5,10 @@ Game client for CNC:TA
 ## Setup
 
 ```typescript
-import { TaClient } from '@cncta/client'
+import { TaClient } from '@cncta/client';
 
 const client = new TaClient(username, password);
-/** Login and open a world instance *//
+/** Login and open a world instance */
 const world = await client.open(410);
 ```
 
