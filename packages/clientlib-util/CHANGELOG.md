@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/blacha/st/compare/v0.9.0...v0.10.0) (2020-01-20)
+
+
+### Features
+
+* better base91 implementation ([a6e2860](https://github.com/blacha/st/commit/a6e286029be6509e0b0e6689081156bc1b2203fb))
+* switch to a base-n implementation to share the logic between 58 and 91 ([8dc124c](https://github.com/blacha/st/commit/8dc124c384e69d9662733b99facb37da89018c69))
+
+
+
+
+
 # [0.9.0](https://github.com/blacha/st/compare/v0.8.0...v0.9.0) (2020-01-17)
 
 **Note:** Version bump only for package @cncta/util

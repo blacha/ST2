@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/blacha/st/compare/v0.9.0...v0.10.0) (2020-01-20)
+
+
+### Features
+
+* better base91 implementation ([a6e2860](https://github.com/blacha/st/commit/a6e286029be6509e0b0e6689081156bc1b2203fb))
+* parse and decode sector data ([b3ac867](https://github.com/blacha/st/commit/b3ac86774d536ad9d37b97a5e75aa44fc948f979))
+
+
+
+
+
 # [0.9.0](https://github.com/blacha/st/compare/v0.8.0...v0.9.0) (2020-01-17)
 
 **Note:** Version bump only for package @st/shared

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/blacha/st/compare/v0.9.0...v0.10.0) (2020-01-20)
+
+
+### Bug Fixes
+
+* broken tests ([cadcc43](https://github.com/blacha/st/commit/cadcc43857a17037b9b3cfcbeac14d33bfcd67f6))
+
+
+### Features
+
+* basic mail types ([d0e70a7](https://github.com/blacha/st/commit/d0e70a785885b6e4cab37e9ccc0aec2be729c2f7))
+* improve typing of net commands ([a9f97f2](https://github.com/blacha/st/commit/a9f97f2e7873d23d65c28752b766300b3315e37e))
+* poi type enum ([8121d6e](https://github.com/blacha/st/commit/8121d6e26ab55850c81de22ccdf18d88ed0a949d))
+* send simple command types ([0395217](https://github.com/blacha/st/commit/0395217c7f2ca84707adbf1cf38738344b653d6c))
+
+
+
+
+
 # [0.9.0](https://github.com/blacha/st/compare/v0.8.0...v0.9.0) (2020-01-17)
 
 **Note:** Version bump only for package @cncta/clientlib
