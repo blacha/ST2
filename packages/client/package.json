@@ -9,6 +9,7 @@
     "types": "./build/index.d.ts",
     "devDependencies": {
         "@types/cookie": "^0.3.3",
+        "@types/node": "^13.1.8",
         "@types/node-fetch": "^2.5.4",
         "@types/ospec": "^4.0.2",
         "@types/pino": "^5.15.3",

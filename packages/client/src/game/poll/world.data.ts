@@ -21,13 +21,12 @@ export type WorldSectorObject = WorldSectorObjectCity | WorldSectorObjectBase | 
 export class WorldData {
     static SectorSize = 32;
 
-    players: WorldSectorPlayer[] = [];
-    cities: Record<number, WorldSectorObjectCity>[] = [];
-    alliances: WorldSectorAlliance[] = [];
-    sectors: WorldSectorDecoder[] = [];
-    objects: WorldSectorObject[] = [];
+    players: Record<number, WorldSectorPlayer> = {};
+    cities: Record<number, Record<number, WorldSectorObjectCity>> = {};
+    alliances: Record<number, WorldSectorAlliance> = {};
+    objects: Record<number, WorldSectorObject> = {};
 
     add(sector: PollWorldData) {
-        this.sectors[sector.i] = new WorldSectorDecoder(this, sector);
+        WorldSectorDecoder.decode(this, sector);
     }
 }

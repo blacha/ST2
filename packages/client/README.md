@@ -22,9 +22,36 @@ const client = TaClient.fromSessionId('some-session-id');
 const world = await client.open(410);
 ```
 
-## Send Mail
+## Commands
+
+### Player info
 
 ```typescript
-// Send mail to a player
+const player = await world.player;
+player.Name;
+```
+
+### Server info
+
+```typescript
+const server = await world.server;
+server.ww; // World width
+```
+
+### Send Mail
+
+```typescript
 await world.mail('shockr', 'Hello World', `This is a test message`);
+```
+
+### World Data
+
+```typescript
+const data = await world.data;
+
+/** All players */
+console.log(data.players);
+
+/** Alliance list */
+console.log(data.alliances);
 ```

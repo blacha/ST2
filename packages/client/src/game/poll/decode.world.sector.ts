@@ -22,6 +22,10 @@ export class WorldSectorDecoder {
         if (data.d) this.decodeObjects(data.d);
     }
 
+    static decode(world: WorldData, data: PollWorldData) {
+        new WorldSectorDecoder(world, data);
+    }
+
     decodeAlliances(a: string[]) {
         for (const alliance of a) {
             const ctx = { data: alliance, offset: 0 };
@@ -62,7 +66,7 @@ export class WorldSectorDecoder {
 
             this.players[sectorId] = obj;
             this.world.players[obj.id] = obj;
-            this.world.cities[obj.id] = {};
+            this.world.cities[obj.id] = this.world.cities[obj.id] ?? {};
         }
     }
 
@@ -94,6 +98,7 @@ export class WorldSectorDecoder {
                     throw new Error('Adding city to unknown player');
                 }
                 playerCities[output.id] = output;
+                continue;
             }
             this.world.objects[BaseLocationPacker.pack(output.x, output.y)] = output;
         }
