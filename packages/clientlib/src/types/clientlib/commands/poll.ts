@@ -6,7 +6,6 @@ export interface CommandPoll extends GameWorldCommand {
         requestid: number;
         sequenceid: number;
         requests: string;
-        session: string;
     };
     response: PollResults[];
 }

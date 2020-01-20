@@ -8,6 +8,7 @@ import {
     CommandOpenSession,
     CommandPlayerInfo,
     CommandPoll,
+    CommandGetServerInfo,
 } from './commands';
 
 export interface ClientLibCommunicationManager {
@@ -25,4 +26,5 @@ export type GameCommands =
     | CommandIgmBulkSendMsg
     | CommandOpenSession
     | CommandPlayerInfo
-    | CommandPoll;
+    | CommandPoll
+    | CommandGetServerInfo;

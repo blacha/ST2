@@ -7,7 +7,6 @@ export interface CommandOpenSession extends GameWorldCommand {
         refId: number;
         reset: boolean;
         version: number;
-        session: string;
     };
     response: {
         /** UUID  */

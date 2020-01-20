@@ -3,27 +3,27 @@ import { GameDataResearchLevel } from '../../game';
 
 export interface CommandPlayerInfo extends GameWorldCommand {
     command: 'GetPlayerInfo';
-    request: {
-        session: string;
-    };
-    response: {
-        AllianceId: number;
-        AllianceName: string;
-        Cities: PlayerInfoCity[];
-        Id: number;
-        Name: string;
-        Techs: PlayerInfoTech[];
-        // Lots more
-    };
+    request: {};
+    response: CommandPlayerInfoResponse;
 }
 
-export interface PlayerInfoTech {
+export interface CommandPlayerInfoResponse {
+    AllianceId: number;
+    AllianceName: string;
+    Cities: CommandPlayerInfoCity[];
+    Id: number;
+    Name: string;
+    Techs: CommandPlayerInfoTech[];
+    // Lots more
+}
+
+export interface CommandPlayerInfoTech {
     id: number;
     l: GameDataResearchLevel;
     mid: number;
 }
 
-export interface PlayerInfoCity {
+export interface CommandPlayerInfoCity {
     h: number;
     i: number;
     n: string;

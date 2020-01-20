@@ -13,3 +13,11 @@ instance.SendSimpleCommand<CommandIgmGetMsg>(
         console.log(ctx, data.f, data.m, data.s);
     }),
 );
+
+ClientLib.Net.CommunicationManager.GetInstance().SendSimpleCommand(
+    'GetServerInfo',
+    {},
+    phe.cnc.Util.createEventDelegate(ClientLib.Net.CommandResult, null, (ctx, data) => {
+        console.log(ctx, data);
+    }),
+);
