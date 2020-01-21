@@ -1,4 +1,4 @@
-import { CityScannerUtil, CityUtil, ClientLibLoader, Patches } from '@cncta/util';
+import { CityScannerUtil, CityUtil, ClientLibLoader, Patches, LocalCache } from '@cncta/util';
 import { Id, StLog } from '@st/shared';
 import { StModuleAction } from './actions';
 import { ClientApi } from './api/client.api';
@@ -168,6 +168,7 @@ export class St {
 
     async start() {
         this.log.debug('StStartup');
+        LocalCache.cleanUp();
         let failCount = 0;
         while (this.isClientLoaded === false) {
             failCount++;

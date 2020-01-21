@@ -1,6 +1,5 @@
 import { ClientLibStatic } from '@cncta/clientlib';
 import { CityScannerUtil, CityUtil, Duration } from '@cncta/util';
-import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
 
 declare const ClientLib: ClientLibStatic;
@@ -27,7 +26,7 @@ export class AllianceScanner extends StModuleBase {
                 continue;
             }
 
-            CityCache.set(city.get_Id(), output);
+            this.st.api.base(output);
         }
     }
 
@@ -41,12 +40,6 @@ export class AllianceScanner extends StModuleBase {
 
     async scanCity(cityId: number, current: number, total: number): Promise<void> {
         const cities = ClientLib.Data.MainData.GetInstance().get_Cities();
-        // Cache player bases for a minute
-        const existing = CityCache.get(cityId, Duration.minutes(1));
-        if (existing) {
-            CityCache.set(cityId, existing);
-            return;
-        }
         cities.set_CurrentCityId(cityId);
 
         const cityObj = await CityUtil.waitForCity(cityId);
@@ -60,6 +53,6 @@ export class AllianceScanner extends StModuleBase {
         }
 
         this.st.log.debug({ cityId, owner: output.owner.name, current, total }, 'ScanAlliance');
-        CityCache.set(cityId, output);
+        this.st.api.base(output);
     }
 }
