@@ -5,17 +5,17 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    match /base/{document} {
+    match /Base/{document} {
       allow read: if true;
       allow write: if false;
     }
 
-    match /layout/{document} {
+    match /Layout/{document} {
       allow read: if true;
       allow write: if false;
     }
 
-    match /player/{document} {
+    match /Player/{document} {
       allow read: if true;
       allow write: if false;
     }
