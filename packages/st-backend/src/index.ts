@@ -1,3 +1,6 @@
+import * as admin from 'firebase-admin';
+admin.initializeApp();
+
 import * as cors from 'cors';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
