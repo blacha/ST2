@@ -3,6 +3,9 @@ import { ClientApi } from './client.api';
 import { StCity } from '@cncta/util';
 import { St } from '../st';
 import { ApiScanResponse } from '@st/shared';
+import { ClientLibStatic } from '@cncta/clientlib';
+
+declare const ClientLib: ClientLibStatic;
 
 export class BatchBaseSender extends Batcher<'cityId', StCity, string> {
     api: ClientApi;
@@ -17,8 +20,11 @@ export class BatchBaseSender extends Batcher<'cityId', StCity, string> {
 
     async run(data: StCity[]): Promise<string[]> {
         St.getInstance().log.info({ bases: data.length }, 'SendingData');
-        const firstBase = data[0];
-        const url = [this.api.baseUrl, 'api', 'v1', 'world', firstBase.worldId, 'scan', this.scanId].join('/');
+        const md = ClientLib.Data.MainData.GetInstance();
+        const worldId = md.get_Server().get_WorldId();
+        const playerName = md.get_Player().name;
+
+        const url = [this.api.baseUrl, 'api', 'v1', 'world', worldId, 'player', playerName, 'scan'].join('/');
         const res = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(data),

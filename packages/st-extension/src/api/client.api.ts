@@ -24,8 +24,8 @@ export class ClientApi extends StModuleBase {
         const installId = this.st.instanceId;
         const md = ClientLib.Data.MainData.GetInstance();
         const worldId = md.get_Server().get_WorldId();
-
         const playerName = md.get_Player().name;
+
         const url = [this.baseUrl, 'api', 'v1', 'world', worldId, 'player', playerName, 'install', installId].join('/');
         await fetch(url, { headers: { authorization: `Bearer  ${this.st.instanceId}` } });
     }
