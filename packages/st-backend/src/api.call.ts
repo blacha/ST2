@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as expressCore from 'express-serve-static-core';
 import { Id, StLog } from '@st/shared';
+import * as admin from 'firebase-admin';
 
 export interface ApiFunc<Params = any, Body = any, Response = any> {
     path: string;
@@ -12,6 +13,11 @@ export interface ApiFunc<Params = any, Body = any, Response = any> {
 export interface ApiRequest<T extends ApiFunc> extends expressCore.Request<T['params'], T['response'], T['body']> {
     id: string;
     log: typeof StLog;
+    user?: ApiUser;
+}
+
+export interface ApiUser {
+    uid: string;
 }
 
 export abstract class ApiCall<T extends ApiFunc> {
@@ -21,6 +27,19 @@ export abstract class ApiCall<T extends ApiFunc> {
     static bind<T>(app: express.Application, ApiFunc: ApiCall<any>) {
         app[ApiFunc.method](ApiFunc.path, ApiFunc.doRequest.bind(ApiFunc));
     }
+
+    async validateUser(req: ApiRequest<T>): Promise<ApiUser> {
+        if (req.headers.authorization == null || !req.headers.authorization.startsWith('Bearer ')) {
+            throw new Error('No Authorization');
+        }
+        console.log('Found "Authorization" header');
+        // Read the ID Token from the Authorization header.
+        const idToken = req.headers.authorization.split('Bearer ')[1];
+        const user = await admin.auth().verifyIdToken(idToken);
+        req.user = user;
+        return user;
+    }
+
     static async validateRequest<T extends ApiFunc>(req: express.Request, id: string): Promise<ApiRequest<T>> {
         const apiReq = req as ApiRequest<any>;
         apiReq.id = id;

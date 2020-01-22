@@ -1,8 +1,9 @@
-import * as Base62 from 'base62';
 import { Tile } from './tile';
 import { Base } from './base';
-import { BaseY, ResourceType, BaseX } from '@cncta/clientlib';
-import { LayoutPacker } from '@cncta/util';
+import { BaseY, ResourceType, BaseX, WorldId, CityId } from '@cncta/clientlib';
+import { LayoutPacker, Base62 } from '@cncta/util';
+import { TimeStamp } from '../../db';
+import { CompositeId } from '../../id';
 
 export interface Point {
     x: number;
@@ -11,16 +12,16 @@ export interface Point {
 export class NumberPacker {
     // pack([23,24])
     static pack(data: number): string;
-    static pack(data: Array<number>, join?: string): string;
-    static pack(data: Array<number> | number, join = '.'): string {
+    static pack(data: number[]): string;
+    static pack(data: number[] | number): string {
         if (typeof data === 'number') {
             return Base62.encode(data);
         }
-        return data.map(c => NumberPacker.number.pack(c)).join(join);
+        return Base62.pack(data);
     }
 
     static unpack(str: string): number[] {
-        return str.split('.').map(c => NumberPacker.number.unpack(c));
+        return Base62.unpack(str);
     }
 
     static number = {
@@ -28,14 +29,16 @@ export class NumberPacker {
             return Base62.encode(x);
         },
         unpack(s: string): number {
-            return Base62.decode(s);
+            return Base62.decode(s, 0).value;
         },
     };
 }
 
 export class BaseIdPacker {
-    static pack(base: Base) {
-        return NumberPacker.pack([base.worldId, base.cityId, Math.floor(base.updatedAt / 1000)], '');
+    static pack(base: Base): CompositeId<[WorldId, CityId, TimeStamp]> {
+        return Base62.pack([base.worldId, base.cityId, Math.floor(base.updatedAt / 1000)]) as CompositeId<
+            [WorldId, CityId, TimeStamp]
+        >;
     }
 }
 
@@ -44,12 +47,6 @@ export class BaseIdPacker {
  */
 export class BaseLayoutPacker {
     static pack(base: Base): string {
-        return NumberPacker.pack(BaseLayoutPacker.packLayout(base));
-    }
-    static unpack(tiles: string): Tile[] {
-        return BaseLayoutPacker.unpackLayout(NumberPacker.unpack(tiles));
-    }
-    static packLayout(base: Base): number[] {
         const output: number[] = [];
         for (let y = 0; y < BaseY.MaxDef; y++) {
             const row: ResourceType[] = [];
@@ -59,11 +56,13 @@ export class BaseLayoutPacker {
             }
             output.push(LayoutPacker.pack(row));
         }
-        return output;
+        return Base62.pack(output);
     }
-    static unpackLayout(tiles: number[]): Tile[] {
+
+    static unpack(tiles: string): Tile[] {
+        const data = Base62.unpack(tiles);
         const output: Tile[] = [];
-        for (const row of tiles) {
+        for (const row of data) {
             for (const tile of LayoutPacker.unpack(row)) {
                 output.push(Tile.Id[tile]);
             }

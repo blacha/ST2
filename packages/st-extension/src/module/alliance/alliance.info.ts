@@ -52,7 +52,7 @@ export class AllianceScanner extends StModuleBase {
             return;
         }
 
-        this.st.log.debug({ cityId, owner: output.owner.name, current, total }, 'ScanAlliance');
+        this.st.log.debug({ cityId, owner: output.owner, current, total }, 'ScanAlliance');
         this.st.api.base(output);
     }
 }

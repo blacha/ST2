@@ -1,17 +1,28 @@
 import { StCity } from '@cncta/util';
-import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade, NumberPacker } from '@st/shared';
+import {
+    Base,
+    BaseBuilder,
+    formatNumber,
+    GameResources,
+    Id,
+    mergeBaseUpgrade,
+    NumberPacker,
+    CompositeId,
+} from '@st/shared';
 import BackTop from 'antd/es/back-top';
 import Divider from 'antd/es/divider';
 import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { PlayerStats } from '../alliance/alliance';
 import { ComponentLoading } from '../base/base';
-import { FireStorePlayer } from '../firebase';
+// import { FireStorePlayer } from '../firebase';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
 import { ViewResearch } from '../util/research';
 import React = require('react');
+import { WorldId, PlayerId } from '@cncta/clientlib/src';
+import { Stores } from '@st/shared/src/db';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
@@ -145,19 +156,19 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
 
     componentDidMount() {
         const { worldId, playerId } = this.props.match.params;
-        this.loadPlayer(Number(worldId), Number(playerId));
+        this.loadPlayer(Number(worldId) as WorldId, Number(playerId) as PlayerId);
     }
 
-    async loadPlayer(worldId: number, playerId: number) {
-        const docId = NumberPacker.pack([worldId, playerId]);
+    async loadPlayer(worldId: WorldId, playerId: PlayerId) {
+        const docId = NumberPacker.pack([worldId, playerId]) as CompositeId<[WorldId, PlayerId]>;
         this.setState({ state: ComponentLoading.Loading });
-        const result = await FireStorePlayer.doc(docId).get();
-        if (!result.exists) {
+        const result = await Stores.Player.getOrCreate(docId);
+        if (!result.isValid) {
             this.setState({ state: ComponentLoading.Failed });
             return;
         }
 
-        const cities = (result.get('bases') ?? {}) as Record<string, StCity>;
+        const cities = result.cities;
         const bases = Object.values(cities).map(c => BaseBuilder.load(c));
         const current: PlayerStats = {
             id: Id.generate(),
@@ -189,6 +200,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
     get isLoading() {
         return this.state.state == ComponentLoading.Loading;
     }
+
     render() {
         if (this.state == null || this.isLoading || this.state.main == null) {
             return <div>Loading...</div>;

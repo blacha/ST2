@@ -1,20 +1,24 @@
-import { FactionType } from '@cncta/clientlib/src';
-import { Duration, LocalCache, StCity } from '@cncta/util';
-import { St } from '../st';
+import { ClientLibStatic } from '@cncta/clientlib';
+import { Duration, LocalCache } from '@cncta/util';
 
+declare const ClientLib: ClientLibStatic;
 const OneDayMs = Duration.days(1);
+
+export interface CityLayoutCache {
+    stId: string;
+    layout: string;
+}
+
 export class CityCache {
-    static get(cityId: number, maxAge: number = OneDayMs): StCity {
-        return LocalCache.get(String(cityId), maxAge) as StCity;
+    static get cacheKey() {
+        return `${LocalCache.prefix}-layout-cache`;
     }
 
-    /** Returns the unique id stored in shockrtools */
-    static set(cityId: number, layout: StCity, flush = false): Promise<string> {
-        // No need to cache player cities
-        if (layout.faction == FactionType.Nod || layout.faction == FactionType.Gdi) {
-            return St.getInstance().api.base(layout, flush);
-        }
-        LocalCache.set(String(cityId), layout);
-        return St.getInstance().api.base(layout, flush);
+    static get(cityId: number, maxAge: number = OneDayMs): CityLayoutCache {
+        return LocalCache.get(String(cityId), maxAge) as CityLayoutCache;
+    }
+
+    static setStId(cityId: number, stId: string, layout: string): void {
+        LocalCache.set(String(cityId), { stId, layout });
     }
 }

@@ -9,18 +9,26 @@ import {
     GameDataStatic,
     GameDataUnitId,
     ResourceType,
+    CityId,
+    WorldId,
+    PlayerName,
+    PlayerId,
+    AllianceName,
+    AllianceId,
 } from '@cncta/clientlib';
 import { PatchCityUnits } from '../patch/patch.data';
 import { ClientLibResearchUtil } from './city.research';
 import { UnitLocationPacker } from './pack';
 import { LayoutPacker } from './pack/layout.packer';
 import { UnitPacker } from './pack/unit.packer';
+import { Base62 } from './base.62';
+import { InvalidAllianceId, InvalidAllianceName } from '../id';
 
 declare const GAMEDATA: GameDataStatic;
 
 export interface CityArmy {
-    def: number[];
-    off: number[];
+    def: string;
+    off: string;
 }
 
 export interface IdName {
@@ -30,9 +38,9 @@ export interface IdName {
 
 export interface StCity extends CityArmy {
     /** CNC city Id */
-    cityId: number;
+    cityId: CityId;
     /** Id of the world that the base is on */
-    worldId: number;
+    worldId: WorldId;
 
     level: {
         /** Base level */
@@ -50,17 +58,22 @@ export interface StCity extends CityArmy {
     y: number;
 
     /** Faction, GDI, NOD, Forgotten */
-    faction: number;
+    faction: FactionType;
 
-    /** Owners name */
-    owner: IdName;
+    /** Owners name & Id */
+    ownerId: PlayerId;
+    owner: PlayerName;
+
     /** Alliance name & Id*/
-    alliance: IdName;
+    alliance?: AllianceName | typeof InvalidAllianceName;
+    allianceId?: AllianceId | typeof InvalidAllianceId;
+
     /** Base version  */
     version: number;
+
     /** Base data */
-    tiles: number[];
-    base: number[];
+    tiles: string;
+    base: string;
 
     /** Units that have upgrades */
     upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
@@ -98,12 +111,14 @@ export class CityScannerUtil {
             x: city.get_PosX(),
             y: city.get_PosY(),
             faction: city.get_CityFaction(),
-            owner: { id: city.get_OwnerId(), name: city.get_OwnerName() || player.name },
+            ownerId: city.get_OwnerId(),
+            owner: city.get_OwnerName() || player.name,
             version: city.get_Version(),
             worldId: server.get_WorldId(),
-            alliance: { id: city.get_OwnerAllianceId() || 0, name: city.get_OwnerAllianceName() || '' },
+            alliance: city.get_OwnerAllianceName(),
+            allianceId: city.get_OwnerAllianceId(),
             tiles: CityScannerUtil.getLayout(city),
-            base: Object.values(city.get_Buildings().d).map(unit => CityScannerUtil.packUnit(unit)),
+            base: Base62.pack(Object.values(city.get_Buildings().d).map(unit => CityScannerUtil.packUnit(unit))),
             upgrades: ClientLibResearchUtil.getUpgrades(city),
             ...CityScannerUtil.getUnits(city),
             timestamp: Date.now(),
@@ -114,14 +129,14 @@ export class CityScannerUtil {
             if (alliance == null) {
                 return cityData;
             }
-            cityData.alliance.name = alliance.get_Name();
-            cityData.alliance.id = alliance.get_Id();
+            cityData.alliance = alliance.get_Name();
+            cityData.allianceId = alliance.get_Id();
         }
         return cityData;
     }
 
     /** Pack a city layout into a number */
-    static getLayout(city: ClientLibCity): number[] {
+    static getLayout(city: ClientLibCity): string {
         const output: number[] = [];
         for (let y = 0; y < BaseY.MaxDef; y++) {
             const row: ResourceType[] = [];
@@ -131,7 +146,7 @@ export class CityScannerUtil {
             }
             output.push(LayoutPacker.pack(row));
         }
-        return output;
+        return Base62.pack(output);
     }
 
     static getUnits(city: ClientLibCity): CityArmy {
@@ -146,14 +161,14 @@ export class CityScannerUtil {
         const faction = city.get_CityFaction();
         if (faction === FactionType.Nod || faction === FactionType.Gdi) {
             return {
-                def: Object.values(defUnits.d).map(unit => CityScannerUtil.packUnit(unit)),
-                off: Object.values(offUnits.d).map(unit => CityScannerUtil.packUnit(unit)),
+                def: Base62.pack(Object.values(defUnits.d).map(unit => CityScannerUtil.packUnit(unit))),
+                off: Base62.pack(Object.values(offUnits.d).map(unit => CityScannerUtil.packUnit(unit))),
             };
         }
 
         return {
-            def: Object.values(defUnits.d).map(unit => CityScannerUtil.packUnit(unit)),
-            off: [],
+            def: Base62.pack(Object.values(defUnits.d).map(unit => CityScannerUtil.packUnit(unit))),
+            off: '',
         };
     }
 }

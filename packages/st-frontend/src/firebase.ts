@@ -3,7 +3,6 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/analytics';
 
-import { DbBase, DbLayout, DbPlayer } from '@st/shared';
 const firebaseConfig = {
     apiKey: 'AIzaSyBm7H-ccEuECJXxP4hAPSnew0E6HyGmeoo',
     authDomain: 'shockrtools.firebaseapp.com',
@@ -17,9 +16,9 @@ const firebaseConfig = {
 export const FirebaseClient = firebase.initializeApp(firebaseConfig);
 export const firestore = FirebaseClient.firestore();
 
-export const FireStoreBases = firestore.collection('base') as firebase.firestore.CollectionReference<DbBase>;
-export const FireStoreLayouts = firestore.collection('layout') as firebase.firestore.CollectionReference<DbLayout>;
-export const FireStorePlayer = firestore.collection('player') as firebase.firestore.CollectionReference<DbPlayer>;
+// export const FireStoreBases = firestore.collection('base') as firebase.firestore.CollectionReference<DbBase>;
+// export const FireStoreLayouts = firestore.collection('layout') as firebase.firestore.CollectionReference<DbLayout>;
+// export const FireStorePlayer = firestore.collection('player') as firebase.firestore.CollectionReference<DbPlayer>;
 
 export const FireAuthGoogle = new firebase.auth.GoogleAuthProvider();
 export const FireAuth = firebase.auth();

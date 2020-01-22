@@ -1,10 +1,10 @@
+import { BaseX, BaseY } from '@cncta/clientlib';
 import { StCity, UnitLocationPacker, UnitPacker } from '@cncta/util';
 import { Faction } from '../data/faction';
 import { GameDataObject } from '../data/game.data.object';
 import { Base } from './base';
-import { BaseLayoutPacker } from './base.packer';
+import { NumberPacker, BaseLayoutPacker } from './base.packer';
 import { Tile } from './tile';
-import { BaseY, BaseX } from '@cncta/clientlib';
 
 const codeZero = '0'.charCodeAt(0);
 const codeNine = '9'.charCodeAt(0);
@@ -72,33 +72,35 @@ export class BaseBuilder {
      */
     static load(city: StCity): Base {
         const output = new Base(city.name, Faction.fromId(city.faction));
-        output.owner = city.owner;
+        output.owner = { id: city.ownerId, name: city.owner };
         output.x = city.x;
         output.y = city.y;
         output.cityId = city.cityId;
-        output.alliance = city.alliance;
+        if (city.alliance && city.allianceId) {
+            output.alliance = { id: city.allianceId, name: city.alliance };
+        }
         output.worldId = city.worldId;
         output.updatedAt = city.timestamp;
         output.setBaseLevels(city.level.base, city.level.off, city.level.def);
 
-        for (const building of city.base) {
+        for (const building of NumberPacker.unpack(city.base)) {
             const unit = UnitPacker.unpack(building);
             const point = UnitLocationPacker.unpack(unit.xy);
             output.build(point.x, point.y, unit.level, GameDataObject.getById(unit.id));
         }
 
-        for (const def of city.def) {
+        for (const def of NumberPacker.unpack(city.def)) {
             const unit = UnitPacker.unpack(def);
             const point = UnitLocationPacker.unpack(unit.xy + BaseX.Max * BaseY.MaxBuilding);
             output.build(point.x, point.y, unit.level, GameDataObject.getById(unit.id));
         }
 
-        for (const off of city.off) {
+        for (const off of NumberPacker.unpack(city.off)) {
             const unit = UnitPacker.unpack(off);
             const point = UnitLocationPacker.unpack(unit.xy + BaseX.Max * BaseY.MaxDef);
             output.build(point.x, point.y, unit.level, GameDataObject.getById(unit.id));
         }
-        output.tiles = BaseLayoutPacker.unpackLayout(city.tiles);
+        output.tiles = BaseLayoutPacker.unpack(city.tiles);
 
         output.upgrades = city.upgrades;
         return output;

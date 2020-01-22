@@ -1,7 +1,7 @@
 import { BaseX, ResourceType } from '@cncta/clientlib';
 
 /**
- *  Pack up a layout into a number per row
+ * Pack up a layout into a number per row
  *
  * This packs a layout into 24 bits per row or 48 bytes / layout
  */

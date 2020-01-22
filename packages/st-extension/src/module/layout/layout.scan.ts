@@ -1,5 +1,5 @@
 import { ClientLibStatic, NpcCampType, WorldObjectType } from '@cncta/clientlib';
-import { CityScannerUtil, CityUtil, Duration, PatchWorldObjectNPCCamp, BaseLocationPacker } from '@cncta/util';
+import { BaseLocationPacker, CityScannerUtil, CityUtil, Duration, PatchWorldObjectNPCCamp } from '@cncta/util';
 import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
 
@@ -21,7 +21,6 @@ export class LayoutScanner extends StModuleBase {
             }
             const existing = CityCache.get(object.$Id);
             if (existing) {
-                CityCache.set(object.$Id, existing);
                 continue;
             }
             this.queue(
@@ -56,6 +55,6 @@ export class LayoutScanner extends StModuleBase {
         }
 
         this.st.log.debug({ cityId, index: current, count }, 'ScanLayout');
-        CityCache.set(cityId, output);
+        this.st.api.base(output).then(baseId => CityCache.setStId(cityId, baseId, output.tiles));
     }
 }

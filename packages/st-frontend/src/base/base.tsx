@@ -7,7 +7,6 @@ import Icon from 'antd/es/icon';
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { FireStoreBases, FireStorePlayer } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
@@ -101,42 +100,42 @@ export class ViewBase extends React.Component<ViewBaseProps> {
 
         this.setState({ base: new Base(), state: ComponentLoading.Loading });
         if (playerId != null && worldId != null) {
-            this.loadPlayerBase(Number(playerId), Number(baseId), Number(worldId));
+            // this.loadPlayerBase(Number(playerId), Number(baseId), Number(worldId));
         } else {
-            this.loadBase(baseId);
+            // this.loadBase(baseId);
         }
     }
 
-    async loadPlayerBase(playerId: number, baseId: number, worldId: number) {
-        const docId = NumberPacker.pack([worldId, playerId]);
-        const result = await FireStorePlayer.doc(docId).get();
-        if (!result.exists) {
-            this.setState({ state: ComponentLoading.Failed });
-            return;
-        }
-        const cities = (result.get('bases') ?? {}) as Record<string, StCity>;
-        const cityId = NumberPacker.pack(baseId);
-        if (cities[cityId] == null) {
-            this.setState({ state: ComponentLoading.Failed });
-            return;
-        }
-        this.setState({ base: BaseBuilder.load(cities[cityId]), state: ComponentLoading.Done });
-    }
+    // async loadPlayerBase(playerId: number, baseId: number, worldId: number) {
+    //     const docId = NumberPacker.pack([worldId, playerId]);
+    //     const result = await FireStorePlayer.doc(docId).get();
+    //     if (!result.exists) {
+    //         this.setState({ state: ComponentLoading.Failed });
+    //         return;
+    //     }
+    //     const cities = (result.get('bases') ?? {}) as Record<string, StCity>;
+    //     const cityId = NumberPacker.pack(baseId);
+    //     if (cities[cityId] == null) {
+    //         this.setState({ state: ComponentLoading.Failed });
+    //         return;
+    //     }
+    //     this.setState({ base: BaseBuilder.load(cities[cityId]), state: ComponentLoading.Done });
+    // }
 
-    async loadBase(baseId: string) {
-        const doc = await FireStoreBases.doc(baseId).get();
-        if (!doc.exists) {
-            this.setState({ base: this.state.base, state: ComponentLoading.Failed });
-            return;
-        }
-        const data = doc.data();
-        if (data == null) {
-            this.setState({ base: this.state.base, state: ComponentLoading.Failed });
-            return;
-        }
-        const base = BaseBuilder.load(data);
-        this.setState({ base, state: ComponentLoading.Done });
-    }
+    // async loadBase(baseId: string) {
+    //     const doc = await FireStoreBases.doc(baseId).get();
+    //     if (!doc.exists) {
+    //         this.setState({ base: this.state.base, state: ComponentLoading.Failed });
+    //         return;
+    //     }
+    //     const data = doc.data();
+    //     if (data == null) {
+    //         this.setState({ base: this.state.base, state: ComponentLoading.Failed });
+    //         return;
+    //     }
+    //     const base = BaseBuilder.load(data);
+    //     this.setState({ base, state: ComponentLoading.Done });
+    // }
 
     render() {
         const { base, state } = this.state;

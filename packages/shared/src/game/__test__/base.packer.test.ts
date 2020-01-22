@@ -8,7 +8,7 @@ import { BaseLocationPacker } from '@cncta/util';
 o.spec('NumberPacker', () => {
     o('should pack/unpack a id', () => {
         const str = NumberPacker.pack([4120, 2048872]);
-        o(str).equals('14s.8B0k');
+        o(str).equals('S41.K0b8');
         const [worldId, cityId] = NumberPacker.unpack(str);
         o({ worldId, cityId }).deepEquals({ worldId: 4120, cityId: 2048872 });
     });
@@ -18,7 +18,7 @@ o.spec('NumberPacker', () => {
         const baseOrig = BaseBuilder.fromCnCOpt(cncOpt);
 
         const layout = BaseLayoutPacker.pack(baseOrig);
-        o(layout).equals('0.18lq.0.2exy.0.94C4.2k.0.4.5NFYc.5FYHb.0.6PsmQ.Oc.56N8O.P96');
+        o(layout).equals('.QL81..YXE2..4c49.K2..4.Cyfn5.Bhyf5..qMSp6.Co.o8n65.69p');
         const base = new Base();
         base.tiles = BaseLayoutPacker.unpack(layout);
         o(BaseExporter.toCncOpt(base)).equals(cncOpt);
@@ -28,7 +28,7 @@ o.spec('NumberPacker', () => {
         const point = BaseLocationPacker.pack(768, 398);
         const pointS = NumberPacker.pack(point);
 
-        o(pointS).equals('1LrFe');
+        o(pointS).equals('EfRl1');
         o(point).equals(26084096);
 
         o(NumberPacker.unpack(pointS)[0]).equals(point);

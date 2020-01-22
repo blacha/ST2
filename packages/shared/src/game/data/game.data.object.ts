@@ -32,6 +32,7 @@ export class GameDataObject {
     static getById(id: GameDataUnitId): GameDataObject {
         const obj = GameDataObject.Id[id];
         if (obj == null) {
+            console.trace('BadId');
             throw new Error(`Unable to find game object for ${id}`);
         }
         return obj;

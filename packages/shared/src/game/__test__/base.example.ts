@@ -1,7 +1,8 @@
-import { StCity } from '@cncta/util';
+import { StCity, Base62 } from '@cncta/util';
+import { CityId, WorldId, AllianceName, PlayerName, PlayerId, AllianceId } from '@cncta/clientlib';
 
 export const BaseExampleForgotten: StCity = {
-    cityId: 2829118,
+    cityId: 2829118 as CityId,
     level: {
         base: 15.310612643914,
         off: 0,
@@ -11,20 +12,45 @@ export const BaseExampleForgotten: StCity = {
     x: 374,
     y: 770,
     faction: 5,
-    owner: {
-        id: -152,
-        name: 'The Forgotten',
-    },
+    ownerId: -152 as PlayerId,
+    owner: 'The Forgotten' as PlayerName,
+    allianceId: 0,
+    alliance: 'The Forgotten' as AllianceName,
     version: 3,
-    worldId: 410,
-    alliance: {
-        id: 0,
-        name: 'The Forgotten',
-    },
-    tiles: [0, 532480, 144, 299008, 0, 64, 4231232, 0, 4, 1311080, 132120576, 0, 14352816, 23045, 16515520, 3072],
-    base: [2147126, 2016513, 2015498, 2018828, 2016781, 2015767, 2019096, 2148129, 2016829, 2011400, 2147363],
+    worldId: 410 as WorldId,
+    tiles: Base62.pack([
+        0,
+        532480,
+        144,
+        299008,
+        0,
+        64,
+        4231232,
+        0,
+        4,
+        1311080,
+        132120576,
+        0,
+        14352816,
+        23045,
+        16515520,
+        3072,
+    ]),
+    base: Base62.pack([
+        2147126,
+        2016513,
+        2015498,
+        2018828,
+        2016781,
+        2015767,
+        2019096,
+        2148129,
+        2016829,
+        2011400,
+        2147363,
+    ]),
     upgrades: {},
-    def: [
+    def: Base62.pack([
         2146081,
         2146082,
         2146355,
@@ -39,13 +65,13 @@ export const BaseExampleForgotten: StCity = {
         2013207,
         2013728,
         2145299,
-    ],
-    off: [],
+    ]),
+    off: '',
     timestamp: 1577844542428,
 };
 
 export const BaseExampleNod: StCity = {
-    cityId: 134017,
+    cityId: 134017 as CityId,
     level: {
         base: 15.0562911554,
         off: 14.2246527778,
@@ -55,18 +81,32 @@ export const BaseExampleNod: StCity = {
     x: 375,
     y: 772,
     faction: 2,
-    owner: {
-        id: 2648,
-        name: 'shocknod',
-    },
+    ownerId: 2648 as PlayerId,
+    owner: 'shocknod' as PlayerName,
+    allianceId: 559 as AllianceId,
+    alliance: 'The Zombies 2' as AllianceName,
     version: 148,
-    worldId: 410,
-    alliance: {
-        id: 559,
-        name: 'The Zombies 2',
-    },
-    tiles: [0, 65552, 4194304, 584, 18939904, 128, 4227072, 0, 4, 0, 132342264, 0, 1835008, 147748, 11796480, 3461],
-    base: [
+    worldId: 410 as WorldId,
+
+    tiles: Base62.pack([
+        0,
+        65552,
+        4194304,
+        584,
+        18939904,
+        128,
+        4227072,
+        0,
+        4,
+        0,
+        132342264,
+        0,
+        1835008,
+        147748,
+        11796480,
+        3461,
+    ]),
+    base: Base62.pack([
         2137858,
         1612820,
         1480742,
@@ -96,7 +136,7 @@ export const BaseExampleNod: StCity = {
         2399037,
         1625096,
         1742106,
-    ],
+    ]),
     upgrades: {
         133: 2,
         134: 1,
@@ -112,7 +152,7 @@ export const BaseExampleNod: StCity = {
         167: 1,
         168: 1,
     },
-    def: [
+    def: Base62.pack([
         1876784,
         1615645,
         1877811,
@@ -135,8 +175,8 @@ export const BaseExampleNod: StCity = {
         1617423,
         1615673,
         1486364,
-    ],
-    off: [
+    ]),
+    off: Base62.pack([
         2000143,
         1607190,
         1476119,
@@ -153,16 +193,16 @@ export const BaseExampleNod: StCity = {
         1476127,
         1609477,
         2000139,
-    ],
+    ]),
     timestamp: 1577845052515,
 };
 
 export const ExampleNodBase2: StCity = {
-    alliance: {
-        id: 106,
-        name: 'Blue Cherry Hunters',
-    },
-    base: [
+    ownerId: 2642 as PlayerId,
+    owner: 'shockrNZ' as PlayerName,
+    allianceId: 106 as AllianceId,
+    alliance: 'Blue Cherry Hunters' as AllianceName,
+    base: Base62.pack([
         2136321,
         2136339,
         2136322,
@@ -200,9 +240,9 @@ export const ExampleNodBase2: StCity = {
         2137396,
         2923325,
         1875464,
-    ],
-    cityId: 133682,
-    def: [
+    ]),
+    cityId: 133682 as CityId,
+    def: Base62.pack([
         2138911,
         1879600,
         2138663,
@@ -229,7 +269,7 @@ export const ExampleNodBase2: StCity = {
         2009105,
         2007084,
         2007564,
-    ],
+    ]),
     faction: 2,
     level: {
         base: 18.2022738323,
@@ -237,16 +277,30 @@ export const ExampleNodBase2: StCity = {
         off: 0,
     },
     name: 's-B',
-    off: [],
-    owner: {
-        id: 2642,
-        name: 'shockrNZ',
-    },
-    tiles: [0, 65552, 4194304, 584, 18939904, 128, 4227072, 0, 4, 0, 132342264, 0, 1835008, 147748, 11796480, 3461],
+    off: '',
+
+    tiles: Base62.pack([
+        0,
+        65552,
+        4194304,
+        584,
+        18939904,
+        128,
+        4227072,
+        0,
+        4,
+        0,
+        132342264,
+        0,
+        1835008,
+        147748,
+        11796480,
+        3461,
+    ]),
     timestamp: 1577962548613,
     upgrades: {},
     version: 510,
-    worldId: 410,
+    worldId: 410 as WorldId,
     x: 303,
     y: 615,
 };

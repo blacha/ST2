@@ -6,8 +6,8 @@ export interface ApiScanResponse {
 }
 
 export interface ApiScanRequest {
-    path: '/api/v1/world/:worldId/scan/:scanId';
-    params: { worldId: number; scanId: string };
+    path: '/api/v1/world/:worldId/player/:player/scan';
+    params: { worldId: number; player: string };
     body: StCity[];
     response: ApiScanResponse;
 }

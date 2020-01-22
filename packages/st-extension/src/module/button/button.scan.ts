@@ -10,7 +10,6 @@ import {
 } from '@cncta/clientlib';
 import { CityScannerUtil, CityUtil } from '@cncta/util';
 import { Config } from '@st/shared';
-import { CityCache } from '../city.cache';
 import { StModuleBase } from '../module.base';
 
 // Visit base can be used on anything in range
@@ -81,17 +80,18 @@ export class ButtonScan extends StModuleBase {
         if (city == null) {
             return;
         }
+
         const cityObj = CityScannerUtil.get(city);
         if (cityObj == null) {
             return;
         }
 
-        CityCache.set(cityObj.cityId, cityObj);
+        const stId = await this.st.api.base(cityObj, true);
         if (waitId != this.lastBaseId) {
             return;
         }
 
-        this.lastBaseLinkId = await CityCache.set(cityObj.cityId, cityObj, true);
+        this.lastBaseLinkId = stId;
         this.buttons.forEach(b => b.show());
     }
 

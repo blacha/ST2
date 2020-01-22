@@ -4,10 +4,10 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { ComponentLoading } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
-import { FireStoreLayouts } from '../firebase';
+// import { FireStoreLayouts } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
-import { Base, SiloCounts, BaseExporter, DbLayout, NumberPacker, BaseLayoutPacker } from '@st/shared';
+import { Base, SiloCounts, BaseExporter, NumberPacker, BaseLayoutPacker } from '@st/shared';
 import { BaseX } from '@cncta/clientlib';
 import { BaseLocationPacker } from '@cncta/util';
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
@@ -45,53 +45,53 @@ function addStats(from: SiloCounts, to: SiloCounts) {
 export class ViewScan extends React.Component<ViewScanProps, ScanState> {
     componentDidMount() {
         this.setState({ state: ComponentLoading.Loading });
-        const params = this.props.match.params;
-        const worldId = Number(params.worldId);
-        this.loadScan(worldId, params.scanId);
+        // const params = this.props.match.params;
+        // const worldId = Number(params.worldId);
+        // this.loadScan(worldId, params.scanId);
     }
 
-    async loadScan(worldId: number, scanId: string) {
-        const scanDocId = NumberPacker.pack(worldId) + '.' + scanId;
+    // async loadScan(worldId: number, scanId: string) {
+    //     const scanDocId = NumberPacker.pack(worldId) + '.' + scanId;
 
-        const result = await FireStoreLayouts.doc(scanDocId).get();
-        if (!result.exists) {
-            this.setState({ bases: [], state: ComponentLoading.Failed });
-        }
-        const layoutData = result.data() as DbLayout;
+    //     const result = await FireStoreLayouts.doc(scanDocId).get();
+    //     if (!result.exists) {
+    //         this.setState({ bases: [], state: ComponentLoading.Failed });
+    //     }
+    //     const layoutData = result.data();
 
-        const silos = {
-            tiberium: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-            crystal: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-            mixed: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-        };
+    //     const silos = {
+    //         tiberium: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
+    //         crystal: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
+    //         mixed: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
+    //     };
 
-        const bases: Base[] = [];
-        const layouts = Object.keys(layoutData.layouts ?? {});
-        for (const key of layouts) {
-            const xy = BaseLocationPacker.unpack(NumberPacker.unpack(key)[0]);
-            const base = new Base();
-            base.x = xy.x;
-            base.y = xy.y;
-            const { layout, updatedAt } = layoutData.layouts[key];
-            base.tiles = BaseLayoutPacker.unpack(layout);
-            base.updatedAt = updatedAt;
-            bases.push(base);
-            addStats(base.info.stats, silos);
-        }
+    //     const bases: Base[] = [];
+    //     const layouts = Object.keys(layoutData.layouts ?? {});
+    //     for (const key of layouts) {
+    //         const xy = BaseLocationPacker.unpack(NumberPacker.unpack(key)[0]);
+    //         const base = new Base();
+    //         base.x = xy.x;
+    //         base.y = xy.y;
+    //         const { layout, updatedAt } = layoutData.layouts[key];
+    //         base.tiles = BaseLayoutPacker.unpack(layout);
+    //         base.updatedAt = updatedAt;
+    //         bases.push(base);
+    //         addStats(base.info.stats, silos);
+    //     }
 
-        bases.sort((a: Base, b: Base) => {
-            const statsA = a.info.stats;
-            const statsB = b.info.stats;
-            if (
-                statsA.tiberium.score == statsB.tiberium.score ||
-                (statsA.tiberium.score < 10 && statsB.tiberium.score < 10)
-            ) {
-                return b.info.score - a.info.score;
-            }
-            return statsB.tiberium.score - statsA.tiberium.score;
-        });
-        this.setState({ bases, silos, state: ComponentLoading.Done });
-    }
+    //     bases.sort((a: Base, b: Base) => {
+    //         const statsA = a.info.stats;
+    //         const statsB = b.info.stats;
+    //         if (
+    //             statsA.tiberium.score == statsB.tiberium.score ||
+    //             (statsA.tiberium.score < 10 && statsB.tiberium.score < 10)
+    //         ) {
+    //             return b.info.score - a.info.score;
+    //         }
+    //         return statsB.tiberium.score - statsA.tiberium.score;
+    //     });
+    //     this.setState({ bases, silos, state: ComponentLoading.Done });
+    // }
 
     render() {
         if (this.state == null || this.state.state == ComponentLoading.Loading) {

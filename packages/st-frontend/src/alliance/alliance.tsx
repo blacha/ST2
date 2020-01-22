@@ -1,4 +1,16 @@
 import React = require('react');
+import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId } from '@cncta/clientlib';
+import {
+    Base,
+    CompositeId,
+    formatNumber,
+    GameResources,
+    NumberPacker,
+    BaseBuilder,
+    Id,
+    mergeBaseUpgrade,
+} from '@st/shared';
+import { Stores } from '@st/shared/build/db';
 import 'antd/dist/antd.css';
 import BackTop from 'antd/es/back-top';
 import Table from 'antd/es/table';
@@ -6,13 +18,10 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { ComponentLoading } from '../base/base';
 import { viewFaction } from '../base/faction';
-import { FireStorePlayer } from '../firebase';
 import { timeSince } from '../time.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
-import { Base, GameResources, formatNumber, BaseBuilder, Id, NumberPacker, mergeBaseUpgrade } from '@st/shared';
-import { GameDataUnitId, GameDataResearchLevel } from '@cncta/clientlib';
 import { ViewResearch } from '../util/research';
-import { StCity, Duration } from '@cncta/util';
+import { Duration } from '@cncta/util/src';
 
 export const AllianceCss = {
     Table: style({
@@ -184,26 +193,25 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
-        this.loadAlliance(Number(worldId), Number(allianceId));
+        this.loadAlliance(Number(worldId) as WorldId, Number(allianceId) as AllianceId);
     }
 
-    async loadAlliance(worldId: number, allianceId: number) {
-        const docId = NumberPacker.pack([worldId, allianceId]);
+    async loadAlliance(worldId: WorldId, allianceId: AllianceId) {
+        const docId = NumberPacker.pack([worldId, allianceId]) as CompositeId<[WorldId, AllianceId]>;
         this.setState({ info: [], state: ComponentLoading.Loading });
-        const result = await FireStorePlayer.where('allianceKey', '==', docId)
-            .limit(60)
-            .get();
+
+        const results = await Stores.Player.getAllBy('allianceKey', docId, 60);
 
         const alliance = { id: allianceId, name: '' };
         const playerSet = new Map<number, PlayerStats>();
         // Grab at most the 50 most recently updated
-        const docs = result.docs
-            .sort((a, b) => a.get('updatedAt') - b.get('updatedAt'))
-            .filter(f => Date.now() - f.get('updatedAt') < Duration.days(2))
+        const docs = results
+            .sort((a, b) => a.updatedAt - b.updatedAt)
+            .filter(f => Date.now() - f.updatedAt < Duration.days(2))
             .slice(0, 55);
 
         for (const doc of docs) {
-            const cities = (doc.get('bases') ?? {}) as Record<string, StCity>;
+            const cities = doc.cities;
             const bases = Object.values(cities).map(c => BaseBuilder.load(c));
             for (const base of bases) {
                 if (base.owner == null) {

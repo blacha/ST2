@@ -11,8 +11,8 @@
     "dependencies": {
         "@cncta/clientlib": "^0.10.1",
         "@cncta/util": "^0.10.1",
-        "base62": "^2.0.1",
         "bblog": "^2.0.0",
+        "typesaurus": "^5.0.0",
         "ulid": "^2.3.0"
     },
     "files": [
