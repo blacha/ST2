@@ -1,9 +1,10 @@
-import { InstallId, ModelUtil, TimeStamp, Model } from './model';
+import { PlayerName, WorldId } from '@cncta/clientlib/src';
+import { InstallId, Model, ModelUtil, TimeStamp } from './model';
 
 export interface ModelInstallPlayer {
-    player: string;
+    player: PlayerName;
     updatedAt: TimeStamp;
-    worldId: number;
+    worldId: WorldId;
 }
 
 export class ModelInstall extends Model<ModelInstall> {
@@ -15,7 +16,7 @@ export class ModelInstall extends Model<ModelInstall> {
         this.players = data?.players ?? [];
     }
 
-    touch(player: string, worldId: number) {
+    touch(player: PlayerName, worldId: WorldId) {
         const existing = this.players.find(f => f.player == player && f.worldId == worldId);
         if (existing) {
             existing.updatedAt = ModelUtil.TimeStamp();
