@@ -1,6 +1,7 @@
 import { ClientLibStatic } from '..';
 import { FactionType } from '../../game/faction';
 import { ClientLibMap } from '../util';
+import { AllianceName, AllianceId } from '../../../id';
 
 export type GameStep = number;
 /* eslint-disable @typescript-eslint/camelcase */
@@ -48,13 +49,13 @@ export interface ClientLibAlliance {
      * Get alliance Id
      * @returns allianceId or 0 if not part of an alliance
      */
-    get_Id(): number | 0;
+    get_Id(): AllianceId | 0;
     /**
      * Get alliance name,
      *
      * @returns allianceName or '' if not part of alliance
      */
-    get_Name(): string | '';
+    get_Name(): AllianceName | '';
 
     get_MemberData(): ClientLibMap<ClientLibAllianceMemberData>;
 

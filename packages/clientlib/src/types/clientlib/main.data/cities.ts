@@ -5,6 +5,7 @@ import { ResourceType } from '../../game/resource';
 import { FactionType } from '../../game/faction';
 import { ClientLibEventEmitter } from '../event';
 import { ClientLibStatic } from '..';
+import { CityId, PlayerId, PlayerName, AllianceId, AllianceName } from '../../../id';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -45,7 +46,7 @@ export interface ClientLibCity {
     IsOwnBase(): boolean;
     GetBuildingsConditionInPercent(): number;
 
-    get_Id(): number;
+    get_Id(): CityId;
     /** Rounds level */
     get_BaseLevel(): number;
     /** Get full level */
@@ -63,10 +64,10 @@ export interface ClientLibCity {
 
     get_IsGhostMode(): boolean;
     /** Name of owner, undefined if player */
-    get_OwnerName(): string | undefined;
-    get_OwnerId(): number;
-    get_OwnerAllianceId(): number | null;
-    get_OwnerAllianceName(): string | undefined;
+    get_OwnerName(): PlayerName | undefined;
+    get_OwnerId(): PlayerId;
+    get_OwnerAllianceId(): AllianceId | undefined;
+    get_OwnerAllianceName(): AllianceName | undefined;
 
     get_PosX(): number;
     get_PosY(): number;

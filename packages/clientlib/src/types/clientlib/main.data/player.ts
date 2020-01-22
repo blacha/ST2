@@ -1,5 +1,6 @@
 import { GameDataUnit, GameDataTech, GameDataResearchLevel } from '../../game';
 import { ClientLibList } from '../util';
+import { PlayerName, AllianceId, PlayerId } from 'packages/clientlib/src/id';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibPlayerResearchResult {
@@ -20,10 +21,10 @@ export interface ClientLibPlayerResearch {
 
 export interface ClientLibPlayer {
     /** Player Name */
-    name: string;
+    name: PlayerName;
     accountId: number;
-    allianceId: number;
+    allianceId: AllianceId;
     /** Player Id */
-    id: number;
+    id: PlayerId;
     get_PlayerResearch(): ClientLibPlayerResearch;
 }
