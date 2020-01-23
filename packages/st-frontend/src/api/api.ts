@@ -28,7 +28,7 @@ export class StApi {
     async claimPlayerAccept(claimId: string): Promise<ApiClaimPlayerAcceptRequest['response'] | false> {
         const authHeader = await this.getAuthHeader();
         const res = await fetch(`${this.baseUrl}/api/v1/claim/${claimId}`, {
-            method: 'post',
+            method: 'get',
             headers: { ...authHeader },
         });
         if (res.status == 200) {

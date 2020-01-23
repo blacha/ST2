@@ -13,6 +13,7 @@ export interface ClaimAcceptState {
 }
 @observer
 export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptState> {
+    state = { state: ComponentLoading.Loading };
     componentDidMount() {
         const { claimId } = this.props.match.params;
         this.claimPlayer(claimId);
@@ -31,15 +32,19 @@ export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptStat
         return (
             <React.Fragment>
                 <Title>Claim Player</Title>
-                <Paragraph>Claiming player please hold</Paragraph>
-                {this.state.state == ComponentLoading.Loading ? <Spin /> : null}
-                {this.state.state == ComponentLoading.Failed ? (
-                    <Paragraph>Failed to claim player try again later</Paragraph>
-                ) : null}
                 {this.state.state == ComponentLoading.Done ? (
                     <Paragraph>
                         Claim Accepted! <Link to="/">Home</Link>
                     </Paragraph>
+                ) : null}
+                {this.state.state == ComponentLoading.Failed ? (
+                    <Paragraph type="danger">Failed to claim player, try again later</Paragraph>
+                ) : null}
+                {this.state.state == ComponentLoading.Loading ? (
+                    <React.Fragment>
+                        <Paragraph>Claiming player please hold</Paragraph>
+                        <Spin />
+                    </React.Fragment>
                 ) : null}
             </React.Fragment>
         );
