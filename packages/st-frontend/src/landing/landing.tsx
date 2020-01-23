@@ -6,11 +6,13 @@ import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Auth } from '../auth/auth.service';
 import { ComponentLoading } from '../base/base';
 import { timeSince } from '../time.util';
+import Title from 'antd/es/typography/Title';
+import Paragraph from 'antd/es/typography/Paragraph';
 
 export const LandingColumns = [
     {
@@ -57,7 +59,8 @@ interface LandingState {
 export class ViewLandingPage extends React.Component<{}, LandingState> {
     state: LandingState = { state: ComponentLoading.Ready };
 
-    containerCss = style({ width: '100%' });
+    static landingCss = style({ display: 'flex', flexDirection: 'column'})
+    static containerCss = style({ width: '100%' });
 
     componentDidMount() {
         const uid = Auth.uid;
@@ -90,8 +93,9 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
             return this.renderAuth();
         }
         return (
-            <div>
-                <div>Welcome please register / login to continue</div>
+            <div className={ViewLandingPage.landingCss}>
+                <Title>Welcome</Title>
+                <Paragraph>Please register / login to continue</Paragraph>
                 <Button onClick={this.authButton} type="primary" loading={Auth.isLoading}>
                     Continue
                 </Button>
@@ -105,11 +109,11 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
         }
 
         if (this.state.data == null || this.state.data.length == 0) {
-            return <div>No player data found, please claim a player HERE</div>;
+            return <Redirect to="/claim" />;
         }
 
         return (
-            <div className={this.containerCss}>
+            <div className={ViewLandingPage.containerCss}>
                 <Divider>Your Players</Divider>
                 <Table
                     rowKey="id"

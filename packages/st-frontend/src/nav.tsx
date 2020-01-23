@@ -11,7 +11,7 @@ import Layout from 'antd/es/layout';
 @observer
 export class NavHeader extends React.Component {
     static headerCss = style({
-        background: '#f4f5f6',
+        color: 'rgba(255,255,255,0.87)',
         borderBottom: '.1rem solid #d1d1d1',
         height: '4rem',
         maxWidth: '100%',

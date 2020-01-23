@@ -11,7 +11,7 @@ export class ApiClaimStart extends ApiCall<ApiClaimStartRequest> {
         const user = await this.validateUser(req);
         console.log(user);
 
-        const player = req.params.player as PlayerName;
+        const player = req.params.player.toLowerCase() as PlayerName;
         const worldId = Number(req.params.worldId) as WorldId;
 
         await Stores.ClaimRequest.transaction(player, claim => {

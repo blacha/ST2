@@ -7,6 +7,7 @@ import { ModelUser } from './model.user';
 import { ModelPlayer } from './model.player';
 import { ModelCity } from './model.city';
 import { ModelLayout } from './model.layout';
+import { ModelBotWorld } from './model.bot.world';
 
 export * from './model';
 export * from './store';
@@ -15,10 +16,12 @@ export * from './model.claim';
 export * from './model.user';
 export * from './model.city';
 export * from './model.layout';
+export * from './model.bot.world';
 
 export const Stores = {
     Install: new Store('Install', ModelInstall),
     ClaimRequest: new Store('ClaimRequest', ModelClaimRequest),
+    BotWorld: new Store('BotWorld', ModelBotWorld),
     User: new Store('User', ModelUser),
     Player: new Store('Player', ModelPlayer),
     City: new Store('City', ModelCity),

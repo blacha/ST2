@@ -15,6 +15,7 @@ import { ViewPlayer } from './player/player';
 import { ViewScan } from './scan/scan.result';
 import { Config } from '@st/shared';
 import { Auth } from './auth/auth.service';
+import { ClaimPage } from './claim/claim';
 const { Header, Footer, Content } = Layout;
 
 @observer
@@ -59,6 +60,7 @@ export class App extends React.Component {
                 <Route exact={true} path="/" component={ViewLandingPage} />
                 <Route path="/base/:cityId" component={ViewBase} />
                 <Route path="/login" component={Login} />
+                <PrivateRoute path="/claim" component={ClaimPage} />
                 <PrivateRoute path="/base" component={ViewBase} />
                 <PrivateRoute path="/world/:worldId/player/:playerId/city/:cityId" component={ViewBase} />
                 <PrivateRoute path="/world/:worldId/player/:playerId" component={ViewPlayer} />

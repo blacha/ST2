@@ -24,6 +24,10 @@ export class AuthService {
         this.user.set(u);
     }
 
+    async getToken() {
+        return this.auth.currentUser?.getIdToken();
+    }
+
     get isLoggedIn() {
         return this.user.get() != null;
     }

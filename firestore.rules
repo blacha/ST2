@@ -10,6 +10,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /BotWorld/{document} {
+      allow read: if request.auth.uid != null;
+      allow write: if false;
+    }
+
     match /City/{document} {
       allow read: if true;
       allow write: if false;
