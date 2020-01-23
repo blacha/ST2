@@ -1,17 +1,17 @@
-import { WorldId } from '@cncta/clientlib';
+import { WorldId, PlayerName } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
 import { Id } from '@st/shared';
 import { InvalidWorldId, Model } from './model';
 
-export class ModelClaim extends Model<ModelClaim> {
-    id: string; // PlayerName
+export class ModelClaimRequest extends Model<ModelClaimRequest> {
+    id: PlayerName; // PlayerName
 
     worldId: WorldId;
     messageSentAt: number;
     claimId: string;
     userId: string;
 
-    constructor(data?: ModelClaim) {
+    constructor(data?: ModelClaimRequest) {
         super(data);
         this.worldId = data?.worldId ?? InvalidWorldId;
         this.messageSentAt = data?.messageSentAt ?? -1;

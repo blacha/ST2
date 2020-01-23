@@ -1,6 +1,7 @@
 import { FireAuthGoogle, FireAuth } from '../firebase';
 import { observable, action } from 'mobx';
 import { User } from 'firebase';
+import { UId } from '@st/model/src';
 export class AuthService {
     auth = FireAuth;
     provider = FireAuthGoogle;
@@ -29,6 +30,14 @@ export class AuthService {
 
     get isLoading() {
         return this._login != null;
+    }
+
+    get uid(): UId | null {
+        const user = this.user.get();
+        if (user == null) {
+            return null;
+        }
+        return user.uid as UId;
     }
 
     _login: Promise<boolean> | null;

@@ -2,30 +2,39 @@ import * as FireStore from 'typesaurus/adaptor';
 import { Model, ModelUtil } from './model';
 
 export class Store<T extends Model<T>> {
-    maker: new (obj?: T) => T;
+    maker: new (obj?: Partial<T>) => T;
     table: string;
     constructor(table: string, maker: new () => T) {
         this.maker = maker;
         this.table = table;
     }
 
-    async getAllBy<K extends keyof T>(key: K, value: T[K], limit = 100): Promise<T[]> {
-        const doc = await FireStore.default()
+    private async query<K extends keyof T>(obj: Partial<Record<K, T[K] | T[K][]>>, limit: number): Promise<T[]> {
+        let query = await FireStore.default()
             .collection(this.table)
-            .where(key as string, '==', value)
-            .limit(limit)
-            .get();
-        return doc.docs.map(c => new this.maker(c.data() as T));
+            .limit(limit);
+        for (const [key, value] of Object.entries(obj)) {
+            if (Array.isArray(value)) {
+                query = query.where(key, 'in', value);
+            } else {
+                query = query.where(key, '==', value);
+            }
+        }
+        const res = await query.get();
+        return res.docs.map(c => {
+            const res = new this.maker(c.data() as T);
+            res.id = c.id;
+            return res;
+        });
+    }
+    async getAllBy<K extends keyof T>(obj: Partial<Record<K, T[K] | T[K][]>>, limit = 100): Promise<T[]> {
+        return this.query(obj, limit);
     }
 
-    async getBy<K extends keyof T>(key: K, value: T): Promise<T | undefined> {
-        const doc = await FireStore.default()
-            .collection(this.table)
-            .where(key as string, '==', value)
-            .limit(1)
-            .get();
-        if (doc.size == 1) {
-            return new this.maker(doc.docs[0].data() as T);
+    async getBy<K extends keyof T>(obj: Partial<Record<K, T[K] | T[K][]>>): Promise<T | undefined> {
+        const doc = await this.query(obj, 1);
+        if (doc.length == 1) {
+            return doc[0];
         }
         return undefined;
     }
@@ -34,12 +43,22 @@ export class Store<T extends Model<T>> {
         return new this.maker();
     }
 
-    async getOrCreate(id: T['id']): Promise<T> {
+    async get(id: T['id']): Promise<T | undefined> {
         const doc = FireStore.default()
             .collection(this.table)
             .doc(id);
         const docObj = await doc.get();
-        return new this.maker(docObj.data() as T);
+        if (docObj.exists) {
+            return new this.maker(docObj.data() as T);
+        }
+        return undefined;
+    }
+    async getOrCreate(id: T['id']): Promise<T> {
+        const obj = await this.get(id);
+        if (obj == null) {
+            return new this.maker({ id } as Partial<T>);
+        }
+        return obj;
     }
 
     async delete(id: T['id']): Promise<void> {

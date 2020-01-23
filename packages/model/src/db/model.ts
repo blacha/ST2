@@ -2,7 +2,7 @@ import { WorldId, PlayerName, PlayerId, TimeStamp } from '@cncta/clientlib';
 import { CompositeId } from '@st/shared';
 
 export type InstallId = string & { _t: 'InstallId' };
-
+export type UId = string & { _uid: never };
 export type WorldSessionId = string & { _t: 'WorldSessionId' };
 export type AccountSessionId = string & { _t: 'AccountSessionId' };
 

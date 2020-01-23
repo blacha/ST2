@@ -15,7 +15,6 @@ import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { PlayerStats } from '../alliance/alliance';
 import { ComponentLoading } from '../base/base';
-// import { FireStorePlayer } from '../firebase';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
@@ -23,6 +22,8 @@ import { ViewResearch } from '../util/research';
 import React = require('react');
 import { WorldId, PlayerId } from '@cncta/clientlib/src';
 import { Stores } from '@st/model';
+import { style } from 'typestyle';
+import Spin from 'antd/es/spin';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
@@ -38,16 +39,14 @@ export const PlayerColumns = [
     },
     {
         title: 'Name',
-        dataIndex: '',
         key: 'name',
         render: (base: Base) => (
-            <Link to={`/world/${base.worldId}/player/${base.owner?.id}/base/${base.cityId}`}>{base.name}</Link>
+            <Link to={`/world/${base.worldId}/player/${base.owner?.id}/city/${base.cityId}`}>{base.name}</Link>
         ),
         sorter: (a: Base, b: Base) => a.name.localeCompare(b.name),
     },
     {
         title: 'Level',
-        dataIndex: '',
         key: 'level',
         render: (main: Base) => formatNumber(main.level),
         sorter: (a: Base, b: Base) => a.level - b.level,
@@ -58,30 +57,26 @@ export const PlayerColumns = [
         children: [
             {
                 title: 'Tiberium',
-                dataIndex: 'info.production.total',
                 key: 'tiberium',
-                render: (production: GameResources) => formatNumber(production.tiberium),
+                render: (b: Base) => formatNumber(b.info.production.total.tiberium),
                 sorter: (a: Base, b: Base) => a.info.production.total.tiberium - b.info.production.total.tiberium,
             },
             {
                 title: 'Crystal',
-                dataIndex: 'info.production.total',
                 key: 'crystal',
-                render: (production: GameResources) => formatNumber(production.crystal),
+                render: (b: Base) => formatNumber(b.info.production.total.crystal),
                 sorter: (a: Base, b: Base) => a.info.production.total.crystal - b.info.production.total.crystal,
             },
             {
                 title: 'Credits',
-                dataIndex: 'info.production.total',
                 key: 'credits',
-                render: (production: GameResources) => formatNumber(production.credits),
+                render: (b: Base) => formatNumber(b.info.production.total.credits),
                 sorter: (a: Base, b: Base) => a.info.production.total.credits - b.info.production.total.credits,
             },
             {
                 title: 'Power',
-                dataIndex: 'info.production.total',
                 key: 'power',
-                render: (production: GameResources) => formatNumber(production.power),
+                render: (b: Base) => formatNumber(b.info.production.total.power),
                 sorter: (a: Base, b: Base) => a.info.production.total.power - b.info.production.total.power,
             },
         ],
@@ -92,23 +87,20 @@ export const PlayerColumns = [
         children: [
             {
                 title: 'CC',
-                dataIndex: '',
-                key: 'command',
+                key: 'armyCommand',
                 render: (main: Base) => Math.floor(main.buildings.commandCenter?.level ?? 0) || '',
                 sorter: (a: Base, b: Base) =>
                     (a.buildings.commandCenter?.level || 0) - (b.buildings.commandCenter?.level || 0),
             },
             {
                 title: 'Off',
-                dataIndex: '',
-                key: 'off',
+                key: 'armyOff',
                 render: (main: Base) => formatNumber(main.levelOffense),
                 sorter: (a: Base, b: Base) => a.levelOffense - b.levelOffense,
             },
             {
                 title: 'Def',
-                dataIndex: '',
-                key: 'def',
+                key: 'armyDef',
                 render: (main: Base) => formatNumber(main.levelDefense),
                 sorter: (a: Base, b: Base) => a.levelDefense - b.levelDefense,
             },
@@ -120,7 +112,6 @@ export const PlayerColumns = [
         children: [
             {
                 title: 'Base',
-                dataIndex: '',
                 key: 'baseCost',
                 defaultSortOrder: 'descend' as const,
                 render: (main: Base) => formatNumber(main.info.cost.base.total),
@@ -128,14 +119,12 @@ export const PlayerColumns = [
             },
             {
                 title: 'Off',
-                dataIndex: '',
                 key: 'offCost',
                 render: (main: Base) => formatNumber(main.info.cost.off.total),
                 sorter: (a: Base, b: Base) => a.info.cost.off.total - b.info.cost.off.total,
             },
             {
                 title: 'Def',
-                dataIndex: '',
                 key: 'defCost',
                 render: (main: Base) => formatNumber(main.info.cost.def.total),
                 sorter: (a: Base, b: Base) => a.info.cost.def.total - b.info.cost.def.total,
@@ -144,14 +133,14 @@ export const PlayerColumns = [
     },
     {
         title: 'Updated',
-        dataIndex: '',
-        key: 'updated',
+        key: 'Updated',
         render: (base: Base) => timeSince(base.updatedAt),
         sorter: (a: Base, b: Base) => a.updatedAt - b.updatedAt,
     },
 ];
 
 export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
+    static tableCss = style({ width: '100%' });
     state: PlayerState = { state: ComponentLoading.Ready } as any;
 
     componentDidMount() {
@@ -203,8 +192,9 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
 
     render() {
         if (this.state == null || this.isLoading || this.state.main == null) {
-            return <div>Loading...</div>;
+            return <Spin />;
         }
+
         const { bases } = this.state;
         return (
             <React.Fragment>
@@ -217,7 +207,8 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
                     <FactionName name={this.state.name} faction={this.state.main.faction} />
                 </Divider>
                 <Table
-                    rowKey="id"
+                    className={ViewPlayer.tableCss}
+                    rowKey="cityId"
                     dataSource={bases}
                     columns={PlayerColumns}
                     pagination={false}

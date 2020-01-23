@@ -1,10 +1,11 @@
-import { Model } from './model';
+import { PlayerName } from '@cncta/clientlib';
+import { Model, UId } from './model';
 
 export class ModelUser extends Model<ModelUser> {
     /** User Uid */
-    id: string;
+    id: UId;
 
-    claims: { player: string; claimId: string }[];
+    claims: { player: PlayerName; claimId: string }[];
     constructor(data?: ModelUser) {
         super(data);
         this.claims = data?.claims ?? [];

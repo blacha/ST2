@@ -3,18 +3,16 @@ import { Faction } from '@st/shared';
 import { style } from 'typestyle';
 import { FlexCenter } from '../css.util';
 
-import * as IconNod from '../../static/icon/icon_nod.png';
-import * as IconGdi from '../../static/icon/icon_gdi.png';
-import * as IconFor from '../../static/icon/icon_gdi.png';
+import * as Icons from '../../static/icon/*.png';
 
 export function getFactionIcon(faction: Faction) {
     if (faction == Faction.Gdi) {
-        return IconGdi;
+        return Icons.IconGdi;
     }
     if (faction == Faction.Nod) {
-        return IconNod;
+        return Icons.IconNod;
     }
-    return IconFor;
+    return Icons.IconFor;
 }
 
 export interface FactionNameProps {

@@ -1,27 +1,27 @@
 import React = require('react');
 import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId } from '@cncta/clientlib';
+import { Duration } from '@cncta/util/src';
+import { Stores } from '@st/model';
 import {
     Base,
+    BaseBuilder,
     CompositeId,
     formatNumber,
     GameResources,
-    NumberPacker,
-    BaseBuilder,
     Id,
     mergeBaseUpgrade,
+    NumberPacker,
 } from '@st/shared';
-import { Stores } from '@st/model';
 import 'antd/dist/antd.css';
 import BackTop from 'antd/es/back-top';
 import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { ComponentLoading } from '../base/base';
-import { viewFaction } from '../base/faction';
 import { timeSince } from '../time.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
+import { FactionIcon } from '../util/faction';
 import { ViewResearch } from '../util/research';
-import { Duration } from '@cncta/util/src';
 
 export const AllianceCss = {
     Table: style({
@@ -74,7 +74,7 @@ export const AllianceColumns = [
         dataIndex: 'main',
         key: 'faction',
         width: 50,
-        render: (main: Base) => viewFaction(main.faction),
+        render: (main: Base) => <FactionIcon faction={main.faction} />,
         sorter: (a: PlayerStats, b: PlayerStats) => a.main.faction.name.localeCompare(b.main.faction.name),
     },
     {
@@ -174,7 +174,6 @@ export const AllianceColumns = [
     },
     {
         title: 'Research',
-        dataIndex: '',
         key: 'research',
         render: (stats: PlayerStats) => (
             <ViewResearch faction={stats.main.faction} upgrades={stats.upgrades} style="square" />
@@ -182,14 +181,14 @@ export const AllianceColumns = [
     },
     {
         title: 'Updated',
-        dataIndex: 'updatedAt',
         key: 'updated',
-        render: (updatedAt: number) => timeSince(updatedAt),
+        render: (s: PlayerStats) => timeSince(s.updatedAt),
         sorter: (a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt,
     },
 ];
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
     state: AllianceState = { info: [], state: ComponentLoading.Ready, alliance: { id: -1, name: '' }, worldId: -1 };
+    static tableCss = style({ width: '100%' });
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
@@ -200,7 +199,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
         const docId = NumberPacker.pack([worldId, allianceId]) as CompositeId<[WorldId, AllianceId]>;
         this.setState({ info: [], state: ComponentLoading.Loading });
 
-        const results = await Stores.Player.getAllBy('allianceKey', docId, 60);
+        const results = await Stores.Player.getAllBy({ allianceKey: docId }, 60);
 
         const alliance = { id: allianceId, name: '' };
         const playerSet = new Map<number, PlayerStats>();
@@ -255,6 +254,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
         if (this.state == null || this.isLoading) {
             return (
                 <Table
+                    className={ViewAlliance.tableCss}
                     rowKey="id"
                     dataSource={this.state.info}
                     columns={AllianceColumns}
@@ -269,6 +269,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
             <React.Fragment>
                 <StBreadCrumb worldId={this.state.worldId} alliance={this.state.alliance} />
                 <Table
+                    className={ViewAlliance.tableCss}
                     rowKey="id"
                     dataSource={this.state.info}
                     columns={AllianceColumns}

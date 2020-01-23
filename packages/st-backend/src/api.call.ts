@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as expressCore from 'express-serve-static-core';
 import { Id, StLog } from '@st/shared';
 import * as admin from 'firebase-admin';
+import { UId } from '@st/model';
 
 export interface ApiFunc<Params = any, Body = any, Response = any> {
     path: string;
@@ -17,7 +18,7 @@ export interface ApiRequest<T extends ApiFunc> extends expressCore.Request<T['pa
 }
 
 export interface ApiUser {
-    uid: string;
+    uid: UId;
 }
 
 export abstract class ApiCall<T extends ApiFunc> {
@@ -35,7 +36,7 @@ export abstract class ApiCall<T extends ApiFunc> {
         console.log('Found "Authorization" header');
         // Read the ID Token from the Authorization header.
         const idToken = req.headers.authorization.split('Bearer ')[1];
-        const user = await admin.auth().verifyIdToken(idToken);
+        const user = ((await admin.auth().verifyIdToken(idToken)) as unknown) as ApiUser;
         req.user = user;
         return user;
     }

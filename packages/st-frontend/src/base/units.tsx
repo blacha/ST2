@@ -3,7 +3,7 @@ import { GameDataUnitId } from '@cncta/clientlib';
 import { style } from 'typestyle';
 import * as images from '../../static/images/*.png';
 import { FlexCenter } from '../css.util';
-import * as starIcon from '../../static/icon/icon_star.png';
+import * as IconStar from '../../static/icon/IconStar.png';
 
 const UnitIconCss = style({ height: '90%', maxWidth: '95%' });
 
@@ -47,7 +47,7 @@ export class UnitUpgradeIcon extends React.Component<UnitUpgradeIconProps> {
 
         return (
             <div className={this.cssContainer}>
-                <img src={starIcon} width="16px" height="16px" />
+                <img src={IconStar} width="16px" height="16px" />
             </div>
         );
     }

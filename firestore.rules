@@ -5,7 +5,12 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    match /Base/{document} {
+    match /User/{userId} {
+      allow read: if request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    match /City/{document} {
       allow read: if true;
       allow write: if false;
     }

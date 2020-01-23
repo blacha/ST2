@@ -2,7 +2,7 @@
 
 import { Store } from './store';
 import { ModelInstall } from './model.install';
-import { ModelClaim } from './model.claim';
+import { ModelClaimRequest } from './model.claim';
 import { ModelUser } from './model.user';
 import { ModelPlayer } from './model.player';
 import { ModelCity } from './model.city';
@@ -18,7 +18,7 @@ export * from './model.layout';
 
 export const Stores = {
     Install: new Store('Install', ModelInstall),
-    Claim: new Store('Claim', ModelClaim),
+    ClaimRequest: new Store('ClaimRequest', ModelClaimRequest),
     User: new Store('User', ModelUser),
     Player: new Store('Player', ModelPlayer),
     City: new Store('City', ModelCity),

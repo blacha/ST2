@@ -2,7 +2,7 @@ import { BaseLocationPacker, StCity, InvalidAllianceId } from '@cncta/util';
 import { ApiScanRequest, ApiScanResponse, BaseBuilder, BaseIdPacker, NumberPacker, CompositeId } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { WorldId, PlayerId, AllianceId, AllianceName, PlayerName } from '@cncta/clientlib';
-import { Stores, ModelCity } from '@st/model';
+import { Stores, ModelCity, ModelUtil } from '@st/model';
 
 const OneMinuteMs = 60 * 1000;
 const OneHourMs = 60 * OneMinuteMs;
@@ -29,6 +29,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         if (allianceId == null || allianceId == InvalidAllianceId) {
             return;
         }
+
         const allianceKey = NumberPacker.pack([worldId, allianceId]) as CompositeId<[WorldId, AllianceId]>;
         const playerDocId = NumberPacker.pack([worldId, playerId]) as CompositeId<[WorldId, PlayerId]>;
         await Stores.Player.transaction(playerDocId, playerCity => {
@@ -45,40 +46,37 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         req.log.info({ allianceKey, playerDocId, cities: cityList.length }, 'SetPlayer');
     }
 
-    // async storeLayouts(
-    //     req: ApiRequest<ApiScanRequest>,
-    //     worldId: WorldId,
-    //     player: PlayerName,
-    //     layoutsList: Map<string, string>,
-    // ) {
-    //     if (layoutsList.size == 0) {
-    //         return;
-    //     }
-    //     const LayoutCollection = FireStoreAdmin.collection('layout');
-    //     // TODO use a better random id or something
-    //     const scanDoc = NumberPacker.pack(worldId) + '.' + scanId;
-    //     const doc = LayoutCollection.doc(scanDoc);
-    //     await FireStoreAdmin.runTransaction(async transaction => {
-    //         const existing = await transaction.get(doc);
-    //         let layouts: Record<string, BaseLayout> = {};
-    //         let createdAt = Date.now();
-    //         if (existing != null && existing.exists) {
-    //             const existingData = existing.data() as DbLayout;
-    //             layouts = existingData.layouts ?? {};
-    //             createdAt = existingData.createdAt ?? Date.now();
-    //         }
-    //         for (const [xy, layout] of Object.entries(layouts)) {
-    //             if (Date.now() - layout.updatedAt > LayoutExpireMs) {
-    //                 delete layouts[xy];
-    //             }
-    //         }
-    //         for (const [key, layout] of layoutsList.entries()) {
-    //             layouts[key] = layout;
-    //         }
-    //         const dbObject: DbLayout = { layouts, createdAt, updatedAt: Date.now() };
-    //         await transaction.set(doc, dbObject, { merge: true });
-    //     });
-    // }
+    async storeLayouts(
+        req: ApiRequest<ApiScanRequest>,
+        worldId: WorldId,
+        player: PlayerName,
+        layoutsList: Map<string, string>,
+    ) {
+        if (layoutsList.size == 0) {
+            return;
+        }
+        const playerObj = await Stores.Player.getBy({ worldId, player });
+        if (playerObj == null || playerObj.allianceId == null) {
+            return;
+        }
+
+        // TODO this may get too much write contention, might be a idea to shard based on layout XY
+        const allianceLayoutDoc = NumberPacker.pack([worldId, playerObj.allianceId]) as CompositeId<
+            [WorldId, AllianceId]
+        >;
+
+        const updatedAt = ModelUtil.TimeStamp();
+        await Stores.Layout.transaction(allianceLayoutDoc, model => {
+            for (const [xy, layout] of Object.entries(model.layouts)) {
+                if (Date.now() - layout.updatedAt > LayoutExpireMs) {
+                    delete model.layouts[xy];
+                }
+            }
+            for (const [key, layout] of layoutsList.entries()) {
+                model.layouts[key] = { layout, updatedAt };
+            }
+        });
+    }
 
     async handle(req: ApiRequest<ApiScanRequest>): Promise<ApiScanResponse> {
         const worldId = Number(req.params.worldId) as WorldId;
@@ -114,10 +112,10 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             }
         }
 
-        // if (layouts.size > 0) {
-        //     req.log.info({ player, layouts: layouts.size }, 'StoreLayouts');
-        //     await this.storeLayouts(req, worldId, player, layouts);
-        // }
+        if (layouts.size > 0) {
+            req.log.info({ player, layouts: layouts.size }, 'StoreLayouts');
+            await this.storeLayouts(req, worldId, player, layouts);
+        }
 
         return { id: output, worldId };
     }

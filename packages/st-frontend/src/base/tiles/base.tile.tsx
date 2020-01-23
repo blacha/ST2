@@ -3,6 +3,24 @@ import { style } from 'typestyle';
 import { BackgroundImage, FlexCenter } from '../../css.util';
 import { Tile, Base } from '@st/shared';
 import { UnitIcon, UnitUpgradeIcon } from '../units';
+import * as icons from '../../../static/icon/*.png';
+
+export const TileIconCss = {
+    [Tile.Crystal.id]: style({ backgroundImage: `url(${icons.TileCrystal})` }),
+    [Tile.Tiberium.id]: style({ backgroundImage: `url(${icons.TileTiberium})` }),
+    [Tile.Oil.id]: style({ backgroundImage: `url(${icons.TileOil})` }),
+    [Tile.Woods.id]: style({ backgroundImage: `url(${icons.TileWoods})` }),
+    [Tile.Swamp.id]: style({ backgroundImage: `url(${icons.TileSwamp})` }),
+    [Tile.Scrub.id]: style({ backgroundImage: `url(${icons.TileScrub})` }),
+};
+export const TileColorCss = {
+    [Tile.Crystal.id]: style({ backgroundColor: 'rgba(0,0,150,0.47)' }),
+    [Tile.Tiberium.id]: style({ backgroundColor: 'rgba(0,200,0,0.47)' }),
+    [Tile.Oil.id]: style({ backgroundColor: 'rgba(20,20,20,0.47)' }),
+    [Tile.Woods.id]: style({ backgroundColor: 'rgba(140,80,0,0.47)' }),
+    [Tile.Swamp.id]: style({ backgroundColor: 'rgba(0,0,80,0.47)' }),
+    [Tile.Scrub.id]: style({ backgroundColor: 'rgba(100,80,80,0.47)' }),
+};
 
 const BaseTileCss = {
     Base: style({
@@ -13,12 +31,6 @@ const BaseTileCss = {
         outline: '1px solid rgba(0,0,0,0.4)',
         ...BackgroundImage(90),
     }),
-    Crystal: style({ backgroundColor: 'rgba(0,0,150,0.47)' }),
-    Tiberium: style({ backgroundColor: 'rgba(0,200,0,0.47)' }),
-    Oil: style({ backgroundColor: 'rgba(20,20,20,0.47)' }),
-    Woods: style({ backgroundColor: 'rgba(140,80,0,0.47)' }),
-    Swamp: style({ backgroundColor: 'rgba(0,0,80,0.47)' }),
-    Scrub: style({ backgroundColor: 'rgba(100,80,80,0.47)' }),
 
     Cell: {
         Level: style({
@@ -39,21 +51,9 @@ const BaseTileCss = {
 };
 function getTileCss(tile: Tile, useImages = false): string {
     if (useImages) {
-        return `Tile-${tile.name}`;
+        return TileIconCss[tile.id];
     } else {
-        if (tile == Tile.Crystal) {
-            return BaseTileCss.Crystal;
-        } else if (tile == Tile.Tiberium) {
-            return BaseTileCss.Tiberium;
-        } else if (tile == Tile.Oil) {
-            return BaseTileCss.Oil;
-        } else if (tile == Tile.Swamp) {
-            return BaseTileCss.Swamp;
-        } else if (tile == Tile.Woods) {
-            return BaseTileCss.Woods;
-        } else if (tile == Tile.Scrub) {
-            return BaseTileCss.Scrub;
-        }
+        return TileColorCss[tile.id];
     }
     return '';
 }

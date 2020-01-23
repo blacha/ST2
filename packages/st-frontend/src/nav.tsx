@@ -6,13 +6,14 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Auth } from './auth/auth.service';
+import Layout from 'antd/es/layout';
 
 @observer
 export class NavHeader extends React.Component {
     static headerCss = style({
         background: '#f4f5f6',
         borderBottom: '.1rem solid #d1d1d1',
-        height: '5.2rem',
+        height: '4rem',
         maxWidth: '100%',
         width: '100%',
         padding: '0 4rem',
@@ -26,18 +27,16 @@ export class NavHeader extends React.Component {
         fontSize: '140%',
         justifyContent: 'space-between',
     });
-    static headerIconCss = style({ display: 'flex' });
+    static headerIconCss = style({ display: 'flex', alignItems: 'center' });
     static headerOptionsCss = style({ display: 'flex', $nest: { button: { marginRight: 12 } } });
 
     render() {
         return (
-            <div className={NavHeader.headerCss}>
+            <Layout.Header className={NavHeader.headerCss}>
                 <section className={NavHeader.headerContainerCss}>
                     <div className={NavHeader.headerIconCss}>
                         <div className="Icon"></div>
-                        <div className="IconTitle">
-                            <Link to="/">ShockrTools</Link>
-                        </div>
+                        <div className="IconTitle">ShockrTools</div>
                     </div>
                     <div className={NavHeader.headerOptionsCss}>
                         {this.renderOptions()}
@@ -48,7 +47,7 @@ export class NavHeader extends React.Component {
                         </Tooltip>
                     </div>
                 </section>
-            </div>
+            </Layout.Header>
         );
     }
 

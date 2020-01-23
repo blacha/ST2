@@ -8,6 +8,12 @@
     margin-right: 16px;
 }
 
+body {
+    background-color: #f0f2f5 !important;
+}
+
+/*
+
 .Container {
     height: 100%;
     max-width: 80rem;
@@ -76,4 +82,4 @@
 
 .Tile-Woods {
     background-image: url(../static/icon/tile_woods.png);
-}
+} */

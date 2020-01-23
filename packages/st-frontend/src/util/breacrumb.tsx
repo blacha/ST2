@@ -2,6 +2,7 @@ import React = require('react');
 import BreadCrumb from 'antd/es/breadcrumb';
 import { Link } from 'react-router-dom';
 import { style } from 'typestyle';
+import Icon from 'antd/es/icon';
 
 export interface IdName {
     id: number | string;
@@ -14,7 +15,7 @@ export interface BreadCrumbProps {
     base?: IdName;
 }
 
-const BreadCrumbCss = style({ marginTop: '8px', marginBottom: '8px' });
+const BreadCrumbCss = style({ marginTop: '8px', marginBottom: '8px', alignSelf: 'flex-start' });
 
 export class StBreadCrumb extends React.Component<BreadCrumbProps> {
     viewAlliance() {
@@ -62,8 +63,11 @@ export class StBreadCrumb extends React.Component<BreadCrumbProps> {
             <div className={BreadCrumbCss}>
                 <BreadCrumb>
                     <BreadCrumb.Item>
-                        <Link to={`/world/${this.props.worldId}`}>World {this.props.worldId}</Link>
+                        <Link to="/">
+                            <Icon type="home" />
+                        </Link>
                     </BreadCrumb.Item>
+                    <BreadCrumb.Item>World {this.props.worldId}</BreadCrumb.Item>
                     {this.viewAlliance()}
                     {this.viewPlayer()}
                     {this.viewPlayerBase()}

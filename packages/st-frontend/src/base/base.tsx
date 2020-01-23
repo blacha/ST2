@@ -1,5 +1,5 @@
 import { StCity, BaseLocationPacker } from '@cncta/util';
-import { Base, BaseBuilder, NumberPacker, BaseIdPacker } from '@st/shared';
+import { Base, BaseBuilder, NumberPacker, BaseIdPacker, CompositeId } from '@st/shared';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
@@ -14,7 +14,10 @@ import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
-import { BaseX } from '@cncta/clientlib';
+import { BaseX, PlayerId, WorldId, CityId, TimeStamp } from '@cncta/clientlib';
+import { Stores } from '@st/model';
+import Tooltip from 'antd/es/tooltip';
+import Spin from 'antd/es/spin';
 
 const TileSize = 64;
 
@@ -40,7 +43,7 @@ export enum ComponentLoading {
     Failed,
     Done,
 }
-type ViewBaseProps = RouteComponentProps<{ baseId?: string; playerId?: string; worldId?: string }>;
+type ViewBaseProps = RouteComponentProps<{ cityId?: string; playerId?: string; worldId?: string }>;
 
 function FlexRow(key: string, value?: string | number | null | React.ReactNode, display = true) {
     if (value == null || display == false) {
@@ -89,58 +92,55 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     state = { base: new Base(), state: ComponentLoading.Ready };
 
     componentDidMount() {
-        const { baseId, playerId, worldId } = this.props.match.params;
-        if (baseId == null) {
+        const { cityId, playerId, worldId } = this.props.match.params;
+        console.log('Loading', this.props.match.params);
+        if (cityId == null) {
             return;
         }
-        if (baseId.indexOf('|') > -1) {
-            this.setState({ base: BaseBuilder.fromCnCOpt(baseId), state: ComponentLoading.Done });
+        if (cityId.indexOf('|') > -1) {
+            this.setState({ base: BaseBuilder.fromCnCOpt(cityId), state: ComponentLoading.Done });
             return;
         }
 
         this.setState({ base: new Base(), state: ComponentLoading.Loading });
         if (playerId != null && worldId != null) {
-            // this.loadPlayerBase(Number(playerId), Number(baseId), Number(worldId));
+            this.loadPlayerBase(Number(playerId) as PlayerId, Number(cityId) as CityId, Number(worldId) as WorldId);
         } else {
-            // this.loadBase(baseId);
+            this.loadBase(cityId);
         }
     }
 
-    // async loadPlayerBase(playerId: number, baseId: number, worldId: number) {
-    //     const docId = NumberPacker.pack([worldId, playerId]);
-    //     const result = await FireStorePlayer.doc(docId).get();
-    //     if (!result.exists) {
-    //         this.setState({ state: ComponentLoading.Failed });
-    //         return;
-    //     }
-    //     const cities = (result.get('bases') ?? {}) as Record<string, StCity>;
-    //     const cityId = NumberPacker.pack(baseId);
-    //     if (cities[cityId] == null) {
-    //         this.setState({ state: ComponentLoading.Failed });
-    //         return;
-    //     }
-    //     this.setState({ base: BaseBuilder.load(cities[cityId]), state: ComponentLoading.Done });
-    // }
+    async loadPlayerBase(playerId: PlayerId, cityId: CityId, worldId: WorldId) {
+        const docId = NumberPacker.pack([worldId, playerId]) as CompositeId<[WorldId, PlayerId]>;
+        const player = await Stores.Player.get(docId);
+        if (player == null) {
+            this.setState({ state: ComponentLoading.Failed });
+            return;
+        }
 
-    // async loadBase(baseId: string) {
-    //     const doc = await FireStoreBases.doc(baseId).get();
-    //     if (!doc.exists) {
-    //         this.setState({ base: this.state.base, state: ComponentLoading.Failed });
-    //         return;
-    //     }
-    //     const data = doc.data();
-    //     if (data == null) {
-    //         this.setState({ base: this.state.base, state: ComponentLoading.Failed });
-    //         return;
-    //     }
-    //     const base = BaseBuilder.load(data);
-    //     this.setState({ base, state: ComponentLoading.Done });
-    // }
+        const city = player.getCity(cityId);
+        if (city == null) {
+            this.setState({ state: ComponentLoading.Failed });
+            return;
+        }
+        this.setState({ base: BaseBuilder.load(city), state: ComponentLoading.Done });
+    }
+
+    async loadBase(cityId: string) {
+        console.log('Load', cityId);
+        const city = await Stores.City.get(cityId as CompositeId<[WorldId, CityId, TimeStamp]>);
+        if (city == null) {
+            this.setState({ base: this.state.base, state: ComponentLoading.Failed });
+            return;
+        }
+
+        this.setState({ base: BaseBuilder.load(city.city), state: ComponentLoading.Done });
+    }
 
     render() {
         const { base, state } = this.state;
         if (state == ComponentLoading.Loading) {
-            return <div>Loading...</div>;
+            return <Spin />;
         }
         if (state == ComponentLoading.Failed) {
             return <div>Could not find base</div>;
@@ -159,9 +159,11 @@ export class ViewBase extends React.Component<ViewBaseProps> {
                 <div className={BaseCss.Base}>
                     <Divider>
                         <FactionName name={base.name} faction={base.faction} />
-                        <Link to={`/base/${baseId}`}>
-                            <Icon type="link" />
-                        </Link>
+                        <Tooltip title="Create permanent base link">
+                            <Link to={`/base/${baseId}`}>
+                                <Icon type="link" />
+                            </Link>
+                        </Tooltip>
                     </Divider>
 
                     <div style={{ width: baseWidth }}>

@@ -1,7 +1,7 @@
-import { ApiCall, ApiRequest } from '../api.call';
-import { ApiClaimStartRequest, ApiClaimPlayerRequest } from '@st/shared';
-import { WorldId } from '@cncta/clientlib';
+import { PlayerName, WorldId } from '@cncta/clientlib';
 import { Stores } from '@st/model';
+import { ApiClaimPlayerRequest, ApiClaimStartRequest } from '@st/shared';
+import { ApiCall, ApiRequest } from '../api.call';
 
 export class ApiClaimStart extends ApiCall<ApiClaimStartRequest> {
     path = '/api/v1/world/:worldId/player/:player/claim' as const;
@@ -11,10 +11,10 @@ export class ApiClaimStart extends ApiCall<ApiClaimStartRequest> {
         const user = await this.validateUser(req);
         console.log(user);
 
-        const player = req.params.player;
+        const player = req.params.player as PlayerName;
         const worldId = Number(req.params.worldId) as WorldId;
 
-        await Stores.Claim.transaction(player, claim => {
+        await Stores.ClaimRequest.transaction(player, claim => {
             if (!claim.isAbleToClaim) {
                 req.log.warn({ claimAt: claim.messageSentAt, worldId, player }, 'InvalidClaimStart');
 
@@ -35,11 +35,11 @@ export class ApiClaimPlayer extends ApiCall<ApiClaimPlayerRequest> {
         const user = await this.validateUser(req);
 
         const userId = user.uid;
-        const player = req.params.player;
+        const player = req.params.player as PlayerName;
         const claimId = req.params.claimId;
         const worldId = Number(req.params.worldId) as WorldId;
 
-        const claim = await Stores.Claim.getOrCreate(player);
+        const claim = await Stores.ClaimRequest.getOrCreate(player);
         if (!claim.isActive) {
             req.log.warn({ reason: 'isValid', player, worldId }, 'InvalidClaim');
             throw new Error('Invalid claim');
