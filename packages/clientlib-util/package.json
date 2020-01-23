@@ -1,6 +1,6 @@
 {
     "name": "@cncta/util",
-    "version": "0.10.1",
+    "version": "1.0.0",
     "description": "Client lib utilities",
     "scripts": {
         "build": "tsc --pretty"
@@ -8,7 +8,7 @@
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "dependencies": {
-        "@cncta/clientlib": "^0.10.1"
+        "@cncta/clientlib": "^1.0.0"
     },
     "devDependencies": {
         "@types/ospec": "^4.0.2",

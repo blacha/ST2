@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/blacha/st/compare/v0.10.1...v1.0.0) (2020-01-23)
+
+
+### Bug Fixes
+
+* firebase permissions ([3ac277d](https://github.com/blacha/st/commit/3ac277dfd0c85864eb8ba766266ae165abfc3cba))
+* scan url ([7878401](https://github.com/blacha/st/commit/787840159abbba27079dbdea6e2ac1c671674b48))
+* split out firebase models ([5a0d676](https://github.com/blacha/st/commit/5a0d67643fcaabaed6166ffe1868e5a850dd5622))
+* url of install tracker ([3e176e0](https://github.com/blacha/st/commit/3e176e0a460e759fcf940cdedf0538ca8e5d954f))
+
+
+### Features
+
+* force people to login before viewing base data ([6d49066](https://github.com/blacha/st/commit/6d49066847ddbf52b60eb2ac026756dede074e79))
+* load what players have been claimed before showing anything ([752b586](https://github.com/blacha/st/commit/752b586de7cbe25a32bdcf2c4ca6b4bad418bf4c))
+* no point chaching player bases ([46fe067](https://github.com/blacha/st/commit/46fe0678520fbbfbf32b0a53947dbe4386ffdd8a))
+* replace __VERSION__ with something useful ([98cc2b9](https://github.com/blacha/st/commit/98cc2b9fc536ef49e366d049b5e1672ce3b40f00))
+* use named types for ids ([86176f3](https://github.com/blacha/st/commit/86176f346b65a4034dd995ff3d853de0d656b568))
+
+
+* feat!: rework database structure to prepare for permissions ([cbbd2d5](https://github.com/blacha/st/commit/cbbd2d51494c8e36773ab04eba9fa0bcb0ea832b))
+
+
+### BREAKING CHANGES
+
+* major rework of data base tables
+
+
+
+
+
 ## [0.10.1](https://github.com/blacha/st/compare/v0.10.0...v0.10.1) (2020-01-20)
 
 

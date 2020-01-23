@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/blacha/st/compare/v0.10.1...v1.0.0) (2020-01-23)
+
+
+### Bug Fixes
+
+* scan url ([7878401](https://github.com/blacha/st/commit/787840159abbba27079dbdea6e2ac1c671674b48))
+
+
+* feat!: rework database structure to prepare for permissions ([cbbd2d5](https://github.com/blacha/st/commit/cbbd2d51494c8e36773ab04eba9fa0bcb0ea832b))
+
+
+### Features
+
+* no point chaching player bases ([46fe067](https://github.com/blacha/st/commit/46fe0678520fbbfbf32b0a53947dbe4386ffdd8a))
+
+
+### BREAKING CHANGES
+
+* major rework of data base tables
+
+
+
+
+
 ## [0.10.1](https://github.com/blacha/st/compare/v0.10.0...v0.10.1) (2020-01-20)
 
 

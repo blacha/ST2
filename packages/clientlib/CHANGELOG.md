@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/blacha/st/compare/v0.10.1...v1.0.0) (2020-01-23)
+
+
+### Bug Fixes
+
+* split out firebase models ([5a0d676](https://github.com/blacha/st/commit/5a0d67643fcaabaed6166ffe1868e5a850dd5622))
+
+
+### Features
+
+* use named types for ids ([86176f3](https://github.com/blacha/st/commit/86176f346b65a4034dd995ff3d853de0d656b568))
+
+
+
+
+
 ## [0.10.1](https://github.com/blacha/st/compare/v0.10.0...v0.10.1) (2020-01-20)
 
 
