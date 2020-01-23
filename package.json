@@ -6,9 +6,9 @@
   "scripts": {
     "clean": "tsc -b --clean && rimraf 'packages/*/build' && rimraf dist/",
     "build": "tsc -b --pretty",
-    "pack-ext": "node packages/packer/build/pack-extension.js",
-    "pack-func": "node packages/packer/build/pack-function.js",
-    "pack-front": "parcel build packages/st-frontend/static/index.html",
+    "pack-ext": "node packages/packer/build/pack.extension.js",
+    "pack-func": "node packages/packer/build/pack.function.js",
+    "pack-front": "parcel build packages/st-frontend/static/index.html && node packages/packer/build/pack.frontend.js",
     "version": "lerna version --conventional-commits --no-push --sign-git-commit --sign-git-tag",
     "package": "npm run pack-ext && npm run pack-func && npm run pack-front",
     "lint": "eslint 'packages/*/src/**/*.ts' --fix",
