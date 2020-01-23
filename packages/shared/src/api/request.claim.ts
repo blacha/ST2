@@ -1,3 +1,5 @@
+import { PlayerName } from '@cncta/clientlib';
+
 export interface ApiClaimStartRequest {
     path: '/api/v1/world/:worldId/player/:player/claim';
     params: { worldId: number; player: string };
@@ -5,9 +7,9 @@ export interface ApiClaimStartRequest {
     response: {};
 }
 
-export interface ApiClaimPlayerRequest {
-    path: '/api/v1/world/:worldId/player/:player/claim/:claimId';
-    params: { worldId: number; claimId: string; player: string };
+export interface ApiClaimPlayerAcceptRequest {
+    path: '/api/v1/claim/:claimId';
+    params: { claimId: string };
     body: undefined;
-    response: {};
+    response: { player: PlayerName; worldId: number };
 }

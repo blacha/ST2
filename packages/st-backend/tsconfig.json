@@ -8,6 +8,8 @@
     "references": [{
         "path": "../clientlib"
     }, {
+        "path": "../client"
+    }, {
         "path": "../shared"
     }, {
         "path": "../model"

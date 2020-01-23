@@ -7,6 +7,7 @@ import Icon from 'antd/es/icon';
 import Input from 'antd/es/input';
 import Select from 'antd/es/select';
 import Spin from 'antd/es/spin';
+import Text from 'antd/es/typography/Text';
 import Paragraph from 'antd/es/typography/Paragraph';
 import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react';
@@ -58,7 +59,11 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
             }
             this.setState({ ...this.state, claim: ComponentLoading.Loading });
             const res = await Api.claimPlayerRequest(values.worldId, values.player);
-            this.setState({ ...this.state, claim: ComponentLoading.Done });
+            if (res == true) {
+                this.setState({ ...this.state, claim: ComponentLoading.Done });
+            } else {
+                this.setState({ ...this.state, claim: ComponentLoading.Failed });
+            }
         });
     };
 
@@ -67,6 +72,9 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
             return <Spin />;
         }
         const { getFieldDecorator, getFieldsError } = this.props.form;
+        if (this.state.claim == ComponentLoading.Done) {
+            return <Text>Check your in game mailbox</Text>;
+        }
 
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
@@ -105,6 +113,7 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
                         Claim
                     </Button>
                 </Form.Item>
+                {this.state.claim == ComponentLoading.Failed ? <Text type="danger">Failed to claim player</Text> : null}
             </Form>
         );
     }

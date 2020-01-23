@@ -1,4 +1,4 @@
-import { Config } from '@st/shared';
+import { ApiClaimPlayerAcceptRequest, Config } from '@st/shared';
 import { Auth } from '../auth/auth.service';
 
 export class StApi {
@@ -12,14 +12,29 @@ export class StApi {
         return { Authorization: 'Bearer ' + token };
     }
 
+    /** Send a request to claim a player this will trigger a mail message being sent in game */
     async claimPlayerRequest(worldId: number, player: string): Promise<boolean> {
         const authHeader = await this.getAuthHeader();
-        const res = await fetch(`${this.baseUrl}/v1/api/world/${worldId}/player/${player}/claim`, {
+        const res = await fetch(`${this.baseUrl}/api/v1/world/${worldId}/player/${player}/claim`, {
             method: 'post',
             headers: { ...authHeader },
         });
-        console.log(res);
-        return true;
+        if (res.status == 200) {
+            return true;
+        }
+        return false;
+    }
+
+    async claimPlayerAccept(claimId: string): Promise<ApiClaimPlayerAcceptRequest['response'] | false> {
+        const authHeader = await this.getAuthHeader();
+        const res = await fetch(`${this.baseUrl}/api/v1/claim/${claimId}`, {
+            method: 'post',
+            headers: { ...authHeader },
+        });
+        if (res.status == 200) {
+            return (await res.json()) as ApiClaimPlayerAcceptRequest['response'];
+        }
+        return false;
     }
 }
 

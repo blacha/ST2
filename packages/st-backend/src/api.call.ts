@@ -67,7 +67,7 @@ export abstract class ApiCall<T extends ApiFunc> {
         res.status(status);
         res.json(response);
 
-        StLog.info({ duration: Date.now() - startTime, status }, 'Done');
+        StLog.info({ url: req.url, duration: Date.now() - startTime, status }, 'Done');
     }
 
     abstract handle(req: ApiRequest<T>): Promise<T['response']>;

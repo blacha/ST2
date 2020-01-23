@@ -17,6 +17,7 @@ export * from './model.user';
 export * from './model.city';
 export * from './model.layout';
 export * from './model.bot.world';
+export * from './model.bot.config';
 
 export const Stores = {
     Install: new Store('Install', ModelInstall),

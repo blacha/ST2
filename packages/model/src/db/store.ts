@@ -82,11 +82,12 @@ export class Store<T extends Model<T>> {
         return this.set(obj.id, obj);
     }
 
-    async transaction(id: T['id'], update: (obj: T) => any | Promise<any>) {
+    async transaction(id: T['id'], update: (obj: T) => any | Promise<any>): Promise<T> {
         const doc = FireStore.default()
             .collection(this.table)
             .doc(id);
 
+        let currentObj: T | null = null;
         await FireStore.default().runTransaction(async transaction => {
             const docObj = await transaction.get(doc);
             const obj = new this.maker(docObj.data() as T);
@@ -96,6 +97,11 @@ export class Store<T extends Model<T>> {
             const updateObj = { ...obj };
             delete updateObj.id;
             await transaction.set(doc, updateObj, { merge: true });
+            currentObj = obj;
         });
+        if (currentObj == null) {
+            throw new Error('Failed to complete transaction');
+        }
+        return currentObj;
     }
 }
