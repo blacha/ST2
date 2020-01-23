@@ -5,6 +5,7 @@ import { AccountSessionId, ModelBotConfig, ModelClaimRequest, ModelUtil, Stores 
 import { ApiClaimPlayerAcceptRequest, ApiClaimStartRequest } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { BackEndStore } from '../backend.store';
+import { HttpError } from '../http.error';
 
 export class ApiClaimPlayerStart extends ApiCall<ApiClaimStartRequest> {
     path = '/api/v1/world/:worldId/player/:player/claim' as const;
@@ -30,7 +31,7 @@ export class ApiClaimPlayerStart extends ApiCall<ApiClaimStartRequest> {
     async sendMail(req: ApiRequest<ApiClaimStartRequest>, player: PlayerName, claim: ModelClaimRequest) {
         const botConfig = await BackEndStore.BotConfig.get('bot');
         if (botConfig == null) {
-            throw new Error('Unable to find bot session');
+            throw new HttpError(500, 'Unable to find bot session');
         }
         const session = await this.getClient(req, botConfig);
         const gameSession = await session.open(claim.worldId);
@@ -63,8 +64,7 @@ A user has requested to claim this player account on shockr.dev to complete the 
         const currentClaim = await Stores.ClaimRequest.transaction(player, claim => {
             if (!claim.isAbleToClaim) {
                 req.log.warn({ claimAt: claim.messageSentAt, worldId, player }, 'InvalidClaimStart');
-
-                throw new Error('Unable to claim playerId');
+                throw new HttpError(422, 'Unable to claim playerId');
             }
             claim.claim(worldId, user.uid);
         });
@@ -94,22 +94,23 @@ export class ApiClaimPlayerAccept extends ApiCall<ApiClaimPlayerAcceptRequest> {
         const claim = await Stores.ClaimRequest.getBy({ claimId });
         if (claim == null) {
             req.log.warn({ reason: 'missing', claimId }, 'MissingClaim');
-            throw new Error('Invalid claim');
+            throw new HttpError(422, 'Missing claim');
         }
         const player = claim.id;
         const worldId = claim.worldId;
         if (!claim.isActive) {
             req.log.warn({ reason: 'isValid', player, worldId }, 'InvalidClaim');
-            throw new Error('Invalid claim');
+            throw new HttpError(422, 'Invalid claim');
         }
 
         if (claim.worldId != worldId) {
             req.log.warn({ reason: 'worldId', player, claimWorldId: claim.worldId, worldId }, 'InvalidClaim');
-            throw new Error('Invalid claim');
+            throw new HttpError(422, 'Invalid claim');
         }
+
         if (claim.claimId != claimId) {
             req.log.warn({ reason: 'claimId', player, claimId, worldId }, 'InvalidClaim');
-            throw new Error('Invalid claim');
+            throw new HttpError(422, 'Invalid claim');
         }
 
         req.log.info({ userId, player, worldId, claimId }, 'Claim');

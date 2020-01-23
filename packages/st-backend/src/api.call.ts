@@ -3,6 +3,7 @@ import * as expressCore from 'express-serve-static-core';
 import { Id, StLog } from '@st/shared';
 import * as admin from 'firebase-admin';
 import { UId } from '@st/model';
+import { HttpError } from './http.error';
 
 export interface ApiFunc<Params = any, Body = any, Response = any> {
     path: string;
@@ -52,22 +53,32 @@ export abstract class ApiCall<T extends ApiFunc> {
         let status = 200;
         let response: T['response'] | null = null;
         const id = Id.generate();
+        const childLog = StLog.child({ id });
 
         try {
             const apiReq = await ApiCall.validateRequest<T>(req, id);
-            apiReq.log = StLog.child({ id });
+            apiReq.log = childLog;
             response = await this.handle(apiReq);
         } catch (e) {
             status = 500;
-            StLog.error({ error: e }, 'Failed');
-            response = { status: 500, message: 'Internal server error', error: e.message };
+            if (e instanceof HttpError) {
+                status = e.code;
+                response = { status, message: e.message };
+            } else {
+                response = { status: 500, message: 'Internal server error', error: e.message };
+            }
+            if (status > 499) {
+                childLog.error({ error: e }, 'Failed');
+            } else if (status > 400) {
+                childLog.warn({ error: e }, e.message);
+            }
         }
 
         res.header('x-request-id', id);
         res.status(status);
         res.json(response);
 
-        StLog.info({ url: req.url, duration: Date.now() - startTime, status }, 'Done');
+        childLog.info({ url: req.url, duration: Date.now() - startTime, status }, 'Done');
     }
 
     abstract handle(req: ApiRequest<T>): Promise<T['response']>;
