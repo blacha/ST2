@@ -13,6 +13,8 @@
     }, {
         "path": "./packages/packer"
     }, {
+        "path": "./packages/model"
+    }, {
         "path": "./packages/st-backend"
     }, {
         "path": "./packages/st-frontend"

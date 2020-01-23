@@ -6,3 +6,5 @@ export type AllianceName = string & { _allianceName: never };
 
 export type PlayerId = number & { _playerId: never };
 export type PlayerName = string & { _playerName: never };
+
+export type TimeStamp = number & { _timeStamp: never };

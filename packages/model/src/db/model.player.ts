@@ -1,7 +1,7 @@
 import { AllianceId, AllianceName, CityId, PlayerId, PlayerName, WorldId } from '@cncta/clientlib';
 import { StCity } from '@cncta/util';
 import { InvalidPlayerId, InvalidPlayerName, InvalidWorldId, Model } from './model';
-import { CompositeId } from '../id';
+import { CompositeId } from '@st/shared';
 
 export class ModelPlayer extends Model<ModelPlayer> {
     /** User Uid */

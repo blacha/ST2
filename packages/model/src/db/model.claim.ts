@@ -1,6 +1,6 @@
 import { WorldId } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
-import { Id } from '../id';
+import { Id } from '@st/shared';
 import { InvalidWorldId, Model } from './model';
 
 export class ModelClaim extends Model<ModelClaim> {

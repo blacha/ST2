@@ -10,7 +10,7 @@ import {
     Id,
     mergeBaseUpgrade,
 } from '@st/shared';
-import { Stores } from '@st/shared/build/db';
+import { Stores } from '@st/model';
 import 'antd/dist/antd.css';
 import BackTop from 'antd/es/back-top';
 import Table from 'antd/es/table';

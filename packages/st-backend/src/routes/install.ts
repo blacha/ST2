@@ -1,7 +1,7 @@
+import { PlayerName, WorldId } from '@cncta/clientlib';
 import { ApiInstallRequest } from '@st/shared';
+import { InstallId, Stores } from '@st/model';
 import { ApiCall, ApiRequest } from '../api.call';
-import { InstallId, Stores } from '@st/shared/build/db';
-import { PlayerId, PlayerName, WorldId } from '@cncta/clientlib/src';
 
 export class ApiInstall extends ApiCall<ApiInstallRequest> {
     path = '/api/v1/world/:worldId/player/:player/install/:installId' as const;

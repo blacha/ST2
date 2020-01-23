@@ -2,7 +2,7 @@ import { BaseLocationPacker, StCity, InvalidAllianceId } from '@cncta/util';
 import { ApiScanRequest, ApiScanResponse, BaseBuilder, BaseIdPacker, NumberPacker, CompositeId } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { WorldId, PlayerId, AllianceId, AllianceName, PlayerName } from '@cncta/clientlib';
-import { Stores, ModelBase } from '@st/shared/build/db';
+import { Stores, ModelCity } from '@st/model';
 
 const OneMinuteMs = 60 * 1000;
 const OneHourMs = 60 * OneMinuteMs;
@@ -103,7 +103,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             }
 
             const baseId = BaseIdPacker.pack(base);
-            await Stores.Base.set(baseId, new ModelBase({ city: baseJson }));
+            await Stores.City.set(baseId, new ModelCity({ city: baseJson }));
             output.push(baseId);
         }
 

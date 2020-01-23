@@ -22,7 +22,7 @@ import { FactionName } from '../util/faction';
 import { ViewResearch } from '../util/research';
 import React = require('react');
 import { WorldId, PlayerId } from '@cncta/clientlib/src';
-import { Stores } from '@st/shared/src/db';
+import { Stores } from '@st/model';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 

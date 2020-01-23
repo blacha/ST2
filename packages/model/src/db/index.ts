@@ -5,7 +5,7 @@ import { ModelInstall } from './model.install';
 import { ModelClaim } from './model.claim';
 import { ModelUser } from './model.user';
 import { ModelPlayer } from './model.player';
-import { ModelBase } from './model.base';
+import { ModelCity } from './model.city';
 import { ModelLayout } from './model.layout';
 
 export * from './model';
@@ -13,7 +13,7 @@ export * from './store';
 export * from './model.install';
 export * from './model.claim';
 export * from './model.user';
-export * from './model.base';
+export * from './model.city';
 export * from './model.layout';
 
 export const Stores = {
@@ -21,6 +21,6 @@ export const Stores = {
     Claim: new Store('Claim', ModelClaim),
     User: new Store('User', ModelUser),
     Player: new Store('Player', ModelPlayer),
-    Base: new Store('Base', ModelBase),
+    City: new Store('City', ModelCity),
     Layout: new Store('Layout', ModelLayout),
 };

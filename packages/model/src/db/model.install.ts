@@ -1,5 +1,5 @@
-import { PlayerName, WorldId } from '@cncta/clientlib/src';
-import { InstallId, Model, ModelUtil, TimeStamp } from './model';
+import { PlayerName, WorldId, TimeStamp } from '@cncta/clientlib';
+import { InstallId, Model, ModelUtil } from './model';
 
 export interface ModelInstallPlayer {
     player: PlayerName;

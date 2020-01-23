@@ -1,8 +1,7 @@
 import { Tile } from './tile';
 import { Base } from './base';
-import { BaseY, ResourceType, BaseX, WorldId, CityId } from '@cncta/clientlib';
+import { BaseY, ResourceType, BaseX, WorldId, CityId, TimeStamp } from '@cncta/clientlib';
 import { LayoutPacker, Base62 } from '@cncta/util';
-import { TimeStamp } from '../../db';
 import { CompositeId } from '../../id';
 
 export interface Point {

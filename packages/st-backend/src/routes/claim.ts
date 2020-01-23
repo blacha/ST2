@@ -1,7 +1,7 @@
 import { ApiCall, ApiRequest } from '../api.call';
 import { ApiClaimStartRequest, ApiClaimPlayerRequest } from '@st/shared';
 import { WorldId } from '@cncta/clientlib';
-import { Stores } from '@st/shared/build/db';
+import { Stores } from '@st/model';
 
 export class ApiClaimStart extends ApiCall<ApiClaimStartRequest> {
     path = '/api/v1/world/:worldId/player/:player/claim' as const;

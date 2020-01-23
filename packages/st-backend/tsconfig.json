@@ -6,10 +6,10 @@
     },
     "include": ["src/**/*"],
     "references": [{
-            "path": "../clientlib"
-        },
-        {
-            "path": "../shared"
-        }
-    ]
+        "path": "../clientlib"
+    }, {
+        "path": "../shared"
+    }, {
+        "path": "../model"
+    }]
 }
