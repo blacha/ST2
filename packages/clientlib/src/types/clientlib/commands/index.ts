@@ -6,3 +6,4 @@ export * from './open.session';
 export * from './poll';
 export * from './player.info';
 export * from './server.info';
+export * from './check.player.exist';

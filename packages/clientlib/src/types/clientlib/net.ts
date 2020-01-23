@@ -9,6 +9,7 @@ import {
     CommandPlayerInfo,
     CommandPoll,
     CommandGetServerInfo,
+    CommandCheckPlayerExist,
 } from './commands';
 
 export interface ClientLibCommunicationManager {
@@ -27,4 +28,5 @@ export type GameCommands =
     | CommandOpenSession
     | CommandPlayerInfo
     | CommandPoll
-    | CommandGetServerInfo;
+    | CommandGetServerInfo
+    | CommandCheckPlayerExist;

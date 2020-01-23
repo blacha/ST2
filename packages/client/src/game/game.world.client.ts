@@ -7,6 +7,8 @@ import {
     CommandGetServerInfoResponse,
     CommandGetServerInfo,
     CommandPlayerInfoResponse,
+    PlayerName,
+    CommandCheckPlayerExist,
 } from '@cncta/clientlib';
 import fetch from 'node-fetch';
 import { TaClient } from '../client';
@@ -56,6 +58,7 @@ export class GameWorldClient {
     private async fetch<T extends GameCommands>(
         method: T['command'],
         body: T['request'] & { session: string },
+        jsonResponse = true,
     ): Promise<T['response']> {
         const url = this.url(method);
         const res = await fetch(url, FetchArgs.json(body));
@@ -64,12 +67,15 @@ export class GameWorldClient {
             Logger.fatal({ url, status: res.status }, 'Fetch');
             throw new Error('Failed to run request');
         }
-        if (!res.headers.get('content-type')?.startsWith('application/json')) {
+        if (!res.headers.get('content-type')?.startsWith('application/json') && jsonResponse) {
             Logger.fatal({ url, status: res.status }, 'FailedToFetch');
             await writeDebugFile(method, await res.text());
             throw new Error('Failed to run request');
         }
-        return await res.json();
+        if (jsonResponse) {
+            return await res.json();
+        }
+        return await res.text();
     }
 
     /**
@@ -101,6 +107,18 @@ export class GameWorldClient {
         if (this.state != GameWorldState.Opened) {
             throw new Error('Failed to open game world');
         }
+    }
+
+    async playerExists(name: PlayerName): Promise<boolean> {
+        const res = await this.fetch<CommandCheckPlayerExist>(
+            'CheckPlayerExist',
+            { name, session: this.gameSessionId },
+            false,
+        );
+        if (res == 'true') {
+            return true;
+        }
+        return false;
     }
 
     async poll(requests: string) {
