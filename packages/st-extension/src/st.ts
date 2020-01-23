@@ -168,7 +168,6 @@ export class St {
 
     async start() {
         this.log.debug('StStartup');
-        LocalCache.cleanUp();
         let failCount = 0;
         while (this.isClientLoaded === false) {
             failCount++;
@@ -179,6 +178,8 @@ export class St {
                 throw new Error('ShockrTools failed to start after 100 attempts.');
             }
         }
+        const removed = LocalCache.cleanUp();
+        this.log.trace({ removed }, 'StCleanup');
 
         this.log.trace('StPatch');
         for (const patch of Object.values(Patches)) {

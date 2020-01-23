@@ -45,7 +45,8 @@ export class LocalCache {
         localStorage.setItem(LocalCache.prefix + key, toStore);
     }
 
-    static cleanUp() {
+    static cleanUp(): number {
+        let removedCount = 0;
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (!key?.startsWith(LocalCache.prefix)) {
@@ -54,12 +55,15 @@ export class LocalCache {
             const value = localStorage.getItem(key);
             if (value == null) {
                 localStorage.removeItem(key);
+                removedCount++;
                 continue;
             }
             const cacheItem = JSON.parse(value) as CachedObject<any>;
             if (cacheItem == null || cacheItem.timestamp == null || Date.now() - cacheItem.timestamp > OneWeekMs) {
+                removedCount++;
                 localStorage.removeItem(key);
             }
         }
+        return removedCount;
     }
 }
