@@ -9,6 +9,12 @@ export class Store<T extends Model<T>> {
         this.table = table;
     }
 
+    private fromFirebase(c: any): T {
+        const res = new this.maker(c.data() as T);
+        res.id = c.id;
+        return res;
+    }
+
     private async query<K extends keyof T>(obj: Partial<Record<K, T[K] | T[K][]>>, limit: number): Promise<T[]> {
         let query = await FireStore.default()
             .collection(this.table)
@@ -21,11 +27,7 @@ export class Store<T extends Model<T>> {
             }
         }
         const res = await query.get();
-        return res.docs.map(c => {
-            const res = new this.maker(c.data() as T);
-            res.id = c.id;
-            return res;
-        });
+        return res.docs.map(c => this.fromFirebase(c));
     }
     async getAllBy<K extends keyof T>(obj: Partial<Record<K, T[K] | T[K][]>>, limit = 100): Promise<T[]> {
         return this.query(obj, limit);
@@ -39,17 +41,13 @@ export class Store<T extends Model<T>> {
         return undefined;
     }
 
-    create() {
-        return new this.maker();
-    }
-
     async get(id: T['id']): Promise<T | undefined> {
         const doc = FireStore.default()
             .collection(this.table)
             .doc(id);
         const docObj = await doc.get();
         if (docObj.exists) {
-            return new this.maker(docObj.data() as T);
+            return this.fromFirebase(docObj);
         }
         return undefined;
     }
@@ -90,7 +88,7 @@ export class Store<T extends Model<T>> {
         let currentObj: T | null = null;
         await FireStore.default().runTransaction(async transaction => {
             const docObj = await transaction.get(doc);
-            const obj = new this.maker(docObj.data() as T);
+            const obj = this.fromFirebase(docObj);
             await update(obj);
 
             obj.updatedAt = ModelUtil.TimeStamp();

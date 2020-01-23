@@ -38,7 +38,9 @@ export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptStat
                     </Paragraph>
                 ) : null}
                 {this.state.state == ComponentLoading.Failed ? (
-                    <Paragraph type="danger">Failed to claim player, try again later</Paragraph>
+                    <Paragraph type="danger">
+                        Failed to claim player, try again later <Link to="/claim">Claim</Link>
+                    </Paragraph>
                 ) : null}
                 {this.state.state == ComponentLoading.Loading ? (
                     <React.Fragment>

@@ -1,4 +1,4 @@
-import { BaseLocationPacker, StCity, InvalidAllianceId } from '@cncta/util';
+import { BaseLocationPacker, StCity, InvalidAllianceId, Duration } from '@cncta/util';
 import { ApiScanRequest, ApiScanResponse, BaseBuilder, BaseIdPacker, NumberPacker, CompositeId } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { WorldId, PlayerId, AllianceId, AllianceName, PlayerName } from '@cncta/clientlib';
@@ -100,6 +100,8 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
                 players.set(baseJson.ownerId, existing);
             }
 
+            // Add a bit of randomness to when a base was updated
+            base.updatedAt = base.updatedAt - Duration.minutes(1) * Math.random();
             const baseId = BaseIdPacker.pack(base);
             await Stores.City.set(baseId, new ModelCity({ city: baseJson }));
             output.push(baseId);
