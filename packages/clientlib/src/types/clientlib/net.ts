@@ -12,6 +12,7 @@ import {
     CommandCheckPlayerExist,
 } from './commands';
 import { CommandIgmBulkDeleteMsg } from './commands/mail.delete';
+import { CommandRankingGetCount } from './commands/ranking';
 
 export interface ClientLibCommunicationManager {
     SendSimpleCommand<T extends GameWorldCommand>(
@@ -30,5 +31,7 @@ export type GameCommands =
     | CommandOpenSession
     | CommandPlayerInfo
     | CommandPoll
+    | CommandRankingGetData
+    | CommandRankingGetCount
     | CommandGetServerInfo
     | CommandCheckPlayerExist;
