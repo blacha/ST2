@@ -69,6 +69,10 @@ export class CampTracker extends StModuleBase {
     doUpdate() {
         this.updateCb = null;
         const mainBase = CityUtil.getMainCity();
+        // No main base, skip
+        if (mainBase == null) {
+            return;
+        }
         const offLevel = mainBase.get_LvlOffense();
         const minBaseHighlight = offLevel - this.MaxOffDiff;
         const nearByCamps = Array.from(CityUtil.getObjectsNearCity(mainBase).values()).filter(f => {
