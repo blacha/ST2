@@ -11,6 +11,7 @@ import {
     CommandGetServerInfo,
     CommandCheckPlayerExist,
 } from './commands';
+import { CommandIgmBulkDeleteMsg } from './commands/mail.delete';
 
 export interface ClientLibCommunicationManager {
     SendSimpleCommand<T extends GameWorldCommand>(
@@ -25,6 +26,7 @@ export type GameCommands =
     | CommandIgmGetMsg
     | CommandIgmGetMsgHeader
     | CommandIgmBulkSendMsg
+    | CommandIgmBulkDeleteMsg
     | CommandOpenSession
     | CommandPlayerInfo
     | CommandPoll

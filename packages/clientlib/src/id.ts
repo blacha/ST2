@@ -11,3 +11,5 @@ export type PlayerNameDisplay = string & { _playerNameDisplay: never };
 export type PlayerNameId = string & { _playerNameId: never };
 
 export type TimeStamp = number & { _timeStamp: never };
+
+export type MailId = number & { _mailId: never };

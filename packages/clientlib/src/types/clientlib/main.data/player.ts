@@ -1,6 +1,6 @@
 import { GameDataUnit, GameDataTech, GameDataResearchLevel } from '../../game';
 import { ClientLibList } from '../util';
-import { PlayerNameDisplay, AllianceId, PlayerId } from 'packages/clientlib/src/id';
+import { PlayerNameDisplay, AllianceId, PlayerId } from '../../../id';
 
 /* eslint-disable @typescript-eslint/camelcase */
 export interface ClientLibPlayerResearchResult {
