@@ -31,6 +31,7 @@ export class StApi {
             method: 'get',
             headers: { ...authHeader },
         });
+        console.log('claimAccept', res.status);
         if (res.status == 200) {
             return (await res.json()) as ApiClaimPlayerAcceptRequest['response'];
         }

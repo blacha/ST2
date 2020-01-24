@@ -92,6 +92,10 @@ export class ApiClaimPlayerAccept extends ApiCall<ApiClaimPlayerAcceptRequest> {
 
         await Stores.ClaimRequest.delete(player);
         const userObj = await Stores.User.getOrCreate(user.uid);
+        // Already claimed
+        if (userObj.claims.find(f => f.player == player)) {
+            return { player, worldId };
+        }
         userObj.claims.push({ claimId, player });
         await Stores.User.save(userObj);
 
