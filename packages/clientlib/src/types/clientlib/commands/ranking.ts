@@ -30,13 +30,37 @@ export interface RankingGetDataResult {
     w: boolean;
 }
 
+export const enum RankingViewType {
+    Alliance = 1,
+    Player = 0,
+}
+
+export const enum RankingType {
+    Score = 0,
+    KillsBasePve = 1,
+    KillsBasePvp = 2,
+    DistanceToCenter = 3,
+    BonusTiberium = 4,
+    BonusCrystal = 5,
+    BonusPower = 6,
+    BonusInfantry = 7,
+    BonusVehicles = 8,
+    BonusAircraft = 9,
+    BonusDefense = 10,
+    EndgameProgress = 11,
+    HallOfFame = 12,
+    Event = 13,
+    SeasonOverview = 14,
+    MostValuableAlliance = 15,
+}
+
 export interface CommandRankingGetData extends GameWorldCommand {
     command: 'RankingGetData';
     request: {
         firstIndex: number;
         lastIndex: number;
-        view: number;
-        rankingType: number;
+        view: RankingViewType;
+        rankingType: RankingType;
         sortColumn: number;
         ascending: boolean;
     };
