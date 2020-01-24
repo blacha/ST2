@@ -1,4 +1,4 @@
-import { WorldId, PlayerName, PlayerId, TimeStamp } from '@cncta/clientlib';
+import { WorldId, PlayerNameDisplay, PlayerId, TimeStamp, PlayerNameId } from '@cncta/clientlib';
 import { CompositeId } from '@st/shared';
 
 export type InstallId = string & { _t: 'InstallId' };
@@ -7,7 +7,7 @@ export type WorldSessionId = string & { _t: 'WorldSessionId' };
 export type AccountSessionId = string & { _t: 'AccountSessionId' };
 
 export const InvalidWorldId = -1 as WorldId;
-export const InvalidPlayerName = '' as PlayerName;
+export const InvalidPlayerName = '' as PlayerNameDisplay;
 export const InvalidPlayerId = -1 as PlayerId;
 
 export interface FireStoreInstance {
@@ -19,6 +19,10 @@ export interface FireStoreInstance {
 export const ModelUtil = {
     TimeStamp(): TimeStamp {
         return Date.now() as TimeStamp;
+    },
+
+    toPlayerNameId(p: PlayerNameDisplay): PlayerNameId {
+        return p.toLowerCase() as PlayerNameId;
     },
 };
 

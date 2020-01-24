@@ -1,7 +1,7 @@
-import { AllianceId, AllianceName, CityId, PlayerId, PlayerName, WorldId } from '@cncta/clientlib';
+import { AllianceId, AllianceName, CityId, PlayerId, PlayerNameDisplay, PlayerNameId, WorldId } from '@cncta/clientlib';
 import { StCity } from '@cncta/util';
-import { InvalidPlayerId, InvalidPlayerName, InvalidWorldId, Model } from './model';
 import { CompositeId } from '@st/shared';
+import { InvalidPlayerId, InvalidPlayerName, InvalidWorldId, Model, ModelUtil } from './model';
 
 export class ModelPlayer extends Model<ModelPlayer> {
     /** User Uid */
@@ -10,7 +10,8 @@ export class ModelPlayer extends Model<ModelPlayer> {
     allianceKey?: CompositeId<[WorldId, AllianceId]>;
     cities: Record<number, StCity>;
     worldId: WorldId;
-    player: PlayerName;
+    player: PlayerNameDisplay;
+    playerNameId: PlayerNameId; // Firebase does not allow case insensitive searching
     playerId: PlayerId;
     alliance?: AllianceName;
     allianceId?: AllianceId;
@@ -22,6 +23,7 @@ export class ModelPlayer extends Model<ModelPlayer> {
         this.worldId = data?.worldId ?? InvalidWorldId;
         this.player = data?.player ?? InvalidPlayerName;
         this.playerId = data?.playerId ?? InvalidPlayerId;
+        this.playerNameId = ModelUtil.toPlayerNameId(this.player);
         this.alliance = data?.alliance ?? undefined;
         this.allianceId = data?.allianceId ?? undefined;
     }

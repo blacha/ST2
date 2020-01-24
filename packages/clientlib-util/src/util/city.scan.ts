@@ -11,7 +11,7 @@ import {
     ResourceType,
     CityId,
     WorldId,
-    PlayerName,
+    PlayerNameDisplay,
     PlayerId,
     AllianceName,
     AllianceId,
@@ -62,7 +62,7 @@ export interface StCity extends CityArmy {
 
     /** Owners name & Id */
     ownerId: PlayerId;
-    owner: PlayerName;
+    owner: PlayerNameDisplay;
 
     /** Alliance name & Id*/
     alliance?: AllianceName | typeof InvalidAllianceName;

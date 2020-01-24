@@ -1,8 +1,8 @@
 import { GameWorldCommand } from './command';
-import { PlayerName } from 'packages/clientlib/src/id';
+import { PlayerNameDisplay, PlayerNameId } from 'packages/clientlib/src/id';
 
 export interface CommandCheckPlayerExist extends GameWorldCommand {
     command: 'CheckPlayerExist';
-    request: { name: PlayerName };
+    request: { name: PlayerNameDisplay | PlayerNameId };
     response: 'true' | 'false';
 }

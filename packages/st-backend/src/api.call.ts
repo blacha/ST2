@@ -49,17 +49,20 @@ export abstract class ApiCall<T extends ApiFunc> {
     }
 
     async doRequest(req: express.Request, res: express.Response) {
+        console.log('Starting', req.baseUrl);
         const startTime = Date.now();
         let status = 200;
         let response: T['response'] | null = null;
         const id = Id.generate();
         const childLog = StLog.child({ id });
+        let error: Error | null = null;
 
         try {
             const apiReq = await ApiCall.validateRequest<T>(req, id);
             apiReq.log = childLog;
             response = await this.handle(apiReq);
         } catch (e) {
+            error = e;
             status = 500;
             if (e instanceof HttpError) {
                 status = e.code;
@@ -67,18 +70,18 @@ export abstract class ApiCall<T extends ApiFunc> {
             } else {
                 response = { status: 500, message: 'Internal server error', error: e.message };
             }
-            if (status > 499) {
-                childLog.error({ error: e }, 'Failed');
-            } else if (status > 400) {
-                childLog.warn({ error: e }, e.message);
-            }
         }
 
         res.header('x-request-id', id);
         res.status(status);
         res.json(response);
-
-        childLog.info({ url: req.url, duration: Date.now() - startTime, status }, 'Done');
+        if (status > 499 && error != null) {
+            childLog.error({ error: error }, 'Failed');
+        } else if (status > 399 && error != null) {
+            childLog.warn({ error: error }, error.message);
+        } else {
+            childLog.info({ url: req.url, duration: Date.now() - startTime, status }, 'Done');
+        }
     }
 
     abstract handle(req: ApiRequest<T>): Promise<T['response']>;

@@ -1,10 +1,10 @@
-import { WorldId, PlayerName } from '@cncta/clientlib';
+import { PlayerNameId, WorldId } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
 import { Id } from '@st/shared';
 import { InvalidWorldId, Model } from './model';
 
 export class ModelClaimRequest extends Model<ModelClaimRequest> {
-    id: PlayerName; // PlayerName
+    id: PlayerNameId; // PlayerName
 
     worldId: WorldId;
     messageSentAt: number;

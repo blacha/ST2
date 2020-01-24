@@ -1,5 +1,5 @@
 import { StCity, Base62 } from '@cncta/util';
-import { CityId, WorldId, AllianceName, PlayerName, PlayerId, AllianceId } from '@cncta/clientlib';
+import { CityId, WorldId, AllianceName, PlayerNameDisplay, PlayerId, AllianceId } from '@cncta/clientlib';
 
 export const BaseExampleForgotten: StCity = {
     cityId: 2829118 as CityId,
@@ -13,7 +13,7 @@ export const BaseExampleForgotten: StCity = {
     y: 770,
     faction: 5,
     ownerId: -152 as PlayerId,
-    owner: 'The Forgotten' as PlayerName,
+    owner: 'The Forgotten' as PlayerNameDisplay,
     allianceId: 0,
     alliance: 'The Forgotten' as AllianceName,
     version: 3,
@@ -82,7 +82,7 @@ export const BaseExampleNod: StCity = {
     y: 772,
     faction: 2,
     ownerId: 2648 as PlayerId,
-    owner: 'shocknod' as PlayerName,
+    owner: 'shocknod' as PlayerNameDisplay,
     allianceId: 559 as AllianceId,
     alliance: 'The Zombies 2' as AllianceName,
     version: 148,
@@ -199,7 +199,7 @@ export const BaseExampleNod: StCity = {
 
 export const ExampleNodBase2: StCity = {
     ownerId: 2642 as PlayerId,
-    owner: 'shockrNZ' as PlayerName,
+    owner: 'shockrNZ' as PlayerNameDisplay,
     allianceId: 106 as AllianceId,
     alliance: 'Blue Cherry Hunters' as AllianceName,
     base: Base62.pack([

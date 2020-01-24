@@ -1,4 +1,4 @@
-import { PlayerName, WorldId } from '@cncta/clientlib';
+import { PlayerNameDisplay, WorldId } from '@cncta/clientlib';
 import { ApiInstallRequest } from '@st/shared';
 import { InstallId, Stores } from '@st/model';
 import { ApiCall, ApiRequest } from '../api.call';
@@ -9,7 +9,7 @@ export class ApiInstall extends ApiCall<ApiInstallRequest> {
 
     async handle(req: ApiRequest<ApiInstallRequest>): Promise<{}> {
         const installId = req.params.installId as InstallId;
-        const playerName = req.params.player as PlayerName;
+        const playerName = req.params.player as PlayerNameDisplay;
         const worldId = Number(req.params.worldId) as WorldId;
 
         await Stores.Install.transaction(installId, async obj => obj.touch(playerName, worldId));

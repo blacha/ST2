@@ -1,41 +1,16 @@
-import { TaClient } from '@cncta/client';
-import { PlayerName, TimeStamp, WorldId } from '@cncta/clientlib';
-import { Duration } from '@cncta/util/src';
-import { AccountSessionId, ModelBotConfig, ModelClaimRequest, ModelUtil, Stores } from '@st/model';
+import { PlayerNameId, WorldId } from '@cncta/clientlib';
+import { ModelClaimRequest, ModelUtil, Stores } from '@st/model';
 import { ApiClaimPlayerAcceptRequest, ApiClaimStartRequest } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
-import { BackEndStore } from '../backend.store';
+import { GameSession } from '../game.session';
 import { HttpError } from '../http.error';
 
 export class ApiClaimPlayerStart extends ApiCall<ApiClaimStartRequest> {
     path = '/api/v1/world/:worldId/player/:player/claim' as const;
     method = 'post' as const;
 
-    async getClient(req: ApiRequest<ApiClaimStartRequest>, botConfig: ModelBotConfig) {
-        if (botConfig.isSessionValid()) {
-            req.log.info({ expiresAt: botConfig.session.expiresAt }, 'ActiveSession');
-            return TaClient.fromSessionId(botConfig.session.id);
-        }
-
-        req.log.info({ email: botConfig.email }, 'NewSession');
-        const client = new TaClient(botConfig.email, botConfig.password);
-        await client.login();
-
-        botConfig.session = {
-            id: client.sessionId as AccountSessionId,
-            expiresAt: (Date.now() + Duration.minutes(59)) as TimeStamp,
-        };
-        await BackEndStore.BotConfig.set('bot', botConfig);
-        return client;
-    }
-    async sendMail(req: ApiRequest<ApiClaimStartRequest>, player: PlayerName, claim: ModelClaimRequest) {
-        const botConfig = await BackEndStore.BotConfig.get('bot');
-        if (botConfig == null) {
-            throw new HttpError(500, 'Unable to find bot session');
-        }
-        const session = await this.getClient(req, botConfig);
-        const gameSession = await session.open(claim.worldId);
-
+    async sendMail(req: ApiRequest<ApiClaimStartRequest>, player: PlayerNameId, claim: ModelClaimRequest) {
+        const gameSession = await GameSession.getClient(req, claim.worldId);
         const playerExists = await gameSession.playerExists(player);
         if (playerExists == false) {
             req.log.warn({ world: claim.worldId, player }, 'Player does not exist');
@@ -58,7 +33,7 @@ A user has requested to claim this player account on shockr.dev to complete the 
         const user = await this.validateUser(req);
         console.log(user);
 
-        const player = req.params.player.toLowerCase() as PlayerName;
+        const player = req.params.player.toLowerCase() as PlayerNameId;
         const worldId = Number(req.params.worldId) as WorldId;
 
         const currentClaim = await Stores.ClaimRequest.transaction(player, claim => {

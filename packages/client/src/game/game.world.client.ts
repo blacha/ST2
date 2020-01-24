@@ -7,8 +7,9 @@ import {
     CommandGetServerInfoResponse,
     CommandGetServerInfo,
     CommandPlayerInfoResponse,
-    PlayerName,
+    PlayerNameDisplay,
     CommandCheckPlayerExist,
+    PlayerNameId,
 } from '@cncta/clientlib';
 import fetch from 'node-fetch';
 import { TaClient } from '../client';
@@ -109,7 +110,7 @@ export class GameWorldClient {
         }
     }
 
-    async playerExists(name: PlayerName): Promise<boolean> {
+    async playerExists(name: PlayerNameDisplay | PlayerNameId): Promise<boolean> {
         const res = await this.fetch<CommandCheckPlayerExist>(
             'CheckPlayerExist',
             { name, session: this.gameSessionId },

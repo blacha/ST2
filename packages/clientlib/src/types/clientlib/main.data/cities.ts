@@ -5,7 +5,7 @@ import { ResourceType } from '../../game/resource';
 import { FactionType } from '../../game/faction';
 import { ClientLibEventEmitter } from '../event';
 import { ClientLibStatic } from '..';
-import { CityId, PlayerId, PlayerName, AllianceId, AllianceName } from '../../../id';
+import { CityId, PlayerId, PlayerNameDisplay, AllianceId, AllianceName } from '../../../id';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -64,7 +64,7 @@ export interface ClientLibCity {
 
     get_IsGhostMode(): boolean;
     /** Name of owner, undefined if player */
-    get_OwnerName(): PlayerName | undefined;
+    get_OwnerName(): PlayerNameDisplay | undefined;
     get_OwnerId(): PlayerId;
     get_OwnerAllianceId(): AllianceId | undefined;
     get_OwnerAllianceName(): AllianceName | undefined;

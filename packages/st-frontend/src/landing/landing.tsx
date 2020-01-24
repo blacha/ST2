@@ -80,7 +80,7 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
         }
 
         const playerClaims = user.claims.map(c => c.player);
-        const playerData = await Stores.Player.getAllBy({ player: playerClaims });
+        const playerData = await Stores.Player.getAllBy({ playerNameId: playerClaims });
         this.setState({ state: ComponentLoading.Done, data: playerData });
     }
 

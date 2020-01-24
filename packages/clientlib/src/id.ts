@@ -5,6 +5,9 @@ export type AllianceId = number & { _allianceId: never };
 export type AllianceName = string & { _allianceName: never };
 
 export type PlayerId = number & { _playerId: never };
-export type PlayerName = string & { _playerName: never };
+
+export type PlayerNameDisplay = string & { _playerNameDisplay: never };
+/** Player names are not case sensitive */
+export type PlayerNameId = string & { _playerNameId: never };
 
 export type TimeStamp = number & { _timeStamp: never };

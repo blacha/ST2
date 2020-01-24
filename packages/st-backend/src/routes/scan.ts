@@ -1,7 +1,7 @@
 import { BaseLocationPacker, StCity, InvalidAllianceId, Duration } from '@cncta/util';
 import { ApiScanRequest, ApiScanResponse, BaseBuilder, BaseIdPacker, NumberPacker, CompositeId } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
-import { WorldId, PlayerId, AllianceId, AllianceName, PlayerName } from '@cncta/clientlib';
+import { WorldId, PlayerId, AllianceId, AllianceName, PlayerNameDisplay } from '@cncta/clientlib';
 import { Stores, ModelCity, ModelUtil } from '@st/model';
 
 const OneMinuteMs = 60 * 1000;
@@ -49,7 +49,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
     async storeLayouts(
         req: ApiRequest<ApiScanRequest>,
         worldId: WorldId,
-        player: PlayerName,
+        player: PlayerNameDisplay,
         layoutsList: Map<string, string>,
     ) {
         if (layoutsList.size == 0) {
@@ -80,7 +80,7 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
 
     async handle(req: ApiRequest<ApiScanRequest>): Promise<ApiScanResponse> {
         const worldId = Number(req.params.worldId) as WorldId;
-        const player = req.params.player as PlayerName;
+        const player = req.params.player as PlayerNameDisplay;
 
         const bases = req.body;
 
@@ -88,7 +88,11 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         const layouts: Map<string, string> = new Map();
         const players: Map<number, StCity[]> = new Map();
         for (const baseJson of bases) {
-            baseJson.timestamp = Date.now();
+            // Update is really old
+            if (baseJson.timestamp > Date.now() || baseJson.timestamp < Date.now() - Duration.OneHour) {
+                // Add a bit of randomness to when a base was updated
+                baseJson.timestamp = Date.now() - Duration.minutes(1) * Math.random();
+            }
             const base = BaseBuilder.load(baseJson);
 
             if (baseJson.ownerId < 0) {
@@ -100,8 +104,6 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
                 players.set(baseJson.ownerId, existing);
             }
 
-            // Add a bit of randomness to when a base was updated
-            base.updatedAt = base.updatedAt - Duration.minutes(1) * Math.random();
             const baseId = BaseIdPacker.pack(base);
             await Stores.City.set(baseId, new ModelCity({ city: baseJson }));
             output.push(baseId);
