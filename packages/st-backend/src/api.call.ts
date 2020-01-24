@@ -5,11 +5,12 @@ import * as admin from 'firebase-admin';
 import { UId } from '@st/model';
 import { HttpError } from './http.error';
 
-export interface ApiFunc<Params = any, Body = any, Response = any> {
+export interface ApiFunc<Params = any, Body = any, Response = any, method = 'post'> {
     path: string;
     params: Params;
     body: Body;
     response: Response;
+    method: 'get' | 'post';
 }
 
 export interface ApiRequest<T extends ApiFunc> extends expressCore.Request<T['params'], T['response'], T['body']> {
@@ -24,9 +25,9 @@ export interface ApiUser {
 
 export abstract class ApiCall<T extends ApiFunc> {
     abstract path: T['path'];
-    abstract method: 'get' | 'post';
+    abstract method: T['method'];
 
-    static bind<T>(app: express.Application, ApiFunc: ApiCall<any>) {
+    static bind<T extends ApiFunc>(app: express.Application, ApiFunc: ApiCall<T>) {
         app[ApiFunc.method](ApiFunc.path, ApiFunc.doRequest.bind(ApiFunc));
     }
 
