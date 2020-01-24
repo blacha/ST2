@@ -1,6 +1,6 @@
 import { ClientLibStatic } from '@cncta/clientlib';
 import { StCity } from '@cncta/util';
-import { Config } from '@st/shared';
+import { Config, ApiUtil, ApiInstallRequest } from '@st/shared';
 import { StModuleBase } from '../module/module.base';
 import { BatchBaseSender } from './batcher.base';
 
@@ -11,6 +11,10 @@ export class ClientApi extends StModuleBase {
     baseUrl = Config.api.url;
 
     baseSender = new BatchBaseSender(this);
+
+    get auth() {
+        return { Authorization: `Bearer ${this.st.instanceId}` };
+    }
 
     async base(base: StCity, flush = false): Promise<string> {
         const promise = this.baseSender.queue(base);
@@ -24,10 +28,15 @@ export class ClientApi extends StModuleBase {
         const installId = this.st.instanceId;
         const md = ClientLib.Data.MainData.GetInstance();
         const worldId = md.get_Server().get_WorldId();
-        const playerName = md.get_Player().name;
+        const player = md.get_Player().name;
 
-        const url = [this.baseUrl, 'api', 'v1', 'world', worldId, 'player', playerName, 'install', installId].join('/');
-        await fetch(url, { headers: { authorization: `Bearer  ${this.st.instanceId}` } });
+        const req = ApiUtil.request<ApiInstallRequest>(
+            'post',
+            '/api/v1/install/:installId',
+            { installId },
+            { player, worldId },
+        );
+        await fetch(req.url, { method: req.method, body: req.body, headers: this.auth });
     }
 
     async onStop() {

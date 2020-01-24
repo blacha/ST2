@@ -2,7 +2,7 @@ import { Batcher } from './batcher';
 import { ClientApi } from './client.api';
 import { StCity } from '@cncta/util';
 import { St } from '../st';
-import { ApiScanResponse } from '@st/shared';
+import { ApiScanResponse, ApiUtil, ApiScanRequest } from '@st/shared';
 import { ClientLibStatic } from '@cncta/clientlib';
 
 declare const ClientLib: ClientLibStatic;
@@ -22,12 +22,17 @@ export class BatchBaseSender extends Batcher<'cityId', StCity, string> {
         St.getInstance().log.info({ bases: data.length }, 'SendingData');
         const md = ClientLib.Data.MainData.GetInstance();
         const worldId = md.get_Server().get_WorldId();
-        const playerName = md.get_Player().name;
+        const player = md.get_Player().name;
+        const req = ApiUtil.request<ApiScanRequest>(
+            'post',
+            '/api/v1/world/:worldId/player/:player/scan',
+            { worldId, player },
+            data,
+        );
 
-        const url = [this.api.baseUrl, 'api', 'v1', 'world', worldId, 'player', playerName, 'scan'].join('/');
-        const res = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
+        const res = await fetch(req.url, {
+            method: req.method,
+            body: req.body,
             headers: { 'content-type': 'application/json', authorization: `Bearer  ${this.api.st.instanceId}` },
         });
         if (!res.ok) {

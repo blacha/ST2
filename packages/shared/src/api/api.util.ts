@@ -18,7 +18,7 @@ export class ApiUtil {
             method,
             url: `${ApiUtil.BaseUrl}/${output}`,
             params,
-            body,
+            body: JSON.stringify(body),
         };
     }
 }
