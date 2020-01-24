@@ -36,7 +36,9 @@ export class NavHeader extends React.Component {
                 <section className={NavHeader.headerContainerCss}>
                     <div className={NavHeader.headerIconCss}>
                         <div className="Icon"></div>
-                        <div className="IconTitle">ShockrTools</div>
+                        <div className="IconTitle">
+                            <Link to="/">ShockrTools</Link>
+                        </div>
                     </div>
                     <div className={NavHeader.headerOptionsCss}>
                         {this.renderOptions()}
