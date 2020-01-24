@@ -5,8 +5,6 @@ import * as images from '../../static/images/*.png';
 import { FlexCenter } from '../css.util';
 import * as IconStar from '../../static/icon/IconStar.png';
 
-const UnitIconCss = style({ height: '90%', maxWidth: '95%' });
-
 export interface UnitIconProps {
     unitId: GameDataUnitId;
 }
@@ -19,7 +17,7 @@ export class UnitIcon extends React.Component<UnitIconProps> {
         if (imageName == null) {
             console.error('Missing unit id:' + unitId);
         }
-        return <img src={imageName} className={UnitIconCss} />;
+        return <img src={imageName} />;
     }
 }
 
