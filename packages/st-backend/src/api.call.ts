@@ -1,17 +1,9 @@
 import * as express from 'express';
 import * as expressCore from 'express-serve-static-core';
-import { Id, StLog } from '@st/shared';
+import { Id, StLog, ApiFunc } from '@st/shared';
 import * as admin from 'firebase-admin';
 import { UId } from '@st/model';
 import { HttpError } from './http.error';
-
-export interface ApiFunc<Params = any, Body = any, Response = any, method = 'post'> {
-    path: string;
-    params: Params;
-    body: Body;
-    response: Response;
-    method: 'get' | 'post';
-}
 
 export interface ApiRequest<T extends ApiFunc> extends expressCore.Request<T['params'], T['response'], T['body']> {
     id: string;

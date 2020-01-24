@@ -1,9 +1,7 @@
-import { ApiClaimPlayerAcceptRequest, Config } from '@st/shared';
+import { ApiClaimPlayerAcceptRequest, Config, ApiUtil, ApiClaimStartRequest } from '@st/shared';
 import { Auth } from '../auth/auth.service';
 
 export class StApi {
-    baseUrl = Config.api.url.replace('__URL__', 'https://shockr.dev');
-
     private async getAuthHeader() {
         const token = await Auth.getToken();
         if (token == null) {
@@ -15,10 +13,11 @@ export class StApi {
     /** Send a request to claim a player this will trigger a mail message being sent in game */
     async claimPlayerRequest(worldId: number, player: string): Promise<boolean> {
         const authHeader = await this.getAuthHeader();
-        const res = await fetch(`${this.baseUrl}/api/v1/world/${worldId}/player/${player}/claim`, {
-            method: 'post',
-            headers: { ...authHeader },
+        const req = ApiUtil.request<ApiClaimStartRequest>('post', '/api/v1/world/:worldId/player/:player/claim', {
+            worldId,
+            player,
         });
+        const res = await fetch(req.url, { method: req.method, headers: authHeader });
         if (res.status == 200) {
             return true;
         }
@@ -27,10 +26,9 @@ export class StApi {
 
     async claimPlayerAccept(claimId: string): Promise<ApiClaimPlayerAcceptRequest['response'] | false> {
         const authHeader = await this.getAuthHeader();
-        const res = await fetch(`${this.baseUrl}/api/v1/claim/${claimId}`, {
-            method: 'get',
-            headers: { ...authHeader },
-        });
+
+        const req = ApiUtil.request<ApiClaimPlayerAcceptRequest>('get', '/api/v1/claim/:claimId', { claimId });
+        const res = await fetch(req.url, { method: req.method, headers: authHeader });
         console.log('claimAccept', res.status);
         if (res.status == 200) {
             return (await res.json()) as ApiClaimPlayerAcceptRequest['response'];
