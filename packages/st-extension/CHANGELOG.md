@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
+
+
+### Bug Fixes
+
+* don't crash if there is no main base ([ac1e8ee](https://github.com/blacha/st/commit/ac1e8eec8f0a8f57e85590bd0c823d35f72fa307))
+
+
+### Features
+
+* count the number of records removed in a cleanup ([fe7e8a7](https://github.com/blacha/st/commit/fe7e8a73b2cc39a690bebb155034ee3fdbe3c457))
+
+
+
+
+
 # [1.0.0](https://github.com/blacha/st/compare/v0.10.1...v1.0.0) (2020-01-23)
 
 

@@ -1,14 +1,14 @@
 {
     "name": "@st/extension",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Client lib utilities and types",
     "private": true,
     "scripts": {
         "build": "tsc --pretty"
     },
     "dependencies": {
-        "@cncta/clientlib": "^1.0.0",
-        "@cncta/util": "^1.0.0"
+        "@cncta/clientlib": "^2.0.0",
+        "@cncta/util": "^2.0.0"
     },
     "files": [
         "/build"

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
+
+
+### Features
+
+* adding ranking data commands ([7f62ef1](https://github.com/blacha/st/commit/7f62ef11a9e2d510165c59ff3d5683772031a43c))
+* check player exist command ([0d972f8](https://github.com/blacha/st/commit/0d972f8f3bbe21aebc5c8ffc85cbbdb896fdc347))
+* improve typing of ranking data requests ([3e30584](https://github.com/blacha/st/commit/3e30584633c493b1be5470c2042881f40a12dca1))
+* support for mail deletion ([1a3de84](https://github.com/blacha/st/commit/1a3de844d0a21279a11b6550c6be8d41d3a61986))
+
+
+* feat!: player names are not case sensitive for ea accounts ([6de1c45](https://github.com/blacha/st/commit/6de1c4502b355d207f4eac8f8760f81470686f73))
+
+
+### BREAKING CHANGES
+
+* this splits PlayerName into two
+- PlayerNameDisplay: case sensitive player name
+- PlayerNameId: lowercased player name
+
+
+
+
+
 # [1.0.0](https://github.com/blacha/st/compare/v0.10.1...v1.0.0) (2020-01-23)
 
 

@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
+
+
+### Bug Fixes
+
+* claim accept is missing ([7506a5e](https://github.com/blacha/st/commit/7506a5ed0aad28ec98da7c0b01117eff5c6d07f4))
+* don't always goto the alliance page ([5038b77](https://github.com/blacha/st/commit/5038b779de8a013a4fa6d1eb7c72668c8be8f9f6))
+* don't crash if there is no main base ([ac1e8ee](https://github.com/blacha/st/commit/ac1e8eec8f0a8f57e85590bd0c823d35f72fa307))
+* improve logic behind failure conditions in claiming players ([6753149](https://github.com/blacha/st/commit/6753149b33bbca60180c3b3d212475e9662f034b))
+* missing model id ([2606e6d](https://github.com/blacha/st/commit/2606e6dfcd9ba5c4028dc6e14935ff7f7dcfb184))
+
+
+### Features
+
+* accept claims ([c3b74f4](https://github.com/blacha/st/commit/c3b74f42cd2c2ffd1eee6265a95f2e51cd941fb4))
+* adding ranking data commands ([7f62ef1](https://github.com/blacha/st/commit/7f62ef11a9e2d510165c59ff3d5683772031a43c))
+* better error messages ([4d44ff0](https://github.com/blacha/st/commit/4d44ff0086bfdeaa2fb614466357afcadb03e297))
+* check player exist command ([0d972f8](https://github.com/blacha/st/commit/0d972f8f3bbe21aebc5c8ffc85cbbdb896fdc347))
+* count the number of records removed in a cleanup ([fe7e8a7](https://github.com/blacha/st/commit/fe7e8a73b2cc39a690bebb155034ee3fdbe3c457))
+* improve typing of ranking data requests ([3e30584](https://github.com/blacha/st/commit/3e30584633c493b1be5470c2042881f40a12dca1))
+* initial work on claiming a player ux ([b8c352b](https://github.com/blacha/st/commit/b8c352b33f8b7792882edce4e1ebfb0fee05320e))
+* support for mail deletion ([1a3de84](https://github.com/blacha/st/commit/1a3de844d0a21279a11b6550c6be8d41d3a61986))
+
+
+* feat!: player names are not case sensitive for ea accounts ([6de1c45](https://github.com/blacha/st/commit/6de1c4502b355d207f4eac8f8760f81470686f73))
+
+
+### BREAKING CHANGES
+
+* this splits PlayerName into two
+- PlayerNameDisplay: case sensitive player name
+- PlayerNameId: lowercased player name
+
+
+
+
+
 # [1.0.0](https://github.com/blacha/st/compare/v0.10.1...v1.0.0) (2020-01-23)
 
 

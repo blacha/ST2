@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
+
+
+### Bug Fixes
+
+* claim accept is missing ([7506a5e](https://github.com/blacha/st/commit/7506a5ed0aad28ec98da7c0b01117eff5c6d07f4))
+* don't always goto the alliance page ([5038b77](https://github.com/blacha/st/commit/5038b779de8a013a4fa6d1eb7c72668c8be8f9f6))
+* improve logic behind failure conditions in claiming players ([6753149](https://github.com/blacha/st/commit/6753149b33bbca60180c3b3d212475e9662f034b))
+* missing model id ([2606e6d](https://github.com/blacha/st/commit/2606e6dfcd9ba5c4028dc6e14935ff7f7dcfb184))
+
+
+* feat!: player names are not case sensitive for ea accounts ([6de1c45](https://github.com/blacha/st/commit/6de1c4502b355d207f4eac8f8760f81470686f73))
+
+
+### Features
+
+* accept claims ([c3b74f4](https://github.com/blacha/st/commit/c3b74f42cd2c2ffd1eee6265a95f2e51cd941fb4))
+* initial work on claiming a player ux ([b8c352b](https://github.com/blacha/st/commit/b8c352b33f8b7792882edce4e1ebfb0fee05320e))
+
+
+### BREAKING CHANGES
+
+* this splits PlayerName into two
+- PlayerNameDisplay: case sensitive player name
+- PlayerNameId: lowercased player name
+
+
+
+
+
 # [1.0.0](https://github.com/blacha/st/compare/v0.10.1...v1.0.0) (2020-01-23)
 
 

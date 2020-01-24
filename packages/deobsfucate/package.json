@@ -1,6 +1,6 @@
 {
     "name": "@cncta/deobsfucate",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "ClientLib deobsfucator",
     "scripts": {
         "build": "tsc --pretty"
