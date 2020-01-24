@@ -46,6 +46,7 @@ export class App extends React.Component {
                         <div>
                             Created by <a href="mailto:contact@shockr.dev">shockr</a>
                         </div>
+                        |
                         <div>
                             <a href="https://github.com/blacha/st/">v{Config.version}</a> ({Config.hash.substr(0, 8)})
                         </div>
