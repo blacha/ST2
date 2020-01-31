@@ -1,17 +1,8 @@
 import React = require('react');
-import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId } from '@cncta/clientlib';
+import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId, CompositeId } from '@cncta/clientlib';
 import { Duration } from '@cncta/util/src';
 import { Stores } from '@st/model';
-import {
-    Base,
-    BaseBuilder,
-    CompositeId,
-    formatNumber,
-    GameResources,
-    Id,
-    mergeBaseUpgrade,
-    NumberPacker,
-} from '@st/shared';
+import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade, WorldAllianceId } from '@st/shared';
 import 'antd/dist/antd.css';
 import BackTop from 'antd/es/back-top';
 import Table from 'antd/es/table';
@@ -196,7 +187,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
     }
 
     async loadAlliance(worldId: WorldId, allianceId: AllianceId) {
-        const docId = NumberPacker.pack([worldId, allianceId]) as CompositeId<[WorldId, AllianceId]>;
+        const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
         this.setState({ info: [], state: ComponentLoading.Loading });
 
         const results = await Stores.Player.getAllBy({ allianceKey: docId }, 60);

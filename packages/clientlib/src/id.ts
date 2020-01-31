@@ -13,3 +13,5 @@ export type PlayerNameId = string & { _playerNameId: never };
 export type TimeStamp = number & { _timeStamp: never };
 
 export type MailId = number & { _mailId: never };
+
+export type CompositeId<T> = string & { _t: T };

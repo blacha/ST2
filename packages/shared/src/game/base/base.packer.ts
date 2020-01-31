@@ -1,8 +1,7 @@
-import { Tile } from './tile';
+import { BaseX, BaseY, ResourceType } from '@cncta/clientlib';
+import { Base62, LayoutPacker } from '@cncta/util';
 import { Base } from './base';
-import { BaseY, ResourceType, BaseX, WorldId, CityId, TimeStamp } from '@cncta/clientlib';
-import { LayoutPacker, Base62 } from '@cncta/util';
-import { CompositeId } from '../../id';
+import { Tile } from './tile';
 
 export interface Point {
     x: number;
@@ -31,14 +30,6 @@ export class NumberPacker {
             return Base62.decode(s, 0).value;
         },
     };
-}
-
-export class BaseIdPacker {
-    static pack(base: Base): CompositeId<[WorldId, CityId, TimeStamp]> {
-        return Base62.pack([base.worldId, base.cityId, Math.floor(base.updatedAt / 1000)]) as CompositeId<
-            [WorldId, CityId, TimeStamp]
-        >;
-    }
 }
 
 /**

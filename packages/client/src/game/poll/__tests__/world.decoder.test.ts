@@ -1,4 +1,4 @@
-import { FactionType } from '@cncta/clientlib';
+import { FactionType, PlayerId, AllianceId, PlayerNameDisplay, AllianceName, CityId } from '@cncta/clientlib';
 import { BaseLocationPacker } from '@cncta/util';
 import * as o from 'ospec';
 import 'source-map-support/register';
@@ -19,9 +19,11 @@ o.spec('WorldDecoder', () => {
             v: 3228,
         });
 
-        const cities = decoder.cities[712];
-        o(Object.keys(cities).length).equals(1);
-        const city = cities[3686816];
+        const cities = decoder.cities.get(712 as CityId);
+        if (cities == null) throw new Error('Invalid city');
+        o(cities.size).equals(1);
+        const city = cities.get(3686816);
+        if (city == null) throw new Error('Invalid city');
         o(city.id).equals(3686816);
         o(city.x).equals(443);
         o(city.y).equals(571);
@@ -39,8 +41,8 @@ o.spec('WorldDecoder', () => {
             healthBase: 100,
             healthDefense: 100,
         };
-        const output = decoder.objects[location];
-        if (output.type != 'base') throw new Error('Invalid object');
+        const output = decoder.objects.get(location);
+        if (output == null || output.type != 'base') throw new Error('Invalid object');
         o(output.id).equals(expectedOutput.id);
         o(output.level).equals(expectedOutput.level);
         o(output.healthBase).equals(expectedOutput.healthBase);
@@ -49,21 +51,22 @@ o.spec('WorldDecoder', () => {
 
     o('should decode a player', () => {
         decoder.add({ a: ['BA6B-f$kL-Red Cherry Hunters'], p: ['DA;H-[Nu-MAArco_-7x'], i: 0, v: 0 });
-        o(decoder.players[712]).deepEquals({
-            id: 712,
-            allianceId: 149,
+        o(decoder.players.get(712 as PlayerId)).deepEquals({
+            id: 712 as PlayerId,
+            allianceId: 149 as AllianceId,
             points: 382190,
-            name: 'Arco_-7x',
+            name: 'Arco_-7x' as PlayerNameDisplay,
             faction: FactionType.Nod,
         });
     });
 
     o('should decode an alliance', () => {
         decoder.add({ a: ['BA6B-f$kL-Red Cherry Hunters'], i: 0, v: 0 });
-        o(decoder.alliances[149]).deepEquals({
-            id: 149,
+        o(decoder.alliances.get(149 as AllianceId)).deepEquals({
+            id: 149 as AllianceId,
             points: 8593252,
-            name: 'Red Cherry Hunters',
+            name: 'Red Cherry Hunters' as AllianceName,
+            players: [],
         });
     });
 });

@@ -52,12 +52,15 @@ export class BaseN {
         return { value, bytes };
     }
 
-    encode(num: number): string {
+    encode(num: number, padLength = 0): string {
         let current = num;
         const output: string[] = [];
         while (current > 0) {
             output.push(this.EncodingTable[current % this.base]);
             current = Math.floor(current / this.base);
+        }
+        while (output.length < padLength) {
+            output.push(this.chars[0]);
         }
         return output.join('');
     }

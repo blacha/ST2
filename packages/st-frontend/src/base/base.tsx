@@ -1,9 +1,12 @@
-import { StCity, BaseLocationPacker } from '@cncta/util';
-import { Base, BaseBuilder, NumberPacker, BaseIdPacker, CompositeId } from '@st/shared';
+import { BaseX, CityId, PlayerId, TimeStamp, WorldId, CompositeId } from '@cncta/clientlib';
+import { Stores } from '@st/model';
+import { Base, BaseBuilder, WorldPlayerId, WorldCityId } from '@st/shared';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
-import Row from 'antd/es/row';
 import Icon from 'antd/es/icon';
+import Row from 'antd/es/row';
+import Spin from 'antd/es/spin';
+import Tooltip from 'antd/es/tooltip';
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
@@ -14,10 +17,6 @@ import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
-import { BaseX, PlayerId, WorldId, CityId, TimeStamp } from '@cncta/clientlib';
-import { Stores } from '@st/model';
-import Tooltip from 'antd/es/tooltip';
-import Spin from 'antd/es/spin';
 
 const TileSize = 64;
 
@@ -111,7 +110,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     }
 
     async loadPlayerBase(playerId: PlayerId, cityId: CityId, worldId: WorldId) {
-        const docId = NumberPacker.pack([worldId, playerId]) as CompositeId<[WorldId, PlayerId]>;
+        const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
         const player = await Stores.Player.get(docId);
         if (player == null) {
             this.setState({ state: ComponentLoading.Failed });
@@ -128,7 +127,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
 
     async loadBase(cityId: string) {
         console.log('Load', cityId);
-        const city = await Stores.City.get(cityId as CompositeId<[WorldId, CityId, TimeStamp]>);
+        const city = await Stores.City.get(cityId as CompositeId<[WorldId, TimeStamp, CityId]>);
         if (city == null) {
             this.setState({ base: this.state.base, state: ComponentLoading.Failed });
             return;
@@ -146,7 +145,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
             return <div>Could not find base</div>;
         }
 
-        const baseId = BaseIdPacker.pack(base);
+        const baseId = WorldCityId.pack({ worldId: base.worldId, cityId: base.cityId, timestamp: base.updatedAt });
         const baseWidth = TileSize * BaseX.Max + 'px';
         return (
             <React.Fragment>

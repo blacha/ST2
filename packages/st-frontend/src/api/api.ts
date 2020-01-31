@@ -1,4 +1,4 @@
-import { ApiClaimPlayerAcceptRequest, Config, ApiUtil, ApiClaimStartRequest } from '@st/shared';
+import { ApiClaimPlayerAcceptRequest, ApiClaimStartRequest, ApiUtil } from '@st/shared';
 import { Auth } from '../auth/auth.service';
 
 export class StApi {

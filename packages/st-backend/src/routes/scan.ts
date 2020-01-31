@@ -1,7 +1,24 @@
 import { BaseLocationPacker, StCity, InvalidAllianceId, Duration } from '@cncta/util';
-import { ApiScanRequest, ApiScanResponse, BaseBuilder, BaseIdPacker, NumberPacker, CompositeId } from '@st/shared';
+import {
+    ApiScanRequest,
+    ApiScanResponse,
+    BaseBuilder,
+    NumberPacker,
+    WorldCityId,
+    WorldAllianceId,
+    WorldPlayerId,
+} from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
-import { WorldId, PlayerId, AllianceId, AllianceName, PlayerNameDisplay } from '@cncta/clientlib';
+import {
+    WorldId,
+    PlayerId,
+    AllianceId,
+    AllianceName,
+    PlayerNameDisplay,
+    CompositeId,
+    TimeStamp,
+    CityId,
+} from '@cncta/clientlib';
 import { Stores, ModelCity, ModelUtil } from '@st/model';
 
 const OneMinuteMs = 60 * 1000;
@@ -30,8 +47,8 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             return;
         }
 
-        const allianceKey = NumberPacker.pack([worldId, allianceId]) as CompositeId<[WorldId, AllianceId]>;
-        const playerDocId = NumberPacker.pack([worldId, playerId]) as CompositeId<[WorldId, PlayerId]>;
+        const allianceKey = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
+        const playerDocId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
         await Stores.Player.transaction(playerDocId, playerCity => {
             playerCity.allianceKey = allianceKey;
             for (const city of cityList) {
@@ -60,10 +77,9 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             return;
         }
 
+        const allianceId = playerObj.allianceId;
         // TODO this may get too much write contention, might be a idea to shard based on layout XY
-        const allianceLayoutDoc = NumberPacker.pack([worldId, playerObj.allianceId]) as CompositeId<
-            [WorldId, AllianceId]
-        >;
+        const allianceLayoutDoc = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
 
         const updatedAt = ModelUtil.TimeStamp();
         await Stores.Layout.transaction(allianceLayoutDoc, model => {
@@ -104,7 +120,11 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
                 players.set(baseJson.ownerId, existing);
             }
 
-            const baseId = BaseIdPacker.pack(base);
+            const baseId = WorldCityId.pack({
+                worldId: base.worldId,
+                timestamp: base.updatedAt,
+                cityId: base.cityId,
+            }) as CompositeId<[WorldId, TimeStamp, CityId]>;
             await Stores.City.set(baseId, new ModelCity({ city: baseJson }));
             output.push(baseId);
         }

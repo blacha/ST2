@@ -31,8 +31,6 @@ A user has requested to claim this player account on shockr.dev to complete the 
 
     async handle(req: ApiRequest<ApiClaimStartRequest>): Promise<{}> {
         const user = await this.validateUser(req);
-        console.log(user);
-
         const player = req.params.player.toLowerCase() as PlayerNameId;
         const worldId = Number(req.params.worldId) as WorldId;
 
@@ -91,13 +89,14 @@ export class ApiClaimPlayerAccept extends ApiCall<ApiClaimPlayerAcceptRequest> {
         req.log.info({ userId, player, worldId, claimId }, 'Claim');
 
         await Stores.ClaimRequest.delete(player);
-        const userObj = await Stores.User.getOrCreate(user.uid);
-        // Already claimed
-        if (userObj.claims.find(f => f.player == player)) {
-            return { player, worldId };
-        }
-        userObj.claims.push({ claimId, player });
-        await Stores.User.save(userObj);
+
+        Stores.User.transaction(user.uid, userObj => {
+            // Already claimed
+            if (userObj.claims.find(f => f.player == player)) {
+                return;
+            }
+            userObj.claims.push({ claimId, player });
+        });
 
         return { player, worldId };
     }

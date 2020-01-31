@@ -1,10 +1,9 @@
-import { WorldId, PlayerNameDisplay, PlayerId, TimeStamp, PlayerNameId } from '@cncta/clientlib';
-import { CompositeId } from '@st/shared';
+import { WorldId, PlayerNameDisplay, PlayerId, TimeStamp, CompositeId, PlayerNameId } from '@cncta/clientlib';
 
-export type InstallId = string & { _t: 'InstallId' };
+export type InstallId = string & { _installId: never };
 export type UId = string & { _uid: never };
-export type WorldSessionId = string & { _t: 'WorldSessionId' };
-export type AccountSessionId = string & { _t: 'AccountSessionId' };
+export type WorldSessionId = string & { _worldSessionId: never };
+export type AccountSessionId = string & { _accountSessionId: never };
 
 export const InvalidWorldId = -1 as WorldId;
 export const InvalidPlayerName = '' as PlayerNameDisplay;

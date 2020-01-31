@@ -1,30 +1,31 @@
-import { FactionType, PollWorldData } from '@cncta/clientlib';
+import { AllianceId, AllianceName, FactionType, PlayerId, PlayerNameDisplay, PollWorldData } from '@cncta/clientlib';
 import { WorldSectorObjectCity } from './decode.world.city';
 import { WorldSectorObjectBase } from './decode.world.npc.base';
 import { WorldSectorObjectPoi } from './decode.world.poi';
 import { WorldSectorDecoder } from './decode.world.sector';
 
 export interface WorldSectorPlayer {
-    id: number;
+    id: PlayerId;
     points: number;
     faction: FactionType.Nod | FactionType.Gdi;
-    allianceId: number;
-    name: string;
+    allianceId: AllianceId;
+    name: PlayerNameDisplay;
 }
 export interface WorldSectorAlliance {
-    id: number;
+    id: AllianceId;
     points: number;
-    name: string;
+    name: AllianceName;
+    players: PlayerId[];
 }
 export type WorldSectorObject = WorldSectorObjectCity | WorldSectorObjectBase | WorldSectorObjectPoi;
 
 export class WorldData {
     static SectorSize = 32;
 
-    players: Record<number, WorldSectorPlayer> = {};
-    cities: Record<number, Record<number, WorldSectorObjectCity>> = {};
-    alliances: Record<number, WorldSectorAlliance> = {};
-    objects: Record<number, WorldSectorObject> = {};
+    players: Map<PlayerId, WorldSectorPlayer> = new Map();
+    cities: Map<number, Map<number, WorldSectorObjectCity>> = new Map();
+    alliances: Map<AllianceId, WorldSectorAlliance> = new Map();
+    objects: Map<number, WorldSectorObject> = new Map();
 
     add(sector: PollWorldData) {
         WorldSectorDecoder.decode(this, sector);

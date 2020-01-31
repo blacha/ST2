@@ -1,5 +1,13 @@
-import { Point, WorldObjectType, PollWorldData } from '@cncta/clientlib';
-import { Base91, BaseLocationPacker } from '@cncta/util';
+import {
+    Point,
+    WorldObjectType,
+    PollWorldData,
+    AllianceId,
+    AllianceName,
+    PlayerNameDisplay,
+    PlayerId,
+} from '@cncta/clientlib';
+import { Base91, BaseLocationPacker, InvalidAllianceId } from '@cncta/util';
 import { WorldData, WorldSectorAlliance, WorldSectorPlayer } from './world.data';
 import { DecodeWorldNpcBase } from './decode.world.npc.base';
 import { DecodeWorldCity } from './decode.world.city';
@@ -31,13 +39,18 @@ export class WorldSectorDecoder {
             const ctx = { data: alliance, offset: 0 };
             const sectorId = Base91.dec(ctx, 2);
 
-            const obj: WorldSectorAlliance = {
-                id: Base91.dec(ctx),
-                points: Base91.dec(ctx),
-                name: alliance.substr(ctx.offset),
-            };
-            this.alliances[sectorId] = obj;
-            this.world.alliances[obj.id] = obj;
+            const allianceId = Base91.dec(ctx) as AllianceId;
+            let existing = this.world.alliances.get(allianceId);
+            if (existing == null) {
+                existing = {
+                    id: allianceId,
+                    points: Base91.dec(ctx),
+                    name: alliance.substr(ctx.offset) as AllianceName,
+                    players: [],
+                };
+            }
+            this.alliances[sectorId] = existing;
+            this.world.alliances.set(existing.id, existing);
         }
     }
 
@@ -45,28 +58,31 @@ export class WorldSectorDecoder {
         for (const player of p) {
             const ctx = { data: player, offset: 0 };
             const sectorId = Base91.dec(ctx, 2);
-            const id = Base91.dec(ctx);
+            const id = Base91.dec(ctx) as PlayerId;
             const points = Base91.dec(ctx);
             const header = Base91.dec(ctx, 2);
+            const name = player.substr(ctx.offset) as PlayerNameDisplay;
 
             const faction = (header >> 1) & 3;
             const localAllianceId = header >> 3;
-            let allianceId = 0;
+            let allianceId: AllianceId = InvalidAllianceId as AllianceId;
             if (localAllianceId > 0 && this.alliances[localAllianceId]) {
+                const alliance = this.alliances[localAllianceId];
+                alliance.players.push(id);
                 allianceId = this.alliances[localAllianceId].id;
             }
 
-            const obj = {
+            const obj: WorldSectorPlayer = {
                 id,
                 points,
                 faction,
                 allianceId,
-                name: player.substr(ctx.offset),
+                name,
             };
 
             this.players[sectorId] = obj;
-            this.world.players[obj.id] = obj;
-            this.world.cities[obj.id] = this.world.cities[obj.id] ?? {};
+            this.world.players.set(obj.id, obj);
+            this.world.cities.set(obj.id, this.world.cities.get(obj.id) ?? new Map());
         }
     }
 
@@ -93,14 +109,14 @@ export class WorldSectorDecoder {
                 continue;
             }
             if (output.type == 'city') {
-                const playerCities = this.world.cities[output.ownerId];
+                const playerCities = this.world.cities.get(output.ownerId);
                 if (playerCities == null) {
                     throw new Error('Adding city to unknown player');
                 }
-                playerCities[output.id] = output;
+                playerCities.set(output.id, output);
                 continue;
             }
-            this.world.objects[BaseLocationPacker.pack(output.x, output.y)] = output;
+            this.world.objects.set(BaseLocationPacker.pack(output.x, output.y), output);
         }
     }
 }

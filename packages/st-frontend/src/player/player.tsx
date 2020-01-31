@@ -1,4 +1,5 @@
-import { StCity } from '@cncta/util';
+import { PlayerId, WorldId, CompositeId } from '@cncta/clientlib';
+import { Stores } from '@st/model';
 import {
     Base,
     BaseBuilder,
@@ -7,12 +8,14 @@ import {
     Id,
     mergeBaseUpgrade,
     NumberPacker,
-    CompositeId,
+    WorldPlayerId,
 } from '@st/shared';
 import BackTop from 'antd/es/back-top';
 import Divider from 'antd/es/divider';
+import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { style } from 'typestyle';
 import { PlayerStats } from '../alliance/alliance';
 import { ComponentLoading } from '../base/base';
 import { timeSince } from '../time.util';
@@ -20,10 +23,6 @@ import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
 import { ViewResearch } from '../util/research';
 import React = require('react');
-import { WorldId, PlayerId } from '@cncta/clientlib/src';
-import { Stores } from '@st/model';
-import { style } from 'typestyle';
-import Spin from 'antd/es/spin';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
@@ -149,7 +148,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
     }
 
     async loadPlayer(worldId: WorldId, playerId: PlayerId) {
-        const docId = NumberPacker.pack([worldId, playerId]) as CompositeId<[WorldId, PlayerId]>;
+        const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
         this.setState({ state: ComponentLoading.Loading });
         const result = await Stores.Player.getOrCreate(docId);
         if (!result.isValid) {
