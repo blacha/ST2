@@ -140,7 +140,7 @@ export const PlayerColumns = [
 
 export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
     static tableCss = style({ width: '100%' });
-    state: PlayerState = { state: ComponentLoading.Ready } as any;
+    state: PlayerState = { state: ComponentLoading.Init } as any;
 
     componentDidMount() {
         const { worldId, playerId } = this.props.match.params;

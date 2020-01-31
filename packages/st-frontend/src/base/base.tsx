@@ -1,6 +1,6 @@
 import { BaseX, CityId, PlayerId, TimeStamp, WorldId, CompositeId } from '@cncta/clientlib';
 import { Stores } from '@st/model';
-import { Base, BaseBuilder, WorldPlayerId, WorldCityId } from '@st/shared';
+import { Base, BaseBuilder, WorldPlayerId, WorldCityId, StLog } from '@st/shared';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Icon from 'antd/es/icon';
@@ -37,7 +37,7 @@ export const BaseCss = {
 };
 const ResourceCountsCss = style({ display: 'flex', alignItems: 'center', marginRight: '-8px' });
 export enum ComponentLoading {
-    Ready,
+    Init,
     Loading,
     Failed,
     Done,
@@ -88,11 +88,12 @@ function viewBaseLocation(base: Base) {
 }
 
 export class ViewBase extends React.Component<ViewBaseProps> {
-    state = { base: new Base(), state: ComponentLoading.Ready };
+    state = { base: new Base(), state: ComponentLoading.Init };
 
     componentDidMount() {
         const { cityId, playerId, worldId } = this.props.match.params;
-        console.log('Loading', this.props.match.params);
+        StLog.info({ playerId, cityId, worldId }, 'Loading');
+
         if (cityId == null) {
             return;
         }
@@ -110,6 +111,8 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     }
 
     async loadPlayerBase(playerId: PlayerId, cityId: CityId, worldId: WorldId) {
+        StLog.info({ playerId, cityId, worldId }, 'LoadingPlayerCity');
+
         const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
         const player = await Stores.Player.get(docId);
         if (player == null) {
@@ -126,7 +129,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     }
 
     async loadBase(cityId: string) {
-        console.log('Load', cityId);
+        StLog.info({ cityId }, 'LoadingCity');
         const city = await Stores.City.get(cityId as CompositeId<[WorldId, TimeStamp, CityId]>);
         if (city == null) {
             this.setState({ base: this.state.base, state: ComponentLoading.Failed });
@@ -138,7 +141,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
 
     render() {
         const { base, state } = this.state;
-        if (state == ComponentLoading.Loading) {
+        if (state == ComponentLoading.Loading || state == ComponentLoading.Init) {
             return <Spin />;
         }
         if (state == ComponentLoading.Failed) {
@@ -153,7 +156,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
                     worldId={base.worldId}
                     alliance={base.alliance}
                     player={base.owner}
-                    base={{ id: baseId, name: base.name }}
+                    base={{ id: baseId, name: base.name, cityId: base.cityId }}
                 />
                 <div className={BaseCss.Base}>
                     <Divider>
@@ -167,7 +170,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
 
                     <div style={{ width: baseWidth }}>
                         <div>{viewBaseLocation(base)}</div>
-                        <div style={{ width: baseWidth }}>
+                        <div style={{ width: baseWidth, marginBottom: 24 }}>
                             <ViewBaseStats base={base} />
                         </div>
                     </div>

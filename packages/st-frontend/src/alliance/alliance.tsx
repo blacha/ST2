@@ -178,7 +178,7 @@ export const AllianceColumns = [
     },
 ];
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
-    state: AllianceState = { info: [], state: ComponentLoading.Ready, alliance: { id: -1, name: '' }, worldId: -1 };
+    state: AllianceState = { info: [], state: ComponentLoading.Init, alliance: { id: -1, name: '' }, worldId: -1 };
     static tableCss = style({ width: '100%' });
 
     componentDidMount() {

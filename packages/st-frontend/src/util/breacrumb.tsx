@@ -12,7 +12,7 @@ export interface BreadCrumbProps {
     worldId: number;
     alliance?: IdName;
     player?: IdName;
-    base?: IdName;
+    base?: IdName & { cityId?: number };
 }
 
 const BreadCrumbCss = style({ marginTop: '8px', marginBottom: '8px', alignSelf: 'flex-start' });
@@ -44,13 +44,20 @@ export class StBreadCrumb extends React.Component<BreadCrumbProps> {
     }
 
     viewPlayerBase() {
-        const { base, worldId } = this.props;
+        const { base, worldId, player } = this.props;
         if (base == null) {
             return null;
         }
+        if (player) {
+            return (
+                <BreadCrumb.Item>
+                    <Link to={`/world/${worldId}/player/${player.id}/city/${base.cityId}`}>{base.name}</Link>
+                </BreadCrumb.Item>
+            );
+        }
         return (
             <BreadCrumb.Item>
-                <Link to={`/world/${worldId}/base/${base.id}`}>{base.name}</Link>
+                <Link to={`/base/${base.id}`}>{base.name}</Link>
             </BreadCrumb.Item>
         );
     }

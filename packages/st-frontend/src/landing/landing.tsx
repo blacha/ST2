@@ -60,10 +60,10 @@ interface LandingState {
 }
 @observer
 export class ViewLandingPage extends React.Component<{}, LandingState> {
-    state: LandingState = { state: ComponentLoading.Ready };
+    state: LandingState = { state: ComponentLoading.Init };
 
     static landingCss = style({ display: 'flex', flexDirection: 'column' });
-    static containerCss = style({ width: '100%', display: 'flex', justifyContent: 'center' });
+    static containerCss = style({ width: '100%' });
 
     componentDidMount() {
         const uid = Auth.uid;
@@ -112,7 +112,7 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
     }
 
     renderAuth() {
-        if (this.state.state == ComponentLoading.Loading || this.state.state == ComponentLoading.Ready) {
+        if (this.state.state == ComponentLoading.Loading || this.state.state == ComponentLoading.Init) {
             return <Spin />;
         }
 
