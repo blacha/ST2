@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as expressCore from 'express-serve-static-core';
-import { Id, StLog, ApiFunc } from '@st/shared';
+import { Id, StLog, ApiFunc, Config } from '@st/shared';
 import * as admin from 'firebase-admin';
 import { UId } from '@st/model';
 import { HttpError } from './http.error';
@@ -66,6 +66,8 @@ export abstract class ApiCall<T extends ApiFunc> {
         }
 
         res.header('x-request-id', id);
+        res.header('x-st-version', Config.version);
+        res.header('x-st-hash', Config.hash);
         res.status(status);
         res.json(response);
         if (status > 499 && error != null) {
