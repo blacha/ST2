@@ -10,7 +10,7 @@ export class ApiUtil {
         params: T['params'],
         body: T['body'] = undefined,
     ) {
-        let output = url;
+        let output = url.startsWith('/') ? url.substr(1) : url;
         for (const [key, value] of Object.entries(params)) {
             output = output.replace(`:${key}`, String(value));
         }
