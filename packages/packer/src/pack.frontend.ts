@@ -4,12 +4,13 @@ import { replaceConfig, Config } from './config';
 import findAndReadPackageJSON from 'find-and-read-package-json';
 
 const DistFolder = path.join(__dirname, '..', '..', '..', 'dist');
+const PkgSource = path.join(__dirname, '..', '..', 'st-frontend');
 
 async function main() {
     if (!fs.existsSync(DistFolder)) {
         throw new Error('Missing dist folder: ' + DistFolder);
     }
-    const pkgJson = await findAndReadPackageJSON(DistFolder);
+    const pkgJson = await findAndReadPackageJSON(PkgSource);
     Config.version = pkgJson.json.version;
     const jsFiles = fs.readdirSync(DistFolder).filter(f => f.endsWith('.js'));
     for (const fileName of jsFiles) {
