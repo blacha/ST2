@@ -1,9 +1,13 @@
-import { Stores, UId } from '@st/model';
-import { ModelPlayer } from '@st/model/src/db/model.player';
+import { PlayerNameId } from '@cncta/clientlib';
+import { ModelPlayer, Stores, UId } from '@st/model';
+import { StLog } from '@st/shared';
 import Button from 'antd/es/button';
 import Divider from 'antd/es/divider';
 import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
+import List from 'antd/es/list';
+import Paragraph from 'antd/es/typography/Paragraph';
+import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
@@ -11,8 +15,6 @@ import { style } from 'typestyle';
 import { Auth } from '../auth/auth.service';
 import { ComponentLoading } from '../base/base';
 import { timeSince } from '../time.util';
-import Title from 'antd/es/typography/Title';
-import Paragraph from 'antd/es/typography/Paragraph';
 
 export const LandingColumns = [
     {
@@ -54,13 +56,14 @@ export const LandingColumns = [
 interface LandingState {
     state: ComponentLoading;
     data?: ModelPlayer[];
+    claims?: PlayerNameId[];
 }
 @observer
 export class ViewLandingPage extends React.Component<{}, LandingState> {
     state: LandingState = { state: ComponentLoading.Ready };
 
     static landingCss = style({ display: 'flex', flexDirection: 'column' });
-    static containerCss = style({ width: '100%' });
+    static containerCss = style({ width: '100%', display: 'flex', justifyContent: 'center' });
 
     componentDidMount() {
         const uid = Auth.uid;
@@ -73,6 +76,7 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
     }
 
     async loadPlayerInfo(uId: UId) {
+        StLog.info({ uId }, 'LoadPlayer');
         const user = await Stores.User.get(uId);
         if (user == null) {
             this.setState({ state: ComponentLoading.Done });
@@ -80,8 +84,12 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
         }
 
         const playerClaims = user.claims.map(c => c.player);
+        StLog.info({ uId, claims: playerClaims }, 'LoadPlayer:Done');
+
         const playerData = await Stores.Player.getAllBy({ playerNameId: playerClaims });
-        this.setState({ state: ComponentLoading.Done, data: playerData });
+        StLog.info({ uId, count: playerData.length }, 'LoadPlayerData:Done');
+
+        this.setState({ state: ComponentLoading.Done, claims: playerClaims, data: playerData });
     }
 
     authButton = () => {
@@ -106,6 +114,21 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
     renderAuth() {
         if (this.state.state == ComponentLoading.Loading || this.state.state == ComponentLoading.Ready) {
             return <Spin />;
+        }
+
+        if (this.state.claims?.length && !this.state.data?.length) {
+            return (
+                <React.Fragment>
+                    <Title>Player info</Title>
+                    <Paragraph>No data found for your players</Paragraph>
+
+                    <List dataSource={this.state.claims} renderItem={item => <List.Item>{item}</List.Item>} />
+                    <Paragraph>
+                        <Link to="/claim">Claim another player</Link> |{' '}
+                        <a href="/extension/st.user.js">Install Addon</a>
+                    </Paragraph>
+                </React.Fragment>
+            );
         }
 
         if (this.state.data == null || this.state.data.length == 0) {

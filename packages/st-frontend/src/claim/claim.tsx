@@ -1,5 +1,5 @@
-import { WorldId } from '@cncta/clientlib/src';
-import { Stores } from '@st/model/src';
+import { WorldId } from '@cncta/clientlib';
+import { Stores } from '@st/model';
 import Button from 'antd/es/button';
 import Form from 'antd/es/form';
 import { FormComponentProps } from 'antd/es/form/Form';

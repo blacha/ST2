@@ -1,8 +1,9 @@
-import { Redirect, Route, RouteComponentProps } from 'react-router-dom';
-import { Auth } from './auth.service';
-import React = require('react');
+import { StLog } from '@st/shared';
 import Spin from 'antd/es/spin';
 import { observer } from 'mobx-react';
+import { Redirect, Route } from 'react-router-dom';
+import { Auth } from './auth.service';
+import React = require('react');
 
 interface AuthRouteProps {
     component: typeof React.Component;
@@ -21,9 +22,11 @@ export class PrivateRoute extends React.Component<AuthRouteProps> {
             return <Route {...this.props} />;
         }
 
+        const from = (this.props as any).location;
+        StLog.info({ from }, 'RedirectToLogin');
         const to = {
             pathname: '/login',
-            state: { from: (this.props as any).location },
+            state: { from },
         };
 
         return <Redirect to={to} />;

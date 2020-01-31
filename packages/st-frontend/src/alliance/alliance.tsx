@@ -1,6 +1,6 @@
 import React = require('react');
 import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId, CompositeId } from '@cncta/clientlib';
-import { Duration } from '@cncta/util/src';
+import { Duration } from '@cncta/util';
 import { Stores } from '@st/model';
 import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade, WorldAllianceId } from '@st/shared';
 import 'antd/dist/antd.css';

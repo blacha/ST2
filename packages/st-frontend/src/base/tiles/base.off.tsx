@@ -2,7 +2,7 @@ import React = require('react');
 import { BaseCss } from '../base';
 import { ViewBaseItem } from './base.tile';
 import { viewRow } from './base.row';
-import { Base } from '@st/shared/src';
+import { Base } from '@st/shared';
 import { BaseX, BaseY } from '@cncta/clientlib';
 
 export class ViewBaseOff extends React.Component<{ base: Base; size: number }> {

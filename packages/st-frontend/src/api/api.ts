@@ -30,10 +30,14 @@ export class StApi {
         const req = ApiUtil.request<ApiClaimPlayerAcceptRequest>('get', '/api/v1/claim/:claimId', { claimId });
         const res = await fetch(req.url, { method: req.method, headers: authHeader });
         console.log('claimAccept', res.status);
-        if (res.status == 200) {
-            return (await res.json()) as ApiClaimPlayerAcceptRequest['response'];
+        if (!res.headers.get('content-type')?.includes('application/json')) {
+            throw new Error('Failed to fetch: ' + res.statusText);
         }
-        return false;
+        const json = await res.json();
+        if (res.status == 200) {
+            return json as ApiClaimPlayerAcceptRequest['response'];
+        }
+        throw new Error(json.message);
     }
 }
 

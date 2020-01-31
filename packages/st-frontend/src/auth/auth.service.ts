@@ -1,7 +1,9 @@
 import { FireAuthGoogle, FireAuth } from '../firebase';
 import { observable, action } from 'mobx';
 import { User } from 'firebase';
-import { UId } from '@st/model/src';
+import { UId } from '@st/model';
+import { StLog } from '@st/shared';
+
 export class AuthService {
     auth = FireAuth;
     provider = FireAuthGoogle;
@@ -20,6 +22,7 @@ export class AuthService {
 
     @action
     setUser(u: User | null) {
+        StLog.info({ user: u?.uid }, 'UserUpdate');
         this.isReady = true;
         this.user.set(u);
     }

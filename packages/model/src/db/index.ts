@@ -20,6 +20,7 @@ export * from './model.layout';
 export * from './model.bot.world';
 export * from './model.bot.config';
 export * from './model.world.alliance';
+export * from './model.player';
 
 export const Stores = {
     Install: new Store('Install', ModelInstall),

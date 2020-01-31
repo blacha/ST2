@@ -28,7 +28,7 @@ export class BaseN {
         return value;
     }
 
-    decode(str: string, offset = 0, maxBytes = this.maxIntLength) {
+    decode(str: string | string[], offset = 0, maxBytes = this.maxIntLength) {
         let multiplier = 1;
         let value = 0;
         let bytes = 0;
@@ -40,7 +40,7 @@ export class BaseN {
                 break;
             }
 
-            const val = str.charCodeAt(current);
+            const val = str[current].charCodeAt(0);
             if (val == this.separatorCode) {
                 break;
             }
@@ -52,17 +52,22 @@ export class BaseN {
         return { value, bytes };
     }
 
-    encode(num: number, padLength = 0): string {
+    encodeAry(num: number, padLength = 0): string[] {
         let current = num;
         const output: string[] = [];
         while (current > 0) {
-            output.push(this.EncodingTable[current % this.base]);
-            current = Math.floor(current / this.base);
+            const mod = current % this.base;
+            output.push(this.EncodingTable[mod]);
+            current = (current - mod) / this.base;
         }
         while (output.length < padLength) {
             output.push(this.chars[0]);
         }
-        return output.join('');
+        return output;
+    }
+
+    encode(num: number, padLength = 0): string {
+        return this.encodeAry(num, padLength).join('');
     }
 
     pack(data: number[]): string {

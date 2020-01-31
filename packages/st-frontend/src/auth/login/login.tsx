@@ -1,10 +1,10 @@
 import React = require('react');
-import { Redirect, RouteComponentProps } from 'react-router-dom';
-import { Auth } from '../auth.service';
-import Spin from 'antd/es/spin';
+import { StLog } from '@st/shared';
 import Button from 'antd/es/button';
-import { style } from 'typestyle';
 import { observer } from 'mobx-react';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { style } from 'typestyle';
+import { Auth } from '../auth.service';
 
 export type LoginProps = RouteComponentProps<{}, {}, { from?: { pathname: string } }>;
 
@@ -17,12 +17,11 @@ export class Login extends React.Component<LoginProps> {
     }
 
     render() {
-        console.log('Render');
         if (Auth.isLoggedIn) {
-            console.log('Redirect');
+            StLog.info({ to: this.props.location.state.from?.pathname }, 'Redirect');
             return <Redirect to={this.props.location.state.from?.pathname ?? '/'} />;
         }
-        console.log('NeedLogin', this.props);
+        StLog.info({ from: this.props.location.state.from?.pathname }, 'NeedLogin');
         return (
             <div className={this.loginCss}>
                 <Button onClick={this.onClick} loading={Auth.isLoading}>
