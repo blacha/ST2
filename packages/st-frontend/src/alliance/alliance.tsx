@@ -1,8 +1,17 @@
 import React = require('react');
 import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId, CompositeId } from '@cncta/clientlib';
-import { Duration } from '@cncta/util';
-import { Stores } from '@st/model';
-import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade, WorldAllianceId } from '@st/shared';
+import { Duration, BaseLocationPacker } from '@cncta/util';
+import { Stores, ModelLayout } from '@st/model';
+import {
+    Base,
+    BaseBuilder,
+    formatNumber,
+    GameResources,
+    Id,
+    mergeBaseUpgrade,
+    WorldAllianceId,
+    NumberPacker,
+} from '@st/shared';
 import 'antd/dist/antd.css';
 import BackTop from 'antd/es/back-top';
 import Table from 'antd/es/table';
@@ -13,6 +22,12 @@ import { timeSince } from '../time.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { FactionIcon } from '../util/faction';
 import { ViewResearch } from '../util/research';
+import Spin from 'antd/es/spin';
+import Divider from 'antd/es/divider';
+import { PlayerStats, AllianceColumns } from './alliance.table';
+import Button from 'antd/es/button';
+import { unpackLayouts } from '../layout/layout.util';
+import { LayoutView } from '../layout/layout';
 
 export const AllianceCss = {
     Table: style({
@@ -28,15 +43,6 @@ export const AllianceCss = {
         gridTemplateColumns: 'repeat(auto-fill, 10%)',
     }),
 };
-export interface PlayerStats {
-    id: string;
-    name: string;
-    bases: Base[];
-    production: GameResources;
-    main: Base;
-    updatedAt: number;
-    upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
-}
 
 type AllianceProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
 interface AllianceState {
@@ -44,142 +50,16 @@ interface AllianceState {
     worldId: number;
     alliance: IdName;
     state: ComponentLoading;
+    layouts?: Base[];
+    isExpanded?: boolean;
 }
 
-export const AllianceColumns = [
-    {
-        title: '#',
-        key: 'index',
-        render: (main: Base, record: any, index: number) => index + 1,
-        width: 45,
-    },
-    {
-        title: 'Player',
-        dataIndex: 'main',
-        key: 'name',
-        render: (main: Base) => <Link to={`/world/${main.worldId}/player/${main.owner?.id}`}>{main.owner?.name}</Link>,
-        sorter: (a: PlayerStats, b: PlayerStats) => a.name.localeCompare(b.name),
-    },
-    {
-        title: 'F',
-        dataIndex: 'main',
-        key: 'faction',
-        width: 50,
-        render: (main: Base) => <FactionIcon faction={main.faction} />,
-        sorter: (a: PlayerStats, b: PlayerStats) => a.main.faction.name.localeCompare(b.main.faction.name),
-    },
-    {
-        title: 'B#',
-        dataIndex: 'bases',
-        key: 'bases',
-        render: (bases: Base[]) => bases.length,
-        sorter: (a: PlayerStats, b: PlayerStats) => a.bases.length - b.bases.length,
-        width: 70,
-    },
-    {
-        title: 'Production',
-        key: 'production',
-        children: [
-            {
-                title: 'Tiberium',
-                dataIndex: 'production',
-                key: 'tiberium',
-                render: (production: GameResources) => formatNumber(production.tiberium),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.production.tiberium - b.production.tiberium,
-            },
-            {
-                title: 'Crystal',
-                dataIndex: 'production',
-                key: 'crystal',
-                render: (production: GameResources) => formatNumber(production.crystal),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.production.crystal - b.production.crystal,
-            },
-            {
-                title: 'Credits',
-                dataIndex: 'production',
-                key: 'credits',
-                render: (production: GameResources) => formatNumber(production.credits),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.production.credits - b.production.credits,
-            },
-        ],
-    },
-    {
-        title: 'Main',
-        key: 'main',
-        children: [
-            {
-                title: 'Name',
-                dataIndex: 'main',
-                key: 'mainName',
-                render: (main: Base) => (
-                    <Link to={`/world/${main.worldId}/player/${main.owner?.id}/base/${main.cityId}`}>{main.name}</Link>
-                ),
-            },
-            {
-                title: 'Level',
-                dataIndex: 'main',
-                key: 'level',
-                render: (main: Base) => formatNumber(main.level),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.level - b.main.level,
-            },
-            {
-                title: 'CC',
-                dataIndex: 'main',
-                key: 'command',
-                defaultSortOrder: 'descend' as const,
-                render: (main: Base) => Math.floor(main.buildings.commandCenter?.level ?? 0) || '',
-                sorter: (a: PlayerStats, b: PlayerStats) =>
-                    (a.main.buildings.commandCenter?.level || 0) - (b.main.buildings.commandCenter?.level || 0),
-            },
-            {
-                title: 'Off',
-                dataIndex: 'main',
-                key: 'off',
-                defaultSortOrder: 'descend' as const,
-                render: (main: Base) => formatNumber(main.levelOffense),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.levelOffense - b.main.levelOffense,
-            },
-            {
-                title: 'Def',
-                dataIndex: 'main',
-                key: 'def',
-                render: (main: Base) => formatNumber(main.levelDefense),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.levelDefense - b.main.levelDefense,
-            },
-            {
-                title: 'Power',
-                dataIndex: 'main',
-                key: 'power',
-                render: (main: Base) => formatNumber(main.info.production.total.power),
-                sorter: (a: PlayerStats, b: PlayerStats) =>
-                    a.main.info.production.total.power - b.main.info.production.total.power,
-            },
-            {
-                title: 'Cost',
-                dataIndex: 'main',
-                key: 'mainCost',
-                render: (main: Base) => formatNumber(main.info.cost.total.total),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.info.cost.total.total - b.main.info.cost.total.total,
-            },
-        ],
-    },
-    {
-        title: 'Research',
-        key: 'research',
-        render: (stats: PlayerStats) => (
-            <ViewResearch faction={stats.main.faction} upgrades={stats.upgrades} style="square" />
-        ),
-    },
-    {
-        title: 'Updated',
-        key: 'updated',
-        render: (s: PlayerStats) => timeSince(s.updatedAt),
-        sorter: (a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt,
-    },
-];
+const PageSize = 10;
+
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
     state: AllianceState = { info: [], state: ComponentLoading.Init, alliance: { id: -1, name: '' }, worldId: -1 };
-    static tableCss = style({ width: '100%' });
+    static tableCss = style({ width: '100%', marginBottom: 12 });
+    static layoutCss = style({ display: 'flex', width: '100%', flexWrap: 'wrap' });
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
@@ -191,6 +71,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
         this.setState({ info: [], state: ComponentLoading.Loading });
 
         const results = await Stores.Player.getAllBy({ allianceKey: docId }, 60);
+        const layoutData = await Stores.Layout.get(docId);
 
         const alliance = { id: allianceId, name: '' };
         const playerSet = new Map<number, PlayerStats>();
@@ -234,39 +115,73 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 mergeBaseUpgrade(base.upgrades, current.upgrades);
             }
         }
-        this.setState({ info: Array.from(playerSet.values()), state: ComponentLoading.Done, alliance, worldId });
+        this.setState({
+            info: Array.from(playerSet.values()),
+            state: ComponentLoading.Done,
+            alliance,
+            worldId,
+            layouts: unpackLayouts(layoutData),
+        });
     }
 
     get isLoading() {
-        return this.state.state == ComponentLoading.Loading;
+        return this.state.state == ComponentLoading.Loading || this.state.state == ComponentLoading.Init;
     }
 
+    toggleExpand = () => {
+        this.setState({ ...this.state, isExpanded: !this.state.isExpanded });
+    };
+
     render() {
-        if (this.state == null || this.isLoading) {
-            return (
-                <Table
-                    className={ViewAlliance.tableCss}
-                    rowKey="id"
-                    dataSource={this.state.info}
-                    columns={AllianceColumns}
-                    pagination={false}
-                    bordered
-                    loading={this.isLoading}
-                    size="small"
-                />
-            );
+        if (this.isLoading) {
+            return <Spin></Spin>;
         }
+        const { worldId, alliance } = this.state;
         return (
             <React.Fragment>
-                <StBreadCrumb worldId={this.state.worldId} alliance={this.state.alliance} />
+                <StBreadCrumb worldId={worldId} alliance={alliance} />
+                <Divider>
+                    <a onClick={this.toggleExpand}>{this.state.alliance.name}</a>
+                </Divider>
+                {this.renderPlayerInfo()}
+
+                <Divider>
+                    <Link to={`/world/${worldId}/alliance/${alliance.id}/layouts`}>Layouts</Link>
+                </Divider>
+                {this.renderLayouts()}
+            </React.Fragment>
+        );
+    }
+
+    get isPaginatingTable() {
+        return this.state.isExpanded != true && this.state.info.length > PageSize;
+    }
+    renderLayouts() {
+        if (this.state.layouts == null) {
+            return null;
+        }
+
+        return (
+            <div className={ViewAlliance.layoutCss}>
+                {this.state.layouts.slice(0, 12).map(c => (
+                    <LayoutView key={c.cityId} base={c} />
+                ))}
+            </div>
+        );
+    }
+
+    renderPlayerInfo() {
+        return (
+            <React.Fragment>
                 <Table
                     className={ViewAlliance.tableCss}
                     rowKey="id"
                     dataSource={this.state.info}
                     columns={AllianceColumns}
-                    pagination={false}
+                    pagination={this.isPaginatingTable ? { position: 'bottom', pageSize: PageSize } : false}
                     bordered
                     loading={this.isLoading}
+                    sortDirections={['descend', 'ascend']}
                     size="small"
                 />
                 <BackTop></BackTop>

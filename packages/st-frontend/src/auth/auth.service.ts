@@ -1,8 +1,8 @@
-import { FireAuthGoogle, FireAuth } from '../firebase';
-import { observable, action } from 'mobx';
-import { User } from 'firebase';
 import { UId } from '@st/model';
 import { StLog } from '@st/shared';
+import { User } from 'firebase';
+import { action, observable } from 'mobx';
+import { FireAuth, FireAuthGoogle } from '../firebase';
 
 export class AuthService {
     auth = FireAuth;
@@ -10,8 +10,7 @@ export class AuthService {
 
     user = observable.box<User | null>(undefined);
 
-    @observable
-    isReady = false;
+    @observable isReady = false;
 
     constructor() {
         this.auth.onAuthStateChanged(
@@ -24,6 +23,7 @@ export class AuthService {
     setUser(u: User | null) {
         StLog.info({ user: u?.uid }, 'UserUpdate');
         this.isReady = true;
+        const oldUser = this.user.get();
         this.user.set(u);
     }
 

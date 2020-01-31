@@ -16,13 +16,13 @@ import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { PlayerStats } from '../alliance/alliance';
 import { ComponentLoading } from '../base/base';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
 import { ViewResearch } from '../util/research';
 import React = require('react');
+import { PlayerStats } from '../alliance/alliance.table';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 

@@ -10,6 +10,7 @@ import { timeSince } from '../time.util';
 import { Base, SiloCounts, BaseExporter, NumberPacker, BaseLayoutPacker } from '@st/shared';
 import { BaseX } from '@cncta/clientlib';
 import { BaseLocationPacker } from '@cncta/util';
+import Spin from 'antd/es/spin';
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({
     padding: '4px',
@@ -44,6 +45,7 @@ function addStats(from: SiloCounts, to: SiloCounts) {
 
 export class ViewScan extends React.Component<ViewScanProps, ScanState> {
     componentDidMount() {
+        console.log('Mounted');
         this.setState({ state: ComponentLoading.Loading });
         // const params = this.props.match.params;
         // const worldId = Number(params.worldId);
@@ -94,8 +96,8 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
     // }
 
     render() {
-        if (this.state == null || this.state.state == ComponentLoading.Loading) {
-            return <div>Loading...</div>;
+        if (this.state?.state == ComponentLoading.Loading) {
+            return <Spin />;
         }
         if (this.state.state == ComponentLoading.Failed) {
             return <div>Could not find scan</div>;
@@ -108,32 +110,39 @@ export class ViewScan extends React.Component<ViewScanProps, ScanState> {
                     <SiloTags minSize={4} resource={'mixed'} silos={this.state.silos} />
                 </div> */}
 
-                {this.state?.bases.slice(0, 50).map(base => {
-                    const baseId = BaseLocationPacker.pack(base.x, base.y);
+                {this.state?.bases.slice(0, 50).map(base => (
+                    <LayoutView base={base} />
+                ))}
+            </div>
+        );
+    }
+}
 
-                    const timeAgo = timeSince(base.updatedAt);
-                    const silos = base.info.stats;
-                    return (
-                        <div className={BaseCardCss} key={baseId}>
-                            <Divider>
-                                <Link to={`/base/${BaseExporter.toCncOpt(base)}`}>
-                                    {base.x}:{base.y}
-                                </Link>
-                            </Divider>
-                            <div style={{ width: 24 * BaseX.Max + 'px' }}>
-                                <ViewBaseMain base={base} key={baseId} size={24} />
-                            </div>
-                            <div className={BaseCardInfoCss}>
-                                <SiloTags minSize={4} resource={'tiberium'} silos={silos} />
-                                <SiloTags minSize={4} resource={'crystal'} silos={silos} />
-                                <SiloTags minSize={4} resource={'mixed'} silos={silos} />
-                                <div style={{ float: 'right' }} title={`Last seen ${timeAgo} ago`}>
-                                    {timeAgo}
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+export class LayoutView extends React.Component<{ base: Base }> {
+    render() {
+        const base = this.props.base;
+        const baseId = BaseLocationPacker.pack(base.x, base.y);
+        const timeAgo = timeSince(base.updatedAt);
+        const silos = base.info.stats;
+
+        return (
+            <div className={BaseCardCss} key={baseId}>
+                <Divider>
+                    <Link to={`/base/${BaseExporter.toCncOpt(base)}`}>
+                        {base.x}:{base.y}
+                    </Link>
+                </Divider>
+                <div style={{ width: 24 * BaseX.Max + 'px' }}>
+                    <ViewBaseMain base={base} key={baseId} size={24} />
+                </div>
+                <div className={BaseCardInfoCss}>
+                    <SiloTags minSize={4} resource={'tiberium'} silos={silos} />
+                    <SiloTags minSize={4} resource={'crystal'} silos={silos} />
+                    <SiloTags minSize={4} resource={'mixed'} silos={silos} />
+                    <div style={{ float: 'right' }} title={`Last seen ${timeAgo} ago`}>
+                        {timeAgo}
+                    </div>
+                </div>
             </div>
         );
     }

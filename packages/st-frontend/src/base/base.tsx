@@ -147,25 +147,51 @@ export class ViewBase extends React.Component<ViewBaseProps> {
         if (state == ComponentLoading.Failed) {
             return <div>Could not find base</div>;
         }
-
-        const baseId = WorldCityId.pack({ worldId: base.worldId, cityId: base.cityId, timestamp: base.updatedAt });
+        console.log(base);
+        const baseId =
+            base.worldId > 0
+                ? WorldCityId.pack({ worldId: base.worldId, cityId: base.cityId, timestamp: base.updatedAt })
+                : null;
         const baseWidth = TileSize * BaseX.Max + 'px';
-        return (
-            <React.Fragment>
-                <StBreadCrumb
-                    worldId={base.worldId}
-                    alliance={base.alliance}
-                    player={base.owner}
-                    base={{ id: baseId, name: base.name, cityId: base.cityId }}
-                />
+
+        if (baseId == null) {
+            return (
                 <div className={BaseCss.Base}>
                     <Divider>
                         <FactionName name={base.name} faction={base.faction} />
-                        <Tooltip title="Create permanent base link">
-                            <Link to={`/base/${baseId}`}>
-                                <Icon type="link" />
-                            </Link>
-                        </Tooltip>
+                    </Divider>
+                    <div style={{ width: baseWidth }}>
+                        <ViewBaseMain base={base} size={TileSize} />
+                        <ViewBaseDef base={base} size={TileSize} />
+                        <ViewBaseOff base={base} size={TileSize} />
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <React.Fragment>
+                {baseId != null ? (
+                    <StBreadCrumb
+                        worldId={base.worldId}
+                        alliance={base.alliance}
+                        player={base.owner}
+                        base={{
+                            id: baseId,
+                            name: base.name,
+                            cityId: base.cityId,
+                        }}
+                    />
+                ) : null}
+                <div className={BaseCss.Base}>
+                    <Divider>
+                        <FactionName name={base.name} faction={base.faction} />
+                        {baseId != null ? (
+                            <Tooltip title="Create permanent base link">
+                                <Link to={`/base/${baseId}`}>
+                                    <Icon type="link" />
+                                </Link>
+                            </Tooltip>
+                        ) : null}
                     </Divider>
 
                     <div style={{ width: baseWidth }}>

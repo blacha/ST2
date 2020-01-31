@@ -12,7 +12,7 @@ import { FlexCenter } from './css.util';
 import { ViewLandingPage } from './landing/landing';
 import { NavHeader } from './nav';
 import { ViewPlayer } from './player/player';
-import { ViewScan } from './scan/scan.result';
+import { ViewScan } from './layout/layout';
 import { Config } from '@st/shared';
 import { Auth } from './auth/auth.service';
 import { ClaimPage } from './claim/claim';
@@ -69,7 +69,7 @@ export class App extends React.Component {
                 <PrivateRoute path="/world/:worldId/player/:playerId/city/:cityId" component={ViewBase} />
                 <PrivateRoute path="/world/:worldId/player/:playerId" component={ViewPlayer} />
                 <PrivateRoute path="/world/:worldId/alliance/:allianceId" component={ViewAlliance} />
-                <PrivateRoute path="/world/:worldId/alliance/:allianceId/scan" component={ViewScan} />
+                <PrivateRoute path="/world/:worldId/alliance/:allianceId/layouts" component={ViewScan} />
                 <Redirect to="/" />
             </Switch>
         );
