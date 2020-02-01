@@ -12,74 +12,8 @@ body {
     background-color: #f0f2f5 !important;
 }
 
-/*
-
-.Container {
-    height: 100%;
-    max-width: 80rem;
-    margin: auto;
-    display: flex;
+.ant-pagination-item-link {
+    display: flex !important;
     align-items: center;
-    font-size: 140%;
-}
-
-.Content {
-    margin: 24px auto;
-    max-width: 112rem;
-    padding: 0 2rem;
-    width: 100%;
-    position: relative;
     justify-content: center;
 }
-
-.Faction-Nod {
-    background-image: url(../static/icon/icon_nod.png);
-}
-
-.Faction-Gdi {
-    background-image: url(../static/icon/icon_gdi.png);
-}
-
-.Faction-Forgotten {
-    background-image: url(../static/icon/icon_for.png);
-}
-
-.Resource-Tiberium {
-    background-image: url(../static/icon/icon_tiberium.png);
-}
-
-.Resource-Power {
-    background-image: url(../static/icon/icon_power.png);
-}
-
-.Resource-Crystal {
-    background-image: url(../static/icon/icon_crystal.png);
-}
-
-.Resource-Credits {
-    background-image: url(../static/icon/icon_credits.png);
-}
-
-.Tile-Tiberium {
-    background-image: url(../static/icon/tile_tiberium.png);
-}
-
-.Tile-Crystal {
-    background-image: url(../static/icon/tile_crystal.png);
-}
-
-.Tile-Oil {
-    background-image: url(../static/icon/tile_oil.png);
-}
-
-.Tile-Scrub {
-    background-image: url(../static/icon/tile_scrub.png);
-}
-
-.Tile-Swamp {
-    background-image: url(../static/icon/tile_swamp.png);
-}
-
-.Tile-Woods {
-    background-image: url(../static/icon/tile_woods.png);
-} */

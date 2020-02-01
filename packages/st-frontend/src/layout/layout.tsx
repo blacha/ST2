@@ -1,16 +1,20 @@
 import React = require('react');
+import { AllianceId, BaseX, CompositeId, WorldId } from '@cncta/clientlib';
+import { BaseLocationPacker } from '@cncta/util';
+import { Stores } from '@st/model';
+import { Base, BaseExporter, SiloCounts, WorldAllianceId } from '@st/shared';
 import Divider from 'antd/es/divider';
+import Spin from 'antd/es/spin';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { ComponentLoading } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
-// import { FireStoreLayouts } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
-import { Base, SiloCounts, BaseExporter, NumberPacker, BaseLayoutPacker } from '@st/shared';
-import { BaseX } from '@cncta/clientlib';
-import { BaseLocationPacker } from '@cncta/util';
-import Spin from 'antd/es/spin';
+import { unpackLayouts } from './layout.util';
+import Pagination from 'antd/es/pagination/Pagination';
+import { observer } from 'mobx-react';
+import { observable, action, computed } from 'mobx';
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({
     padding: '4px',
@@ -20,11 +24,12 @@ const BaseCardCss = style({
 const BaseCardInfoCss = style({ marginTop: '4px', padding: '0 4px' });
 
 interface ScanState {
-    bases: Base[];
+    layouts: Base[];
     state: ComponentLoading;
     silos: SiloCounts;
+    currentPage?: number;
 }
-type ViewScanProps = RouteComponentProps<{ worldId: string; scanId: string }>;
+type ViewLayoutsProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
 
 function addStats(from: SiloCounts, to: SiloCounts) {
     if (from.tiberium[3] > 0) to.tiberium[3]++;
@@ -43,77 +48,100 @@ function addStats(from: SiloCounts, to: SiloCounts) {
     if (from.mixed[6] > 0) to.mixed[6]++;
 }
 
-export class ViewScan extends React.Component<ViewScanProps, ScanState> {
+@observer
+export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
+    @observable currentPage = 1;
+
+    pageSize = 18;
     componentDidMount() {
         console.log('Mounted');
         this.setState({ state: ComponentLoading.Loading });
-        // const params = this.props.match.params;
-        // const worldId = Number(params.worldId);
-        // this.loadScan(worldId, params.scanId);
+        const params = this.props.match.params;
+        const worldId = Number(params.worldId);
+        const allianceId = Number(params.allianceId);
+        this.loadScan(worldId as WorldId, allianceId as AllianceId);
     }
 
-    // async loadScan(worldId: number, scanId: string) {
-    //     const scanDocId = NumberPacker.pack(worldId) + '.' + scanId;
+    async loadScan(worldId: WorldId, allianceId: AllianceId) {
+        const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
 
-    //     const result = await FireStoreLayouts.doc(scanDocId).get();
-    //     if (!result.exists) {
-    //         this.setState({ bases: [], state: ComponentLoading.Failed });
-    //     }
-    //     const layoutData = result.data();
+        const layoutData = await Stores.Layout.get(docId);
+        if (layoutData == null) {
+            this.setState({ state: ComponentLoading.Failed });
+            return;
+        }
 
-    //     const silos = {
-    //         tiberium: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-    //         crystal: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-    //         mixed: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-    //     };
+        const layouts = unpackLayouts(layoutData);
 
-    //     const bases: Base[] = [];
-    //     const layouts = Object.keys(layoutData.layouts ?? {});
-    //     for (const key of layouts) {
-    //         const xy = BaseLocationPacker.unpack(NumberPacker.unpack(key)[0]);
-    //         const base = new Base();
-    //         base.x = xy.x;
-    //         base.y = xy.y;
-    //         const { layout, updatedAt } = layoutData.layouts[key];
-    //         base.tiles = BaseLayoutPacker.unpack(layout);
-    //         base.updatedAt = updatedAt;
-    //         bases.push(base);
-    //         addStats(base.info.stats, silos);
-    //     }
+        const silos = {
+            tiberium: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
+            crystal: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
+            mixed: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
+        };
+        layouts.forEach(c => addStats(c.info.stats, silos));
 
-    //     bases.sort((a: Base, b: Base) => {
-    //         const statsA = a.info.stats;
-    //         const statsB = b.info.stats;
-    //         if (
-    //             statsA.tiberium.score == statsB.tiberium.score ||
-    //             (statsA.tiberium.score < 10 && statsB.tiberium.score < 10)
-    //         ) {
-    //             return b.info.score - a.info.score;
-    //         }
-    //         return statsB.tiberium.score - statsA.tiberium.score;
-    //     });
-    //     this.setState({ bases, silos, state: ComponentLoading.Done });
-    // }
+        this.setState({ layouts, silos, state: ComponentLoading.Done });
+    }
+
+    @computed get visibleLayouts(): Base[] {
+        const layouts = this.state.layouts;
+        if (layouts == null || layouts.length == 0) {
+            return [];
+        }
+
+        return layouts;
+    }
+
+    @computed get layouts(): Base[] {
+        const minItem = (this.currentPage - 1) * this.pageSize;
+        const maxItem = this.currentPage * this.pageSize;
+        return this.visibleLayouts.slice(minItem, maxItem);
+    }
+
+    @action.bound
+    handlePageChange(currentPage: number) {
+        this.currentPage = currentPage;
+    }
 
     render() {
-        if (this.state?.state == ComponentLoading.Loading) {
+        if (this.state == null || this.state?.state == ComponentLoading.Loading) {
             return <Spin />;
         }
-        if (this.state.state == ComponentLoading.Failed) {
+        if (this.state.state == ComponentLoading.Failed || this.state.layouts.length == 0) {
             return <div>Could not find scan</div>;
         }
+        const layoutCount = this.visibleLayouts.length;
+        const layouts = this.layouts;
+        const currentPage = this.currentPage ?? 1;
+
         return (
-            <div className={ScanListCss}>
-                {/* <div className="filter">
+            <React.Fragment>
+                <div className="filter">
                     <SiloTags minSize={4} resource={'tiberium'} silos={this.state.silos} />
                     <SiloTags minSize={4} resource={'crystal'} silos={this.state.silos} />
                     <SiloTags minSize={4} resource={'mixed'} silos={this.state.silos} />
-                </div> */}
+                </div>
+                <Divider>Layouts</Divider>
+                <Pagination
+                    current={currentPage}
+                    total={layoutCount - 1}
+                    pageSize={this.pageSize}
+                    onChange={this.handlePageChange}
+                />
+                <div className={ScanListCss}>
+                    {layouts.map(base => {
+                        const baseId = BaseLocationPacker.pack(base.x, base.y);
+                        return <LayoutView base={base} key={baseId} />;
+                    })}
+                </div>
 
-                {this.state?.bases.slice(0, 50).map(base => (
-                    <LayoutView base={base} />
-                ))}
-            </div>
+                <Pagination
+                    current={currentPage}
+                    total={layoutCount - 1}
+                    pageSize={this.pageSize}
+                    onChange={this.handlePageChange}
+                />
+            </React.Fragment>
         );
     }
 }
@@ -126,7 +154,7 @@ export class LayoutView extends React.Component<{ base: Base }> {
         const silos = base.info.stats;
 
         return (
-            <div className={BaseCardCss} key={baseId}>
+            <div className={BaseCardCss} style={{ width: 24 * BaseX.Max + 'px' }} key={baseId}>
                 <Divider>
                     <Link to={`/base/${BaseExporter.toCncOpt(base)}`}>
                         {base.x}:{base.y}

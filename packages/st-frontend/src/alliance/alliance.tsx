@@ -70,8 +70,14 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
         const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
         this.setState({ info: [], state: ComponentLoading.Loading });
 
-        const results = await Stores.Player.getAllBy({ allianceKey: docId }, 60);
-        const layoutData = await Stores.Layout.get(docId);
+        const [results, layoutData] = await Promise.all([
+            Stores.Player.getAllBy({ allianceKey: docId }, 60),
+            Stores.Layout.get(docId),
+        ]);
+        if (results == null || layoutData == null) {
+            this.setState({ info: [], state: ComponentLoading.Failed });
+            return;
+        }
 
         const alliance = { id: allianceId, name: '' };
         const playerSet = new Map<number, PlayerStats>();
