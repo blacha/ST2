@@ -20,7 +20,7 @@ function makeExtension(output: NccOutput): NccOutput {
     const ExtensionHeader = stripIndent(`
     // ==UserScript==
     // @name            Shockr - Tiberium Alliances Tools
-    // @author          Shockr <shockr@chard.com>
+    // @author          Shockr <contact@shockr.dev>
     // @description     Tools to work with Tiberium alliances ${Config.baseUrl}
     // @include         http*://prodgame*.alliances.commandandconquer.com/*/index.aspx*
     // @include         http*://cncapp*.alliances.commandandconquer.com/*/index.aspx*
