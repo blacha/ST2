@@ -29,6 +29,7 @@ function makeExtension(output: NccOutput): NccOutput {
     // @version         ${Config.version}
     // @downloadURL     ${Config.baseUrl}/extension/st.user.js
     // @icon            ${Config.baseUrl}/${Config.icon}
+    // @versionHash     ${Config.hash}
     // ==/UserScript==
     `).trimLeft();
 
