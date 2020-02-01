@@ -7,6 +7,7 @@ import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
 import List from 'antd/es/list';
 import Paragraph from 'antd/es/typography/Paragraph';
+import Text from 'antd/es/typography/Text';
 import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react';
 import * as React from 'react';
@@ -137,7 +138,7 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
 
         return (
             <div className={ViewLandingPage.containerCss}>
-                <Divider>Your Players</Divider>
+                <Divider>Your data</Divider>
                 <Table
                     rowKey="id"
                     dataSource={this.state.data}
@@ -146,6 +147,27 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
                     bordered
                     size="small"
                 />
+
+                <Divider>Your claimed players</Divider>
+                <div
+                    style={{
+                        width: '30%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        margin: 'auto',
+                    }}
+                >
+                    <List
+                        style={{ width: '100%', textAlign: 'center' }}
+                        dataSource={this.state.claims}
+                        renderItem={item => <List.Item>{item}</List.Item>}
+                    />
+                    <Text>
+                        <Link to="/claim">Claim another player</Link>
+                    </Text>
+                </div>
             </div>
         );
     }
