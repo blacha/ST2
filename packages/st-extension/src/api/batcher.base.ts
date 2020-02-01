@@ -33,7 +33,7 @@ export class BatchBaseSender extends Batcher<'cityId', StCity, string> {
         const res = await fetch(req.url, {
             method: req.method,
             body: req.body,
-            headers: { 'content-type': 'application/json', authorization: `Bearer  ${this.api.st.instanceId}` },
+            headers: this.api.jsonHeaders,
         });
         if (!res.ok) {
             console.error(await res.text());
