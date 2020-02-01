@@ -1,7 +1,7 @@
+import { GameCdn } from './auth/game.cdn';
 import { ClientLogin } from './auth/login';
 import { GameWorldClient } from './game/game.world.client';
 import { Logger } from './log';
-import { GameCdn } from './auth/game.cdn';
 
 export class TaClient {
     static InvalidGameSession = '00000000-0000-0000-0000-000000000000';
