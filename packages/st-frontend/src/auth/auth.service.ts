@@ -23,7 +23,6 @@ export class AuthService {
     setUser(u: User | null) {
         StLog.info({ user: u?.uid }, 'UserUpdate');
         this.isReady = true;
-        const oldUser = this.user.get();
         this.user.set(u);
     }
 
