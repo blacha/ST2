@@ -12,8 +12,8 @@ export class ClientApi extends StModuleBase {
 
     baseSender = new BatchBaseSender(this);
 
-    get auth() {
-        return { Authorization: `Bearer ${this.st.instanceId}` };
+    get jsonHeaders() {
+        return { 'content-type': 'application/json', Authorization: `Bearer  ${this.st.instanceId}` };
     }
 
     async base(base: StCity, flush = false): Promise<string> {
@@ -36,7 +36,7 @@ export class ClientApi extends StModuleBase {
             { installId },
             { player, worldId },
         );
-        await fetch(req.url, { method: req.method, body: req.body, headers: this.auth });
+        await fetch(req.url, { method: req.method, body: req.body, headers: this.jsonHeaders });
     }
 
     async onStop() {
