@@ -1,5 +1,5 @@
 import { BaseX, BaseY, ResourceType } from '@cncta/clientlib';
-import { Base62, LayoutPacker } from '@cncta/util';
+import { Base62, LayoutPacker, UnitLocationPacker } from '@cncta/util';
 import { Base } from './base';
 import { Tile } from './tile';
 
@@ -49,12 +49,17 @@ export class BaseLayoutPacker {
         return Base62.pack(output);
     }
 
-    static unpack(tiles: string): Tile[] {
+    static unpack(tiles: string): Map<number, Tile> {
         const data = Base62.unpack(tiles);
-        const output: Tile[] = [];
-        for (const row of data) {
-            for (const tile of LayoutPacker.unpack(row)) {
-                output.push(Tile.Id[tile]);
+        const output: Map<number, Tile> = new Map();
+        for (let y = 0; y < data.length; y++) {
+            const row = LayoutPacker.unpack(data[y]);
+            for (let x = 0; x < row.length; x++) {
+                const tileId = row[x];
+                const tile = Tile.Id[tileId];
+                if (tile != Tile.Empty) {
+                    output.set(UnitLocationPacker.pack(x, y), tile);
+                }
             }
         }
         return output;

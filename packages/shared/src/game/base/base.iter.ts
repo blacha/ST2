@@ -1,6 +1,6 @@
-import { Base, CncBaseObject, CncLocation } from './base';
+import { BaseX, BaseY, Point } from '@cncta/clientlib';
+import { Base, CncBaseObject } from './base';
 import { Tile } from './tile';
-import { BaseX, BaseY } from '@cncta/clientlib';
 export class BaseIter {
     static getSurroundings(base: Base, x: number, y: number, buildings?: number[], tiles?: Tile[]): CncBaseObject[] {
         const output: CncBaseObject[] = [];
@@ -8,18 +8,18 @@ export class BaseIter {
             for (let dy = -1; dy < 2; dy++) {
                 const offX = x + dx;
                 const offY = y + dy;
-                if (offX < 0 || offX > BaseX.Max) {
+                if (offX < 0 || offX >= BaseX.Max) {
                     continue;
                 }
-                if (offY < 0 || offY > BaseY.Max) {
+                if (offY < 0 || offY >= BaseY.Max) {
                     continue;
                 }
                 if (offY === y && offX === x) {
                     continue;
                 }
 
-                const building = base.getBase(offX, offY);
                 const tile = base.getTile(offX, offY);
+                const building = base.getBase(offX, offY);
                 if (building == null) {
                     if (tiles && tiles.indexOf(tile) > -1) {
                         output.push({ x: offX, y: offY, tile: tile });
@@ -65,25 +65,26 @@ export class BaseIter {
         return output;
     }
 
-    static getSurroundingXy(x: number, y: number): CncLocation[] {
-        const output = [];
+    static BaseXyIter(x: number, y: number): Generator<Point> {
+        return this.getSurroundingXy(x, y, 0, BaseY.MaxBuilding);
+    }
+
+    static *getSurroundingXy(x: number, y: number, minY = 0, maxY = BaseY.Max): Generator<Point> {
         for (let dx = -1; dx < 2; dx++) {
             for (let dy = -1; dy < 2; dy++) {
                 const offX = x + dx;
                 const offY = y + dy;
-                if (offX < 0 || offX > BaseX.Max) {
+                if (offX < 0 || offX >= BaseX.Max) {
                     continue;
                 }
-                if (offY < 0 || offY > BaseY.Max) {
+                if (offY < minY || offY >= maxY) {
                     continue;
                 }
                 if (offY === y && offX === x) {
                     continue;
                 }
-                output.push({ x: offX, y: offY });
+                yield { x: offX, y: offY };
             }
         }
-
-        return output;
     }
 }

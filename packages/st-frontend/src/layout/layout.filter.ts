@@ -21,7 +21,7 @@ export class LayoutFilterItem {
 
     @computed get layoutCount() {
         let count = 0;
-        for (const base of this.layoutFilter.layouts) {
+        for (const base of this.layoutFilter.filtered) {
             if (this.filter(base)) {
                 count++;
             }
@@ -31,11 +31,12 @@ export class LayoutFilterItem {
 
     filter(base: Base) {
         const stats = base.info.silos[this.resource];
+
         if (stats == null) {
             return false;
         }
 
-        return stats[this.touches].length >= this.count;
+        return stats[this.touches]?.length >= this.count;
     }
 }
 export class LayoutFilter {
@@ -91,7 +92,7 @@ export class LayoutFilter {
         return true;
     }
 
-    filter(): Base[] {
+    @computed get filtered(): Base[] {
         const output: Base[] = [];
         for (const base of this.layouts) {
             let keep = true;

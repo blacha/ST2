@@ -42,4 +42,23 @@ o.spec('BaseBuilder', () => {
         o(Math.floor(production.cont.power)).equals(29983);
         o(Math.floor(production.cont.credits)).equals(109342);
     });
+
+    o('should not build silos around the base', () => {
+        GameData.load();
+        const base = BaseBuilder.fromCnCOpt('3|G|G|Base|...........................t......t.t......t');
+        o(base.info.silos.tiberium).deepEquals({ 3: [], 4: [], 5: [], 6: [], score: 0 });
+    });
+
+    o('should find good accumulator placement', () => {
+        const base = BaseBuilder.fromCnCOpt(
+            `3|G|G|Base|..............t.t.......20st......c.t..t....20s....20sc.cc..cc.c12p12p12p......12p40a12p`,
+        );
+
+        o(base.info.accumulators).deepEquals([
+            { x: 1, y: 1, touch: 8 },
+            { x: 3, y: 1, touch: 8 },
+            { x: 1, y: 3, touch: 7 },
+            { x: 3, y: 3, touch: 8 },
+        ]);
+    });
 });

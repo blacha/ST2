@@ -24,12 +24,13 @@ export class SiloTag extends React.Component<{
         if (touches == 6 && resource == 'tiberium') {
             color = 'magenta';
         }
+        let title = `${count} silo${count == 1 ? '' : 's'} touching ${touches} ${resource} harvesters`;
+        if (resource == 'power') {
+            title = `${count} accumulators touching ${touches} power plants`;
+        }
         return (
-            <Tag
-                color={color}
-                title={`${count} silo${count == 1 ? '' : 's'} touching ${touches} ${resource} harvesters`}
-            >
-                {count} x {touches}
+            <Tag color={color} title={title}>
+                {count} x {touches}{' '}
             </Tag>
         );
     }

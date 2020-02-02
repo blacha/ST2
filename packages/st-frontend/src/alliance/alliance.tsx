@@ -11,6 +11,7 @@ import {
     mergeBaseUpgrade,
     WorldAllianceId,
     NumberPacker,
+    BaseOptimizer,
 } from '@st/shared';
 import 'antd/dist/antd.css';
 import BackTop from 'antd/es/back-top';
@@ -121,12 +122,18 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 mergeBaseUpgrade(base.upgrades, current.upgrades);
             }
         }
+
+        const layouts = unpackLayouts(layoutData);
+        for (const layout of layouts) {
+            BaseOptimizer.buildSilos(layout);
+        }
+
         this.setState({
             info: Array.from(playerSet.values()),
             state: ComponentLoading.Done,
             alliance,
             worldId,
-            layouts: unpackLayouts(layoutData),
+            layouts,
         });
     }
 

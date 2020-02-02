@@ -35,7 +35,8 @@ export class Base {
     name: string;
     faction: Faction;
     offFaction: Faction;
-    base: Buildable[];
+    base: Map<number, Buildable> = new Map();
+    tiles: Map<number, Tile> = new Map();
 
     owner?: { id: number; name: string };
     alliance?: { id: number; name: string };
@@ -54,7 +55,6 @@ export class Base {
     /** Time the base was last seen */
     updatedAt: number;
 
-    tiles: Tile[];
     upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>> = {};
 
     info: BaseStats;
@@ -63,9 +63,7 @@ export class Base {
         this.name = name;
         this.faction = faction;
         this.offFaction = faction;
-        this.tiles = [];
         this.upgrades = {};
-        this.base = [];
 
         this.info = new BaseStats(this);
         this.buildings = new BaseBuildings(this);
@@ -101,7 +99,7 @@ export class Base {
     }
 
     getTile(x: number, y: number) {
-        return this.tiles[UnitLocationPacker.pack(x, y)] || Tile.Empty;
+        return this.tiles.get(UnitLocationPacker.pack(x, y)) || Tile.Empty;
     }
 
     getResource(x: number, y: number): GameResource | null {
@@ -117,20 +115,25 @@ export class Base {
 
     clear() {
         this.info.clear();
-        this.base = [];
+        this.base.clear();
     }
 
     setTile(x: number, y: number, tile: Tile) {
         this.info.clear();
-        this.tiles[UnitLocationPacker.pack(x, y)] = tile;
+        const xy = UnitLocationPacker.pack(x, y);
+        if (tile == Tile.Empty) {
+            this.tiles.delete(xy);
+        } else {
+            this.tiles.set(xy, tile);
+        }
     }
 
-    getBase(x: number, y: number): Buildable {
-        return this.base[UnitLocationPacker.pack(x, y)];
+    getBase(x: number, y: number): Buildable | undefined {
+        return this.base.get(UnitLocationPacker.pack(x, y));
     }
 
     setBase(x: number, y: number, buildable: Buildable) {
-        this.base[UnitLocationPacker.pack(x, y)] = buildable;
+        this.base.set(UnitLocationPacker.pack(x, y), buildable);
     }
 
     isResearched(unitId: GameDataUnitId) {
@@ -145,7 +148,7 @@ export class Base {
     }
 
     findBuilding(buildingCodes: number[]): Building | null {
-        for (const building of this.base) {
+        for (const building of this.base.values()) {
             if (building == null) {
                 continue;
             }

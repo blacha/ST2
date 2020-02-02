@@ -2,7 +2,7 @@ import React = require('react');
 import { AllianceId, BaseX, CompositeId, WorldId, AllianceName } from '@cncta/clientlib';
 import { BaseLocationPacker, WorldNames } from '@cncta/util';
 import { Stores } from '@st/model';
-import { Base, BaseExporter, SiloCounts, WorldAllianceId, GameResource } from '@st/shared';
+import { Base, BaseExporter, SiloCounts, WorldAllianceId, GameResource, BaseOptimizer, StLog } from '@st/shared';
 import Divider from 'antd/es/divider';
 import Spin from 'antd/es/spin';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -17,6 +17,7 @@ import { observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import { LayoutFilter, LayoutFilterItem } from './layout.filter';
 import { StBreadCrumb } from '../util/breacrumb';
+
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({ padding: 4, margin: 8, borderRadius: 8 });
 const BaseCardInfoCss = style({ marginTop: 4, padding: '0 4px' });
@@ -56,20 +57,29 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
     async loadScan(worldId: WorldId, allianceId: AllianceId) {
         const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
 
-        const layoutData = await Stores.Layout.get(docId);
+        const [layoutData, allianceData] = await Promise.all([
+            Stores.Layout.get(docId),
+            Stores.Player.getBy({ allianceKey: docId }),
+        ]);
         if (layoutData == null) {
             this.setState({ state: ComponentLoading.Failed });
             return;
         }
-        const allianceData = await Stores.Player.getBy({ allianceKey: docId });
         if (allianceData && allianceData.alliance) {
             this.alliance = { id: allianceId, name: allianceData.alliance };
         }
 
+        StLog.info('UnpackLayouts');
         const layouts = unpackLayouts(layoutData);
+        StLog.info('ComputeLayouts');
+        console.time('ComputeLayout');
         for (const layout of layouts) {
-            layout.info.buildSilos();
+            BaseOptimizer.buildSilos(layout);
+            // Calculate accumulator data
+            layout.info.computePower();
         }
+        console.timeEnd('ComputeLayout');
+
         this.filters.setLayouts(layouts);
         this.setState({ layouts, state: ComponentLoading.Done });
     }
@@ -77,7 +87,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
     @computed get layouts(): Base[] {
         const minItem = (this.currentPage - 1) * this.pageSize;
         const maxItem = this.currentPage * this.pageSize;
-        return this.filters.filter().slice(minItem, maxItem);
+        return this.filters.filtered.slice(minItem, maxItem);
     }
 
     @action.bound
@@ -120,7 +130,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         if (this.state.state == ComponentLoading.Failed || this.state.layouts.length == 0) {
             return <div>Could not find scan</div>;
         }
-        const layoutCount = this.filters.filter().length;
+        const layoutCount = this.filters.filtered.length;
         const layouts = this.layouts;
         const currentPage = this.currentPage ?? 1;
 
@@ -174,6 +184,7 @@ export class LayoutView extends React.Component<{ base: Base }> {
                     <SiloTags minSize={4} resource={'tiberium'} silos={silos} />
                     <SiloTags minSize={4} resource={'crystal'} silos={silos} />
                     <SiloTags minSize={4} resource={'mixed'} silos={silos} />
+
                     <div style={{ float: 'right' }} title={`Last seen ${timeAgo} ago`}>
                         {timeAgo}
                     </div>

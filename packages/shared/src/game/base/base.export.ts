@@ -40,10 +40,7 @@ export class BaseExporter {
 
     static toString(base: Base) {
         return `[Base ${base.name}:${base.faction}
-    buildings: [${base.base
-        .filter(x => x != null)
-        .map(x => String(x))
-        .join('\n\t')})}]
+    buildings: [${[...base.base.values()].map(x => String(x)).join('\n\t')})}]
         ]`;
     }
 }

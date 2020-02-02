@@ -1,15 +1,17 @@
-import { GameResources, GameResource } from '../game.resources';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Point } from '@cncta/clientlib';
+import { BuildingType } from '../building/building.type';
+import { GameResource, GameResources } from '../game.resources';
 import { BaseProduction } from '../production';
 import { BaseOutput } from '../production/calculator';
 import { Base } from './base';
 import { BaseIter } from './base.iter';
+import { BaseOptimizer } from './base.optimizer';
 import { Tile } from './tile';
-import { BuildingType } from '../building/building.type';
-import { assert } from '../util/assert';
-import { Point } from '@cncta/clientlib/src';
-import { Faction } from '../data/faction';
-import { BaseBuilder } from './base.builder';
 
+export interface AccumulatorLocation extends Point {
+    touch: number;
+}
 export interface SiloCount {
     [siloCount: number]: Point[];
     '3': Point[];
@@ -32,7 +34,7 @@ export interface BaseCost {
     total: GameResources;
 }
 export class BaseStats {
-    private computed: Partial<{
+    private _computed: Partial<{
         production: BaseOutput;
         score: number;
         silos: SiloCounts;
@@ -41,7 +43,10 @@ export class BaseStats {
             crystal: number;
         };
         cost: BaseCost;
+        accumulators: AccumulatorLocation[];
+        possibleAccumulators: AccumulatorLocation[];
     }> = {};
+
     base: Base;
 
     constructor(base: Base) {
@@ -49,73 +54,55 @@ export class BaseStats {
     }
 
     clear() {
-        this.computed = {};
+        this._computed = {};
+    }
+
+    get computed() {
+        let existing = this._computed;
+        if (existing.silos == null) {
+            existing = this.compute();
+            this._computed = existing;
+        }
+        return existing;
+    }
+
+    get accumulators() {
+        if (this.computed.accumulators == null) {
+            this.computePower();
+        }
+        return this.computed.accumulators!;
     }
 
     get tiles() {
-        if (this.computed.tiles == null) {
-            this.compute();
-        }
-        assert(this.computed.tiles != null, 'Failed to compute cost');
-        return this.computed.tiles;
+        return this.computed.tiles!;
     }
 
     get production(): BaseOutput {
         if (this.computed.production == null) {
             this.computed.production = BaseProduction.getOutput(this.base);
         }
-        assert(this.computed.production != null, 'Failed to compute production');
-        return this.computed.production;
+        return this.computed.production!;
     }
 
     get score(): number {
-        if (this.computed.score == null) {
-            this.compute();
-        }
-        assert(this.computed.score != null, 'Failed to compute score');
-        return this.computed.score;
+        return this.computed.score!;
     }
 
     get silos() {
-        if (this.computed.silos == null) {
-            this.compute();
-        }
-        assert(this.computed.silos != null, 'Failed to compute stats');
-        return this.computed.silos;
-    }
-
-    buildSilos(minTouch = 4, maxTouch = 6) {
-        const silos = this.silos;
-        for (const resource of ['tiberium', 'crystal', 'mixed', 'power']) {
-            const siloData = silos[resource as GameResource];
-            if (siloData == null) {
-                continue;
-            }
-            for (let i = minTouch; i <= maxTouch; i++) {
-                const toBuild = siloData[i];
-                if (toBuild == null) {
-                    continue;
-                }
-                for (const building of toBuild) {
-                    BaseBuilder.buildByCode(this.base, building.x, building.y, 20, BuildingType.GDI.Silo.code);
-                }
-            }
-        }
+        return this.computed.silos!;
     }
 
     /** Total cost to build this base */
     get cost() {
-        if (this.computed.cost == null) {
-            this.compute();
-        }
-        assert(this.computed.cost != null, 'Failed to compute cost');
-        return this.computed.cost;
+        return this.computed.cost!;
     }
 
-    private compute() {
+    compute() {
         this.computeSilo();
         this.computeTiles();
         this.computeCost();
+
+        return this._computed;
     }
 
     private computeCost() {
@@ -123,13 +110,14 @@ export class BaseStats {
         if (!BuildingType.GDI.CommandCenter.isGameDataLoaded) {
             return;
         }
-        const costs = (this.computed.cost = {
+        const costs = {
             base: new GameResources(),
             off: new GameResources(),
             def: new GameResources(),
             total: new GameResources(),
-        });
-        for (const unit of this.base.base) {
+        };
+        this._computed.cost = costs;
+        for (const unit of this.base.base.values()) {
             if (unit == null) {
                 continue;
             }
@@ -147,14 +135,14 @@ export class BaseStats {
 
     private computeTiles() {
         const tiles = { tiberium: 0, crystal: 0 };
-        for (const tile of this.base.tiles) {
+        for (const tile of this.base.tiles.values()) {
             if (tile == Tile.Crystal) {
                 tiles.crystal++;
             } else if (tile == Tile.Tiberium) {
                 tiles.tiberium++;
             }
         }
-        this.computed.tiles = tiles;
+        this._computed.tiles = tiles;
     }
 
     private computeSilo() {
@@ -162,11 +150,31 @@ export class BaseStats {
         const crystal: SiloCount = { 3: [], 4: [], 5: [], 6: [], score: 0 };
         const mixed: SiloCount = { 3: [], 4: [], 5: [], 6: [], score: 0 };
 
+        const accumulators: AccumulatorLocation[] = [];
         const MIN_SILO = 3;
         // TODO this is not super efficient, could be improved but generally runs in <1ms
         Base.buildingForEach((x, y) => {
-            const tib = BaseIter.getSurroundings(this.base, x, y, undefined, [Tile.Tiberium]).length;
-            const cry = BaseIter.getSurroundings(this.base, x, y, undefined, [Tile.Crystal]).length;
+            const tile = this.base.getTile(x, y);
+            if (tile != Tile.Empty) {
+                return;
+            }
+            let cry = 0;
+            let tib = 0;
+            let empty = 0;
+            for (const pt of BaseIter.BaseXyIter(x, y)) {
+                const tile = this.base.getTile(pt.x, pt.y);
+                if (tile == Tile.Empty) {
+                    empty++;
+                } else if (tile == Tile.Crystal) {
+                    cry++;
+                } else if (tile == Tile.Tiberium) {
+                    tib++;
+                }
+            }
+
+            if (empty > 6) {
+                accumulators.push({ x, y, touch: empty });
+            }
 
             if (tib + cry > 3 && tib > 0 && cry > 0) {
                 mixed[tib + cry].push({ x, y });
@@ -191,7 +199,71 @@ export class BaseStats {
             mixed.score += mixed[i + MIN_SILO].length * 10 ** i;
         }
 
-        this.computed.silos = { tiberium, crystal, mixed } as SiloCounts;
-        this.computed.score = tiberium.score + crystal.score * 0.1 + mixed.score * 0.25;
+        this._computed.possibleAccumulators = accumulators;
+        this._computed.silos = { tiberium, crystal, mixed } as SiloCounts;
+        this._computed.score = tiberium.score + crystal.score * 0.1 + mixed.score * 0.25;
+    }
+
+    computePower() {
+        const accumulators = this.computed.possibleAccumulators;
+        if (accumulators == null || accumulators.length == 0 || this._computed.silos == null) {
+            this._computed.accumulators = [];
+            return;
+        }
+
+        let bestScore = 0;
+        let bestAccumulators: AccumulatorLocation[] = [];
+        const maxAccumulators = 5;
+        const base = new Base();
+
+        /**
+         * 4 x 8 touch accumulators next to each other in a square
+         * use 25 buildings, 4 accumulators 21 power plants
+         **/
+
+        const BestPowerLayoutCount = [0, 9, 15, 21, 25, 31, 35];
+
+        for (const pt of accumulators) {
+            let score = 0;
+            const current: AccumulatorLocation[] = [];
+            base.clear();
+            BaseOptimizer.BuildAccumulator(base, pt.x, pt.y);
+            current.push(pt);
+            score += pt.touch == 8 ? 2 : 1.5;
+
+            for (const other of accumulators) {
+                const building = base.getBase(other.x, other.y);
+                if (building != null) {
+                    continue;
+                }
+                const buildCount = BaseOptimizer.BuildAccumulator(base, other.x, other.y, false);
+                if (buildCount + base.base.size > 30) {
+                    continue;
+                }
+                BaseOptimizer.BuildAccumulator(base, other.x, other.y);
+                current.push(other);
+                score += pt.touch == 8 ? 2 : 1.5;
+                if (current.length >= maxAccumulators) {
+                    break;
+                }
+            }
+
+            const sizeRatio = base.base.size / BestPowerLayoutCount[current.length];
+            const finalScore = Math.floor((score / sizeRatio) * 100);
+
+            if (finalScore > bestScore) {
+                bestScore = finalScore;
+                bestAccumulators = current;
+            }
+        }
+        const power = {} as SiloCount;
+        for (const accumulator of bestAccumulators) {
+            if (power != null) {
+                power[accumulator.touch] = power[accumulator.touch] || [];
+                power[accumulator.touch].push(accumulator);
+            }
+        }
+        this._computed.silos.power = power;
+        this._computed.accumulators = bestAccumulators;
     }
 }

@@ -36,7 +36,6 @@ export class BaseBuilder {
                 continue;
             }
 
-            const faction = y > BaseY.MaxDef ? targetFaction : baseFaction;
             BaseBuilder.buildByCode(base, x, y, currentLevel || 1, baseString[i]);
             currentLevel = 0;
         }
@@ -52,8 +51,8 @@ export class BaseBuilder {
 
     static buildByCode(base: Base, x: number, y: number, level: number, code: string): void {
         const objectType = Base.getObjectType(y);
-
-        const unitType = GameDataObject.getByCode(objectType, base.faction, code);
+        const faction = y > BaseY.MaxDef ? base.offFaction : base.faction;
+        const unitType = GameDataObject.getByCode(objectType, faction, code);
         if (unitType == null) {
             const tile = Tile.make(code);
             if (tile == null) {

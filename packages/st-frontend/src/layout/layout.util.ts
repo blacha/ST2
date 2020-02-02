@@ -18,6 +18,7 @@ export function unpackLayouts(layoutModel?: ModelLayout): Base[] {
         base.updatedAt = updatedAt;
         layouts.push(base);
     }
+
     return layouts.sort((a: Base, b: Base) => {
         const statsA = a.info.silos;
         const statsB = b.info.silos;
