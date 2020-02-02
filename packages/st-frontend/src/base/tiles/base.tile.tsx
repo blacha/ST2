@@ -85,7 +85,7 @@ export class ViewBaseItem extends React.Component<{
         return (
             <div className={classNames.join(' ')} title={building.type.data.display + ` (${building.level})`}>
                 <UnitIcon unitId={building.type.id} />
-                <div className={BaseTileCss.Cell.Level}>{building.level}</div>
+                {size > 24 ? <div className={BaseTileCss.Cell.Level}>{building.level}</div> : null}
                 <UnitUpgradeIcon isUpgraded={base.isResearchUpgraded(building.type.id)} />
             </div>
         );

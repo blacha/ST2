@@ -1,4 +1,4 @@
-import { GameResources } from '../game.resources';
+import { GameResources, GameResource } from '../game.resources';
 import { BaseProduction } from '../production';
 import { BaseOutput } from '../production/calculator';
 import { Base } from './base';
@@ -7,6 +7,8 @@ import { Tile } from './tile';
 import { BuildingType } from '../building/building.type';
 import { assert } from '../util/assert';
 import { Point } from '@cncta/clientlib/src';
+import { Faction } from '../data/faction';
+import { BaseBuilder } from './base.builder';
 
 export interface SiloCount {
     [siloCount: number]: Point[];
@@ -22,13 +24,7 @@ export interface SiloCount {
      */
     score: number;
 }
-export interface SiloCounts {
-    tiberium: SiloCount;
-    crystal: SiloCount;
-    mixed: SiloCount;
-    power?: SiloCount;
-    credits?: SiloCount;
-}
+export type SiloCounts = Record<GameResource | 'mixed', SiloCount>;
 export interface BaseCost {
     base: GameResources;
     def: GameResources;
@@ -86,6 +82,25 @@ export class BaseStats {
         }
         assert(this.computed.silos != null, 'Failed to compute stats');
         return this.computed.silos;
+    }
+
+    buildSilos(minTouch = 4, maxTouch = 6) {
+        const silos = this.silos;
+        for (const resource of ['tiberium', 'crystal', 'mixed', 'power']) {
+            const siloData = silos[resource as GameResource];
+            if (siloData == null) {
+                continue;
+            }
+            for (let i = minTouch; i <= maxTouch; i++) {
+                const toBuild = siloData[i];
+                if (toBuild == null) {
+                    continue;
+                }
+                for (const building of toBuild) {
+                    BaseBuilder.buildByCode(this.base, building.x, building.y, 20, BuildingType.GDI.Silo.code);
+                }
+            }
+        }
     }
 
     /** Total cost to build this base */
@@ -176,7 +191,7 @@ export class BaseStats {
             mixed.score += mixed[i + MIN_SILO].length * 10 ** i;
         }
 
-        this.computed.silos = { tiberium, crystal, mixed };
+        this.computed.silos = { tiberium, crystal, mixed } as SiloCounts;
         this.computed.score = tiberium.score + crystal.score * 0.1 + mixed.score * 0.25;
     }
 }

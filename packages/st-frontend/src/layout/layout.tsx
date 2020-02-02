@@ -67,6 +67,9 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         }
 
         const layouts = unpackLayouts(layoutData);
+        for (const layout of layouts) {
+            layout.info.buildSilos();
+        }
         this.filters.setLayouts(layouts);
         this.setState({ layouts, state: ComponentLoading.Done });
     }

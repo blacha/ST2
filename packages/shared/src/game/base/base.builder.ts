@@ -37,7 +37,7 @@ export class BaseBuilder {
             }
 
             const faction = y > BaseY.MaxDef ? targetFaction : baseFaction;
-            BaseBuilder.buildByCode(base, x, y, currentLevel || 1, faction, baseString[i]);
+            BaseBuilder.buildByCode(base, x, y, currentLevel || 1, baseString[i]);
             currentLevel = 0;
         }
         base.poi.tiberium = parseInt(parts[5], 10);
@@ -50,10 +50,10 @@ export class BaseBuilder {
         return base;
     }
 
-    static buildByCode(base: Base, x: number, y: number, level: number, faction: Faction, code: string): void {
+    static buildByCode(base: Base, x: number, y: number, level: number, code: string): void {
         const objectType = Base.getObjectType(y);
 
-        const unitType = GameDataObject.getByCode(objectType, faction, code);
+        const unitType = GameDataObject.getByCode(objectType, base.faction, code);
         if (unitType == null) {
             const tile = Tile.make(code);
             if (tile == null) {
