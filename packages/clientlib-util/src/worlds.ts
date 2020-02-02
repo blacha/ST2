@@ -1,11 +1,8 @@
-import { WorldId } from '@cncta/clientlib';
-
 export interface WorldInfo {
-    id: WorldId;
     name: string;
 }
 
-export const WorldNames: Record<WorldId, WorldInfo> = {
+export const WorldNames: Record<number, WorldInfo> = {
     10: { name: 'Closed Beta 1' },
     11: { name: 'Closed Beta 2' },
     12: { name: 'Closed Beta 3' },

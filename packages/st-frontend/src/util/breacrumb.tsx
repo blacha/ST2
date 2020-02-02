@@ -3,6 +3,7 @@ import BreadCrumb from 'antd/es/breadcrumb';
 import { Link } from 'react-router-dom';
 import { style } from 'typestyle';
 import Icon from 'antd/es/icon';
+import { WorldNames } from '@cncta/util/src';
 
 export interface IdName {
     id: number | string;
@@ -13,6 +14,7 @@ export interface BreadCrumbProps {
     alliance?: IdName;
     player?: IdName;
     base?: IdName & { cityId?: number };
+    layout?: boolean;
 }
 
 const BreadCrumbCss = style({ marginTop: '8px', marginBottom: '8px', alignSelf: 'flex-start' });
@@ -62,6 +64,12 @@ export class StBreadCrumb extends React.Component<BreadCrumbProps> {
         );
     }
 
+    viewLayout() {
+        if (this.props.layout) {
+            return <BreadCrumb.Item>Layouts</BreadCrumb.Item>;
+        }
+        return null;
+    }
     render() {
         if (this.props.worldId == -1) {
             return null;
@@ -74,10 +82,11 @@ export class StBreadCrumb extends React.Component<BreadCrumbProps> {
                             <Icon type="home" />
                         </Link>
                     </BreadCrumb.Item>
-                    <BreadCrumb.Item>World {this.props.worldId}</BreadCrumb.Item>
+                    <BreadCrumb.Item>{WorldNames[this.props.worldId].name}</BreadCrumb.Item>
                     {this.viewAlliance()}
                     {this.viewPlayer()}
                     {this.viewPlayerBase()}
+                    {this.viewLayout()}
                 </BreadCrumb>
             </div>
         );

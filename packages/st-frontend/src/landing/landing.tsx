@@ -16,6 +16,7 @@ import { style } from 'typestyle';
 import { Auth } from '../auth/auth.service';
 import { ComponentLoading } from '../base/base';
 import { timeSince } from '../time.util';
+import { WorldNames } from '@cncta/util/src';
 
 export const LandingColumns = [
     {
@@ -35,7 +36,7 @@ export const LandingColumns = [
         title: 'World',
         dataIndex: '',
         key: 'worldId',
-        render: (p: ModelPlayer) => String(p.worldId),
+        render: (p: ModelPlayer) => WorldNames[p.worldId].name + ` (${p.worldId})`,
         sorter: (a: ModelPlayer, b: ModelPlayer) => a.worldId - b.worldId,
         width: 150,
     },

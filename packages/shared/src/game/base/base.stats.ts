@@ -25,6 +25,8 @@ export interface SiloCounts {
     tiberium: SiloCount;
     crystal: SiloCount;
     mixed: SiloCount;
+    power?: SiloCount;
+    credits?: SiloCount;
 }
 export interface BaseCost {
     base: GameResources;

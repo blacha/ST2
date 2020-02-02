@@ -1,27 +1,25 @@
 import React = require('react');
-import { AllianceId, BaseX, CompositeId, WorldId } from '@cncta/clientlib';
-import { BaseLocationPacker } from '@cncta/util';
+import { AllianceId, BaseX, CompositeId, WorldId, AllianceName } from '@cncta/clientlib';
+import { BaseLocationPacker, WorldNames } from '@cncta/util';
 import { Stores } from '@st/model';
-import { Base, BaseExporter, SiloCounts, WorldAllianceId } from '@st/shared';
+import { Base, BaseExporter, SiloCounts, WorldAllianceId, GameResource } from '@st/shared';
 import Divider from 'antd/es/divider';
 import Spin from 'antd/es/spin';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { ComponentLoading } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
-import { SiloTags } from '../silo/silo.tag';
+import { SiloTags, SiloTag } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
 import { unpackLayouts } from './layout.util';
 import Pagination from 'antd/es/pagination/Pagination';
 import { observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
+import { LayoutFilter, LayoutFilterItem } from './layout.filter';
+import { StBreadCrumb } from '../util/breacrumb';
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
-const BaseCardCss = style({
-    padding: '4px',
-    margin: '8px',
-    borderRadius: '8px',
-});
-const BaseCardInfoCss = style({ marginTop: '4px', padding: '0 4px' });
+const BaseCardCss = style({ padding: 4, margin: 8, borderRadius: 8 });
+const BaseCardInfoCss = style({ marginTop: 4, padding: '0 4px' });
 
 interface ScanState {
     layouts: Base[];
@@ -31,34 +29,27 @@ interface ScanState {
 }
 type ViewLayoutsProps = RouteComponentProps<{ worldId: string; allianceId: string }>;
 
-function addStats(from: SiloCounts, to: SiloCounts) {
-    if (from.tiberium[3] > 0) to.tiberium[3]++;
-    if (from.tiberium[4] > 0) to.tiberium[4]++;
-    if (from.tiberium[5] > 0) to.tiberium[5]++;
-    if (from.tiberium[6] > 0) to.tiberium[6]++;
-
-    if (from.crystal[3] > 0) to.crystal[3]++;
-    if (from.crystal[4] > 0) to.crystal[4]++;
-    if (from.crystal[5] > 0) to.crystal[5]++;
-    if (from.crystal[6] > 0) to.crystal[6]++;
-
-    if (from.mixed[3] > 0) to.mixed[3]++;
-    if (from.mixed[4] > 0) to.mixed[4]++;
-    if (from.mixed[5] > 0) to.mixed[5]++;
-    if (from.mixed[6] > 0) to.mixed[6]++;
-}
-
 @observer
 export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
+    static FilterDisabledCss = style({ opacity: 0.4 });
+    static FilterButtonCss = style({ cursor: 'pointer', marginRight: 8, $nest: { span: { cursor: 'pointer' } } });
+    static FilterListCss = style({ display: 'flex' });
+    static FilterCss = style({ display: 'flex', padding: 4 });
+    static FilterTitleCss = style({ width: 85, fontWeight: 'bold' });
+
     @observable currentPage = 1;
+    worldId: number;
+    filters = new LayoutFilter();
 
     pageSize = 18;
+    alliance?: { id: AllianceId; name: AllianceName };
     componentDidMount() {
         console.log('Mounted');
         this.setState({ state: ComponentLoading.Loading });
         const params = this.props.match.params;
         const worldId = Number(params.worldId);
         const allianceId = Number(params.allianceId);
+        this.worldId = worldId;
         this.loadScan(worldId as WorldId, allianceId as AllianceId);
     }
 
@@ -70,37 +61,53 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
             this.setState({ state: ComponentLoading.Failed });
             return;
         }
-
-        const layouts = unpackLayouts(layoutData);
-
-        const silos = {
-            tiberium: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-            crystal: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-            mixed: { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 },
-        };
-        layouts.forEach(c => addStats(c.info.stats, silos));
-
-        this.setState({ layouts, silos, state: ComponentLoading.Done });
-    }
-
-    @computed get visibleLayouts(): Base[] {
-        const layouts = this.state.layouts;
-        if (layouts == null || layouts.length == 0) {
-            return [];
+        const allianceData = await Stores.Player.getBy({ allianceKey: docId });
+        if (allianceData && allianceData.alliance) {
+            this.alliance = { id: allianceId, name: allianceData.alliance };
         }
 
-        return layouts;
+        const layouts = unpackLayouts(layoutData);
+        this.filters.setLayouts(layouts);
+        this.setState({ layouts, state: ComponentLoading.Done });
     }
 
     @computed get layouts(): Base[] {
         const minItem = (this.currentPage - 1) * this.pageSize;
         const maxItem = this.currentPage * this.pageSize;
-        return this.visibleLayouts.slice(minItem, maxItem);
+        return this.filters.filter().slice(minItem, maxItem);
     }
 
     @action.bound
     handlePageChange(currentPage: number) {
         this.currentPage = currentPage;
+    }
+
+    renderFilters(resource: string) {
+        const output = [];
+        for (const filter of this.filters.filters) {
+            if (filter.resource == resource.toLowerCase()) {
+                output.push(this.renderFilter(filter));
+            }
+        }
+        return (
+            <div className={ViewLayouts.FilterCss}>
+                <div className={ViewLayouts.FilterTitleCss}>{resource}</div>
+                <div className={ViewLayouts.FilterListCss}>{...output}</div>
+            </div>
+        );
+    }
+
+    renderFilter(f: LayoutFilterItem) {
+        const className = [ViewLayouts.FilterButtonCss];
+        if (f.isEnabled == false && this.filters.isAllDisabled == false) {
+            className.push(ViewLayouts.FilterDisabledCss);
+        }
+        return (
+            <div className={className.join(' ')} onClick={f.toggle} key={`${f.resource}-${f.count}-${f.touches}`}>
+                <SiloTag resource={f.resource} count={f.count} touches={f.touches} />
+                {f.layoutCount}
+            </div>
+        );
     }
 
     render() {
@@ -110,24 +117,21 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         if (this.state.state == ComponentLoading.Failed || this.state.layouts.length == 0) {
             return <div>Could not find scan</div>;
         }
-        const layoutCount = this.visibleLayouts.length;
+        const layoutCount = this.filters.filter().length;
         const layouts = this.layouts;
         const currentPage = this.currentPage ?? 1;
 
         return (
-            <React.Fragment>
+            <div style={{ width: '100%' }}>
+                <StBreadCrumb worldId={this.worldId} alliance={this.alliance} layout={true} />
+                <Divider>{WorldNames[this.worldId].name} - Layouts</Divider>
+
                 <div className="filter">
-                    <SiloTags minSize={4} resource={'tiberium'} silos={this.state.silos} />
-                    <SiloTags minSize={4} resource={'crystal'} silos={this.state.silos} />
-                    <SiloTags minSize={4} resource={'mixed'} silos={this.state.silos} />
+                    <div>{this.renderFilters('Tiberium')}</div>
+                    <div>{this.renderFilters('Crystal')}</div>
+                    <div>{this.renderFilters('Mixed')}</div>
+                    <div>{this.renderFilters('Power')}</div>
                 </div>
-                <Divider>Layouts</Divider>
-                <Pagination
-                    current={currentPage}
-                    total={layoutCount - 1}
-                    pageSize={this.pageSize}
-                    onChange={this.handlePageChange}
-                />
                 <div className={ScanListCss}>
                     {layouts.map(base => {
                         const baseId = BaseLocationPacker.pack(base.x, base.y);
@@ -141,7 +145,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
                     pageSize={this.pageSize}
                     onChange={this.handlePageChange}
                 />
-            </React.Fragment>
+            </div>
         );
     }
 }

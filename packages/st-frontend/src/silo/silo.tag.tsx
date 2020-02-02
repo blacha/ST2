@@ -1,29 +1,35 @@
 import Tag from 'antd/es/tag';
 import React = require('react');
-import { SiloCounts } from '@st/shared';
+import { SiloCounts, GameResource } from '@st/shared';
+
+const Colors = {
+    tiberium: 'green',
+    crystal: 'blue',
+    mixed: 'purple',
+    power: 'orange',
+    credits: 'cyan',
+};
 
 export class SiloTag extends React.Component<{
-    resource: 'tiberium' | 'crystal' | 'mixed';
-    silos: SiloCounts;
-    size: number;
+    resource: GameResource | 'mixed';
+    count: number;
+    touches: number;
 }> {
     render() {
-        const { resource, size, silos } = this.props;
-        const count = silos[resource][size];
+        const { resource, touches, count } = this.props;
         if (count == 0) {
-            return '';
+            return null;
         }
-        let color = 'green';
-        if (size == 6 && resource == 'tiberium') {
-            color = 'volcano';
-        } else if (resource == 'crystal') {
-            color = 'blue';
-        } else if (resource == 'mixed') {
-            color = 'purple';
+        let color = Colors[resource];
+        if (touches == 6 && resource == 'tiberium') {
+            color = 'magenta';
         }
         return (
-            <Tag color={color} title={`${count} silo${count == 1 ? '' : 's'} touching ${size} ${resource} harvesters`}>
-                {count} x {size}
+            <Tag
+                color={color}
+                title={`${count} silo${count == 1 ? '' : 's'} touching ${touches} ${resource} harvesters`}
+            >
+                {count} x {touches}
             </Tag>
         );
     }
@@ -38,7 +44,10 @@ export class SiloTags extends React.Component<{
         const { minSize, resource, silos } = this.props;
         const output = [];
         for (let i = minSize; i < 7; i++) {
-            output.push(<SiloTag resource={resource} size={i} silos={silos} key={`${resource}-${i}`} />);
+            const count = silos[resource][i];
+            output.push(
+                <SiloTag resource={resource as GameResource} touches={i} count={count} key={`${resource}-${i}`} />,
+            );
         }
         return <React.Fragment>{...output}</React.Fragment>;
     }
