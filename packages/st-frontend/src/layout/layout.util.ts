@@ -19,8 +19,8 @@ export function unpackLayouts(layoutModel?: ModelLayout): Base[] {
         layouts.push(base);
     }
     return layouts.sort((a: Base, b: Base) => {
-        const statsA = a.info.stats;
-        const statsB = b.info.stats;
+        const statsA = a.info.silos;
+        const statsB = b.info.silos;
         if (
             statsA.tiberium.score == statsB.tiberium.score ||
             (statsA.tiberium.score < 10 && statsB.tiberium.score < 10)

@@ -44,7 +44,7 @@ export class SiloTags extends React.Component<{
         const { minSize, resource, silos } = this.props;
         const output = [];
         for (let i = minSize; i < 7; i++) {
-            const count = silos[resource][i];
+            const count = silos[resource][i].length;
             output.push(
                 <SiloTag resource={resource as GameResource} touches={i} count={count} key={`${resource}-${i}`} />,
             );

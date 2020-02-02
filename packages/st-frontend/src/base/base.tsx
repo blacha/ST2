@@ -60,7 +60,7 @@ function viewBaseLocation(base: Base) {
     if (base.x < 0) {
         return '';
     }
-    const silos = base.info.stats;
+    const silos = base.info.silos;
     return (
         <React.Fragment>
             {FlexRow(

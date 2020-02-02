@@ -30,12 +30,12 @@ export class LayoutFilterItem {
     }
 
     filter(base: Base) {
-        const stats = base.info.stats[this.resource];
+        const stats = base.info.silos[this.resource];
         if (stats == null) {
             return false;
         }
 
-        return stats[this.touches] >= this.count;
+        return stats[this.touches].length >= this.count;
     }
 }
 export class LayoutFilter {

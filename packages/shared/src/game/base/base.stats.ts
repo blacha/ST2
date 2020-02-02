@@ -6,13 +6,14 @@ import { BaseIter } from './base.iter';
 import { Tile } from './tile';
 import { BuildingType } from '../building/building.type';
 import { assert } from '../util/assert';
+import { Point } from '@cncta/clientlib/src';
 
 export interface SiloCount {
-    [siloCount: number]: number;
-    '3': number;
-    '4': number;
-    '5': number;
-    '6': number;
+    [siloCount: number]: Point[];
+    '3': Point[];
+    '4': Point[];
+    '5': Point[];
+    '6': Point[];
     /**
      * Silo count shifted by 10
      * @example
@@ -78,7 +79,8 @@ export class BaseStats {
         assert(this.computed.score != null, 'Failed to compute score');
         return this.computed.score;
     }
-    get stats() {
+
+    get silos() {
         if (this.computed.silos == null) {
             this.compute();
         }
@@ -141,9 +143,9 @@ export class BaseStats {
     }
 
     private computeSilo() {
-        const tiberium: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
-        const crystal: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
-        const mixed: SiloCount = { 3: 0, 4: 0, 5: 0, 6: 0, score: 0 };
+        const tiberium: SiloCount = { 3: [], 4: [], 5: [], 6: [], score: 0 };
+        const crystal: SiloCount = { 3: [], 4: [], 5: [], 6: [], score: 0 };
+        const mixed: SiloCount = { 3: [], 4: [], 5: [], 6: [], score: 0 };
 
         const MIN_SILO = 3;
         // TODO this is not super efficient, could be improved but generally runs in <1ms
@@ -152,7 +154,7 @@ export class BaseStats {
             const cry = BaseIter.getSurroundings(this.base, x, y, undefined, [Tile.Crystal]).length;
 
             if (tib + cry > 3 && tib > 0 && cry > 0) {
-                mixed[tib + cry] = (mixed[tib + cry] || 0) + 1;
+                mixed[tib + cry].push({ x, y });
                 return;
             }
             // No one cares about one or two silos
@@ -161,17 +163,17 @@ export class BaseStats {
             }
 
             if (cry == 0) {
-                tiberium[tib] = (tiberium[tib] || 0) + 1;
+                tiberium[tib].push({ x, y });
             }
             if (tib == 0) {
-                crystal[cry] = (crystal[cry] || 0) + 1;
+                crystal[cry].push({ x, y });
             }
         });
 
         for (let i = 0; i <= 6 - MIN_SILO; i++) {
-            tiberium.score += tiberium[i + MIN_SILO] * 10 ** i;
-            crystal.score += crystal[i + MIN_SILO] * 10 ** i;
-            mixed.score += mixed[i + MIN_SILO] * 10 ** i;
+            tiberium.score += tiberium[i + MIN_SILO].length * 10 ** i;
+            crystal.score += crystal[i + MIN_SILO].length * 10 ** i;
+            mixed.score += mixed[i + MIN_SILO].length * 10 ** i;
         }
 
         this.computed.silos = { tiberium, crystal, mixed };

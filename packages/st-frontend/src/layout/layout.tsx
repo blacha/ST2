@@ -155,7 +155,7 @@ export class LayoutView extends React.Component<{ base: Base }> {
         const base = this.props.base;
         const baseId = BaseLocationPacker.pack(base.x, base.y);
         const timeAgo = timeSince(base.updatedAt);
-        const silos = base.info.stats;
+        const silos = base.info.silos;
 
         return (
             <div className={BaseCardCss} style={{ width: 24 * BaseX.Max + 'px' }} key={baseId}>
