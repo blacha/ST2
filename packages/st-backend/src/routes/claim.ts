@@ -17,6 +17,8 @@ export class ApiClaimPlayerStart extends ApiCall<ApiClaimStartRequest> {
             throw new Error('Player does not exist');
         }
 
+        req.log.info({ player }, 'SendMail');
+
         gameSession.sendMail(
             player,
             'shockr.dev: Player claim request',
@@ -33,6 +35,8 @@ A user has requested to claim this player account on shockr.dev to complete the 
         const user = await this.validateUser(req);
         const player = req.params.player.toLowerCase() as PlayerNameId;
         const worldId = Number(req.params.worldId) as WorldId;
+        this.logContext['player'] = player;
+        this.logContext['worldId'] = worldId;
 
         const currentClaim = await Stores.ClaimRequest.transaction(player, claim => {
             if (!claim.isAbleToClaim) {
@@ -63,6 +67,8 @@ export class ApiClaimPlayerAccept extends ApiCall<ApiClaimPlayerAcceptRequest> {
 
         const userId = user.uid;
         const claimId = req.params.claimId;
+        this.logContext['userId'] = userId;
+        this.logContext['claimId'] = claimId;
 
         const claim = await Stores.ClaimRequest.getBy({ claimId });
         if (claim == null) {

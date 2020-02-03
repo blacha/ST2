@@ -19,6 +19,8 @@ export abstract class ApiCall<T extends ApiFunc> {
     abstract path: T['path'];
     abstract method: T['method'];
 
+    logContext: Record<string, any> = {};
+
     static bind<T extends ApiFunc>(app: express.Application, ApiFunc: ApiCall<T>) {
         app[ApiFunc.method](ApiFunc.path, ApiFunc.doRequest.bind(ApiFunc));
     }
@@ -71,11 +73,11 @@ export abstract class ApiCall<T extends ApiFunc> {
         res.status(status);
         res.json(response);
         if (status > 499 && error != null) {
-            childLog.error({ error: error }, 'Failed');
+            childLog.error({ ...this.logContext, error: error }, 'Failed');
         } else if (status > 399 && error != null) {
-            childLog.warn({ error: error }, error.message);
+            childLog.warn({ ...this.logContext, error: error }, error.message);
         } else {
-            childLog.info({ url: req.url, duration: Date.now() - startTime, status }, 'Done');
+            childLog.info({ ...this.logContext, url: req.url, duration: Date.now() - startTime, status }, 'Done');
         }
     }
 

@@ -98,6 +98,9 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
         const worldId = Number(req.params.worldId) as WorldId;
         const player = req.params.player as PlayerNameDisplay;
 
+        this.logContext['player'] = player;
+        this.logContext['worldId'] = worldId;
+
         const bases = req.body;
 
         const output: string[] = [];
@@ -140,6 +143,8 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             req.log.info({ player, layouts: layouts.size }, 'StoreLayouts');
             await this.storeLayouts(req, worldId, player, layouts);
         }
+
+        this.logContext['baseCount'] = output.length;
 
         return { id: output, worldId };
     }

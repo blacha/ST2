@@ -19,8 +19,9 @@ export class ApiInstall extends ApiCall<ApiInstallRequest> {
         if (!isValidWorld(worldId)) {
             throw new HttpError(400, 'Invalid worldId');
         }
-        req.log.info({ player: playerName, worldId, installId }, 'ExtensionInstall');
-
+        this.logContext['installId'] = installId;
+        this.logContext['player'] = playerName;
+        this.logContext['worldId'] = worldId;
         await Stores.Install.transaction(installId, async obj => obj.touch(playerName, worldId));
         // TODO if new install send mail message to confirm
         return {};
