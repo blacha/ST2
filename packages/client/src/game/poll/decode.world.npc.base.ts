@@ -1,7 +1,7 @@
 import { Base91 } from '@cncta/util';
 import { DecodeWorldXy } from './decode.world.xy';
 import { WorldSectorDecoder } from './decode.world.sector';
-import { Point } from '@cncta/clientlib/src';
+import { Point } from '@cncta/clientlib';
 
 export interface WorldSectorObjectBase extends Point {
     type: 'base';

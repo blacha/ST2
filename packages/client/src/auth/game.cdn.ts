@@ -1,4 +1,4 @@
-import { FactionType } from '@cncta/clientlib/src';
+import { FactionType } from '@cncta/clientlib';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
 import { Cookies } from '../cookie';

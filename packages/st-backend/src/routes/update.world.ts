@@ -1,8 +1,7 @@
-import { Logger } from '@cncta/client/src/log';
 import { WorldId } from '@cncta/clientlib';
-import { Duration } from '@cncta/util/src';
+import { Duration } from '@cncta/util';
 import { ModelWorldAlliance, Stores } from '@st/model';
-import { ApiWorldUpdateRequest } from '@st/shared';
+import { ApiWorldUpdateRequest, StLog } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { GameSession } from '../game.session';
 import { HttpError } from '../http.error';
@@ -27,7 +26,7 @@ export class ApiWorldUpdate extends ApiCall<ApiWorldUpdateRequest> {
         }
 
         if (matchedWorld.updatedAt != null && matchedWorld.updatedAt > Date.now() - Duration.minutes(30)) {
-            Logger.info({ lastUpdate: matchedWorld.updatedAt }, 'SkippingUpdate');
+            StLog.info({ lastUpdate: matchedWorld.updatedAt }, 'SkippingUpdate');
             return {};
         }
         const gameSession = await GameSession.getClient(req, worldId);

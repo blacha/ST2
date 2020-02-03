@@ -3,7 +3,7 @@ import BreadCrumb from 'antd/es/breadcrumb';
 import { Link } from 'react-router-dom';
 import { style } from 'typestyle';
 import Icon from 'antd/es/icon';
-import { WorldNames } from '@cncta/util/src';
+import { WorldNames } from '@cncta/util';
 
 export interface IdName {
     id: number | string;

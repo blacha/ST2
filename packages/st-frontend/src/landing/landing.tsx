@@ -16,7 +16,7 @@ import { style } from 'typestyle';
 import { Auth } from '../auth/auth.service';
 import { ComponentLoading } from '../base/base';
 import { timeSince } from '../time.util';
-import { WorldNames } from '@cncta/util/src';
+import { WorldNames } from '@cncta/util';
 
 export const LandingColumns = [
     {

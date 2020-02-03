@@ -1,6 +1,7 @@
-import { Duration } from '@cncta/util/src';
+import { Duration } from '@cncta/util';
 import { StModuleBase } from './module/module.base';
 import { StModule } from './module/module';
+import { StLog } from '@st/shared';
 
 export type StConfigKey = keyof StConfigKeys;
 
@@ -25,6 +26,18 @@ export class StConfig extends StModuleBase {
         this.load();
         // Reload config every 30 seconds
         this.interval(() => this.load(), Duration.seconds(30));
+
+        this.st.cli.register('config', ([key, value]) => {
+            if (key == null || key == '') {
+                return 'No key provided, usage /st set <key> <value>';
+            }
+            if (value == null || value.trim() == '') {
+                return 'No value provided, usage /st set <key> <value>, or /st unset <key> to remove a key';
+            }
+            StLog.info({ key, value }, 'SetConfig');
+            this.set(key as StConfigKey, value);
+            return;
+        });
     }
     /** Optional hook called when the module stops */
     async onStop() {

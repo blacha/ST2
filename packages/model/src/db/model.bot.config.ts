@@ -1,5 +1,5 @@
 import { Model, AccountSessionId } from './model';
-import { Duration } from '@cncta/util/src';
+import { Duration } from '@cncta/util';
 
 export interface Session<T extends string> {
     id: T;
