@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/blacha/st/compare/v2.0.0...v2.1.0) (2020-02-03)
+
+
+### Bug Fixes
+
+* json requests should be application/json ([2088454](https://github.com/blacha/st/commit/20884543eeaa9c96e78b258e6e6c0ca8a4512292))
+
+
+### Features
+
+* allow customizing options using st.config.set() ([e5f0c6b](https://github.com/blacha/st/commit/e5f0c6bef47404376f8a9f28641ff2de4b935379))
+
+
+
+
+
 # [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
 
 

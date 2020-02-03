@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/blacha/st/compare/v2.0.0...v2.1.0) (2020-02-03)
+
+
+### Bug Fixes
+
+* don't duplicate player claims ([6a16f4f](https://github.com/blacha/st/commit/6a16f4f3eed890f13c28ce1da6508770c77d557a))
+* json requests should be application/json ([2088454](https://github.com/blacha/st/commit/20884543eeaa9c96e78b258e6e6c0ca8a4512292))
+* loading random bases should now work ([4217060](https://github.com/blacha/st/commit/4217060e5d9ae9fb5e5e8dd4244733d95d95b712))
+* provide a link to home from every page ([e763146](https://github.com/blacha/st/commit/e763146794eec8c5e73e999381e38caf55777a08))
+* some icons need to be limited in width and height ([7c7fbf0](https://github.com/blacha/st/commit/7c7fbf0c2af78dc4a29c4393497b2e06565aeaf0))
+* unit icons should scale by the size of the icon ([430d92f](https://github.com/blacha/st/commit/430d92f907601b5dfd470708ae6d353dee8d4e07))
+* urls should not have // in them ([c08558b](https://github.com/blacha/st/commit/c08558bc69d893f59b1de67977fd76c739b7534c))
+* use a sortable id for timestamp based entries ([8c2af09](https://github.com/blacha/st/commit/8c2af09626083feacea4cd4be31c232588533003))
+* use the correct package for version information ([e1aef25](https://github.com/blacha/st/commit/e1aef25495757b7bc0f92628ab41226dcb7204d2))
+
+
+### Features
+
+* add all world names ([2cf2a61](https://github.com/blacha/st/commit/2cf2a615ae1281a9241585d8f5d9642e37cbab7f))
+* allow customizing options using st.config.set() ([e5f0c6b](https://github.com/blacha/st/commit/e5f0c6bef47404376f8a9f28641ff2de4b935379))
+* allow players to claim more than one player ([e15bbed](https://github.com/blacha/st/commit/e15bbed0f716c1ba5528c852ec9b5347ff68a8ca))
+* filter layouts ([12c2dd4](https://github.com/blacha/st/commit/12c2dd4892125ef05de13b59d2a080cd9708b2cd))
+* much improved layout viewer ([1066eb1](https://github.com/blacha/st/commit/1066eb1a8c8f40c228404b0c19f3bed59638b3ba))
+* show some layouts on the player info page ([1154d97](https://github.com/blacha/st/commit/1154d9773745b9c5213f0dd843e78ab5051d55ce))
+* show where silos would be built ([9a253e0](https://github.com/blacha/st/commit/9a253e0188f597c015e18f6a0db0c9fb51409bfc))
+* start showing where power should be built ([e6ad7b1](https://github.com/blacha/st/commit/e6ad7b15cfa9f34336ec53f161b4642d0c31e7f3))
+* use fixed width sizes for ids to remove the seperator ([b3d9ae7](https://github.com/blacha/st/commit/b3d9ae7f9e849b61b051e683a523d319d78debb6))
+
+
+
+
+
 # [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
 
 

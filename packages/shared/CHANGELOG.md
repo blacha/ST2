@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/blacha/st/compare/v2.0.0...v2.1.0) (2020-02-03)
+
+
+### Bug Fixes
+
+* json requests should be application/json ([2088454](https://github.com/blacha/st/commit/20884543eeaa9c96e78b258e6e6c0ca8a4512292))
+* urls should not have // in them ([c08558b](https://github.com/blacha/st/commit/c08558bc69d893f59b1de67977fd76c739b7534c))
+* use a sortable id for timestamp based entries ([8c2af09](https://github.com/blacha/st/commit/8c2af09626083feacea4cd4be31c232588533003))
+
+
+### Features
+
+* filter layouts ([12c2dd4](https://github.com/blacha/st/commit/12c2dd4892125ef05de13b59d2a080cd9708b2cd))
+* show where silos would be built ([9a253e0](https://github.com/blacha/st/commit/9a253e0188f597c015e18f6a0db0c9fb51409bfc))
+* start showing where power should be built ([e6ad7b1](https://github.com/blacha/st/commit/e6ad7b15cfa9f34336ec53f161b4642d0c31e7f3))
+* use fixed width sizes for ids to remove the seperator ([b3d9ae7](https://github.com/blacha/st/commit/b3d9ae7f9e849b61b051e683a523d319d78debb6))
+
+
+
+
+
 # [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
 
 

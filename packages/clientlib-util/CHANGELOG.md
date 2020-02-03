@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/blacha/st/compare/v2.0.0...v2.1.0) (2020-02-03)
+
+
+### Bug Fixes
+
+* use a sortable id for timestamp based entries ([8c2af09](https://github.com/blacha/st/commit/8c2af09626083feacea4cd4be31c232588533003))
+
+
+### Features
+
+* add all world names ([2cf2a61](https://github.com/blacha/st/commit/2cf2a615ae1281a9241585d8f5d9642e37cbab7f))
+* filter layouts ([12c2dd4](https://github.com/blacha/st/commit/12c2dd4892125ef05de13b59d2a080cd9708b2cd))
+* use fixed width sizes for ids to remove the seperator ([b3d9ae7](https://github.com/blacha/st/commit/b3d9ae7f9e849b61b051e683a523d319d78debb6))
+
+
+
+
+
 # [2.0.0](https://github.com/blacha/st/compare/v1.0.0...v2.0.0) (2020-01-24)
 
 
