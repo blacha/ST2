@@ -50,6 +50,7 @@ export abstract class ApiCall<T extends ApiFunc> {
         let response: T['response'] | null = null;
         const id = Id.generate();
         const childLog = StLog.child({ id });
+        this.logContext['id'] = id;
         let error: Error | null = null;
 
         try {

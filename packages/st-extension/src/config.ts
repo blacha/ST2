@@ -1,7 +1,8 @@
 import { Duration } from '@cncta/util/src';
 import { StModuleBase } from './module/module.base';
+import { StModule } from './module/module';
 
-export type StConfigKey = 'CampTracker.icon.size' | 'CampTracker.icon.font' | 'CampTracker.icon.fontSize';
+export type StConfigKey = keyof StConfigKeys;
 
 export interface StConfigKeys {
     'CampTracker.icon.size': number;
@@ -17,7 +18,7 @@ export class StConfig extends StModuleBase {
     name = 'StConfig';
 
     private localStorageKey = 'shockr-tools-config';
-    data: Partial<Record<keyof StConfigKeys, string | number>> = {};
+    data: Partial<Record<StConfigKey, string | number | boolean>> = {};
 
     /** Optional hook called when the module starts */
     async onStart() {
@@ -42,11 +43,11 @@ export class StConfig extends StModuleBase {
         localStorage.setItem(this.localStorageKey, JSON.stringify(this.data));
     }
 
-    get<T extends keyof StConfigKeys>(key: T): undefined | StConfigKeys[T] {
+    get<T extends StConfigKey>(key: T): undefined | StConfigKeys[T] {
         return this.data[key] as StConfigKeys[T];
     }
 
-    set<T extends keyof StConfigKeys>(key: StConfigKey, value: StConfigKeys[T] | undefined) {
+    set<T extends StConfigKey>(key: StConfigKey, value: StConfigKeys[T] | undefined) {
         const oldValue = this.data[key];
         if (value == undefined) {
             delete this.data[key];
@@ -57,5 +58,9 @@ export class StConfig extends StModuleBase {
             this.save();
             this.st.onConfig();
         }
+    }
+
+    isDisabled(module: StModule) {
+        return this.data[`Module.${module.name}` as StConfigKey] == false;
     }
 }

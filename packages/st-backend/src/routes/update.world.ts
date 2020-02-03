@@ -14,6 +14,7 @@ export class ApiWorldUpdate extends ApiCall<ApiWorldUpdateRequest> {
     async handle(req: ApiRequest<ApiWorldUpdateRequest>): Promise<{}> {
         const worldId = Number(req.params.worldId) as WorldId;
 
+        this.logContext['worldId'] = worldId;
         const bots = await Stores.BotWorld.get('worlds');
         if (bots == null) {
             throw new HttpError(500, 'Invalid bot configuration');

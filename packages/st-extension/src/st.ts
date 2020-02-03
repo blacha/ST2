@@ -66,10 +66,11 @@ export class St {
     };
 
     modules: StModule[] = [
+        this.config,
+
         this.api,
         this.layout,
         this.alliance,
-        this.config,
         new ButtonScan(),
         new CampTracker(),
         new KillInfo(),
@@ -191,6 +192,10 @@ export class St {
         }
 
         for (const module of this.modules) {
+            if (this.config.isDisabled(module)) {
+                this.log.info({ module: module.name }, 'StModule:Disabled');
+                continue;
+            }
             this.log.debug({ module: module.name }, 'StModule:Start');
             if (module.state != StModuleState.Init) {
                 this.log.warn({ module: module.name, state: module.state }, 'Invalid module state');
