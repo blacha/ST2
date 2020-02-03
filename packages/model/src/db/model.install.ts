@@ -5,6 +5,8 @@ export interface ModelInstallPlayer {
     player: PlayerNameId;
     updatedAt: TimeStamp;
     worldId: WorldId;
+    version: string;
+    hash: string;
 }
 
 export class ModelInstall extends Model<ModelInstall> {
@@ -16,16 +18,20 @@ export class ModelInstall extends Model<ModelInstall> {
         this.players = data?.players ?? [];
     }
 
-    touch(player: PlayerNameDisplay, worldId: WorldId) {
+    touch(player: PlayerNameDisplay, worldId: WorldId, version: string, hash: string) {
         const playerNameId = ModelUtil.toPlayerNameId(player);
         const existing = this.players.find(f => f.player == playerNameId && f.worldId == worldId);
         if (existing) {
             existing.updatedAt = ModelUtil.TimeStamp();
+            existing.version = version;
+            existing.hash = hash;
         } else {
             this.players.push({
                 player: playerNameId,
                 worldId,
                 updatedAt: ModelUtil.TimeStamp(),
+                version,
+                hash,
             });
         }
     }

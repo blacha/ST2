@@ -4,7 +4,7 @@ export interface ApiInstallRequest {
     path: '/api/v1/install/:installId';
     method: 'post';
     params: { installId: string };
-    body: { worldId: WorldId; player: PlayerNameDisplay };
+    body: { worldId: WorldId; player: PlayerNameDisplay; version: string; hash: string };
     response: {};
 }
 

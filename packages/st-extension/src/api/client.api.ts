@@ -34,7 +34,7 @@ export class ClientApi extends StModuleBase {
             'post',
             '/api/v1/install/:installId',
             { installId },
-            { player, worldId },
+            { player, worldId, version: Config.version, hash: Config.hash },
         );
         await fetch(req.url, { method: req.method, body: req.body, headers: this.jsonHeaders });
     }
