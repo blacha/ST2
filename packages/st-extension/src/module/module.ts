@@ -12,6 +12,9 @@ export interface StModule {
 export interface StModuleHooks extends StModule {
     start(st: St): Promise<void>;
     stop(): Promise<void>;
+
+    /** Called when config changes */
+    onConfig?(): void;
 }
 
 export function hasStModuleHooks(x: any): x is StModuleHooks {

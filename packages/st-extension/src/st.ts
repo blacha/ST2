@@ -11,6 +11,7 @@ import { LayoutScanner } from './module/layout/layout.scan';
 import { hasStModuleHooks, StModule, StModuleState } from './module/module';
 import { StModuleBase } from './module/module.base';
 import { PlayerStatus } from './module/player.status/player.status';
+import { StConfig } from './config';
 
 /** What is the player currently up to */
 export enum PlayerState {
@@ -54,6 +55,7 @@ export class St {
 
     log: typeof StLog;
 
+    config = new StConfig();
     api = new ClientApi();
     layout = new LayoutScanner();
     alliance = new AllianceScanner();
@@ -67,6 +69,7 @@ export class St {
         this.api,
         this.layout,
         this.alliance,
+        this.config,
         new ButtonScan(),
         new CampTracker(),
         new KillInfo(),
@@ -239,6 +242,14 @@ export class St {
         this.modules.push(m);
         if (this.isClientLoaded && hasStModuleHooks(m)) {
             m.start(this).catch(error => StLog.error({ error, module: m.name }, 'Failed to start module'));
+        }
+    }
+
+    onConfig() {
+        for (const module of this.modules) {
+            if (hasStModuleHooks(module) && module.onConfig) {
+                module.onConfig();
+            }
         }
     }
 }

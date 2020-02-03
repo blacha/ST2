@@ -13,19 +13,19 @@ function replaceBaseLevel(t: ClientLibClass<RegionNpcCamp | RegionNpcCamp>) {
 export class CampTracker extends StModuleBase {
     name = 'CampTracker';
     /** Max number to show at one time */
-    MaxToShow = 10;
-    /**
-     * Max level difference to highlight
-     * (MainOffLevel - MaxOffDiff)
-     **/
-    MaxOffDiff = 1;
 
+    MaxToShow = 10;
     markers: Map<number, { el: HTMLDivElement; location: Point; index: number }> = new Map();
     updateInterval: number;
     lastUpdatedStep: number;
     updateCb: number | null;
+    font: string;
+    fontSize: string;
+    iconSize: number;
+    maxOffDiff = -1;
 
     async onStart(): Promise<void> {
+        this.MaxToShow = this.st.config.get('CampTracker.count') ?? 10;
         const md = ClientLib.Data.MainData.GetInstance();
         const visMain = ClientLib.Vis.VisMain.GetInstance();
         const region = visMain.get_Region();
@@ -40,6 +40,17 @@ export class CampTracker extends StModuleBase {
         replaceBaseLevel(ClientLib.Vis.Region.RegionNPCCamp);
 
         this.update();
+    }
+
+    onConfig() {
+        this.MaxToShow = this.st.config.get('CampTracker.count') ?? 10;
+        this.maxOffDiff = this.st.config.get('CampTracker.offense') ?? -1;
+        this.font = this.st.config.get('CampTracker.icon.font') ?? 'Roboto condensed';
+        this.fontSize = this.st.config.get('CampTracker.icon.fontSize') ?? '110%';
+        this.iconSize = this.st.config.get('CampTracker.icon.size') ?? 24;
+
+        this.markers.forEach(e => this.updateStyle(e.el));
+        this.doUpdate();
     }
 
     async onStop(): Promise<void> {
@@ -73,8 +84,9 @@ export class CampTracker extends StModuleBase {
         if (mainBase == null) {
             return;
         }
+
         const offLevel = mainBase.get_LvlOffense();
-        const minBaseHighlight = offLevel - this.MaxOffDiff;
+        const minBaseHighlight = offLevel + this.maxOffDiff;
         const nearByCamps = Array.from(CityUtil.getObjectsNearCity(mainBase).values()).filter(f => {
             // All outposts are camps
             if (!PatchWorldObjectNPCCamp.isPatched(f.object)) {
@@ -162,20 +174,19 @@ export class CampTracker extends StModuleBase {
         this.markers.delete(cityId);
     }
 
-    addMarker(cityId: number, location: Point, index: number) {
-        const el = document.createElement('div');
+    updateStyle(el: HTMLDivElement) {
         el.style.position = 'absolute';
         el.style.pointerEvents = 'none';
 
-        el.style.fontFamily = 'Roboto condensed';
+        el.style.fontFamily = this.font;
         el.style.fontWeight = 'bold';
-        el.style.fontSize = '110%';
+        el.style.fontSize = this.fontSize;
 
         el.style.zIndex = '10';
+        el.style.borderRadius = '50%';
 
-        el.style.borderRadius = '24px';
-        el.style.width = '24px';
-        el.style.height = '24px';
+        el.style.width = `${this.iconSize}px`;
+        el.style.height = `${this.iconSize}px`;
 
         el.style.padding = '2px';
         el.style.display = 'flex';
@@ -183,8 +194,13 @@ export class CampTracker extends StModuleBase {
         el.style.alignItems = 'center';
 
         el.style.border = '2px solid rgba(0,0,0,0.87)';
+    }
+
+    addMarker(cityId: number, location: Point, index: number) {
+        const el = document.createElement('div');
 
         el.title = `Object #${cityId}`;
+        this.updateStyle(el);
         this.updateElement(el, location, index);
         this.markers.set(cityId, { el, location, index });
         this.addMarkerToDom(el);
