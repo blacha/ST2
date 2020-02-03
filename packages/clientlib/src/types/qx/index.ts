@@ -1,4 +1,5 @@
 import { PlayerAreaViewMode } from '../clientlib';
+import { ChatWidgetSender, ChatWidgetChannel, ValueOf } from '../web';
 
 export interface QxLayoutItem {
     getWidth(): number;
@@ -39,8 +40,18 @@ export type QxLabel = QxWidget;
 export interface QxPlayArea extends QxWidget {
     setView: (viewMode: PlayerAreaViewMode, cityId: number, a: unknown, b: unknown) => void;
 }
+
+export interface QxChatInputWidget {
+    getEditable(): QxWidget;
+    showMessage(msg: string, sender: ValueOf<ChatWidgetSender>, channel: ChatWidgetChannel): void;
+}
+
+export interface QxChat {
+    getChatWidget(): QxChatInputWidget;
+}
 export interface QxApplication {
     getMenuBar(): QxWidget;
+    getChat(): QxChat;
     getPlayArea(): QxPlayArea;
     getBackgroundArea(): QxWidget;
     getDesktop(): QxComposite;

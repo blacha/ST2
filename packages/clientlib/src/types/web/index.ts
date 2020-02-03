@@ -14,8 +14,27 @@ export interface ClientLibSingletonClass<T> extends ClientLibClass<T> {
     getInstance(): T;
 }
 
+export const enum ChatWidgetChannel {
+    all = 1,
+    alliance = 2,
+    officers = 4,
+    whisper = 8,
+    global = 16,
+    allflags = 31,
+}
+export type ValueOf<T> = T[keyof T];
+export interface ChatWidgetSender {
+    system: 'SYSTEM';
+}
+
 export interface WebFrontEndStatic {
     gui: {
+        chat: {
+            ChatWidget: {
+                channel: typeof ChatWidgetChannel;
+                sender: ChatWidgetSender;
+            };
+        };
         region: {
             RegionInfoAllianceMarker: unknown;
             RegionCityFoundInfo: unknown;

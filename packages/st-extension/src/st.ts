@@ -12,6 +12,7 @@ import { hasStModuleHooks, StModule, StModuleState } from './module/module';
 import { StModuleBase } from './module/module.base';
 import { PlayerStatus } from './module/player.status/player.status';
 import { StConfig } from './config';
+import { StCli } from './module/cli';
 
 /** What is the player currently up to */
 export enum PlayerState {
@@ -56,6 +57,7 @@ export class St {
     log: typeof StLog;
 
     config = new StConfig();
+    cli = new StCli();
     api = new ClientApi();
     layout = new LayoutScanner();
     alliance = new AllianceScanner();
@@ -66,9 +68,12 @@ export class St {
     };
 
     modules: StModule[] = [
+        // Core modules
         this.config,
-
+        this.cli,
         this.api,
+
+        // Feature modules
         this.layout,
         this.alliance,
         new ButtonScan(),
