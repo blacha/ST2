@@ -16,6 +16,7 @@ export interface ApiUser {
 }
 
 export abstract class ApiCall<T extends ApiFunc> {
+    abstract name: string;
     abstract path: T['path'];
     abstract method: T['method'];
 
@@ -50,7 +51,10 @@ export abstract class ApiCall<T extends ApiFunc> {
         let response: T['response'] | null = null;
         const id = Id.generate();
         const childLog = StLog.child({ id });
+
         this.logContext['id'] = id;
+        this.logContext['route'] = this.name;
+
         let error: Error | null = null;
 
         try {

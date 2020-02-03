@@ -8,6 +8,7 @@ import { GameSession } from '../game.session';
 import { HttpError } from '../http.error';
 
 export class ApiWorldUpdate extends ApiCall<ApiWorldUpdateRequest> {
+    name = 'world.update';
     path = '/api/v1/world/:worldId/update' as const;
     method = 'post' as const;
 

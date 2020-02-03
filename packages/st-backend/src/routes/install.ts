@@ -5,6 +5,7 @@ import { ApiCall, ApiRequest } from '../api.call';
 import { HttpError } from '../http.error';
 
 export class ApiInstall extends ApiCall<ApiInstallRequest> {
+    name = 'install.track';
     path = '/api/v1/install/:installId' as const;
     method = 'post' as const;
 

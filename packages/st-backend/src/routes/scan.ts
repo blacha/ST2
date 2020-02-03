@@ -28,6 +28,7 @@ const OneDayMs = 25 * OneHourMs;
 const LayoutExpireMs = 3 * OneDayMs;
 
 export class ApiScan extends ApiCall<ApiScanRequest> {
+    name = 'scan.create';
     path = '/api/v1/world/:worldId/player/:player/scan' as const;
     method = 'post' as const;
 

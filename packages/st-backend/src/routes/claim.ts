@@ -6,6 +6,7 @@ import { GameSession } from '../game.session';
 import { HttpError } from '../http.error';
 
 export class ApiClaimPlayerStart extends ApiCall<ApiClaimStartRequest> {
+    name = 'claim.start';
     path = '/api/v1/world/:worldId/player/:player/claim' as const;
     method = 'post' as const;
 
@@ -59,6 +60,7 @@ A user has requested to claim this player account on shockr.dev to complete the 
 }
 
 export class ApiClaimPlayerAccept extends ApiCall<ApiClaimPlayerAcceptRequest> {
+    name = 'claim.accept';
     path = '/api/v1/claim/:claimId' as const;
     method = 'get' as const;
 
