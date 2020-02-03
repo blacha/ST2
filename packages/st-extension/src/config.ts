@@ -1,6 +1,5 @@
-import { StModuleState } from './module/module';
-import { StModuleBase } from './module/module.base';
 import { Duration } from '@cncta/util/src';
+import { StModuleBase } from './module/module.base';
 
 export type StConfigKey = 'CampTracker.icon.size' | 'CampTracker.icon.font' | 'CampTracker.icon.fontSize';
 
