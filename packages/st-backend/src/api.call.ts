@@ -9,6 +9,7 @@ export interface ApiRequest<T extends ApiFunc> extends expressCore.Request<T['pa
     id: string;
     log: typeof StLog;
     user?: ApiUser;
+    logContext: Record<string, any>;
 }
 
 export interface ApiUser {
@@ -19,8 +20,6 @@ export abstract class ApiCall<T extends ApiFunc> {
     abstract name: string;
     abstract path: T['path'];
     abstract method: T['method'];
-
-    logContext: Record<string, any> = {};
 
     static bind<T extends ApiFunc>(app: express.Application, ApiFunc: ApiCall<T>) {
         app[ApiFunc.method](ApiFunc.path, ApiFunc.doRequest.bind(ApiFunc));
@@ -38,9 +37,14 @@ export abstract class ApiCall<T extends ApiFunc> {
         return user;
     }
 
-    static async validateRequest<T extends ApiFunc>(req: express.Request, id: string): Promise<ApiRequest<T>> {
+    static validateRequest<T extends ApiFunc>(req: express.Request, id: string): ApiRequest<T> {
         const apiReq = req as ApiRequest<any>;
         apiReq.id = id;
+        apiReq.logContext = {
+            hash: Config.hash,
+            version: Config.version,
+        };
+        apiReq.log = StLog.child({ id });
         return apiReq;
     }
 
@@ -50,16 +54,13 @@ export abstract class ApiCall<T extends ApiFunc> {
         let status = 200;
         let response: T['response'] | null = null;
         const id = Id.generate();
-        const childLog = StLog.child({ id });
-
-        this.logContext['id'] = id;
-        this.logContext['route'] = this.name;
+        const apiReq = await ApiCall.validateRequest<T>(req, id);
 
         let error: Error | null = null;
 
         try {
-            const apiReq = await ApiCall.validateRequest<T>(req, id);
-            apiReq.log = childLog;
+            apiReq.logContext['id'] = id;
+            apiReq.logContext['route'] = this.name;
             response = await this.handle(apiReq);
         } catch (e) {
             error = e;
@@ -78,11 +79,11 @@ export abstract class ApiCall<T extends ApiFunc> {
         res.status(status);
         res.json(response);
         if (status > 499 && error != null) {
-            childLog.error({ ...this.logContext, error: error }, 'Failed');
+            apiReq.log.error({ ...apiReq.logContext, error: error }, 'Failed');
         } else if (status > 399 && error != null) {
-            childLog.warn({ ...this.logContext, error: error }, error.message);
+            apiReq.log.warn({ ...apiReq.logContext, error: error }, error.message);
         } else {
-            childLog.info({ ...this.logContext, url: req.url, duration: Date.now() - startTime, status }, 'Done');
+            apiReq.log.info({ ...apiReq.logContext, url: req.url, duration: Date.now() - startTime, status }, 'Done');
         }
     }
 
