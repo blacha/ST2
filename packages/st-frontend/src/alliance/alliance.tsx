@@ -55,7 +55,7 @@ interface AllianceState {
     isExpanded?: boolean;
 }
 
-const PageSize = 10;
+const PageSize = 20;
 
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
     state: AllianceState = { info: [], state: ComponentLoading.Init, alliance: { id: -1, name: '' }, worldId: -1 };
@@ -191,7 +191,11 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                     rowKey="id"
                     dataSource={this.state.info}
                     columns={AllianceColumns}
-                    pagination={this.isPaginatingTable ? { position: 'bottom', pageSize: PageSize } : false}
+                    pagination={
+                        this.isPaginatingTable
+                            ? { position: 'bottom', defaultPageSize: PageSize, showSizeChanger: true }
+                            : false
+                    }
                     bordered
                     loading={this.isLoading}
                     sortDirections={['descend', 'ascend']}

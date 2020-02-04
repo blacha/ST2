@@ -1,20 +1,14 @@
 import React = require('react');
-import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId, CompositeId } from '@cncta/clientlib';
+import { GameDataResearchLevel, GameDataUnitId } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
-import { Stores } from '@st/model';
-import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade, WorldAllianceId } from '@st/shared';
+import { Base, formatNumber, GameResources } from '@st/shared';
 import 'antd/dist/antd.css';
-import BackTop from 'antd/es/back-top';
-import Table from 'antd/es/table';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { style } from 'typestyle';
-import { ComponentLoading } from '../base/base';
+import Icon from 'antd/es/icon';
+import { Link } from 'react-router-dom';
 import { timeSince } from '../time.util';
-import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { FactionIcon } from '../util/faction';
 import { ViewResearch } from '../util/research';
-import Spin from 'antd/es/spin';
-import Divider from 'antd/es/divider';
+import Tooltip from 'antd/es/tooltip';
 
 export interface PlayerStats {
     id: string;
@@ -24,6 +18,19 @@ export interface PlayerStats {
     main: Base;
     updatedAt: number;
     upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
+}
+
+function getDiffIcon(updatedAt: number) {
+    const dateDiff = Date.now() - updatedAt;
+
+    if (dateDiff > Duration.hours(6)) {
+        return <Icon type="exclamation-circle" theme="twoTone" twoToneColor="#eb2f96" />;
+    }
+    if (dateDiff > Duration.OneHour) {
+        return <Icon type="info-circle" theme="twoTone" />;
+    }
+
+    return <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />;
 }
 
 export const AllianceColumns = [
@@ -39,6 +46,8 @@ export const AllianceColumns = [
         key: 'name',
         render: (main: Base) => <Link to={`/world/${main.worldId}/player/${main.owner?.id}`}>{main.owner?.name}</Link>,
         sorter: (a: PlayerStats, b: PlayerStats) => a.name.localeCompare(b.name),
+        ellipsis: true,
+        width: 150,
     },
     {
         title: 'F',
@@ -92,8 +101,10 @@ export const AllianceColumns = [
                 dataIndex: 'main',
                 key: 'mainName',
                 render: (main: Base) => (
-                    <Link to={`/world/${main.worldId}/player/${main.owner?.id}/base/${main.cityId}`}>{main.name}</Link>
+                    <Link to={`/world/${main.worldId}/player/${main.owner?.id}/city/${main.cityId}`}>{main.name}</Link>
                 ),
+                width: 150,
+                ellipsis: true,
             },
             {
                 title: 'Level',
@@ -101,6 +112,7 @@ export const AllianceColumns = [
                 key: 'level',
                 render: (main: Base) => formatNumber(main.level),
                 sorter: (a: PlayerStats, b: PlayerStats) => a.main.level - b.main.level,
+                width: 85,
             },
             {
                 title: 'CC',
@@ -110,6 +122,7 @@ export const AllianceColumns = [
                 render: (main: Base) => Math.floor(main.buildings.commandCenter?.level ?? 0) || '',
                 sorter: (a: PlayerStats, b: PlayerStats) =>
                     (a.main.buildings.commandCenter?.level || 0) - (b.main.buildings.commandCenter?.level || 0),
+                width: 70,
             },
             {
                 title: 'Off',
@@ -149,11 +162,17 @@ export const AllianceColumns = [
         render: (stats: PlayerStats) => (
             <ViewResearch faction={stats.main.faction} upgrades={stats.upgrades} style="square" />
         ),
+        width: 180,
     },
     {
-        title: 'Updated',
+        title: '',
         key: 'updated',
-        render: (s: PlayerStats) => timeSince(s.updatedAt),
+        render: (s: PlayerStats) => {
+            const title = 'Last updated ' + timeSince(s.updatedAt) + ' ago';
+
+            return <Tooltip title={title}>{getDiffIcon(s.updatedAt)}</Tooltip>;
+        },
         sorter: (a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt,
+        width: 32,
     },
 ];
