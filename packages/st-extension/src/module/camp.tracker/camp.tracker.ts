@@ -20,7 +20,7 @@ export class CampTracker extends StModuleBase {
     lastUpdatedStep: number;
     updateCb: number | null;
     font: string;
-    fontSize: string;
+    fontSize: number;
     iconSize: number;
     maxOffDiff = -1;
 
@@ -43,11 +43,11 @@ export class CampTracker extends StModuleBase {
     }
 
     onConfig() {
-        this.MaxToShow = this.st.config.get('CampTracker.count') ?? 10;
-        this.maxOffDiff = this.st.config.get('CampTracker.offense') ?? -1;
-        this.font = this.st.config.get('CampTracker.icon.font') ?? 'Roboto condensed';
-        this.fontSize = this.st.config.get('CampTracker.icon.fontSize') ?? '110%';
-        this.iconSize = this.st.config.get('CampTracker.icon.size') ?? 24;
+        this.MaxToShow = this.st.config.get('CampTracker.count');
+        this.maxOffDiff = this.st.config.get('CampTracker.offense');
+        this.font = this.st.config.get('CampTracker.icon.font');
+        this.fontSize = this.st.config.get('CampTracker.icon.fontSize');
+        this.iconSize = this.st.config.get('CampTracker.icon.size');
 
         this.markers.forEach(e => this.updateStyle(e.el));
         this.doUpdate();
@@ -180,7 +180,7 @@ export class CampTracker extends StModuleBase {
 
         el.style.fontFamily = this.font;
         el.style.fontWeight = 'bold';
-        el.style.fontSize = this.fontSize;
+        el.style.fontSize = this.fontSize + 'px';
 
         el.style.zIndex = '10';
         el.style.borderRadius = '50%';

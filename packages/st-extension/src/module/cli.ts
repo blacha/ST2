@@ -1,14 +1,20 @@
+import { ChatWidgetChannel, QxStatic, WebFrontEndStatic } from '@cncta/clientlib';
+import { St } from '../st';
 import { StModuleBase } from './module.base';
-import { QxStatic, WebFrontEndStatic, ChatWidgetChannel } from '@cncta/clientlib';
 
 declare const qx: QxStatic;
 declare const webfrontend: WebFrontEndStatic;
+
+export interface StCliCommand {
+    cmd: string;
+    handle(st: St, args: string[]): void;
+}
 
 export class StCli extends StModuleBase {
     StSlashCommand = '/st';
     name = 'Cli';
 
-    commands: Record<string, (args: string[]) => string | void> = {};
+    commands: Record<string, StCliCommand> = {};
 
     get inputEl() {
         return qx.core.Init.getApplication()
@@ -19,7 +25,7 @@ export class StCli extends StModuleBase {
             .getDomElement() as HTMLInputElement;
     }
 
-    async onSart() {
+    async onStart() {
         this.inputEl.addEventListener('keydown', this.handleKeyDown);
     }
 
@@ -34,26 +40,32 @@ export class StCli extends StModuleBase {
         }
 
         // Parse CLI args
-        const parts = el.value.split(' ');
-        const cmd = parts[1].toLowerCase();
+        const parts = el.value.trim().split(' ');
+        const cmd = (parts[1] ?? '').toLowerCase();
         if (this.commands[cmd] == null) {
             this.sendMessage('red', 'Invalid command, Options: ' + Object.keys(this.commands).join(', '));
+        } else {
+            this.sendMessage('white', parts.join(' '));
+            this.commands[cmd].handle(this.st, parts.slice(2));
         }
-        const res = this.commands[cmd](parts.slice(1));
-        if (res) {
-            this.sendMessage('red', 'Error: ' + res);
-        }
-
-        this.inputEl.value = '';
+        el.value = '';
+        el.focus();
+        setTimeout(() => el.focus(), 5);
+        e.preventDefault();
         return false;
     };
 
-    register(cmd: string, cb: (args: string[]) => string | void) {
-        this.commands[cmd] = cb;
+    register(cmd: StCliCommand) {
+        this.st.log.debug({ cmd: cmd.cmd }, 'AddCliCommand');
+        this.commands[cmd.cmd] = cmd;
+    }
+
+    unregister(cmd: StCliCommand) {
+        delete this.commands[cmd.cmd];
     }
 
     sendMessage(color: string, msg: string) {
-        const s = `<font color="${color}"><i>${msg}</i></font>`;
+        const s = `<font color="${color}">St: ${msg}</font>`;
         qx.core.Init.getApplication()
             .getChat()
             .getChatWidget()

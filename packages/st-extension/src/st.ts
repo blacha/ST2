@@ -1,18 +1,18 @@
-import { CityScannerUtil, CityUtil, ClientLibLoader, Patches, LocalCache } from '@cncta/util';
+import { CityScannerUtil, CityUtil, ClientLibLoader, LocalCache, Patches } from '@cncta/util';
 import { Id, StLog } from '@st/shared';
 import { StModuleAction } from './actions';
 import { ClientApi } from './api/client.api';
 import { AllianceScanner } from './module/alliance/alliance.info';
 import { ButtonScan } from './module/button/button.scan';
 import { CampTracker } from './module/camp.tracker/camp.tracker';
+import { StCli } from './module/cli';
 import { IdleScanner } from './module/idle/idle.module';
 import { KillInfo } from './module/kill.info/kill.info';
 import { LayoutScanner } from './module/layout/layout.scan';
-import { hasStModuleHooks, StModule, StModuleState } from './module/module';
+import { hasStModuleHooks, StModuleState } from './module/module';
 import { StModuleBase } from './module/module.base';
 import { PlayerStatus } from './module/player.status/player.status';
-import { StConfig } from './config';
-import { StCli } from './module/cli';
+import { StConfig } from './st.config';
 
 /** What is the player currently up to */
 export enum PlayerState {
@@ -61,18 +61,18 @@ export class St {
 
     log: typeof StLog;
 
-    config = new StConfig();
-    cli = new StCli();
-    api = new ClientApi();
-    layout = new LayoutScanner();
-    alliance = new AllianceScanner();
+    config = new StConfig(this);
+    cli = new StCli(this);
+    api = new ClientApi(this);
+    layout = new LayoutScanner(this);
+    alliance = new AllianceScanner(this);
 
     util = {
         scan: CityScannerUtil,
         city: CityUtil,
     };
 
-    modules: StModule[] = [
+    modules: StModuleBase[] = [
         // Core modules
         this.config,
         this.cli,
@@ -81,11 +81,11 @@ export class St {
         // Feature modules
         this.layout,
         this.alliance,
-        new ButtonScan(),
-        new CampTracker(),
-        new KillInfo(),
-        new PlayerStatus(),
-        new IdleScanner(),
+        new ButtonScan(this),
+        new CampTracker(this),
+        new KillInfo(this),
+        new PlayerStatus(this),
+        new IdleScanner(this),
     ];
 
     constructor() {
@@ -213,7 +213,7 @@ export class St {
             if (!hasStModuleHooks(module)) {
                 continue;
             }
-            await module.start(this);
+            await module.start();
             if (module.state !== StModuleState.Started) {
                 this.log.warn({ module: module.name, state: module.state }, 'Module failed to start');
             }
@@ -232,9 +232,11 @@ export class St {
             if (module.state != StModuleState.Started) {
                 continue;
             }
+
             if (!hasStModuleHooks(module)) {
                 continue;
             }
+
             await module.stop();
             if (module.state !== StModuleState.Stopped) {
                 this.log.warn({ module: module.name, state: module.state }, 'Module failed to stop');
@@ -242,7 +244,7 @@ export class St {
         }
     }
 
-    add(m: StModule) {
+    add(m: StModuleBase) {
         this.log.debug({ module: m.name }, 'StModule:Add');
 
         if (m.state !== StModuleState.Init) {
@@ -255,13 +257,14 @@ export class St {
 
         this.modules.push(m);
         if (this.isClientLoaded && hasStModuleHooks(m)) {
-            m.start(this).catch(error => StLog.error({ error, module: m.name }, 'Failed to start module'));
+            m.st = this;
+            m.start().catch(error => StLog.error({ error, module: m.name }, 'Failed to start module'));
         }
     }
 
     onConfig() {
         for (const module of this.modules) {
-            if (hasStModuleHooks(module) && module.onConfig) {
+            if (module.isReady && module.onConfig) {
                 module.onConfig();
             }
         }

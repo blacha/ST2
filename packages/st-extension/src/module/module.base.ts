@@ -22,6 +22,10 @@ export abstract class StModuleBase implements StModuleHooks {
     state = StModuleState.Init;
     st: St;
 
+    constructor(st: St) {
+        this.st = st;
+    }
+
     /** Bound events to ClientLib */
     events: EventContext<any, any>[] = [];
     /** Any periodic timers needed */
@@ -34,16 +38,19 @@ export abstract class StModuleBase implements StModuleHooks {
     /** Optional hook called when the module stops */
     onStop?(): Promise<void>;
 
-    async start(st: St): Promise<void> {
+    /** Optional hook called when config changes */
+    onConfig?(): void;
+
+    async start(): Promise<void> {
         this.state = StModuleState.Starting;
-        this.st = st;
         await this.onStart?.();
 
         for (const patch of this.patches) {
-            st.log.info({ patch }, 'Patch:Apply');
+            this.st.log.info({ patch }, 'Patch:Apply');
             patch.apply();
         }
 
+        this.onConfig?.();
         this.state = StModuleState.Started;
     }
 
