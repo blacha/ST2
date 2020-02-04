@@ -34,6 +34,9 @@ export const StCliDisable: StCliCommand = {
 
         st.log.info({ module: module.name }, 'Disable');
         st.config.disable(module);
+        if (module.isReady) {
+            module.stop();
+        }
     },
 };
 
@@ -48,6 +51,9 @@ export const StCliEnable: StCliCommand = {
 
         st.log.info({ module: module.name }, 'Enable');
         st.config.enable(module);
+        if (!module.isReady) {
+            module.start();
+        }
     },
 };
 
@@ -89,7 +95,7 @@ export const StCliConfigList = {
             for (const module of st.modules) {
                 st.cli.sendMessage(
                     'white',
-                    `    ${module.name} : ${st.config.isDisabled(module) ? 'disabled' : 'enabled'}}`,
+                    `    ${module.name} : ${st.config.isDisabled(module) ? 'disabled' : 'enabled'}`,
                 );
             }
         }
