@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/blacha/st/compare/v2.1.0...v2.2.0) (2020-02-04)
+
+
+### Features
+
+* start tracking what version everyone has installed ([f8350eb](https://github.com/blacha/st/commit/f8350eb2761ed6f3a2f042135819d585697e05e2))
+* supply basic extension metrics on every request ([e3b35c9](https://github.com/blacha/st/commit/e3b35c97c1f4c49980420decd66460fdc205e3a8))
+
+
+
+
+
 # [2.1.0](https://github.com/blacha/st/compare/v2.0.0...v2.1.0) (2020-02-03)
 
 

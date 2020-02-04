@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/blacha/st/compare/v2.1.0...v2.2.0) (2020-02-04)
+
+
+### Features
+
+* basic chat message types ([f44a2dd](https://github.com/blacha/st/commit/f44a2dddef849be8b4a750bc09a302ab404b2ad8))
+
+
+
+
+
 # [2.1.0](https://github.com/blacha/st/compare/v2.0.0...v2.1.0) (2020-02-03)
 
 

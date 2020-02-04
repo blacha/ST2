@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/blacha/st/compare/v2.1.0...v2.2.0) (2020-02-04)
+
+
+### Features
+
+* allow disabling of modules ([6a546aa](https://github.com/blacha/st/commit/6a546aa175c75bfd442df54e36a009731704bed8))
+* basic chat message types ([f44a2dd](https://github.com/blacha/st/commit/f44a2dddef849be8b4a750bc09a302ab404b2ad8))
+* cli to conifgure st ([79121f6](https://github.com/blacha/st/commit/79121f60332f1d4b12d436b0c8336b5ea609bee6))
+* start tracking what version everyone has installed ([f8350eb](https://github.com/blacha/st/commit/f8350eb2761ed6f3a2f042135819d585697e05e2))
+* supply basic extension metrics on every request ([e3b35c9](https://github.com/blacha/st/commit/e3b35c97c1f4c49980420decd66460fdc205e3a8))
+
+
+
+
+
 # [2.1.0](https://github.com/blacha/st/compare/v2.0.0...v2.1.0) (2020-02-03)
 
 

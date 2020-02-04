@@ -1,6 +1,6 @@
 {
     "name": "@st/backend",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "private": true,
     "description": "Client lib utilities and types",
     "scripts": {
@@ -9,9 +9,9 @@
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "dependencies": {
-        "@cncta/clientlib": "^2.1.0",
-        "@st/model": "^2.1.0",
-        "@st/shared": "^2.1.0",
+        "@cncta/clientlib": "^2.2.0",
+        "@st/model": "^2.2.0",
+        "@st/shared": "^2.2.0",
         "firebase-admin": "^8.9.0",
         "firebase-functions": "^3.3.0"
     },
