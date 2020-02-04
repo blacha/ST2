@@ -1,8 +1,25 @@
 import { ClientLibStatic } from '@cncta/clientlib';
 import { CityScannerUtil, CityUtil, Duration } from '@cncta/util';
 import { StModuleBase } from '../module.base';
+import { StCliCommand } from '../cli';
+import { St } from '../../st';
 
 declare const ClientLib: ClientLibStatic;
+
+export const StCliScanAlliance: StCliCommand = {
+    cmd: 'scan-alliance',
+    handle(st: St): void {
+        st.clearActions();
+        // Abort a in progress scan
+        if (!st.isIdle) {
+            st.cli.sendMessage('white', 'Abort Scan');
+            return;
+        }
+        st.cli.sendMessage('white', 'Starting Scan');
+        st.alliance.scanAll();
+        st.run(true).then(() => st.cli.sendMessage('white', 'Scan done!'));
+    },
+};
 
 export class AllianceScanner extends StModuleBase {
     name = 'AllianceScanner';
@@ -10,6 +27,7 @@ export class AllianceScanner extends StModuleBase {
     async onStart(): Promise<void> {
         this.interval(() => this.scanAll(), Duration.OneHour);
         this.interval(() => this.playerScan(), Duration.minutes(20));
+        this.cli(StCliScanAlliance);
     }
 
     /** Scan only the current player's bases */

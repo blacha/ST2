@@ -36,18 +36,14 @@ export class StConfig extends StModuleBase {
         // Reload config
         this.interval(() => this.load(), Duration.seconds(60));
 
-        this.st.cli.register(StCliEnable);
-        this.st.cli.register(StCliDisable);
-        this.st.cli.register(StCliConfigSet);
-        this.st.cli.register(StCliConfigList);
+        this.cli(StCliEnable);
+        this.cli(StCliDisable);
+        this.cli(StCliConfigSet);
+        this.cli(StCliConfigList);
     }
     /** Optional hook called when the module stops */
     async onStop() {
         this.save();
-        this.st.cli.unregister(StCliEnable);
-        this.st.cli.unregister(StCliDisable);
-        this.st.cli.unregister(StCliConfigSet);
-        this.st.cli.unregister(StCliConfigList);
     }
 
     get allKeys(): StConfigKey[] {

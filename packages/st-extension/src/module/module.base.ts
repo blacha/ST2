@@ -4,6 +4,7 @@ import { St } from '../st';
 import { StModuleHooks, StModuleState } from './module';
 import { ClientLibPatch } from '@cncta/util';
 import { StAction } from '../actions';
+import { StCliCommand } from './cli';
 
 declare const phe: PheStatic;
 
@@ -33,6 +34,8 @@ export abstract class StModuleBase implements StModuleHooks {
     /** ClientLib Patches specifically applied for this module */
     patches: ClientLibPatch<{}, any>[] = [];
 
+    cliCommands: StCliCommand[] = [];
+
     /** Optional hook called when the module starts */
     onStart?(): Promise<void>;
     /** Optional hook called when the module stops */
@@ -54,6 +57,11 @@ export abstract class StModuleBase implements StModuleHooks {
         this.state = StModuleState.Started;
     }
 
+    cli(cmd: StCliCommand) {
+        this.st.cli.register(cmd);
+        this.cliCommands.push(cmd);
+    }
+
     async stop(): Promise<void> {
         this.state = StModuleState.Stopping;
         this.clearActions();
@@ -70,6 +78,7 @@ export abstract class StModuleBase implements StModuleHooks {
         for (const patch of this.patches) {
             patch.remove();
         }
+        this.cliCommands.forEach(c => this.st.cli.unregister(c));
         this.state = StModuleState.Stopped;
     }
 
