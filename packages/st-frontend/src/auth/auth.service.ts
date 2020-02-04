@@ -2,7 +2,7 @@ import { UId } from '@st/model';
 import { StLog } from '@st/shared';
 import { User } from 'firebase';
 import { action, observable } from 'mobx';
-import { FireAuth, FireAuthGoogle } from '../firebase';
+import { FireAuth, FireAuthGoogle, FireAnalytics } from '../firebase';
 
 export class AuthService {
     auth = FireAuth;
@@ -22,6 +22,10 @@ export class AuthService {
     @action
     setUser(u: User | null) {
         StLog.info({ user: u?.uid }, 'UserUpdate');
+        if (u) {
+            FireAnalytics.setUserId(u.uid);
+            FireAnalytics.logEvent('UserUpdate', { uid: u.uid });
+        }
         this.isReady = true;
         this.user.set(u);
     }

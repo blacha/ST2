@@ -14,6 +14,8 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Cs } from '../base/base';
 import { Api } from '../api/api';
+import { FireAnalytics } from '../firebase';
+import { Auth } from '../auth/auth.service';
 
 @observer
 export class ClaimPage extends React.Component<{}, {}> {
@@ -57,11 +59,19 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
             if (err) {
                 return;
             }
+            FireAnalytics.logEvent('Claim:Send', { worldId: values.worldId, player: values.player });
+
             this.setState({ ...this.state, claim: Cs.Loading });
             const res = await Api.claimPlayerRequest(values.worldId, values.player);
             if (res == true) {
                 this.setState({ ...this.state, claim: Cs.Done });
             } else {
+                FireAnalytics.logEvent('Claim:Failed', {
+                    worldId: values.worldId,
+                    player: values.player,
+                    uid: Auth.uid,
+                });
+
                 this.setState({ ...this.state, claim: Cs.Failed });
             }
         });

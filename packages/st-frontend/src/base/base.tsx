@@ -17,6 +17,8 @@ import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
+import { FireAnalytics } from '../firebase';
+import { Auth } from '../auth/auth.service';
 
 const TileSize = 64;
 
@@ -114,6 +116,7 @@ export class ViewBase extends React.Component<ViewBaseProps> {
 
     async loadPlayerBase(playerId: PlayerId, cityId: CityId, worldId: WorldId) {
         StLog.info({ playerId, cityId, worldId }, 'LoadingPlayerCity');
+        FireAnalytics.logEvent('City:LoadPlayer', { worldId, playerId, cityId });
 
         const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
         const player = await Stores.Player.get(docId);
@@ -133,6 +136,8 @@ export class ViewBase extends React.Component<ViewBaseProps> {
     async loadBase(cityId: string) {
         StLog.info({ cityId }, 'LoadingCity');
         const city = await Stores.City.get(cityId as CompositeId<[WorldId, TimeStamp, CityId]>);
+        FireAnalytics.logEvent('City:LoadCity', { cityId });
+
         if (city == null) {
             this.setState({ base: this.state.base, state: Cs.Failed });
             return;

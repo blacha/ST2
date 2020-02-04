@@ -16,6 +16,8 @@ import { LayoutView } from '../layout/layout';
 import { unpackLayouts } from '../layout/layout.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { AllianceColumns, PlayerStats } from './alliance.table';
+import { Auth } from '../auth/auth.service';
+import { FireAnalytics } from '../firebase';
 
 export const AllianceCss = {
     Table: style({
@@ -64,8 +66,9 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
         if (currentState == Cs.Loading || currentState == Cs.Refreshing) {
             return;
         }
-        console.log('Load alliance');
         const { worldId, allianceId } = this;
+        FireAnalytics.logEvent('Alliance:Load', { worldId, allianceId });
+
         const loadingState = currentState == Cs.Init ? Cs.Loading : Cs.Refreshing;
         const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
         this.setState({ ...this.state, state: loadingState });

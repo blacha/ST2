@@ -6,6 +6,8 @@ import { Cs } from '../base/base';
 import Title from 'antd/es/typography/Title';
 import Paragraph from 'antd/es/typography/Paragraph';
 import Spin from 'antd/es/spin';
+import { Auth } from '../auth/auth.service';
+import { FireAnalytics } from '../firebase';
 
 type ClaimProps = RouteComponentProps<{ claimId: string }>;
 export interface ClaimAcceptState {
@@ -17,6 +19,8 @@ export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptStat
     state: ClaimAcceptState = { state: Cs.Loading };
     componentDidMount() {
         const { claimId } = this.props.match.params;
+        FireAnalytics.logEvent('Claim:Accept', { claimId });
+
         this.claimPlayer(claimId);
     }
 

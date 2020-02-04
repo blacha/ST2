@@ -23,6 +23,8 @@ import { FactionName } from '../util/faction';
 import { ViewResearch } from '../util/research';
 import React = require('react');
 import { PlayerStats } from '../alliance/alliance.table';
+import { FireAnalytics } from '../firebase';
+import { Auth } from '../auth/auth.service';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
@@ -149,9 +151,12 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
 
     async loadPlayer(worldId: WorldId, playerId: PlayerId) {
         const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
+        FireAnalytics.logEvent('Player:Load', { worldId: worldId, playerId });
+
         this.setState({ state: Cs.Loading });
         const result = await Stores.Player.getOrCreate(docId);
         if (!result.isValid) {
+            FireAnalytics.logEvent('Player:LoadFailed', { worldId: worldId, playerId });
             this.setState({ state: Cs.Failed });
             return;
         }
