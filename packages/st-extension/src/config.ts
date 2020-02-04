@@ -18,7 +18,7 @@ export interface StConfigKeys {
 export class StConfig extends StModuleBase {
     name = 'StConfig';
 
-    private localStorageKey = 'shockr-tools-config';
+    private localStorageKey = 'st-config';
     data: Partial<Record<StConfigKey, string | number | boolean>> = {};
 
     /** Optional hook called when the module starts */

@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as expressCore from 'express-serve-static-core';
-import { Id, StLog, ApiFunc, Config } from '@st/shared';
+import { Id, StLog, ApiFunc, Config, ApiHeaders } from '@st/shared';
 import * as admin from 'firebase-admin';
 import { UId } from '@st/model';
 import { HttpError } from './http.error';
@@ -45,6 +45,13 @@ export abstract class ApiCall<T extends ApiFunc> {
             version: Config.version,
         };
         apiReq.log = StLog.child({ id });
+        if (apiReq.header(ApiHeaders.ExtensionHash)) {
+            apiReq.logContext['extension'] = {
+                hash: apiReq.header(ApiHeaders.ExtensionHash),
+                version: apiReq.header(ApiHeaders.ExtensionVersion),
+                installId: apiReq.header(ApiHeaders.ExtensionInstall),
+            };
+        }
         return apiReq;
     }
 

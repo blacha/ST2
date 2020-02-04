@@ -29,6 +29,7 @@ export enum StState {
 }
 
 const InstanceIdKey = 'st-instance-id';
+const ChallengeIdKey = 'st-instance-challenge-id';
 
 export class St {
     static instance: St;
@@ -49,6 +50,10 @@ export class St {
             localStorage.setItem(InstanceIdKey, instanceId);
         }
         return instanceId;
+    }
+
+    get challengeId(): string {
+        return localStorage.getItem(ChallengeIdKey) ?? '';
     }
 
     player: PlayerState = PlayerState.Active;
@@ -183,7 +188,6 @@ export class St {
             await new Promise(resolve => setTimeout(resolve, 100));
             if (failCount > 100) {
                 this.log.error('StStartup:Failed');
-
                 throw new Error('ShockrTools failed to start after 100 attempts.');
             }
         }

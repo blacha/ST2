@@ -5,3 +5,9 @@ export * from './request.world.data';
 
 export * from './api.func';
 export * from './api.util';
+
+export const ApiHeaders = {
+    ExtensionVersion: 'X-St-Extension-Version',
+    ExtensionHash: 'X-St-Extension-Hash',
+    ExtensionInstall: 'X-St-Extension-Install',
+};

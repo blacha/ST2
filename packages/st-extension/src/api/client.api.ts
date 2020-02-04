@@ -1,6 +1,6 @@
 import { ClientLibStatic } from '@cncta/clientlib';
 import { StCity } from '@cncta/util';
-import { Config, ApiUtil, ApiInstallRequest } from '@st/shared';
+import { Config, ApiUtil, ApiInstallRequest, ApiHeaders } from '@st/shared';
 import { StModuleBase } from '../module/module.base';
 import { BatchBaseSender } from './batcher.base';
 
@@ -13,7 +13,13 @@ export class ClientApi extends StModuleBase {
     baseSender = new BatchBaseSender(this);
 
     get jsonHeaders() {
-        return { 'content-type': 'application/json', Authorization: `Bearer  ${this.st.instanceId}` };
+        return {
+            'content-type': 'application/json',
+            Authorization: `Bearer  ${this.st.instanceId}:${this.st.challengeId}`,
+            [ApiHeaders.ExtensionVersion]: Config.version,
+            [ApiHeaders.ExtensionHash]: Config.hash,
+            [ApiHeaders.ExtensionInstall]: this.st.instanceId,
+        };
     }
 
     async base(base: StCity, flush = false): Promise<string> {
