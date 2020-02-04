@@ -2,36 +2,36 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { Api } from '../api/api';
-import { ComponentLoading } from '../base/base';
+import { Cs } from '../base/base';
 import Title from 'antd/es/typography/Title';
 import Paragraph from 'antd/es/typography/Paragraph';
 import Spin from 'antd/es/spin';
 
 type ClaimProps = RouteComponentProps<{ claimId: string }>;
 export interface ClaimAcceptState {
-    state: ComponentLoading;
+    state: Cs;
     message?: string;
 }
 @observer
 export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptState> {
-    state: ClaimAcceptState = { state: ComponentLoading.Loading };
+    state: ClaimAcceptState = { state: Cs.Loading };
     componentDidMount() {
         const { claimId } = this.props.match.params;
         this.claimPlayer(claimId);
     }
 
     async claimPlayer(claimId: string) {
-        this.setState({ state: ComponentLoading.Loading });
+        this.setState({ state: Cs.Loading });
         try {
             await Api.claimPlayerAccept(claimId);
-            this.setState({ state: ComponentLoading.Done });
+            this.setState({ state: Cs.Done });
         } catch (e) {
-            this.setState({ state: ComponentLoading.Failed, message: e.message });
+            this.setState({ state: Cs.Failed, message: e.message });
         }
     }
 
     renderText() {
-        if (this.state.state == ComponentLoading.Done) {
+        if (this.state.state == Cs.Done) {
             return (
                 <Paragraph>
                     Claim Accepted! <Link to="/">Home</Link>
@@ -39,7 +39,7 @@ export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptStat
             );
         }
 
-        if (this.state.state == ComponentLoading.Failed) {
+        if (this.state.state == Cs.Failed) {
             return (
                 <React.Fragment>
                     <Paragraph>Failed to claim player</Paragraph>
@@ -51,7 +51,7 @@ export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptStat
             );
         }
 
-        if (this.state.state == ComponentLoading.Loading) {
+        if (this.state.state == Cs.Loading) {
             return (
                 <React.Fragment>
                     <Paragraph>Claiming player please hold</Paragraph>

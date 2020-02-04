@@ -1,34 +1,21 @@
 import React = require('react');
-import { AllianceId, GameDataResearchLevel, GameDataUnitId, WorldId, CompositeId } from '@cncta/clientlib';
-import { Duration, BaseLocationPacker } from '@cncta/util';
-import { Stores, ModelLayout } from '@st/model';
-import {
-    Base,
-    BaseBuilder,
-    formatNumber,
-    GameResources,
-    Id,
-    mergeBaseUpgrade,
-    WorldAllianceId,
-    NumberPacker,
-    BaseOptimizer,
-} from '@st/shared';
+import { AllianceId, CompositeId, WorldId } from '@cncta/clientlib';
+import { Duration } from '@cncta/util';
+import { Stores } from '@st/model';
+import { Base, BaseBuilder, BaseOptimizer, GameResources, Id, mergeBaseUpgrade, WorldAllianceId } from '@st/shared';
 import 'antd/dist/antd.css';
 import BackTop from 'antd/es/back-top';
+import Button from 'antd/es/button';
+import Divider from 'antd/es/divider';
+import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { ComponentLoading } from '../base/base';
-import { timeSince } from '../time.util';
-import { IdName, StBreadCrumb } from '../util/breacrumb';
-import { FactionIcon } from '../util/faction';
-import { ViewResearch } from '../util/research';
-import Spin from 'antd/es/spin';
-import Divider from 'antd/es/divider';
-import { PlayerStats, AllianceColumns } from './alliance.table';
-import Button from 'antd/es/button';
-import { unpackLayouts } from '../layout/layout.util';
+import { Cs } from '../base/base';
 import { LayoutView } from '../layout/layout';
+import { unpackLayouts } from '../layout/layout.util';
+import { IdName, StBreadCrumb } from '../util/breacrumb';
+import { AllianceColumns, PlayerStats } from './alliance.table';
 
 export const AllianceCss = {
     Table: style({
@@ -50,7 +37,7 @@ interface AllianceState {
     info: PlayerStats[];
     worldId: number;
     alliance: IdName;
-    state: ComponentLoading;
+    state: Cs;
     layouts?: Base[];
     isExpanded?: boolean;
 }
@@ -58,25 +45,37 @@ interface AllianceState {
 const PageSize = 20;
 
 export class ViewAlliance extends React.Component<AllianceProps, AllianceState> {
-    state: AllianceState = { info: [], state: ComponentLoading.Init, alliance: { id: -1, name: '' }, worldId: -1 };
+    state: AllianceState = { info: [], state: Cs.Init, alliance: { id: -1, name: '' }, worldId: -1 };
+    worldId: WorldId;
+    allianceId: AllianceId;
+
+    static refreshCss = style({ alignSelf: 'flex-end', marginBottom: 8, marginTop: -12 });
     static tableCss = style({ width: '100%', marginBottom: 12 });
     static layoutCss = style({ display: 'flex', width: '100%', flexWrap: 'wrap' });
 
     componentDidMount() {
         const { worldId, allianceId } = this.props.match.params;
-        this.loadAlliance(Number(worldId) as WorldId, Number(allianceId) as AllianceId);
+        (this.worldId = Number(worldId) as WorldId), (this.allianceId = Number(allianceId) as AllianceId);
+        this.loadAlliance();
     }
 
-    async loadAlliance(worldId: WorldId, allianceId: AllianceId) {
+    async loadAlliance() {
+        const currentState = this.state.state;
+        if (currentState == Cs.Loading || currentState == Cs.Refreshing) {
+            return;
+        }
+        console.log('Load alliance');
+        const { worldId, allianceId } = this;
+        const loadingState = currentState == Cs.Init ? Cs.Loading : Cs.Refreshing;
         const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
-        this.setState({ info: [], state: ComponentLoading.Loading });
+        this.setState({ ...this.state, state: loadingState });
 
         const [results, layoutData] = await Promise.all([
             Stores.Player.getAllBy({ allianceKey: docId }, 60),
             Stores.Layout.get(docId),
         ]);
         if (results == null || layoutData == null) {
-            this.setState({ info: [], state: ComponentLoading.Failed });
+            this.setState({ info: [], state: Cs.Failed });
             return;
         }
 
@@ -130,7 +129,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
 
         this.setState({
             info: Array.from(playerSet.values()),
-            state: ComponentLoading.Done,
+            state: Cs.Done,
             alliance,
             worldId,
             layouts,
@@ -138,7 +137,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
     }
 
     get isLoading() {
-        return this.state.state == ComponentLoading.Loading || this.state.state == ComponentLoading.Init;
+        return this.state.state == Cs.Loading || this.state.state == Cs.Init;
     }
 
     toggleExpand = () => {
@@ -156,8 +155,15 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 <Divider>
                     <a onClick={this.toggleExpand}>{this.state.alliance.name}</a>
                 </Divider>
+                <Button
+                    className={ViewAlliance.refreshCss}
+                    type="primary"
+                    loading={this.state.state == Cs.Refreshing}
+                    onClick={() => this.loadAlliance()}
+                >
+                    Refresh
+                </Button>
                 {this.renderPlayerInfo()}
-
                 <Divider>
                     <Link to={`/world/${worldId}/alliance/${alliance.id}/layouts`}>Layouts</Link>
                 </Divider>

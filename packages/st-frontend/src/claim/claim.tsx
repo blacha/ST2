@@ -12,7 +12,7 @@ import Paragraph from 'antd/es/typography/Paragraph';
 import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { ComponentLoading } from '../base/base';
+import { Cs } from '../base/base';
 import { Api } from '../api/api';
 
 @observer
@@ -29,8 +29,8 @@ export class ClaimPage extends React.Component<{}, {}> {
 }
 
 export interface ClaimPlayerState {
-    state: ComponentLoading;
-    claim: ComponentLoading;
+    state: Cs;
+    claim: Cs;
     worlds?: { worldId: WorldId; name: string }[];
 }
 function hasErrors(fieldsError: Record<string, string[] | undefined>) {
@@ -39,7 +39,7 @@ function hasErrors(fieldsError: Record<string, string[] | undefined>) {
 
 export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPlayerState> {
     componentDidMount() {
-        this.setState({ state: ComponentLoading.Loading, worlds: [] });
+        this.setState({ state: Cs.Loading, worlds: [] });
         this.loadWorlds();
     }
 
@@ -48,7 +48,7 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
         if (worlds == null) {
             return;
         }
-        this.setState({ state: ComponentLoading.Done, worlds: worlds.worlds });
+        this.setState({ state: Cs.Done, worlds: worlds.worlds });
     }
 
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,22 +57,22 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
             if (err) {
                 return;
             }
-            this.setState({ ...this.state, claim: ComponentLoading.Loading });
+            this.setState({ ...this.state, claim: Cs.Loading });
             const res = await Api.claimPlayerRequest(values.worldId, values.player);
             if (res == true) {
-                this.setState({ ...this.state, claim: ComponentLoading.Done });
+                this.setState({ ...this.state, claim: Cs.Done });
             } else {
-                this.setState({ ...this.state, claim: ComponentLoading.Failed });
+                this.setState({ ...this.state, claim: Cs.Failed });
             }
         });
     };
 
     render() {
-        if (this.state == null || this.state.state == ComponentLoading.Loading || this.state.worlds == null) {
+        if (this.state == null || this.state.state == Cs.Loading || this.state.worlds == null) {
             return <Spin />;
         }
         const { getFieldDecorator, getFieldsError } = this.props.form;
-        if (this.state.claim == ComponentLoading.Done) {
+        if (this.state.claim == Cs.Done) {
             return <Text>Check your in game mailbox</Text>;
         }
 
@@ -85,7 +85,7 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
                         <Input
                             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                             placeholder="Player"
-                            disabled={this.state.claim == ComponentLoading.Loading}
+                            disabled={this.state.claim == Cs.Loading}
                         />,
                     )}
                 </Form.Item>
@@ -94,7 +94,7 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
                         rules: [{ required: true, message: 'Please select a world you are on!' }],
                         initialValue: this.state.worlds[0].worldId,
                     })(
-                        <Select disabled={this.state.claim == ComponentLoading.Loading}>
+                        <Select disabled={this.state.claim == Cs.Loading}>
                             {...this.state.worlds.map(c => (
                                 <Select.Option key={c.worldId} value={c.worldId}>
                                     {c.name}
@@ -108,12 +108,12 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
                         type="primary"
                         htmlType="submit"
                         disabled={hasErrors(getFieldsError())}
-                        loading={this.state.claim == ComponentLoading.Loading}
+                        loading={this.state.claim == Cs.Loading}
                     >
                         Claim
                     </Button>
                 </Form.Item>
-                {this.state.claim == ComponentLoading.Failed ? <Text type="danger">Failed to claim player</Text> : null}
+                {this.state.claim == Cs.Failed ? <Text type="danger">Failed to claim player</Text> : null}
             </Form>
         );
     }

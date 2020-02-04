@@ -14,7 +14,7 @@ import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Auth } from '../auth/auth.service';
-import { ComponentLoading } from '../base/base';
+import { Cs } from '../base/base';
 import { timeSince } from '../time.util';
 import { WorldNames } from '@cncta/util';
 
@@ -56,13 +56,13 @@ export const LandingColumns = [
     },
 ];
 interface LandingState {
-    state: ComponentLoading;
+    state: Cs;
     data?: ModelPlayer[];
     claims?: PlayerNameId[];
 }
 @observer
 export class ViewLandingPage extends React.Component<{}, LandingState> {
-    state: LandingState = { state: ComponentLoading.Init };
+    state: LandingState = { state: Cs.Init };
 
     static landingCss = style({ display: 'flex', flexDirection: 'column' });
     static containerCss = style({ width: '100%' });
@@ -70,10 +70,10 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
     componentDidMount() {
         const uid = Auth.uid;
         if (uid == null) {
-            this.setState({ state: ComponentLoading.Done });
+            this.setState({ state: Cs.Done });
             return;
         }
-        this.setState({ state: ComponentLoading.Loading });
+        this.setState({ state: Cs.Loading });
         this.loadPlayerInfo(uid as UId);
     }
 
@@ -81,7 +81,7 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
         StLog.info({ uId }, 'LoadPlayer');
         const user = await Stores.User.get(uId);
         if (user == null) {
-            this.setState({ state: ComponentLoading.Done });
+            this.setState({ state: Cs.Done });
             return;
         }
 
@@ -91,7 +91,7 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
         const playerData = await Stores.Player.getAllBy({ playerNameId: playerClaims });
         StLog.info({ uId, count: playerData.length }, 'LoadPlayerData:Done');
 
-        this.setState({ state: ComponentLoading.Done, claims: playerClaims, data: playerData });
+        this.setState({ state: Cs.Done, claims: playerClaims, data: playerData });
     }
 
     authButton = () => {
@@ -114,7 +114,7 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
     }
 
     renderAuth() {
-        if (this.state.state == ComponentLoading.Loading || this.state.state == ComponentLoading.Init) {
+        if (this.state.state == Cs.Loading || this.state.state == Cs.Init) {
             return <Spin />;
         }
 

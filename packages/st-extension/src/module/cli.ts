@@ -69,7 +69,7 @@ export class StCli extends StModuleBase {
         qx.core.Init.getApplication()
             .getChat()
             .getChatWidget()
-            .showMessage(s, webfrontend.gui.chat.ChatWidget.sender.system, ChatWidgetChannel.all);
+            .showMessage(s, webfrontend.gui.chat.ChatWidget.sender.system, ChatWidgetChannel.allflags);
     }
 
     async onStop() {

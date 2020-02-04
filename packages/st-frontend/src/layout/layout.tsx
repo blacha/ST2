@@ -7,7 +7,7 @@ import Divider from 'antd/es/divider';
 import Spin from 'antd/es/spin';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { ComponentLoading } from '../base/base';
+import { Cs } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
 import { SiloTags, SiloTag } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
@@ -24,7 +24,7 @@ const BaseCardInfoCss = style({ marginTop: 4, padding: '0 4px' });
 
 interface ScanState {
     layouts: Base[];
-    state: ComponentLoading;
+    state: Cs;
     silos: SiloCounts;
     currentPage?: number;
 }
@@ -46,7 +46,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
     alliance?: { id: AllianceId; name: AllianceName };
     componentDidMount() {
         console.log('Mounted');
-        this.setState({ state: ComponentLoading.Loading });
+        this.setState({ state: Cs.Loading });
         const params = this.props.match.params;
         const worldId = Number(params.worldId);
         const allianceId = Number(params.allianceId);
@@ -62,7 +62,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
             Stores.Player.getBy({ allianceKey: docId }),
         ]);
         if (layoutData == null) {
-            this.setState({ state: ComponentLoading.Failed });
+            this.setState({ state: Cs.Failed });
             return;
         }
         if (allianceData && allianceData.alliance) {
@@ -81,7 +81,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         console.timeEnd('ComputeLayout');
 
         this.filters.setLayouts(layouts);
-        this.setState({ layouts, state: ComponentLoading.Done });
+        this.setState({ layouts, state: Cs.Done });
     }
 
     @computed get layouts(): Base[] {
@@ -124,10 +124,10 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
     }
 
     render() {
-        if (this.state == null || this.state?.state == ComponentLoading.Loading) {
+        if (this.state == null || this.state?.state == Cs.Loading) {
             return <Spin />;
         }
-        if (this.state.state == ComponentLoading.Failed || this.state.layouts.length == 0) {
+        if (this.state.state == Cs.Failed || this.state.layouts.length == 0) {
             return <div>Could not find scan</div>;
         }
         const layoutCount = this.filters.filtered.length;

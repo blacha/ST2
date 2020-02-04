@@ -16,7 +16,7 @@ import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
-import { ComponentLoading } from '../base/base';
+import { Cs } from '../base/base';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
@@ -27,7 +27,7 @@ import { PlayerStats } from '../alliance/alliance.table';
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
 interface PlayerState extends PlayerStats {
-    state: ComponentLoading;
+    state: Cs;
 }
 export const PlayerColumns = [
     {
@@ -140,7 +140,7 @@ export const PlayerColumns = [
 
 export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
     static tableCss = style({ width: '100%' });
-    state: PlayerState = { state: ComponentLoading.Init } as any;
+    state: PlayerState = { state: Cs.Init } as any;
 
     componentDidMount() {
         const { worldId, playerId } = this.props.match.params;
@@ -149,10 +149,10 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
 
     async loadPlayer(worldId: WorldId, playerId: PlayerId) {
         const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
-        this.setState({ state: ComponentLoading.Loading });
+        this.setState({ state: Cs.Loading });
         const result = await Stores.Player.getOrCreate(docId);
         if (!result.isValid) {
-            this.setState({ state: ComponentLoading.Failed });
+            this.setState({ state: Cs.Failed });
             return;
         }
 
@@ -182,11 +182,11 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
             mergeBaseUpgrade(base.upgrades, current.upgrades);
         }
 
-        this.setState({ ...current, state: ComponentLoading.Done });
+        this.setState({ ...current, state: Cs.Done });
     }
 
     get isLoading() {
-        return this.state.state == ComponentLoading.Loading;
+        return this.state.state == Cs.Loading;
     }
 
     render() {

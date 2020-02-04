@@ -36,9 +36,11 @@ export const BaseCss = {
     Title: style({ fontWeight: 'bold' }),
 };
 const ResourceCountsCss = style({ display: 'flex', alignItems: 'center', marginRight: '-8px' });
-export enum ComponentLoading {
+/** ComponentState */
+export enum Cs {
     Init,
     Loading,
+    Refreshing,
     Failed,
     Done,
 }
@@ -88,7 +90,7 @@ function viewBaseLocation(base: Base) {
 }
 
 export class ViewBase extends React.Component<ViewBaseProps> {
-    state = { base: new Base(), state: ComponentLoading.Init };
+    state = { base: new Base(), state: Cs.Init };
 
     componentDidMount() {
         const { cityId, playerId, worldId } = this.props.match.params;
@@ -98,11 +100,11 @@ export class ViewBase extends React.Component<ViewBaseProps> {
             return;
         }
         if (cityId.indexOf('|') > -1) {
-            this.setState({ base: BaseBuilder.fromCnCOpt(cityId), state: ComponentLoading.Done });
+            this.setState({ base: BaseBuilder.fromCnCOpt(cityId), state: Cs.Done });
             return;
         }
 
-        this.setState({ base: new Base(), state: ComponentLoading.Loading });
+        this.setState({ base: new Base(), state: Cs.Loading });
         if (playerId != null && worldId != null) {
             this.loadPlayerBase(Number(playerId) as PlayerId, Number(cityId) as CityId, Number(worldId) as WorldId);
         } else {
@@ -116,35 +118,35 @@ export class ViewBase extends React.Component<ViewBaseProps> {
         const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
         const player = await Stores.Player.get(docId);
         if (player == null) {
-            this.setState({ state: ComponentLoading.Failed });
+            this.setState({ state: Cs.Failed });
             return;
         }
 
         const city = player.getCity(cityId);
         if (city == null) {
-            this.setState({ state: ComponentLoading.Failed });
+            this.setState({ state: Cs.Failed });
             return;
         }
-        this.setState({ base: BaseBuilder.load(city), state: ComponentLoading.Done });
+        this.setState({ base: BaseBuilder.load(city), state: Cs.Done });
     }
 
     async loadBase(cityId: string) {
         StLog.info({ cityId }, 'LoadingCity');
         const city = await Stores.City.get(cityId as CompositeId<[WorldId, TimeStamp, CityId]>);
         if (city == null) {
-            this.setState({ base: this.state.base, state: ComponentLoading.Failed });
+            this.setState({ base: this.state.base, state: Cs.Failed });
             return;
         }
 
-        this.setState({ base: BaseBuilder.load(city.city), state: ComponentLoading.Done });
+        this.setState({ base: BaseBuilder.load(city.city), state: Cs.Done });
     }
 
     render() {
         const { base, state } = this.state;
-        if (state == ComponentLoading.Loading || state == ComponentLoading.Init) {
+        if (state == Cs.Loading || state == Cs.Init) {
             return <Spin />;
         }
-        if (state == ComponentLoading.Failed) {
+        if (state == Cs.Failed) {
             return <div>Could not find base</div>;
         }
         console.log(base);
