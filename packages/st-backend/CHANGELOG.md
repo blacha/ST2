@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/blacha/st/compare/v3.0.0...v3.1.0) (2020-02-05)
+
+
+### Features
+
+* allow fetching of world data ([adf50fe](https://github.com/blacha/st/commit/adf50feca1115b34bf31a4931c5d592217c6162f))
+
+
+
+
+
 # [3.0.0](https://github.com/blacha/st/compare/v2.2.0...v3.0.0) (2020-02-05)
 
 
