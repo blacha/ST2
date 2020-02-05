@@ -61,8 +61,10 @@ export abstract class StPlugin<Conf extends StPluginConfig = StPluginConfig> {
         await this.onStart?.();
 
         for (const patch of this.patches) {
-            this.st.log.info({ patch }, 'Patch:Apply');
             patch.apply();
+        }
+        if (this.patches.length > 0) {
+            this.st.log.info({ plugin: this.name, patches: this.patches.length }, 'Patch:Apply');
         }
 
         this.onConfig?.();

@@ -6,7 +6,6 @@ import { ClientPatch } from './client.patcher';
  * stores a backup inside the `backupFunctionName` so it can be revered
  */
 export class ClientLibPatchFunction<T> implements ClientPatch {
-    path: string;
     sourceFunctionName: keyof T;
     targetFunction: Function;
     oldFunction: Function | null;
