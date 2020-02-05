@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/blacha/st/compare/v2.2.0...v3.0.0) (2020-02-05)
+
+
+* refactor!: refactoring extension to be more expandable ([a9550e1](https://github.com/blacha/st/commit/a9550e10b9dfc0521a3a8b87a5b8f6de2b81e637))
+
+
+### BREAKING CHANGES
+
+* this changes a lot of how plugins are put together
+
+
+
+
+
 # [2.2.0](https://github.com/blacha/st/compare/v2.1.0...v2.2.0) (2020-02-04)
 
 

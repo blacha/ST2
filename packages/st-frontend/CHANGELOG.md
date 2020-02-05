@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/blacha/st/compare/v2.2.0...v3.0.0) (2020-02-05)
+
+
+### Bug Fixes
+
+* improve rendering of bigger alliances ([7959514](https://github.com/blacha/st/commit/795951417256defe1bd3f6b78733e31203fd8a4b))
+
+
+### Features
+
+* add refresh button ([871ae96](https://github.com/blacha/st/commit/871ae96a92422023a01c3bbd8a5077ddbb81569f))
+* adding some analytics to the site to see who is viewing what ([f77e455](https://github.com/blacha/st/commit/f77e455160dd888006b89d31baa14d1d228c0e81))
+
+
+
+
+
 # [2.2.0](https://github.com/blacha/st/compare/v2.1.0...v2.2.0) (2020-02-04)
 
 **Note:** Version bump only for package @st/frontend

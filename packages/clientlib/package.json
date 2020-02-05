@@ -1,6 +1,6 @@
 {
     "name": "@cncta/clientlib",
-    "version": "2.2.0",
+    "version": "3.0.0",
     "description": "Client lib utilities and types",
     "scripts": {
         "build": "tsc --pretty"

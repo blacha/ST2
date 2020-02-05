@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/blacha/st/compare/v2.2.0...v3.0.0) (2020-02-05)
+
+
+### Bug Fixes
+
+* do not start a disabled plugin ([25c7827](https://github.com/blacha/st/commit/25c7827137667b04f571d80c1a5149cc5e7edc77))
+* improve rendering of bigger alliances ([7959514](https://github.com/blacha/st/commit/795951417256defe1bd3f6b78733e31203fd8a4b))
+* start and stop modules when players start and stop them ([5f7ff5c](https://github.com/blacha/st/commit/5f7ff5cb73a7c5df9ea09b2b24b5410838ab0ecd))
+
+
+* refactor!: refactoring extension to be more expandable ([a9550e1](https://github.com/blacha/st/commit/a9550e10b9dfc0521a3a8b87a5b8f6de2b81e637))
+
+
+### Features
+
+* add refresh button ([871ae96](https://github.com/blacha/st/commit/871ae96a92422023a01c3bbd8a5077ddbb81569f))
+* adding some analytics to the site to see who is viewing what ([f77e455](https://github.com/blacha/st/commit/f77e455160dd888006b89d31baa14d1d228c0e81))
+* allow forcing of alliance scan ([d38c48a](https://github.com/blacha/st/commit/d38c48a0c7ed5e562c04d2f52bcee1973677bbd8))
+* extract player score ([7a5aa59](https://github.com/blacha/st/commit/7a5aa59a5e0a33c024c00c1fcdb14c2d7146cde4))
+
+
+### BREAKING CHANGES
+
+* this changes a lot of how plugins are put together
+
+
+
+
+
 # [2.2.0](https://github.com/blacha/st/compare/v2.1.0...v2.2.0) (2020-02-04)
 
 
