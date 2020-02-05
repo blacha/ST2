@@ -116,7 +116,7 @@ export class St {
         }
 
         this.plugins.push(plugin);
-        if (ClientLibLoader.isLoaded) {
+        if (ClientLibLoader.isLoaded && !this.config.isDisabled(plugin)) {
             plugin.st = this;
             plugin.start().catch(error => StLog.error({ error, plugin: plugin.name }, 'Failed to start plugin'));
         }
