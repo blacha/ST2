@@ -81,7 +81,7 @@ export class Button extends StPlugin {
         }
 
         const res = CityCache.get(waitId, Duration.minutes(5));
-        if (res) {
+        if (res && res.stId) {
             this.lastBaseLinkId = res.stId;
             this.buttons.forEach(b => b.show());
             return;
@@ -98,6 +98,7 @@ export class Button extends StPlugin {
         }
 
         const stId = await this.st.api.base(cityObj, true);
+        CityCache.setStId(waitId, stId, '');
         if (waitId != this.lastBaseId) {
             return;
         }
