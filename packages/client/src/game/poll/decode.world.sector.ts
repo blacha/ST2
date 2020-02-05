@@ -6,6 +6,7 @@ import {
     AllianceName,
     PlayerNameDisplay,
     PlayerId,
+    PlayerScore,
 } from '@cncta/clientlib';
 import { Base91, BaseLocationPacker, InvalidAllianceId } from '@cncta/util';
 import { WorldData, WorldSectorAlliance, WorldSectorPlayer } from './world.data';
@@ -59,7 +60,7 @@ export class WorldSectorDecoder {
             const ctx = { data: player, offset: 0 };
             const sectorId = Base91.dec(ctx, 2);
             const id = Base91.dec(ctx) as PlayerId;
-            const points = Base91.dec(ctx);
+            const points = Base91.dec(ctx) as PlayerScore;
             const header = Base91.dec(ctx, 2);
             const name = player.substr(ctx.offset) as PlayerNameDisplay;
 

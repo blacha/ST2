@@ -1,4 +1,12 @@
-import { FactionType, PlayerId, AllianceId, PlayerNameDisplay, AllianceName, CityId } from '@cncta/clientlib';
+import {
+    AllianceId,
+    AllianceName,
+    CityId,
+    FactionType,
+    PlayerId,
+    PlayerNameDisplay,
+    PlayerScore,
+} from '@cncta/clientlib';
 import { BaseLocationPacker } from '@cncta/util';
 import * as o from 'ospec';
 import 'source-map-support/register';
@@ -54,7 +62,7 @@ o.spec('WorldDecoder', () => {
         o(decoder.players.get(712 as PlayerId)).deepEquals({
             id: 712 as PlayerId,
             allianceId: 149 as AllianceId,
-            points: 382190,
+            points: 382190 as PlayerScore,
             name: 'Arco_-7x' as PlayerNameDisplay,
             faction: FactionType.Nod,
         });

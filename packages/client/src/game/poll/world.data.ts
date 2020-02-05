@@ -1,4 +1,12 @@
-import { AllianceId, AllianceName, FactionType, PlayerId, PlayerNameDisplay, PollWorldData } from '@cncta/clientlib';
+import {
+    AllianceId,
+    AllianceName,
+    FactionType,
+    PlayerId,
+    PlayerNameDisplay,
+    PollWorldData,
+    PlayerScore,
+} from '@cncta/clientlib';
 import { WorldSectorObjectCity } from './decode.world.city';
 import { WorldSectorObjectBase } from './decode.world.npc.base';
 import { WorldSectorObjectPoi } from './decode.world.poi';
@@ -6,7 +14,7 @@ import { WorldSectorDecoder } from './decode.world.sector';
 
 export interface WorldSectorPlayer {
     id: PlayerId;
-    points: number;
+    points: PlayerScore;
     faction: FactionType.Nod | FactionType.Gdi;
     allianceId: AllianceId;
     name: PlayerNameDisplay;
