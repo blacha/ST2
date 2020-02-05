@@ -5,82 +5,18 @@ import {
     ClientLibCityBuildable,
     ClientLibStatic,
     FactionType,
-    GameDataResearchLevel,
     GameDataStatic,
-    GameDataUnitId,
     ResourceType,
-    CityId,
-    WorldId,
-    PlayerNameDisplay,
-    PlayerId,
-    AllianceName,
-    AllianceId,
 } from '@cncta/clientlib';
+import { StCity, CityArmy } from '../city';
 import { PatchCityUnits } from '../patch/patch.data';
+import { Base62 } from './base.62';
 import { ClientLibResearchUtil } from './city.research';
 import { UnitLocationPacker } from './pack';
 import { LayoutPacker } from './pack/layout.packer';
 import { UnitPacker } from './pack/unit.packer';
-import { Base62 } from './base.62';
-import { InvalidAllianceId, InvalidAllianceName } from '../id';
 
 declare const GAMEDATA: GameDataStatic;
-
-export interface CityArmy {
-    def: string;
-    off: string;
-}
-
-export interface IdName {
-    id: number;
-    name: string;
-}
-
-export interface StCity extends CityArmy {
-    /** CNC city Id */
-    cityId: CityId;
-    /** Id of the world that the base is on */
-    worldId: WorldId;
-
-    level: {
-        /** Base level */
-        base: number;
-        /** Base Offense level */
-        off: number;
-        /** Base Defense level */
-        def: number;
-    };
-
-    /** Name of base */
-    name: string;
-
-    x: number;
-    y: number;
-
-    /** Faction, GDI, NOD, Forgotten */
-    faction: FactionType;
-
-    /** Owners name & Id */
-    ownerId: PlayerId;
-    owner: PlayerNameDisplay;
-
-    /** Alliance name & Id*/
-    alliance?: AllianceName | typeof InvalidAllianceName;
-    allianceId?: AllianceId | typeof InvalidAllianceId;
-
-    /** Base version  */
-    version: number;
-
-    /** Base data */
-    tiles: string;
-    base: string;
-
-    /** Units that have upgrades */
-    upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
-
-    /** Time the base was last seen */
-    timestamp: number;
-}
 
 declare const ClientLib: ClientLibStatic;
 

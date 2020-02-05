@@ -70,12 +70,18 @@ export class CityUtil {
     static getAlliedCities(): PatchedWorldObjectCity[] {
         const md = ClientLib.Data.MainData.GetInstance();
         const allianceId = md.get_Alliance().get_Id();
+        const playerId = md.get_Player().id;
 
         const cities: PatchedWorldObjectCity[] = [];
         for (const city of ClientLibIter.values(md.get_World().GetCities())) {
             if (!PatchWorldObjectCity.isPatched(city)) {
                 continue;
             }
+
+            if (city.$PlayerId == playerId) {
+                continue;
+            }
+
             if (city.$AllianceId == allianceId) {
                 cities.push(city);
             }
