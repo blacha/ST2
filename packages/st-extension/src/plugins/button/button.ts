@@ -49,10 +49,12 @@ export class Button extends StPlugin {
             if (currentId == null) {
                 self.buttons.forEach(b => b.exclude());
                 self.lastBaseId = null;
+                oldFunction.call(this, selectedBase);
                 return;
             }
 
             if (currentId == self.lastBaseId) {
+                oldFunction.call(this, selectedBase);
                 return;
             }
 
