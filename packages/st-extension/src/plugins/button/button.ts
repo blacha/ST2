@@ -8,9 +8,10 @@ import {
     VisObjectType,
     WebFrontEndStatic,
 } from '@cncta/clientlib';
-import { CityScannerUtil, CityUtil } from '@cncta/util';
-import { Config } from '@st/shared';
-import { StModuleBase } from '../module.base';
+import { CityScannerUtil, CityUtil, Duration } from '@cncta/util';
+import { Config } from '@st/shared/build/config';
+import { StPlugin } from '../../st.plugin';
+import { CityCache } from '../../city.cache';
 
 // Visit base can be used on anything in range
 // qx.core.Init.getApplication().getPlayArea().setView(ClientLib.Data.PlayerAreaViewMode.pavmAllianceBase, cities.get_CurrentCityId(),0,0)
@@ -23,11 +24,12 @@ function isQxComposite(x: any): x is QxComposite {
     return x != null && x.basename == 'Composite';
 }
 
-export class ButtonScan extends StModuleBase {
-    name = 'ButtonScan';
+export class Button extends StPlugin {
+    name = 'Button';
+    priority = 100;
     oldFunction?: (o: RegionObject) => void;
 
-    isStarted = false;
+    isButtonsAdded = false;
     buttons: QxFormButton[] = [];
     composite: QxComposite | null = null;
     lastBaseId: number | null = null;
@@ -39,7 +41,7 @@ export class ButtonScan extends StModuleBase {
         /* eslint-disable @typescript-eslint/no-this-alias */
         const self = this;
         regionCity.showMenu = function(selectedBase: RegionObject) {
-            if (!self.isStarted) {
+            if (!self.isButtonsAdded) {
                 self.registerButtons(this);
             }
 
@@ -76,6 +78,13 @@ export class ButtonScan extends StModuleBase {
             return;
         }
 
+        const res = CityCache.get(waitId, Duration.minutes(5));
+        if (res) {
+            this.lastBaseLinkId = res.stId;
+            this.buttons.forEach(b => b.show());
+            return;
+        }
+
         const city = await CityUtil.waitForCity(waitId);
         if (city == null) {
             return;
@@ -96,7 +105,7 @@ export class ButtonScan extends StModuleBase {
     }
 
     registerButtons(obj: any) {
-        this.isStarted = true;
+        this.isButtonsAdded = true;
         for (const funcName in obj) {
             const composite = obj[funcName];
             if (!isQxComposite(composite)) {

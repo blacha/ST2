@@ -1,22 +1,21 @@
-import { St } from '../st';
-import { StCliCommand } from './cli';
-import { StModuleBase } from './module.base';
-import { StConfigKeys } from '../st.config';
+import { St } from './st';
+import { StCliCommand } from './st.cli';
+import { StPlugin } from './st.plugin';
 
-function getModule(st: St, moduleName: string): StModuleBase | null {
-    if (moduleName == null || moduleName.trim() == '') {
+function getPlugin(st: St, pluginName: string): StPlugin | null {
+    if (pluginName == null || pluginName.trim() == '') {
         st.cli.sendMessage('red', 'Invalid module name');
         return null;
     }
 
-    const module = st.modules.find(f => f.name.toLowerCase() == moduleName.toLowerCase());
+    const module = st.plugins.find(f => f.name.toLowerCase() == pluginName.toLowerCase());
     if (module == null) {
-        const moduleNames = st.modules.map(c => c.name);
-        if (moduleNames.length == 0) {
+        const pluginNames = st.plugins.map(c => c.name);
+        if (pluginNames.length == 0) {
             st.cli.sendMessage('red', 'No modules found');
             return null;
         }
-        st.cli.sendMessage('red', 'Could not find module, current modules: ' + moduleNames.join(', '));
+        st.cli.sendMessage('red', 'Could not find module, current modules: ' + pluginNames.join(', '));
         return null;
     }
 
@@ -27,14 +26,14 @@ export const StCliDisable: StCliCommand = {
     cmd: 'disable',
 
     handle(st: St, args: string[]): void {
-        const module = getModule(st, args[0]);
+        const module = getPlugin(st, args[0]);
         if (module == null) {
             return;
         }
 
         st.log.info({ module: module.name }, 'Disable');
         st.config.disable(module);
-        if (module.isReady) {
+        if (module.isStarted) {
             module.stop();
         }
     },
@@ -44,14 +43,14 @@ export const StCliEnable: StCliCommand = {
     cmd: 'enable',
 
     handle(st: St, args: string[]): void {
-        const module = getModule(st, args[0]);
+        const module = getPlugin(st, args[0]);
         if (module == null) {
             return;
         }
 
         st.log.info({ module: module.name }, 'Enable');
         st.config.enable(module);
-        if (!module.isReady) {
+        if (!module.isStarted) {
             module.start();
         }
     },
@@ -66,13 +65,31 @@ export const StCliConfigSet: StCliCommand = {
             st.cli.sendMessage('red', 'Could not find key to set');
             return;
         }
+
         if (value == null || value.trim() == '') {
             st.cli.sendMessage('red', 'Invalid value');
             return;
         }
+        const [pluginName, optionKey] = key.toLowerCase().split('.');
+        const plugin = st.plugin(pluginName);
+        if (plugin == null || plugin.options == null) {
+            st.cli.sendMessage('red', `Unable to find plugin for key "${key}"`);
+            return;
+        }
 
-        st.log.info({ key, value }, 'ConfigSet');
-        st.config.set(key as any, value as any);
+        const cfgKey = Object.keys(plugin.options).find(f => f.toLowerCase() == optionKey);
+        if (cfgKey == null) {
+            st.cli.sendMessage('red', `Unable to find option "${key}"`);
+            return;
+        }
+        const cfg = plugin.options[cfgKey];
+        const configKey = `${plugin.name}.${cfgKey}`;
+        if (typeof cfg.value == 'number') {
+            st.config.set(configKey, parseFloat(value));
+        } else {
+            st.config.set(configKey, value);
+        }
+        st.log.info({ key: configKey, value }, 'ConfigSet');
     },
 };
 
@@ -90,26 +107,31 @@ export const StCliConfigList = {
             st.cli.sendMessage('red', 'Could not find option to list use: modules, config');
             return;
         }
+
         if (searchKey == 'modules') {
             st.cli.sendMessage('white', 'Modules');
-            for (const module of st.modules) {
+            for (const plugin of st.plugins) {
                 st.cli.sendMessage(
                     'white',
-                    `    ${module.name} : ${st.config.isDisabled(module) ? 'disabled' : 'enabled'}`,
+                    `    ${plugin.name} : ${st.config.isDisabled(plugin) ? 'disabled' : 'enabled'}`,
                 );
             }
         }
+
         if (searchKey == 'config') {
             st.cli.sendMessage('white', 'Config');
-            for (const key of st.config.allKeys) {
-                const cfg = StConfigKeys[key];
-                const currentValue = st.config.get(key);
-                if (cfg == null) {
-                    st.cli.sendMessage('white', `  ${key}: ${currentValue}`);
-                } else {
+            for (const plugin of st.plugins) {
+                if (plugin.options == null) {
+                    continue;
+                }
+                st.cli.sendMessage('white', `${plugin.name}`);
+                st.cli.sendMessage('white', ``);
+                for (const key of Object.keys(plugin.options)) {
+                    const cfg = plugin.options[key];
+                    const currentValue = plugin.config(key);
                     st.cli.sendMessage(
                         'white',
-                        `  ${key}: ${currentValue} - ${cfg.description} (Default: ${cfg.value})`,
+                        `  ${plugin.name}.${key}: ${currentValue} \t- ${cfg.description} \n\t(Default: ${cfg.value})`,
                     );
                 }
             }

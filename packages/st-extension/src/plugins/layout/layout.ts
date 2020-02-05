@@ -1,12 +1,13 @@
 import { ClientLibStatic, NpcCampType, WorldObjectType } from '@cncta/clientlib';
 import { BaseLocationPacker, CityScannerUtil, CityUtil, Duration, PatchWorldObjectNPCCamp } from '@cncta/util';
-import { CityCache } from '../city.cache';
-import { StModuleBase } from '../module.base';
+import { StPlugin } from '../../st.plugin';
+import { CityCache } from '../../city.cache';
 
 declare const ClientLib: ClientLibStatic;
 
-export class LayoutScanner extends StModuleBase {
+export class LayoutScanner extends StPlugin {
     name = 'LayoutScanner';
+    priority = 100;
 
     async onStart(): Promise<void> {
         this.interval(() => this.scanAll(), Duration.OneHour);
@@ -23,7 +24,7 @@ export class LayoutScanner extends StModuleBase {
             if (existing) {
                 continue;
             }
-            this.queue(
+            this.queueAction(
                 (index: number, total: number): Promise<void> => this.scanLayout(object.$Id, location, index, total),
             );
         }

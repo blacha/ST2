@@ -1,5 +1,5 @@
 import { ClientLibBattleViewUnit, ClientLibStatic, MouseMode } from '@cncta/clientlib';
-import { StModuleBase } from '../module.base';
+import { StPlugin } from '../../st.plugin';
 
 declare const $I: any;
 declare const ClientLib: ClientLibStatic;
@@ -14,8 +14,9 @@ export interface KillInfoProto {
 /**
  * Display the approximate plunder amount when mousing over units inside the battle view
  */
-export class KillInfo extends StModuleBase {
+export class KillInfo extends StPlugin {
     name = 'KillInfo';
+    priority = 100;
 
     protoInfo: KillInfoProto | null = null;
     oldFunction: Function | null = null;

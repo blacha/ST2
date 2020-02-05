@@ -1,7 +1,5 @@
-import { ClientLibStatic } from '@cncta/clientlib';
 import { Duration, LocalCache } from '@cncta/util';
 
-declare const ClientLib: ClientLibStatic;
 const OneDayMs = Duration.days(1);
 
 export interface CityLayoutCache {

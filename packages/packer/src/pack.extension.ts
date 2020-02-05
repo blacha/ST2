@@ -44,9 +44,6 @@ function makeExtension(output: NccOutput): NccOutput {
     return output;
 }
 
-pack(
-    './packages/st-extension/build/index.js',
-    './dist/extension/st.user.js',
-    ['typesaurus/adaptor'],
-    makeExtension,
-).catch(e => console.log(e));
+pack('./packages/st-extension/build/bin.js', './dist/extension/st.user.js', [], makeExtension).catch(e =>
+    console.log(e),
+);

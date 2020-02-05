@@ -1,28 +1,29 @@
 import { ClientLibStatic } from '@cncta/clientlib';
 import { CityScannerUtil, CityUtil, Duration } from '@cncta/util';
-import { StModuleBase } from '../module.base';
-import { StCliCommand } from '../cli';
 import { St } from '../../st';
+import { StPlugin } from '../../st.plugin';
+import { StCliCommand } from '../../st.cli';
 
 declare const ClientLib: ClientLibStatic;
 
 export const StCliScanAlliance: StCliCommand = {
     cmd: 'scan-alliance',
     handle(st: St): void {
-        st.clearActions();
+        st.actions.clear();
         // Abort a in progress scan
-        if (!st.isIdle) {
+        if (!st.actions.isIdle) {
             st.cli.sendMessage('white', 'Abort Scan');
             return;
         }
         st.cli.sendMessage('white', 'Starting Scan');
-        st.alliance.scanAll();
-        st.run(true).then(() => st.cli.sendMessage('white', 'Scan done!'));
+        st.plugin<AllianceScanner>('AllianceScanner')?.scanAll();
+        st.actions.run(true).then(() => st.cli.sendMessage('white', 'Scan done!'));
     },
 };
 
-export class AllianceScanner extends StModuleBase {
+export class AllianceScanner extends StPlugin {
     name = 'AllianceScanner';
+    priority = 100;
 
     async onStart(): Promise<void> {
         this.interval(() => this.scanAll(), Duration.OneHour);
@@ -52,7 +53,7 @@ export class AllianceScanner extends StModuleBase {
         this.clearActions();
         const allCities = CityUtil.getAlliedCities();
         for (const city of allCities) {
-            this.queue((index: number, total: number): Promise<void> => this.scanCity(city.$Id, index, total));
+            this.queueAction((index: number, total: number): Promise<void> => this.scanCity(city.$Id, index, total));
         }
     }
 

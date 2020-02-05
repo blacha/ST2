@@ -1,37 +1,19 @@
 import { CityScannerUtil, CityUtil, ClientLibLoader, LocalCache, Patches } from '@cncta/util';
-import { Id, StLog } from '@st/shared';
-import { StModuleAction } from './actions';
-import { ClientApi } from './api/client.api';
-import { AllianceScanner } from './module/alliance/alliance.info';
-import { ButtonScan } from './module/button/button.scan';
-import { CampTracker } from './module/camp.tracker/camp.tracker';
-import { StCli } from './module/cli';
-import { IdleScanner } from './module/idle/idle.module';
-import { KillInfo } from './module/kill.info/kill.info';
-import { LayoutScanner } from './module/layout/layout.scan';
-import { hasStModuleHooks, StModuleState } from './module/module';
-import { StModuleBase } from './module/module.base';
-import { PlayerStatus } from './module/player.status/player.status';
+import { Id } from '@st/shared/build/id';
+import { StLog } from '@st/shared/build/log';
 import { StConfig } from './st.config';
-
-/** What is the player currently up to */
-export enum PlayerState {
-    /** Has recently done something */
-    Active,
-    /** Hasnt moved in a while */
-    Idle,
-}
-
-export enum StState {
-    Idle,
-    Active,
-    Stopped,
-}
+import { StCli } from './st.cli';
+import { StPlugin, StPluginState } from './st.plugin';
+import { StActions } from './st.actions';
+import { StApi } from './api/st.api';
+import { StPatches } from './st.patches';
 
 const InstanceIdKey = 'st-instance-id';
 const ChallengeIdKey = 'st-instance-challenge-id';
 
 export class St {
+    /** Time St was initialized */
+    startedAt = Date.now();
     static instance: St;
     static getInstance() {
         if (St.instance == null) {
@@ -52,221 +34,95 @@ export class St {
         return instanceId;
     }
 
+    /** Challenge key given to the user */
     get challengeId(): string {
         return localStorage.getItem(ChallengeIdKey) ?? '';
     }
 
-    player: PlayerState = PlayerState.Active;
-    state: StState = StState.Idle;
-
-    log: typeof StLog;
+    log: typeof StLog = StLog.child({ id: this.id });
 
     config = new StConfig(this);
     cli = new StCli(this);
-    api = new ClientApi(this);
-    layout = new LayoutScanner(this);
-    alliance = new AllianceScanner(this);
+    api = new StApi(this);
+    actions = new StActions(this);
+    patches = new StPatches(this);
 
     util = {
         scan: CityScannerUtil,
         city: CityUtil,
     };
 
-    modules: StModuleBase[] = [
+    plugins: StPlugin[] = [
         // Core modules
+        this.patches,
         this.config,
         this.cli,
         this.api,
-
-        // Feature modules
-        this.layout,
-        this.alliance,
-        new ButtonScan(this),
-        new CampTracker(this),
-        new KillInfo(this),
-        new PlayerStatus(this),
-        new IdleScanner(this),
+        this.actions,
     ];
 
-    constructor() {
-        this.log = StLog.child({ id: this.id });
-    }
-
-    get isIdle(): boolean {
-        return this.state == StState.Idle;
-    }
-
-    get isPlayerIdle(): boolean {
-        return this.player == PlayerState.Idle;
-    }
-
-    actions: StModuleAction[] = [];
-    queue(action: StModuleAction) {
-        this.actions.push(action);
-        if (this.isIdle && this.isPlayerIdle) {
-            this.run();
-        }
-    }
-
-    /** Remove any queued actions from a module */
-    clearActions(stModule?: StModuleBase) {
-        if (stModule == null) {
-            this.actions = [];
-        } else {
-            this.actions = this.actions.filter(f => f.module.id != stModule.id);
-        }
-    }
-
-    async scan() {
-        this.layout.scanAll();
-        await this.run(true);
-    }
-
-    /**
-     * Run the queued actions, each action will be run once at a time
-     *
-     * This should be pauseable if the user decides to move the mouse and click @see this.player state
-     */
-    async run(playerTriggered = false): Promise<void> {
-        if (!this.isIdle) {
-            throw new Error('ST is not idle');
-        }
-        if (this.actions.length == 0) {
-            return;
-        }
-        this.state = StState.Active;
-        // Force a async callback
-        await new Promise(resolve => setTimeout(resolve, 0));
-        const startTime = Date.now();
-        this.log.info('RunStart');
-        let reason = 'None';
-        try {
-            let count = 0;
-            while (this.actions.length > 0) {
-                const action = this.actions.shift();
-                if (action == null) {
-                    break;
-                }
-
-                if (this.state != StState.Active) {
-                    reason = 'StExit';
-                    break;
-                }
-
-                if (action.module.isStopping) {
-                    reason = 'ModuleStopping';
-                    break;
-                }
-
-                if (!playerTriggered && this.player == PlayerState.Active) {
-                    this.log.info('AbortScan');
-                    reason = 'PlayerActive';
-                    break;
-                }
-
-                count++;
-                await action.run(count, this.actions.length + count);
-            }
-            if (this.actions.length == 0) {
-                reason = 'Finished';
-            }
-        } finally {
-            this.log.info({ duration: Date.now() - startTime, reason }, 'RunFinished');
-            this.state = StState.Idle;
-        }
-    }
-
-    get isClientLoaded(): boolean {
-        return ClientLibLoader.isLoaded;
+    plugin<T extends StPlugin>(name: string): T | undefined {
+        return this.plugins.find(f => f.name.toLowerCase() == name.toLowerCase()) as T;
     }
 
     async start() {
         this.log.debug('StStartup');
         let failCount = 0;
-        while (this.isClientLoaded === false) {
+        while (ClientLibLoader.isLoaded === false) {
             failCount++;
             await new Promise(resolve => setTimeout(resolve, 100));
             if (failCount > 100) {
                 this.log.error('StStartup:Failed');
-                throw new Error('ShockrTools failed to start after 100 attempts.');
+                throw new Error('St: failed to start after 100 attempts.');
             }
         }
         const removed = LocalCache.cleanUp();
         this.log.trace({ removed }, 'StCleanup');
 
-        this.log.trace('StPatch');
-        for (const patch of Object.values(Patches)) {
-            this.log.info({ patch }, 'Patch:Apply');
-            patch.apply();
-        }
+        for (const plugin of this.plugins) {
+            if (this.config.isDisabled(plugin)) {
+                this.log.info({ plugin: plugin.name }, 'StPlugin:Disabled');
+                continue;
+            }
 
-        for (const module of this.modules) {
-            if (this.config.isDisabled(module)) {
-                this.log.info({ module: module.name }, 'StModule:Disabled');
+            if (plugin.state != StPluginState.Init) {
+                this.log.warn({ plugin: plugin.name, state: plugin.state }, 'Invalid module state');
                 continue;
             }
-            this.log.debug({ module: module.name }, 'StModule:Start');
-            if (module.state != StModuleState.Init) {
-                this.log.warn({ module: module.name, state: module.state }, 'Invalid module state');
-                continue;
-            }
-            if (!hasStModuleHooks(module)) {
-                continue;
-            }
-            await module.start();
-            if (module.state !== StModuleState.Started) {
-                this.log.warn({ module: module.name, state: module.state }, 'Module failed to start');
-            }
+
+            this.log.debug({ plugin: plugin.name }, 'StPlugin:Start');
+            await plugin.start();
         }
     }
 
     async stop() {
-        this.state = StState.Stopped;
-        for (const patch of Object.values(Patches)) {
-            this.log.info({ patch }, 'Patch:Remove');
-            patch.remove();
-        }
-        for (const module of this.modules) {
-            this.log.debug({ module: module.name }, 'StModule:Stop');
-
-            if (module.state != StModuleState.Started) {
+        for (const plugin of this.plugins) {
+            if (plugin.state != StPluginState.Started) {
                 continue;
             }
-
-            if (!hasStModuleHooks(module)) {
-                continue;
-            }
-
-            await module.stop();
-            if (module.state !== StModuleState.Stopped) {
-                this.log.warn({ module: module.name, state: module.state }, 'Module failed to stop');
-            }
+            this.log.debug({ plugin: plugin.name }, 'StPlugin:Stop');
+            await plugin.stop();
         }
     }
 
-    add(m: StModuleBase) {
-        this.log.debug({ module: m.name }, 'StModule:Add');
-
-        if (m.state !== StModuleState.Init) {
-            throw new Error('Invalid module state: ' + m.name + ' ' + m.state);
+    push(plugin: StPlugin) {
+        this.log.debug({ plugin: plugin.name }, 'StPlugin:Add');
+        if (!plugin.isInit) {
+            throw new Error('Invalid plugin state: ' + plugin.name + ' ' + plugin.state);
         }
 
-        if (this.modules.find(f => f.name == m.name)) {
-            throw new Error('Duplicate module name: ' + m.name);
+        if (this.plugins.find(f => f.name == plugin.name)) {
+            throw new Error('Duplicate plugin name: ' + plugin.name);
         }
 
-        this.modules.push(m);
-        if (this.isClientLoaded && hasStModuleHooks(m)) {
-            m.st = this;
-            m.start().catch(error => StLog.error({ error, module: m.name }, 'Failed to start module'));
+        this.plugins.push(plugin);
+        if (ClientLibLoader.isLoaded) {
+            plugin.st = this;
+            plugin.start().catch(error => StLog.error({ error, plugin: plugin.name }, 'Failed to start plugin'));
         }
     }
 
     onConfig() {
-        for (const module of this.modules) {
-            if (module.isReady && module.onConfig) {
-                module.onConfig();
-            }
-        }
+        this.plugins.forEach(c => c.isStarted && c.onConfig?.());
     }
 }

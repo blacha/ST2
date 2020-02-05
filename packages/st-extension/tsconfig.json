@@ -6,11 +6,15 @@
         "lib": ["DOM"]
     },
     "include": ["src/**/*"],
-    "references": [{
-        "path": "../clientlib"
-    }, {
-        "path": "../shared"
-    }, {
-        "path": "../clientlib-util"
-    }]
+    "references": [
+        {
+            "path": "../clientlib"
+        },
+        {
+            "path": "../shared"
+        },
+        {
+            "path": "../clientlib-util"
+        }
+    ]
 }

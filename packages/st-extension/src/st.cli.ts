@@ -1,6 +1,7 @@
 import { ChatWidgetChannel, QxStatic, WebFrontEndStatic } from '@cncta/clientlib';
-import { St } from '../st';
-import { StModuleBase } from './module.base';
+import { St } from './st';
+import { StCliConfigList, StCliConfigSet, StCliDisable, StCliEnable } from './st.config.cli';
+import { StPlugin } from './st.plugin';
 
 declare const qx: QxStatic;
 declare const webfrontend: WebFrontEndStatic;
@@ -10,9 +11,10 @@ export interface StCliCommand {
     handle(st: St, args: string[]): void;
 }
 
-export class StCli extends StModuleBase {
+export class StCli extends StPlugin {
     StSlashCommand = '/st';
     name = 'Cli';
+    priority = 50;
 
     commands: Record<string, StCliCommand> = {};
 
@@ -27,6 +29,10 @@ export class StCli extends StModuleBase {
 
     async onStart() {
         this.inputEl.addEventListener('keydown', this.handleKeyDown);
+        this.cli(StCliEnable);
+        this.cli(StCliDisable);
+        this.cli(StCliConfigSet);
+        this.cli(StCliConfigList);
     }
 
     handleKeyDown = (e: KeyboardEvent) => {
@@ -45,7 +51,7 @@ export class StCli extends StModuleBase {
         if (this.commands[cmd] == null) {
             this.sendMessage('red', 'Invalid command, Options: ' + Object.keys(this.commands).join(', '));
         } else {
-            this.sendMessage('white', parts.join(' '));
+            this.sendMessage('white', 'St: ' + parts.join(' '));
             this.commands[cmd].handle(this.st, parts.slice(2));
         }
         el.value = '';
@@ -56,7 +62,6 @@ export class StCli extends StModuleBase {
     };
 
     register(cmd: StCliCommand) {
-        this.st.log.debug({ cmd: cmd.cmd }, 'AddCliCommand');
         this.commands[cmd.cmd] = cmd;
     }
 
@@ -65,7 +70,7 @@ export class StCli extends StModuleBase {
     }
 
     sendMessage(color: string, msg: string) {
-        const s = `<font color="${color}">St: ${msg}</font>`;
+        const s = `<font color="${color}">${msg}</font>`;
         qx.core.Init.getApplication()
             .getChat()
             .getChatWidget()

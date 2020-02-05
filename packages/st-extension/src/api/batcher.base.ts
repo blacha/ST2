@@ -1,15 +1,15 @@
 import { Batcher } from './batcher';
-import { ClientApi } from './client.api';
-import { StCity } from '@cncta/util';
+import { StApi } from './st.api';
+import { StCity } from '@cncta/util/build/city';
 import { St } from '../st';
-import { ApiScanResponse, ApiUtil, ApiScanRequest } from '@st/shared';
+import { ApiScanResponse, ApiUtil, ApiScanRequest } from '@st/shared/build/api';
 import { ClientLibStatic } from '@cncta/clientlib';
 
 declare const ClientLib: ClientLibStatic;
 
 export class BatchBaseSender extends Batcher<'cityId', StCity, string> {
-    api: ClientApi;
-    constructor(api: ClientApi) {
+    api: StApi;
+    constructor(api: StApi) {
         super('cityId', 30 * 1000, 25);
         this.api = api;
     }

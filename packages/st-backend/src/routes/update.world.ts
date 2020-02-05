@@ -1,6 +1,6 @@
 import { WorldId, PlayerNameDisplay } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
-import { ModelWorldAlliance, Stores, ModelWorldAllianceData } from '@st/model';
+import { ModelWorldAlliance, Stores, ModelWorldAllianceData, ModelUtil } from '@st/model';
 import { ApiWorldUpdateRequest, StLog } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { GameSession } from '../game.session';
@@ -11,7 +11,7 @@ export class ApiWorldUpdate extends ApiCall<ApiWorldUpdateRequest> {
     path = '/api/v1/world/:worldId/update' as const;
     method = 'post' as const;
 
-    async handle(req: ApiRequest<ApiWorldUpdateRequest>): Promise<{}> {
+    async handle(req: ApiRequest<ApiWorldUpdateRequest>): Promise<ApiWorldUpdateRequest['response']> {
         const worldId = Number(req.params.worldId) as WorldId;
 
         req.logContext['worldId'] = worldId;
@@ -27,14 +27,23 @@ export class ApiWorldUpdate extends ApiCall<ApiWorldUpdateRequest> {
 
         if (matchedWorld.updatedAt != null && matchedWorld.updatedAt > Date.now() - Duration.minutes(30)) {
             StLog.info({ lastUpdate: matchedWorld.updatedAt }, 'SkippingUpdate');
-            return {};
+            return { id: matchedWorld.updateId };
         }
-        const gameSession = await GameSession.getClient(req, worldId);
-
-        const worldData = await gameSession.loadWorldData();
 
         const worldModel = new ModelWorldAlliance();
         worldModel.id = ModelWorldAlliance.id(worldId);
+
+        await Stores.BotWorld.transaction('worlds', () => {
+            const world = bots.worlds.find(f => f.worldId == worldId);
+            if (world) {
+                world.updatedAt = ModelUtil.TimeStamp();
+                world.updateId = worldModel.id;
+            }
+        });
+
+        const gameSession = await GameSession.getClient(req, worldId);
+
+        const worldData = await gameSession.loadWorldData();
 
         for (const [allianceId, allianceData] of worldData.alliances) {
             const players = allianceData.players.map(playerId => {

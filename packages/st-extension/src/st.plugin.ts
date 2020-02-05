@@ -1,10 +1,10 @@
 import { ClientLibEventEmitter, ClientLibEvents, PheStatic, ClientLibClass } from '@cncta/clientlib';
-import { Id } from '@st/shared';
-import { St } from '../st';
-import { StModuleHooks, StModuleState } from './module';
+import { St } from './st';
 import { ClientLibPatch } from '@cncta/util';
-import { StAction } from '../actions';
-import { StCliCommand } from './cli';
+import { StCliCommand } from './st.cli';
+import { Id } from '@st/shared/build/id';
+import { StAction } from './st.actions';
+import { StConfigData } from './st.config';
 
 declare const phe: PheStatic;
 
@@ -15,12 +15,24 @@ export interface EventContext<T extends ClientLibEvents<T>, K extends keyof T> {
     cb: Function;
 }
 
-export abstract class StModuleBase implements StModuleHooks {
+export enum StPluginState {
+    Init = 'init',
+    Starting = 'starting',
+    Started = 'started',
+    Stopping = 'stopping',
+    Stopped = 'stopped',
+}
+export type StPluginConfig = Record<string, StConfigData>;
+
+export abstract class StPlugin<Conf extends StPluginConfig = StPluginConfig> {
     /** Unique id for the specific instantiation of the module */
     id: string = Id.generate();
     /** Module name, should be unique */
     abstract name: string;
-    state = StModuleState.Init;
+    abstract priority: number;
+    options?: Conf;
+
+    state: StPluginState = StPluginState.Init;
     st: St;
 
     constructor(st: St) {
@@ -45,7 +57,7 @@ export abstract class StModuleBase implements StModuleHooks {
     onConfig?(): void;
 
     async start(): Promise<void> {
-        this.state = StModuleState.Starting;
+        this.state = StPluginState.Starting;
         await this.onStart?.();
 
         for (const patch of this.patches) {
@@ -54,16 +66,16 @@ export abstract class StModuleBase implements StModuleHooks {
         }
 
         this.onConfig?.();
-        this.state = StModuleState.Started;
+        this.state = StPluginState.Started;
     }
 
-    cli(cmd: StCliCommand) {
+    protected cli(cmd: StCliCommand) {
         this.st.cli.register(cmd);
         this.cliCommands.push(cmd);
     }
 
     async stop(): Promise<void> {
-        this.state = StModuleState.Stopping;
+        this.state = StPluginState.Stopping;
         this.clearActions();
         await this.onStop?.();
         // Destroy events
@@ -79,28 +91,39 @@ export abstract class StModuleBase implements StModuleHooks {
             patch.remove();
         }
         this.cliCommands.forEach(c => this.st.cli.unregister(c));
-        this.state = StModuleState.Stopped;
+        this.state = StPluginState.Stopped;
     }
 
-    patch<T extends {}>(obj: ClientLibClass<T>): ClientLibPatch<{}, T> {
+    config<T extends keyof Conf>(key: T): Conf[T]['value'] {
+        if (this.config == null) {
+            throw new Error('No config provided for plugin: ' + this.name);
+        }
+        const res = this.st.config.get(`${this.name}.${key}` as any);
+        if (res == null) {
+            return this.options?.[key]?.value as any;
+        }
+        return res as any;
+    }
+
+    protected patch<T extends {}>(obj: ClientLibClass<T>): ClientLibPatch<{}, T> {
         const patch = new ClientLibPatch(() => obj);
         this.patches.push(patch);
         return patch;
     }
 
-    interval(func: Function, timeout: number) {
+    protected interval(func: Function, timeout: number) {
         this.timers.push(setInterval(func, timeout));
     }
 
-    clearActions() {
-        this.st.clearActions(this);
+    protected clearActions() {
+        this.st.actions.clear(this);
     }
 
-    queue(action: StAction) {
-        this.st.queue({ module: this, run: action });
+    protected queueAction(action: StAction) {
+        this.st.actions.queue({ plugin: this, run: action });
     }
 
-    addEvent<T extends ClientLibEvents<T>, K extends keyof T>(
+    protected addEvent<T extends ClientLibEvents<T>, K extends keyof T>(
         source: ClientLibEventEmitter<T>,
         name: K,
         type: T[K],
@@ -111,10 +134,18 @@ export abstract class StModuleBase implements StModuleHooks {
     }
 
     get isStopping(): boolean {
-        return this.state == StModuleState.Stopped || this.state == StModuleState.Stopping;
+        return this.state == StPluginState.Stopped || this.state == StPluginState.Stopping;
     }
 
-    get isReady(): boolean {
-        return this.state == StModuleState.Started;
+    get isStarting(): boolean {
+        return this.state == StPluginState.Started || this.state == StPluginState.Starting;
+    }
+
+    get isInit(): boolean {
+        return this.state == StPluginState.Init;
+    }
+
+    get isStarted(): boolean {
+        return this.state == StPluginState.Started;
     }
 }

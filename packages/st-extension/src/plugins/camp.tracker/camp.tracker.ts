@@ -1,8 +1,6 @@
 import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp } from '@cncta/clientlib';
 import { BaseLocationPacker, CityUtil, PatchWorldObjectNPCCamp } from '@cncta/util';
-import { StModuleState } from '../module';
-import { StModuleBase } from '../module.base';
-
+import { StPlugin } from '../../st.plugin';
 declare const ClientLib: ClientLibStatic;
 
 function replaceBaseLevel(t: ClientLibClass<RegionNpcCamp | RegionNpcCamp>) {
@@ -10,22 +8,30 @@ function replaceBaseLevel(t: ClientLibClass<RegionNpcCamp | RegionNpcCamp>) {
     t.prototype.get_BaseLevel = t.prototype.get_BaseLevelFloat;
 }
 
-export class CampTracker extends StModuleBase {
+const CampTrackerOptions = {
+    size: { value: 24, description: 'Size of the circle in pixels' },
+    font: { value: 'Iosevka Term', description: 'Font to use' },
+    fontSize: { value: 20, description: 'Font size in pixels' },
+    /** filter out any camps/outposts that are below your main's offlevel - this value*/
+    offense: { value: -1, description: 'Filter out camps that are below your mains offlevel' },
+    /** Max number of icons to show */
+    count: { value: 10, description: 'Number of icons to show' },
+};
+
+export class CampTracker extends StPlugin<typeof CampTrackerOptions> {
     name = 'CampTracker';
+    priority = 100;
     /** Max number to show at one time */
 
-    MaxToShow = 10;
+    options = CampTrackerOptions;
+
     markers: Map<number, { el: HTMLDivElement; location: Point; index: number }> = new Map();
     updateInterval: number;
     lastUpdatedStep: number;
     updateCb: number | null;
-    font: string;
-    fontSize: number;
-    iconSize: number;
     maxOffDiff = -1;
 
     async onStart(): Promise<void> {
-        this.MaxToShow = this.st.config.get('CampTracker.count') ?? 10;
         const md = ClientLib.Data.MainData.GetInstance();
         const visMain = ClientLib.Vis.VisMain.GetInstance();
         const region = visMain.get_Region();
@@ -43,23 +49,15 @@ export class CampTracker extends StModuleBase {
     }
 
     onConfig() {
-        this.MaxToShow = this.st.config.get('CampTracker.count');
-        this.maxOffDiff = this.st.config.get('CampTracker.offense');
-        this.font = this.st.config.get('CampTracker.icon.font');
-        this.fontSize = this.st.config.get('CampTracker.icon.fontSize');
-        this.iconSize = this.st.config.get('CampTracker.icon.size');
-
         this.markers.forEach(e => this.updateStyle(e.el));
         this.doUpdate();
     }
 
     async onStop(): Promise<void> {
-        this.state = StModuleState.Stopping;
         for (const cityId of Array.from(this.markers.keys())) {
             this.destroy(cityId);
         }
         this.markers.clear();
-        this.state = StModuleState.Stopped;
     }
 
     update() {
@@ -104,7 +102,7 @@ export class CampTracker extends StModuleBase {
 
             return true;
         });
-        const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, this.MaxToShow);
+        const newestCamps = nearByCamps.sort((a, b) => b.id - a.id).slice(0, this.config('count'));
 
         const existingMarkers = new Set(this.markers.keys());
         newestCamps.forEach((camp, index) => {
@@ -178,15 +176,16 @@ export class CampTracker extends StModuleBase {
         el.style.position = 'absolute';
         el.style.pointerEvents = 'none';
 
-        el.style.fontFamily = this.font;
+        el.style.fontFamily = this.config('font');
         el.style.fontWeight = 'bold';
-        el.style.fontSize = this.fontSize + 'px';
+        el.style.fontSize = this.config('fontSize') + 'px';
 
         el.style.zIndex = '10';
         el.style.borderRadius = '50%';
 
-        el.style.width = `${this.iconSize}px`;
-        el.style.height = `${this.iconSize}px`;
+        const iconSize = this.config('size');
+        el.style.width = `${iconSize}px`;
+        el.style.height = `${iconSize}px`;
 
         el.style.padding = '2px';
         el.style.display = 'flex';

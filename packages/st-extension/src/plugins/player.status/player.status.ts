@@ -1,11 +1,12 @@
 import { AllianceMemberOnlineState, ClientLibStatic } from '@cncta/clientlib';
-import { StModuleBase } from '../module.base';
 import { ClientLibPatch, Duration } from '@cncta/util';
+import { StPlugin } from '../../st.plugin';
 
 declare const ClientLib: ClientLibStatic;
 
-export class PlayerStatus extends StModuleBase {
+export class PlayerStatus extends StPlugin {
     name = 'PlayerStatus';
+    priority = 100;
 
     static PlayerColor: Record<AllianceMemberOnlineState, string> = {
         [AllianceMemberOnlineState.Online]: '#76ff03',
@@ -39,9 +40,9 @@ export class PlayerStatus extends StModuleBase {
         const md = ClientLib.Data.MainData.GetInstance();
         const alliance = md.get_Alliance();
         const myAllianceId = alliance.get_Id();
-        // Color for my base
+        // Color for my base (Only seems to be used for ruins)
         if (md.get_Player().id == playerId) {
-            return '#000000';
+            return '#ffffff';
         }
 
         // Color for alliance bases

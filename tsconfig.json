@@ -1,24 +1,35 @@
 {
     "files": [],
-    "references": [{
-        "path": "./packages/clientlib"
-    }, {
-        "path": "./packages/clientlib-util"
-    }, {
-        "path": "./packages/client"
-    }, {
-        "path": "./packages/shared"
-    }, {
-        "path": "./packages/deobsfucate"
-    }, {
-        "path": "./packages/packer"
-    }, {
-        "path": "./packages/model"
-    }, {
-        "path": "./packages/st-backend"
-    }, {
-        "path": "./packages/st-frontend"
-    }, {
-        "path": "./packages/st-extension"
-    }]
+    "references": [
+        {
+            "path": "./packages/clientlib"
+        },
+        {
+            "path": "./packages/clientlib-util"
+        },
+        {
+            "path": "./packages/client"
+        },
+        {
+            "path": "./packages/shared"
+        },
+        {
+            "path": "./packages/deobsfucate"
+        },
+        {
+            "path": "./packages/packer"
+        },
+        {
+            "path": "./packages/model"
+        },
+        {
+            "path": "./packages/st-backend"
+        },
+        {
+            "path": "./packages/st-frontend"
+        },
+        {
+            "path": "./packages/st-extension"
+        }
+    ]
 }

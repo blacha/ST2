@@ -1,14 +1,16 @@
 import { ClientLibStatic } from '@cncta/clientlib';
-import { StCity } from '@cncta/util';
-import { Config, ApiUtil, ApiInstallRequest, ApiHeaders } from '@st/shared';
-import { StModuleBase } from '../module/module.base';
+import { StCity } from '@cncta/util/build/city';
+import { ApiUtil, ApiInstallRequest, ApiHeaders } from '@st/shared/build/api';
+import { Config } from '@st/shared/build/config';
 import { BatchBaseSender } from './batcher.base';
+import { StPlugin } from '../st.plugin';
 
 declare const ClientLib: ClientLibStatic;
 
-export class ClientApi extends StModuleBase {
-    name = 'api';
+export class StApi extends StPlugin {
+    name = 'Api';
     baseUrl = Config.api.url;
+    priority = 100;
 
     baseSender = new BatchBaseSender(this);
 
