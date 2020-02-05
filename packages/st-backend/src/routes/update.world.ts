@@ -1,6 +1,6 @@
-import { WorldId } from '@cncta/clientlib';
+import { WorldId, PlayerNameDisplay } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
-import { ModelWorldAlliance, Stores } from '@st/model';
+import { ModelWorldAlliance, Stores, ModelWorldAllianceData } from '@st/model';
 import { ApiWorldUpdateRequest, StLog } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { GameSession } from '../game.session';
@@ -33,14 +33,29 @@ export class ApiWorldUpdate extends ApiCall<ApiWorldUpdateRequest> {
 
         const worldData = await gameSession.loadWorldData();
 
-        const worldModelUpdate = new ModelWorldAlliance();
-        worldModelUpdate.id = ModelWorldAlliance.id(worldId);
-        worldModelUpdate.alliances = {};
+        const worldModel = new ModelWorldAlliance();
+        worldModel.id = ModelWorldAlliance.id(worldId);
 
-        // Object.values(worldData.players).map(c => )
+        for (const [allianceId, allianceData] of worldData.alliances) {
+            const players = allianceData.players.map(playerId => {
+                const player = worldData.players.get(playerId);
+                if (player == null) {
+                    return { id: playerId, name: 'Unknown' as PlayerNameDisplay, points: 0 };
+                }
+                return { id: playerId, name: player.name, points: player.points };
+            });
 
-        // await Stores.Install.transaction(installId, async obj => obj.touch(playerName, worldId));
-        // TODO if new install send mail message to confirm
-        return {};
+            const worldModelAlliance: ModelWorldAllianceData = {
+                id: allianceId,
+                name: allianceData.name,
+                points: allianceData.points,
+                players,
+            };
+            worldModel.add(worldModelAlliance);
+        }
+
+        await Stores.WorldData.save(worldModel);
+
+        return { id: worldModel.id };
     }
 }

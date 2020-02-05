@@ -9,6 +9,7 @@ export type PlayerId = number & { _playerId: never };
 export type PlayerNameDisplay = string & { _playerNameDisplay: never };
 /** Player names are not case sensitive */
 export type PlayerNameId = string & { _playerNameId: never };
+export type PlayerScore = number & { _playerScore: never };
 
 export type TimeStamp = number & { _timeStamp: never };
 

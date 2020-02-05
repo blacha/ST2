@@ -5,5 +5,8 @@ export interface ApiWorldUpdateRequest {
     method: 'post';
     params: { worldId: WorldId };
     body: {};
-    response: {};
+    response: {
+        /** Id of the newly updated world */
+        id: string;
+    };
 }
