@@ -95,21 +95,20 @@ export const StCliConfigSet: StCliCommand = {
 
 export const StCliConfigList = {
     cmd: 'list',
-    keys: ['modules', 'config'],
     handle(st: St, args: string[]): void {
         const [key] = args;
         if (key == null || key.trim() == '') {
-            st.cli.sendMessage('red', 'Could not find option to list use: modules, config');
+            st.cli.sendMessage('red', 'Could not find option to list use: plugins, config');
             return;
         }
         const searchKey = key.toLowerCase();
-        if (searchKey != 'modules' && searchKey != 'config') {
-            st.cli.sendMessage('red', 'Could not find option to list use: modules, config');
+        if (searchKey != 'plugins' && searchKey != 'config') {
+            st.cli.sendMessage('red', 'Could not find option to list use: plugins, config');
             return;
         }
 
-        if (searchKey == 'modules') {
-            st.cli.sendMessage('white', 'Modules');
+        if (searchKey == 'plugins') {
+            st.cli.sendMessage('white', 'Plugins');
             for (const plugin of st.plugins) {
                 st.cli.sendMessage(
                     'white',
@@ -129,9 +128,10 @@ export const StCliConfigList = {
                 for (const key of Object.keys(plugin.options)) {
                     const cfg = plugin.options[key];
                     const currentValue = plugin.config(key);
+                    const cfgKey = `${plugin.name}.${key}`;
                     st.cli.sendMessage(
                         'white',
-                        `  ${plugin.name}.${key}: ${currentValue} \t- ${cfg.description} \n\t(Default: ${cfg.value})`,
+                        `${cfgKey}: ${currentValue} - ${cfg.description}(Default: ${cfg.value})`,
                     );
                 }
             }

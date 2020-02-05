@@ -1,4 +1,4 @@
-import { WorldId, PlayerNameDisplay } from '@cncta/clientlib';
+import { WorldId, PlayerNameDisplay, PlayerScore } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
 import { ModelWorldAlliance, Stores, ModelWorldAllianceData, ModelUtil } from '@st/model';
 import { ApiWorldUpdateRequest, StLog } from '@st/shared';
@@ -49,7 +49,7 @@ export class ApiWorldUpdate extends ApiCall<ApiWorldUpdateRequest> {
             const players = allianceData.players.map(playerId => {
                 const player = worldData.players.get(playerId);
                 if (player == null) {
-                    return { id: playerId, name: 'Unknown' as PlayerNameDisplay, points: 0 };
+                    return { id: playerId, name: 'Unknown' as PlayerNameDisplay, points: 0 as PlayerScore };
                 }
                 return { id: playerId, name: player.name, points: player.points };
             });

@@ -17,7 +17,7 @@ export interface ModelWorldAllianceData {
     id: AllianceId;
     name: AllianceName;
     points: number;
-    players: { id: PlayerId; name: PlayerNameDisplay; points: number }[];
+    players: { id: PlayerId; name: PlayerNameDisplay; points: PlayerScore }[];
 }
 
 export class ModelWorldAlliance extends Model<ModelWorldAlliance> {
