@@ -1,4 +1,4 @@
-import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp } from '@cncta/clientlib';
+import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp, WorldObjectType } from '@cncta/clientlib';
 import { BaseLocationPacker, CityUtil, PatchWorldObjectNPCCamp } from '@cncta/util';
 import { StPlugin } from '../../st.plugin';
 declare const ClientLib: ClientLibStatic;
@@ -12,10 +12,9 @@ const CampTrackerOptions = {
     size: { value: 24, description: 'Size of the circle in pixels' },
     font: { value: 'Iosevka Term', description: 'Font to use' },
     fontSize: { value: 20, description: 'Font size in pixels' },
-    /** filter out any camps/outposts that are below your main's offlevel - this value*/
-    offense: { value: -1, description: 'Filter out camps that are below your mains offlevel' },
-    /** Max number of icons to show */
+    offense: { value: -1, description: "Filter out camps that are below your main's offense level" },
     count: { value: 10, description: 'Number of icons to show' },
+    alert: { value: true, description: 'Alert on new camps/outposts spawning' },
 };
 
 export class CampTracker extends StPlugin<typeof CampTrackerOptions> {
@@ -30,6 +29,8 @@ export class CampTracker extends StPlugin<typeof CampTrackerOptions> {
     lastUpdatedStep: number;
     updateCb: number | null;
     maxOffDiff = -1;
+
+    firstUpdate = true;
 
     async onStart(): Promise<void> {
         const md = ClientLib.Data.MainData.GetInstance();
@@ -113,8 +114,23 @@ export class CampTracker extends StPlugin<typeof CampTrackerOptions> {
             } else {
                 const location = BaseLocationPacker.unpack(camp.location);
                 this.addMarker(camp.id, location, index);
+
+                const obj = camp.object;
+                if (!PatchWorldObjectNPCCamp.isPatched(obj)) {
+                    return;
+                }
+
+                if (!this.firstUpdate && this.config('alert')) {
+                    const campType = obj.Type == WorldObjectType.NPCCamp ? 'Camp' : 'Outpost';
+                    const campLocation = this.st.cli.createCoOrd(location.x, location.y);
+                    this.st.cli.sendMessage(
+                        'lightblue',
+                        `[ST] New ${obj.$Level} ${campType} spawned at ${campLocation}`,
+                    );
+                }
             }
         });
+        this.firstUpdate = false;
 
         for (const cityId of existingMarkers.values()) {
             this.destroy(cityId);

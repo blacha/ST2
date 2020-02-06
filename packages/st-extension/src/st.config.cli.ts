@@ -133,7 +133,7 @@ export const StCliConfigList = {
                     const cfgKey = `${plugin.name}.${key}`;
                     st.cli.sendMessage(
                         'white',
-                        `${cfgKey}: ${currentValue} - ${cfg.description}(Default: ${cfg.value})`,
+                        `${cfgKey}: ${currentValue} - ${cfg.description} (Default: ${cfg.value})`,
                     );
                 }
             }

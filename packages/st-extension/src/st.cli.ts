@@ -51,7 +51,7 @@ export class StCli extends StPlugin {
         if (this.commands[cmd] == null) {
             this.sendMessage('red', 'Invalid command, Options: ' + Object.keys(this.commands).join(', '));
         } else {
-            this.sendMessage('white', 'St: ' + parts.join(' '));
+            this.sendMessage('white', '[ST] ' + parts.join(' '));
             this.commands[cmd].handle(this.st, parts.slice(2));
         }
         el.value = '';
@@ -75,6 +75,10 @@ export class StCli extends StPlugin {
             .getChat()
             .getChatWidget()
             .showMessage(s, webfrontend.gui.chat.ChatWidget.sender.system, ChatWidgetChannel.allflags);
+    }
+
+    createCoOrd(x: number, y: number) {
+        return `<a style="color:${webfrontend.gui.util.BBCode.clrLink}; cursor: pointer;" onClick="webfrontend.gui.UtilView.centerCoordinatesOnRegionViewWindow(${x}, ${y});">${x}:${y}</a>`;
     }
 
     async onStop() {

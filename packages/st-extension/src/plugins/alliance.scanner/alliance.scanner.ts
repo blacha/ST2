@@ -3,6 +3,7 @@ import { CityScannerUtil, CityUtil, Duration } from '@cncta/util';
 import { St } from '../../st';
 import { StPlugin } from '../../st.plugin';
 import { StCliCommand } from '../../st.cli';
+import { CityCache } from '../../city.cache';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -15,8 +16,9 @@ export const StCliScanAlliance: StCliCommand = {
             st.cli.sendMessage('white', 'Abort Scan');
             return;
         }
-        st.cli.sendMessage('white', 'Starting Scan');
-        st.plugin<AllianceScanner>('AllianceScanner')?.scanAll();
+
+        const scanCount = st.plugin<AllianceScanner>('AllianceScanner')?.scanAll();
+        st.cli.sendMessage('white', 'Starting Scan (' + scanCount + ' cities)');
         st.actions.run(true).then(() => st.cli.sendMessage('white', 'Scan done!'));
     },
 };
@@ -49,12 +51,20 @@ export class AllianceScanner extends StPlugin {
         }
     }
 
-    scanAll(): void {
+    scanAll(): number {
         this.clearActions();
         const allCities = CityUtil.getAlliedCities();
+        let count = 0;
         for (const city of allCities) {
+            // Limit scanning to once every 15 minutes
+            const cityData = CityCache.get(city.$Id, Duration.minutes(15));
+            if (cityData != null) {
+                continue;
+            }
             this.queueAction((index: number, total: number): Promise<void> => this.scanCity(city.$Id, index, total));
+            count++;
         }
+        return count;
     }
 
     async scanCity(cityId: number, current: number, total: number): Promise<void> {
@@ -72,6 +82,6 @@ export class AllianceScanner extends StPlugin {
         }
 
         this.st.log.debug({ cityId, owner: output.owner, current, total }, 'ScanAlliance');
-        this.st.api.base(output);
+        this.st.api.base(output).then(c => CityCache.setStId(cityId, c, ''));
     }
 }
