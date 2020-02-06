@@ -17,6 +17,7 @@ export interface PlayerStats {
     production: GameResources;
     main: Base;
     updatedAt: number;
+    cost: GameResources;
     upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
 }
 
@@ -33,6 +34,16 @@ function getDiffIcon(updatedAt: number) {
     return <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />;
 }
 
+function allianceSorter(cb: (a: PlayerStats, b: PlayerStats) => number) {
+    return function sortMe(a: PlayerStats, b: PlayerStats): number {
+        const res = cb(a, b);
+        if (res == 0) {
+            return a.cost.total - b.cost.total;
+        }
+        return res;
+    };
+}
+
 export const AllianceColumns = [
     {
         title: '#',
@@ -45,7 +56,7 @@ export const AllianceColumns = [
         dataIndex: 'main',
         key: 'name',
         render: (main: Base) => <Link to={`/world/${main.worldId}/player/${main.owner?.id}`}>{main.owner?.name}</Link>,
-        sorter: (a: PlayerStats, b: PlayerStats) => a.name.localeCompare(b.name),
+        sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.name.localeCompare(b.name)),
         ellipsis: true,
         width: 150,
     },
@@ -55,14 +66,16 @@ export const AllianceColumns = [
         key: 'faction',
         width: 50,
         render: (main: Base) => <FactionIcon faction={main.faction} />,
-        sorter: (a: PlayerStats, b: PlayerStats) => a.main.faction.name.localeCompare(b.main.faction.name),
+        sorter: allianceSorter((a: PlayerStats, b: PlayerStats) =>
+            a.main.faction.name.localeCompare(b.main.faction.name),
+        ),
     },
     {
         title: 'B#',
         dataIndex: 'bases',
         key: 'bases',
         render: (bases: Base[]) => bases.length,
-        sorter: (a: PlayerStats, b: PlayerStats) => a.bases.length - b.bases.length,
+        sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.bases.length - b.bases.length),
         width: 70,
     },
     {
@@ -74,21 +87,23 @@ export const AllianceColumns = [
                 dataIndex: 'production',
                 key: 'tiberium',
                 render: (production: GameResources) => formatNumber(production.tiberium),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.production.tiberium - b.production.tiberium,
+                sorter: allianceSorter(
+                    (a: PlayerStats, b: PlayerStats) => a.production.tiberium - b.production.tiberium,
+                ),
             },
             {
                 title: 'Crystal',
                 dataIndex: 'production',
                 key: 'crystal',
                 render: (production: GameResources) => formatNumber(production.crystal),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.production.crystal - b.production.crystal,
+                sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.production.crystal - b.production.crystal),
             },
             {
                 title: 'Credits',
                 dataIndex: 'production',
                 key: 'credits',
                 render: (production: GameResources) => formatNumber(production.credits),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.production.credits - b.production.credits,
+                sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.production.credits - b.production.credits),
             },
         ],
     },
@@ -111,7 +126,7 @@ export const AllianceColumns = [
                 dataIndex: 'main',
                 key: 'level',
                 render: (main: Base) => formatNumber(main.level),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.level - b.main.level,
+                sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.main.level - b.main.level),
                 width: 85,
             },
             {
@@ -120,8 +135,10 @@ export const AllianceColumns = [
                 key: 'command',
                 defaultSortOrder: 'descend' as const,
                 render: (main: Base) => Math.floor(main.buildings.commandCenter?.level ?? 0) || '',
-                sorter: (a: PlayerStats, b: PlayerStats) =>
-                    (a.main.buildings.commandCenter?.level || 0) - (b.main.buildings.commandCenter?.level || 0),
+                sorter: allianceSorter(
+                    (a: PlayerStats, b: PlayerStats) =>
+                        (a.main.buildings.commandCenter?.level || 0) - (b.main.buildings.commandCenter?.level || 0),
+                ),
                 width: 70,
             },
             {
@@ -130,29 +147,33 @@ export const AllianceColumns = [
                 key: 'off',
                 defaultSortOrder: 'descend' as const,
                 render: (main: Base) => formatNumber(main.levelOffense),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.levelOffense - b.main.levelOffense,
+                sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.main.levelOffense - b.main.levelOffense),
             },
             {
                 title: 'Def',
                 dataIndex: 'main',
                 key: 'def',
                 render: (main: Base) => formatNumber(main.levelDefense),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.levelDefense - b.main.levelDefense,
+                sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.main.levelDefense - b.main.levelDefense),
             },
             {
                 title: 'Power',
                 dataIndex: 'main',
                 key: 'power',
                 render: (main: Base) => formatNumber(main.info.production.total.power),
-                sorter: (a: PlayerStats, b: PlayerStats) =>
-                    a.main.info.production.total.power - b.main.info.production.total.power,
+                sorter: allianceSorter(
+                    (a: PlayerStats, b: PlayerStats) =>
+                        a.main.info.production.total.power - b.main.info.production.total.power,
+                ),
             },
             {
                 title: 'Cost',
                 dataIndex: 'main',
                 key: 'mainCost',
                 render: (main: Base) => formatNumber(main.info.cost.total.total),
-                sorter: (a: PlayerStats, b: PlayerStats) => a.main.info.cost.total.total - b.main.info.cost.total.total,
+                sorter: allianceSorter(
+                    (a: PlayerStats, b: PlayerStats) => a.main.info.cost.total.total - b.main.info.cost.total.total,
+                ),
             },
         ],
     },
@@ -172,7 +193,7 @@ export const AllianceColumns = [
 
             return <Tooltip title={title}>{getDiffIcon(s.updatedAt)}</Tooltip>;
         },
-        sorter: (a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt,
+        sorter: allianceSorter((a: PlayerStats, b: PlayerStats) => a.updatedAt - b.updatedAt),
         width: 32,
     },
 ];

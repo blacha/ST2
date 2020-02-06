@@ -107,6 +107,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                         main: base,
                         updatedAt: base.updatedAt,
                         upgrades: {},
+                        cost: new GameResources(),
                     };
                     playerSet.set(base.owner.id, current);
                 }
@@ -115,6 +116,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
                 }
                 current.bases.push(base);
                 current.production.add(base.info.production.total);
+                current.cost.add(base.info.cost.total);
                 if (base.alliance) {
                     alliance.name = base.alliance.name;
                 }

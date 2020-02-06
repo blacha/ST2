@@ -171,6 +171,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
             main: bases[0],
             updatedAt: bases[0].updatedAt,
             upgrades: {},
+            cost: new GameResources(),
         };
 
         for (const base of bases) {
@@ -184,6 +185,7 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
             }
             current.bases.push(base);
             current.production.add(base.info.production.total);
+            current.cost.add(base.info.cost.total);
             mergeBaseUpgrade(base.upgrades, current.upgrades);
         }
 
