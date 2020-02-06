@@ -121,7 +121,7 @@ export class CampTracker extends StPlugin<typeof CampTrackerOptions> {
                 }
 
                 if (!this.firstUpdate && this.config('alert')) {
-                    const campType = obj.Type == WorldObjectType.NPCCamp ? 'Camp' : 'Outpost';
+                    const campType = obj.$CampType == NpcCampType.Random ? 'Camp' : 'Outpost';
                     const campLocation = this.st.cli.createCoOrd(location.x, location.y);
                     this.st.cli.sendMessage(
                         'lightblue',
