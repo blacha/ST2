@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/blacha/st/compare/v3.1.0...v3.1.1) (2020-02-06)
+
+
+### Bug Fixes
+
+* actually scan while not active ([e05d15b](https://github.com/blacha/st/commit/e05d15b9a807ffc67636f2aca9a38167998358c6))
+
+
+
+
+
 # [3.1.0](https://github.com/blacha/st/compare/v3.0.0...v3.1.0) (2020-02-05)
 
 
