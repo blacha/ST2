@@ -118,7 +118,7 @@ export class StActions extends StPlugin {
                     break;
                 }
 
-                if (this.isActive) {
+                if (!this.isActive) {
                     reason = 'StExit';
                     break;
                 }
