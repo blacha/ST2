@@ -29,6 +29,12 @@ export interface ChatWidgetSender {
 
 export interface WebFrontEndStatic {
     gui: {
+        util: {
+            BBCode: {
+                /** color of links */
+                clrLink: string;
+            }
+        }
         chat: {
             ChatWidget: {
                 channel: typeof ChatWidgetChannel;
