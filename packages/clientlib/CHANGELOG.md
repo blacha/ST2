@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/blacha/st/compare/v3.1.1...v3.2.0) (2020-02-06)
+
+
+### Features
+
+* typing around bbcodes ([166b646](https://github.com/blacha/st/commit/166b6463fa8639fba88da94f488c367e569130bf))
+
+
+
+
+
 # [3.0.0](https://github.com/blacha/st/compare/v2.2.0...v3.0.0) (2020-02-05)
 
 

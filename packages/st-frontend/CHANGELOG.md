@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/blacha/st/compare/v3.1.1...v3.2.0) (2020-02-06)
+
+
+### Features
+
+* force a somewhat stable sort when duplicate keys are found ([67898f6](https://github.com/blacha/st/commit/67898f6d4fa7ec65b7ef72e605f63dcd15f2ad06))
+* show base count and updated icons ([b052605](https://github.com/blacha/st/commit/b0526058a0a5853f166abd770caf5904afa5848e))
+
+
+
+
+
 # [3.0.0](https://github.com/blacha/st/compare/v2.2.0...v3.0.0) (2020-02-05)
 
 
