@@ -21,7 +21,7 @@ export interface PlayerStats {
     upgrades: Partial<Record<GameDataUnitId, GameDataResearchLevel>>;
 }
 
-function getDiffIcon(updatedAt: number) {
+export function getDiffIcon(updatedAt: number) {
     const dateDiff = Date.now() - updatedAt;
 
     if (dateDiff > Duration.hours(6)) {

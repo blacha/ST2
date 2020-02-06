@@ -1,11 +1,13 @@
 import { PlayerNameId } from '@cncta/clientlib';
+import { WorldNames } from '@cncta/util';
 import { ModelPlayer, Stores, UId } from '@st/model';
 import { StLog } from '@st/shared';
 import Button from 'antd/es/button';
 import Divider from 'antd/es/divider';
+import List from 'antd/es/list';
 import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
-import List from 'antd/es/list';
+import Tooltip from 'antd/es/tooltip';
 import Paragraph from 'antd/es/typography/Paragraph';
 import Text from 'antd/es/typography/Text';
 import Title from 'antd/es/typography/Title';
@@ -13,10 +15,10 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { style } from 'typestyle';
+import { getDiffIcon } from '../alliance/alliance.table';
 import { Auth } from '../auth/auth.service';
 import { Cs } from '../base/base';
 import { timeSince } from '../time.util';
-import { WorldNames } from '@cncta/util';
 
 export const LandingColumns = [
     {
@@ -41,6 +43,14 @@ export const LandingColumns = [
         width: 150,
     },
     {
+        title: 'B#',
+        dataIndex: '',
+        key: 'bases',
+        render: (p: ModelPlayer) => Object.keys(p.cities).length,
+        sorter: (a: ModelPlayer, b: ModelPlayer) => Object.keys(a.cities).length - Object.keys(b.cities).length,
+        width: 70,
+    },
+    {
         title: 'Alliance',
         dataIndex: '',
         key: 'allianceId',
@@ -48,10 +58,14 @@ export const LandingColumns = [
         sorter: (a: ModelPlayer, b: ModelPlayer) => (a.alliance ?? '').localeCompare(b.alliance ?? ''),
     },
     {
-        title: 'Updated',
+        width: 50,
+        title: '',
         dataIndex: '',
         key: 'updatedAt',
-        render: (p: ModelPlayer) => timeSince(p.updatedAt),
+        render: (p: ModelPlayer) => {
+            const title = 'Last updated ' + timeSince(p.updatedAt) + ' ago';
+            return <Tooltip title={title}>{getDiffIcon(p.updatedAt)}</Tooltip>;
+        },
         sorter: (a: ModelPlayer, b: ModelPlayer) => a.updatedAt - b.updatedAt,
     },
 ];
