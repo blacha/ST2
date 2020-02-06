@@ -1,4 +1,4 @@
-import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp, WorldObjectType } from '@cncta/clientlib';
+import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp } from '@cncta/clientlib';
 import { BaseLocationPacker, CityUtil, PatchWorldObjectNPCCamp } from '@cncta/util';
 import { StPlugin } from '../../st.plugin';
 declare const ClientLib: ClientLibStatic;

@@ -33,8 +33,8 @@ export interface WebFrontEndStatic {
             BBCode: {
                 /** color of links */
                 clrLink: string;
-            }
-        }
+            };
+        };
         chat: {
             ChatWidget: {
                 channel: typeof ChatWidgetChannel;
