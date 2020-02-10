@@ -1,4 +1,4 @@
-import { ClientLibStatic, ClientLibWorldObject, ClientLibCity } from '@cncta/clientlib';
+import { ClientLibStatic, ClientLibWorldObject, ClientLibCity, Point } from '@cncta/clientlib';
 import { ClientLibIter } from './iter';
 import { LocationIter } from './location';
 import { BaseLocationPacker } from './pack';
@@ -26,6 +26,12 @@ export interface NearByObject {
  * Useful utility functions when working with cities
  */
 export class CityUtil {
+    /** Distance between two points */
+    static distance(a: Point, b: Point): number {
+        const x = a.x - b.x;
+        const y = a.y - b.y;
+        return Math.sqrt(x * x + y * y);
+    }
     /**
      * Select a object on the client side from a X/Y Position
      */
