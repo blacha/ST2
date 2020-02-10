@@ -1,11 +1,10 @@
 import {
-    NpcCampType,
     ClientLibCityUnit,
+    ClientLibCityUnits,
     ClientLibMap,
     ClientLibStatic,
     ClientLibWorldObject,
-    ClientLibCityUnits,
-    ClientLibCommunicationManager,
+    NpcCampType,
 } from '@cncta/clientlib';
 import { ClientLibPatch } from './client.patcher';
 

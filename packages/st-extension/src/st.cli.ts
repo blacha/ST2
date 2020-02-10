@@ -20,6 +20,15 @@ function isSubCommand(cmd: any): cmd is StCliCommandSub {
     return typeof cmd['commands'] == 'object';
 }
 
+export class FontBuilder {
+    static color(color: string, msg: string) {
+        return `<font color="${color}">${msg}</font>`;
+    }
+    static coOrd(x: number, y: number) {
+        return `<a style="color:${webfrontend.gui.util.BBCode.clrLink}; cursor: pointer;" onClick="webfrontend.gui.UtilView.centerCoordinatesOnRegionViewWindow(${x}, ${y});">${x}:${y}</a>`;
+    }
+}
+
 export class StCli extends StPlugin {
     StSlashCommand = '/st';
     name = 'Cli';
@@ -106,14 +115,5 @@ export class StCli extends StPlugin {
             .getChat()
             .getChatWidget()
             .showMessage(msg, webfrontend.gui.chat.ChatWidget.sender.system, ChatWidgetChannel.allflags);
-    }
-}
-
-export class FontBuilder {
-    static color(color: string, msg: string) {
-        return `<font color="${color}">${msg}</font>`;
-    }
-    static coOrd(x: number, y: number) {
-        return `<a style="color:${webfrontend.gui.util.BBCode.clrLink}; cursor: pointer;" onClick="webfrontend.gui.UtilView.centerCoordinatesOnRegionViewWindow(${x}, ${y});">${x}:${y}</a>`;
     }
 }
