@@ -43,7 +43,7 @@ export class LayoutScanner extends StPlugin {
         this.clearActions();
         let count = 0;
         const nearByObjects = CityUtil.getNearByObjects();
-        for (const { object, location } of nearByObjects) {
+        for (const { object, location, ownCityId } of nearByObjects) {
             if (object.Type !== WorldObjectType.NPCBase && object.Type !== WorldObjectType.NPCCamp) {
                 continue;
             }
@@ -53,16 +53,24 @@ export class LayoutScanner extends StPlugin {
             }
             count++;
             this.queueAction(
-                (index: number, total: number): Promise<void> => this.scanLayout(object.$Id, location, index, total),
+                (index: number, total: number): Promise<void> =>
+                    this.scanLayout(object.$Id, ownCityId, location, index, total),
             );
         }
         return count;
     }
 
-    async scanLayout(cityId: number, location: number, current: number, count: number): Promise<void> {
+    async scanLayout(
+        cityId: number,
+        ownCityId: number,
+        location: number,
+        current: number,
+        count: number,
+    ): Promise<void> {
         const md = ClientLib.Data.MainData.GetInstance();
         const cities = md.get_Cities();
         const world = md.get_World();
+        const maxAttack = md.get_Server().get_MaxAttackDistance() - 0.5;
 
         const { x, y } = BaseLocationPacker.unpack(location);
         const worldObject = world.GetObjectFromPosition(x, y);
@@ -74,6 +82,17 @@ export class LayoutScanner extends StPlugin {
         }
 
         cities.set_CurrentCityId(cityId);
+
+        // Modify our current own city if we are out of range
+        if (ownCityId != ownCityId) {
+            const currentCity = cities.get_CurrentOwnCity();
+
+            const sourceXy = { x: currentCity.get_PosX(), y: currentCity.get_PosY() };
+            if (CityUtil.distance(sourceXy, { x, y }) > maxAttack) {
+                cities.set_CurrentOwnCityId(ownCityId);
+            }
+        }
+
         const cityObj = await CityUtil.waitForCity(cityId);
         if (cityObj == null) {
             return;
