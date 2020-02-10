@@ -6,7 +6,7 @@ import { StActions } from './st.actions';
 import { StCli } from './st.cli';
 import { StConfig } from './st.config';
 import { StPatches } from './st.patches';
-import { StPlugin, StPluginState } from './st.plugin';
+import { StPlugin } from './st.plugin';
 
 const InstanceIdKey = 'st-instance-id';
 const ChallengeIdKey = 'st-instance-challenge-id';
@@ -85,7 +85,7 @@ export class St {
                 continue;
             }
 
-            if (plugin.state != StPluginState.Init) {
+            if (!plugin.isInit) {
                 this.log.warn({ plugin: plugin.name, state: plugin.state }, 'Invalid module state');
                 continue;
             }
@@ -97,7 +97,7 @@ export class St {
 
     async stop() {
         for (const plugin of this.plugins) {
-            if (plugin.state != StPluginState.Started) {
+            if (!plugin.isStarted) {
                 continue;
             }
             this.log.debug({ plugin: plugin.name }, 'StPlugin:Stop');

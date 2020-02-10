@@ -2,19 +2,46 @@ import { ClientLibStatic, NpcCampType, WorldObjectType } from '@cncta/clientlib'
 import { BaseLocationPacker, CityScannerUtil, CityUtil, Duration, PatchWorldObjectNPCCamp } from '@cncta/util';
 import { StPlugin } from '../../st.plugin';
 import { CityCache } from '../../city.cache';
+import { StCliCommandSub, StCliCommand } from '../../st.cli';
+import { St } from '../../st';
 
 declare const ClientLib: ClientLibStatic;
 
+const StCliScanLayout: StCliCommand = {
+    cmd: 'layout scan',
+    handle(st: St): void {
+        st.actions.clear();
+        // Abort a in progress scan
+        if (!st.actions.isIdle) {
+            st.cli.sendMessage('white', 'Abort Scan');
+            return;
+        }
+
+        const scanCount = st.plugin<LayoutScanner>('layout')?.scanAll();
+        st.cli.sendMessage('white', 'Starting Scan (' + scanCount + ' layouts)');
+        st.actions.run(true).then(() => st.cli.sendMessage('white', 'Scan done!'));
+    },
+};
+
+const StCliLayout: StCliCommandSub = {
+    cmd: 'layout',
+    commands: {
+        scan: StCliScanLayout,
+    },
+};
+
 export class LayoutScanner extends StPlugin {
-    name = 'LayoutScanner';
+    name = 'layout';
     priority = 100;
 
     async onStart(): Promise<void> {
         this.interval(() => this.scanAll(), Duration.OneHour);
+        this.cli(StCliLayout);
     }
 
-    scanAll(): void {
+    scanAll(): number {
         this.clearActions();
+        let count = 0;
         const nearByObjects = CityUtil.getNearByObjects();
         for (const { object, location } of nearByObjects) {
             if (object.Type !== WorldObjectType.NPCBase && object.Type !== WorldObjectType.NPCCamp) {
@@ -24,10 +51,12 @@ export class LayoutScanner extends StPlugin {
             if (existing) {
                 continue;
             }
+            count++;
             this.queueAction(
                 (index: number, total: number): Promise<void> => this.scanLayout(object.$Id, location, index, total),
             );
         }
+        return count;
     }
 
     async scanLayout(cityId: number, location: number, current: number, count: number): Promise<void> {

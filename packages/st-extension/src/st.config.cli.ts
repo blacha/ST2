@@ -1,5 +1,5 @@
 import { St } from './st';
-import { StCliCommand } from './st.cli';
+import { StCliCommand, StCliCommandSub } from './st.cli';
 import { StPlugin } from './st.plugin';
 
 function getPlugin(st: St, pluginName: string): StPlugin | null {
@@ -22,44 +22,8 @@ function getPlugin(st: St, pluginName: string): StPlugin | null {
     return plugin;
 }
 
-export const StCliDisable: StCliCommand = {
-    cmd: 'disable',
-
-    handle(st: St, args: string[]): void {
-        const plugin = getPlugin(st, args[0]);
-        if (plugin == null) {
-            return;
-        }
-
-        st.log.info({ plugin: plugin.name }, 'Disable');
-        st.config.disable(plugin);
-        if (plugin.isStarted) {
-            st.cli.sendMessage('lightblue', 'Stopping ' + plugin.name);
-            plugin.stop();
-        }
-    },
-};
-
-export const StCliEnable: StCliCommand = {
-    cmd: 'enable',
-
-    handle(st: St, args: string[]): void {
-        const plugin = getPlugin(st, args[0]);
-        if (plugin == null) {
-            return;
-        }
-
-        st.log.info({ plugin: plugin.name }, 'Enable');
-        st.config.enable(plugin);
-        if (!plugin.isStarted) {
-            st.cli.sendMessage('lightblue', 'Starting ' + plugin.name);
-            plugin.start();
-        }
-    },
-};
-
-export const StCliConfigSet: StCliCommand = {
-    cmd: 'set',
+const StCliConfigSet: StCliCommand = {
+    cmd: 'config set',
 
     handle(st: St, args: string[]): void {
         const [key, value] = args;
@@ -88,6 +52,8 @@ export const StCliConfigSet: StCliCommand = {
         const configKey = `${plugin.name}.${cfgKey}`;
         if (typeof cfg.value == 'number') {
             st.config.set(configKey, parseFloat(value));
+        } else if (typeof cfg.value === 'boolean') {
+            st.config.set(configKey, value == 'true');
         } else {
             st.config.set(configKey, value);
         }
@@ -95,48 +61,74 @@ export const StCliConfigSet: StCliCommand = {
     },
 };
 
-export const StCliConfigList = {
-    cmd: 'list',
+const StCliConfigList = {
+    cmd: 'config list',
+    handle(st: St): void {
+        st.cli.sendMessage('white', 'Config');
+        for (const plugin of st.plugins) {
+            if (plugin.options == null) {
+                continue;
+            }
+            st.cli.sendMessage('white', `----------------`);
+            st.cli.sendMessage('white', `${plugin.name}`);
+            st.cli.sendMessage('white', `----------------`);
+            for (const key of Object.keys(plugin.options)) {
+                const cfg = plugin.options[key];
+                const currentValue = plugin.config(key);
+                const cfgKey = `${plugin.name}.${key}`;
+                st.cli.sendMessage('white', `${cfgKey}: ${currentValue} - ${cfg.description} (Default: ${cfg.value})`);
+            }
+        }
+    },
+};
+
+export const StCliConfigCommand: StCliCommandSub = {
+    cmd: 'config',
+    commands: {
+        list: StCliConfigList,
+        set: StCliConfigSet,
+    },
+};
+
+const StCliDisable: StCliCommand = {
+    cmd: 'plugin disable',
+
     handle(st: St, args: string[]): void {
-        const [key] = args;
-        if (key == null || key.trim() == '') {
-            st.cli.sendMessage('red', 'Could not find option to list use: plugins, config');
-            return;
-        }
-        const searchKey = key.toLowerCase();
-        if (searchKey != 'plugins' && searchKey != 'config') {
-            st.cli.sendMessage('red', 'Could not find option to list use: plugins, config');
+        const plugin = getPlugin(st, args[0]);
+        if (plugin == null) {
             return;
         }
 
-        if (searchKey == 'plugins') {
-            st.cli.sendMessage('white', 'Plugins');
-            for (const plugin of st.plugins) {
-                st.cli.sendMessage(
-                    'white',
-                    `    ${plugin.name} : ${st.config.isDisabled(plugin) ? 'disabled' : 'enabled'}`,
-                );
-            }
+        st.log.info({ plugin: plugin.name }, 'Disable');
+        st.config.disable(plugin);
+        if (plugin.isStarted) {
+            st.cli.sendMessage('lightblue', 'Stopping ' + plugin.name);
+            plugin.stop();
+        }
+    },
+};
+
+const StCliEnable: StCliCommand = {
+    cmd: 'plugin enable',
+
+    handle(st: St, args: string[]): void {
+        const plugin = getPlugin(st, args[0]);
+        if (plugin == null) {
+            return;
         }
 
-        if (searchKey == 'config') {
-            st.cli.sendMessage('white', 'Config');
-            for (const plugin of st.plugins) {
-                if (plugin.options == null) {
-                    continue;
-                }
-                st.cli.sendMessage('white', `${plugin.name}`);
-                st.cli.sendMessage('white', ``);
-                for (const key of Object.keys(plugin.options)) {
-                    const cfg = plugin.options[key];
-                    const currentValue = plugin.config(key);
-                    const cfgKey = `${plugin.name}.${key}`;
-                    st.cli.sendMessage(
-                        'white',
-                        `${cfgKey}: ${currentValue} - ${cfg.description} (Default: ${cfg.value})`,
-                    );
-                }
-            }
+        st.log.info({ plugin: plugin.name }, 'Enable');
+        st.config.enable(plugin);
+        if (!plugin.isStarted) {
+            st.cli.sendMessage('lightblue', 'Starting ' + plugin.name);
+            plugin.start();
         }
+    },
+};
+export const StCliPluginCommand: StCliCommandSub = {
+    cmd: 'plugin',
+    commands: {
+        enable: StCliEnable,
+        disable: StCliDisable,
     },
 };

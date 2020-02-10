@@ -1,6 +1,6 @@
 import { ChatWidgetChannel, QxStatic, WebFrontEndStatic } from '@cncta/clientlib';
 import { St } from './st';
-import { StCliConfigList, StCliConfigSet, StCliDisable, StCliEnable } from './st.config.cli';
+import { StCliConfigCommand, StCliPluginCommand } from './st.config.cli';
 import { StPlugin } from './st.plugin';
 
 declare const qx: QxStatic;
@@ -11,12 +11,21 @@ export interface StCliCommand {
     handle(st: St, args: string[]): void;
 }
 
+export interface StCliCommandSub {
+    cmd: string;
+    commands: Record<string, StCliCommand>;
+}
+
+function isSubCommand(cmd: any): cmd is StCliCommandSub {
+    return typeof cmd['commands'] == 'object';
+}
+
 export class StCli extends StPlugin {
     StSlashCommand = '/st';
     name = 'Cli';
     priority = 50;
 
-    commands: Record<string, StCliCommand> = {};
+    commands: Record<string, StCliCommand | StCliCommandSub> = {};
 
     get inputEl() {
         return qx.core.Init.getApplication()
@@ -29,10 +38,12 @@ export class StCli extends StPlugin {
 
     async onStart() {
         this.inputEl.addEventListener('keydown', this.handleKeyDown);
-        this.cli(StCliEnable);
-        this.cli(StCliDisable);
-        this.cli(StCliConfigSet);
-        this.cli(StCliConfigList);
+        this.cli(StCliConfigCommand);
+        this.cli(StCliPluginCommand);
+    }
+
+    async onStop() {
+        this.inputEl.removeEventListener('keydown', this.handleKeyDown);
     }
 
     handleKeyDown = (e: KeyboardEvent) => {
@@ -48,11 +59,22 @@ export class StCli extends StPlugin {
         // Parse CLI args
         const parts = el.value.trim().split(' ');
         const cmd = (parts[1] ?? '').toLowerCase();
-        if (this.commands[cmd] == null) {
+        const command = this.commands[cmd];
+        if (command == null) {
             this.sendMessage('red', 'Invalid command, Options: ' + Object.keys(this.commands).join(', '));
-        } else {
+        } else if (isSubCommand(command)) {
             this.sendMessage('white', '[ST] ' + parts.join(' '));
-            this.commands[cmd].handle(this.st, parts.slice(2));
+            const subCmd = (parts[2] ?? '').toLowerCase();
+            if (command.commands[subCmd] != null) {
+                command.commands[subCmd].handle(this.st, parts.slice(3));
+            } else {
+                this.sendMessage(
+                    'red',
+                    `Invalid command "${cmd} ${parts[2]}", Options: ` + Object.keys(command.commands).join(', '),
+                );
+            }
+        } else {
+            command.handle(this.st, parts.slice(2));
         }
         el.value = '';
         el.focus();
@@ -61,11 +83,11 @@ export class StCli extends StPlugin {
         return false;
     };
 
-    register(cmd: StCliCommand) {
+    register(cmd: StCliCommand | StCliCommandSub) {
         this.commands[cmd.cmd] = cmd;
     }
 
-    unregister(cmd: StCliCommand) {
+    unregister(cmd: StCliCommand | StCliCommandSub) {
         delete this.commands[cmd.cmd];
     }
 
@@ -79,9 +101,5 @@ export class StCli extends StPlugin {
 
     createCoOrd(x: number, y: number) {
         return `<a style="color:${webfrontend.gui.util.BBCode.clrLink}; cursor: pointer;" onClick="webfrontend.gui.UtilView.centerCoordinatesOnRegionViewWindow(${x}, ${y});">${x}:${y}</a>`;
-    }
-
-    async onStop() {
-        this.inputEl.removeEventListener('keydown', this.handleKeyDown);
     }
 }

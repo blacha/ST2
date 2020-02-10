@@ -2,13 +2,13 @@ import { ClientLibStatic } from '@cncta/clientlib';
 import { CityScannerUtil, CityUtil, Duration } from '@cncta/util';
 import { St } from '../../st';
 import { StPlugin } from '../../st.plugin';
-import { StCliCommand } from '../../st.cli';
+import { StCliCommand, StCliCommandSub } from '../../st.cli';
 import { CityCache } from '../../city.cache';
 
 declare const ClientLib: ClientLibStatic;
 
-export const StCliScanAlliance: StCliCommand = {
-    cmd: 'scan-alliance',
+const StCliScanAlliance: StCliCommand = {
+    cmd: 'alliance scan',
     handle(st: St): void {
         st.actions.clear();
         // Abort a in progress scan
@@ -17,20 +17,27 @@ export const StCliScanAlliance: StCliCommand = {
             return;
         }
 
-        const scanCount = st.plugin<AllianceScanner>('AllianceScanner')?.scanAll();
+        const scanCount = st.plugin<AllianceScanner>('alliance')?.scanAll();
         st.cli.sendMessage('white', 'Starting Scan (' + scanCount + ' cities)');
         st.actions.run(true).then(() => st.cli.sendMessage('white', 'Scan done!'));
     },
 };
 
+const StCliAlliance: StCliCommandSub = {
+    cmd: 'alliance',
+    commands: {
+        scan: StCliScanAlliance,
+    },
+};
+
 export class AllianceScanner extends StPlugin {
-    name = 'AllianceScanner';
+    name = 'alliance';
     priority = 100;
 
     async onStart(): Promise<void> {
         this.interval(() => this.scanAll(), Duration.OneHour);
         this.interval(() => this.playerScan(), Duration.minutes(20));
-        this.cli(StCliScanAlliance);
+        this.cli(StCliAlliance);
     }
 
     /** Scan only the current player's bases */

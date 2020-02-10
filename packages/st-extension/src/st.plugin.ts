@@ -1,7 +1,7 @@
 import { ClientLibEventEmitter, ClientLibEvents, PheStatic, ClientLibClass } from '@cncta/clientlib';
 import { St } from './st';
 import { ClientLibPatch } from '@cncta/util';
-import { StCliCommand } from './st.cli';
+import { StCliCommand, StCliCommandSub } from './st.cli';
 import { Id } from '@st/shared/build/id';
 import { StAction } from './st.actions';
 import { StConfigData } from './st.config';
@@ -40,13 +40,13 @@ export abstract class StPlugin<Conf extends StPluginConfig = StPluginConfig> {
     }
 
     /** Bound events to ClientLib */
-    events: EventContext<any, any>[] = [];
+    private events: EventContext<any, any>[] = [];
     /** Any periodic timers needed */
-    timers: number[] = [];
+    private timers: number[] = [];
     /** ClientLib Patches specifically applied for this module */
-    patches: ClientLibPatch<{}, any>[] = [];
+    protected patches: ClientLibPatch<{}, any>[] = [];
 
-    cliCommands: StCliCommand[] = [];
+    private cliCommands: (StCliCommand | StCliCommandSub)[] = [];
 
     /** Optional hook called when the module starts */
     onStart?(): Promise<void>;
@@ -71,7 +71,7 @@ export abstract class StPlugin<Conf extends StPluginConfig = StPluginConfig> {
         this.state = StPluginState.Started;
     }
 
-    protected cli(cmd: StCliCommand) {
+    protected cli(cmd: StCliCommand | StCliCommandSub) {
         this.st.cli.register(cmd);
         this.cliCommands.push(cmd);
     }
