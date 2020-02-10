@@ -28,6 +28,9 @@ export interface QxWidget extends QxLayoutItem {
     /** Is capturing pointer events */
     isCapturing(): boolean;
 
+    /** Is widget visible */
+    isVisible(): boolean;
+
     getContentElement(): QxElement;
 }
 
@@ -55,6 +58,10 @@ export interface QxApplication {
     getPlayArea(): QxPlayArea;
     getBackgroundArea(): QxWidget;
     getDesktop(): QxComposite;
+
+    getMainOverlay(): QxWidget;
+    /** show and hide the main overlay */
+    showMainOverlay(enabled: boolean): void;
 }
 
 export interface QxFormButton extends QxWidget {
