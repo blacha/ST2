@@ -8,12 +8,3 @@ export interface ClientLibMap<T> {
 export interface ClientLibList<T> {
     l: T[];
 }
-
-export interface ClientLibSingleton<T> {
-    GetInstance(): T;
-}
-
-export interface ClientLibClass<T> extends Function {
-    new (): T;
-    readonly prototype: T;
-}

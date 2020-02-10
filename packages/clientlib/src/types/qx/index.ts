@@ -1,14 +1,14 @@
 import { PlayerAreaViewMode } from '../clientlib';
 import { ChatWidgetSender, ChatWidgetChannel, ValueOf } from '../web';
 
-export interface QxLayoutItem {
+export declare class QxLayoutItem {
     getWidth(): number;
     getHeight(): number;
     setWidth(value: number): void;
     setHeight(value: number): void;
 }
 
-export interface QxWidget extends QxLayoutItem {
+export declare class QxWidget extends QxLayoutItem {
     name: string;
     decorator?: QxDecorator;
     set(obj: any): QxWidget;
@@ -85,7 +85,16 @@ export interface QxMChildrenHandling {
     addAfter(widget: QxLayoutItem, after: QxLayoutItem, opts?: any): void;
 }
 
-export interface QxComposite extends QxWidget, QxMChildrenHandling, QxMLayoutHandling {
+export declare class QxComposite extends QxWidget implements QxMChildrenHandling, QxMLayoutHandling {
+    setLayout(layout: QxLayout): void;
+    getLayout(): QxLayout;
+    remove(widget: QxLayoutItem): void;
+    removeAll(): QxLayoutItem[];
+    indexOf(widget: QxLayoutItem): number;
+    add(widget: QxLayoutItem, opts?: any): void;
+    addAt(widget: QxLayoutItem, index: number, opts?: any): void;
+    addBefore(widget: QxLayoutItem, before: QxLayoutItem, opts?: any): void;
+    addAfter(widget: QxLayoutItem, after: QxLayoutItem, opts?: any): void;
     basename: 'Composite';
 }
 

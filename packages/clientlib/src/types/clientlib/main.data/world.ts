@@ -33,12 +33,12 @@ export const enum PoiType {
     Defense = 7,
 }
 
-export interface ClientLibWorldObject {
+export declare class ClientLibWorldObject {
     $ctor: Function;
     Type: WorldObjectType;
 }
 
-export interface ClientLibWorld {
+export declare class ClientLibWorld {
     GetObjectFromPosition(x: number, y: number): ClientLibWorldObject;
     GetCities(): ClientLibMap<ClientLibWorldObject>;
 }

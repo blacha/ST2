@@ -2,7 +2,7 @@ import { WorldId } from '../../../id';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
-export interface ClientLibServer {
+export declare class ClientLibServer {
     get_WorldId(): WorldId;
     get_MaxAttackDistance(): number;
 

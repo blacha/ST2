@@ -37,9 +37,7 @@ export interface ClientLibMailMessage {
     Text?: string;
 }
 
-export interface ClientLibMail extends ClientLibEventEmitter<ClientLibMailEvents> {
-    __events: ClientLibMailEvents;
-
+export declare class ClientLibMail extends ClientLibEventEmitter<ClientLibMailEvents> {
     /** Number of unread mail messages */
     get_Count(): number;
 

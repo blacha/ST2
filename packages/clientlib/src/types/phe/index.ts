@@ -28,7 +28,7 @@ export interface PheStaticUtil {
     ): ClientLibEventDelegate<T['response']>;
 }
 
-export interface ClientLibEventDelegate<T> {
+export declare class ClientLibEventDelegate<T> {
     /** Used for typings */
     __delegate: T;
 }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-export interface ClientLibTime {
+export declare class ClientLibTime {
     GetServerStep(): number;
 
     /** Date.now() as a string */

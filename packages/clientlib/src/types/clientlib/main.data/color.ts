@@ -1,4 +1,4 @@
-export interface ClientLibBaseColor {
+export declare class ClientLibBaseColor {
     /**
      *  Get the text color to be used for base panel
      * @example '#ffccff' or 'red'

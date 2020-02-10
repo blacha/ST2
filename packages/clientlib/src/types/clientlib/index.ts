@@ -9,7 +9,6 @@ import {
 import { ClientLibBaseColor } from './main.data/color';
 import { ClientLibMathUtil } from './math';
 import { ClientLibCommunicationManager } from './net';
-import { ClientLibClass, ClientLibSingleton } from './util';
 import { ClientLibVisMain, RegionCity, RegionCityType, RegionNpcBase, RegionNpcCamp, VisObjectType } from './vis';
 
 export const enum PlayerAreaViewMode {
@@ -43,15 +42,15 @@ export interface ClientLibStatic {
         GhostModeChanged: ClientLibEvent;
         ChatMessage: ClientLibEvent;
         AllianceChange: ClientLibEvent;
-        CityUnits: ClientLibClass<ClientLibCityUnits>;
-        BaseColors: ClientLibClass<ClientLibBaseColor>;
+        CityUnits: typeof ClientLibCityUnits;
+        BaseColors: typeof ClientLibBaseColor;
         EAllianceDiplomacyStatus: typeof AllianceDiplomacyStatus;
         PlayerAreaViewMode: typeof PlayerAreaViewMode;
-        MainData: ClientLibSingleton<ClientLibMainData>;
+        MainData: typeof ClientLibMainData;
         WorldSector: {
-            WorldObjectNPCCamp: ClientLibClass<ClientLibWorldObject>;
-            WorldObjectNPCBase: ClientLibClass<ClientLibWorldObject>;
-            WorldObjectCity: ClientLibClass<ClientLibWorldObject>;
+            WorldObjectNPCCamp: typeof ClientLibWorldObject;
+            WorldObjectNPCBase: typeof ClientLibWorldObject;
+            WorldObjectCity: typeof ClientLibWorldObject;
         };
     };
     Draw: {};
@@ -60,7 +59,7 @@ export interface ClientLibStatic {
     Host: {};
     Net: {
         CommandResult: ClientLibEvent;
-        CommunicationManager: ClientLibSingleton<ClientLibCommunicationManager>;
+        CommunicationManager: typeof ClientLibCommunicationManager;
     };
     Res: {};
     Sound: {};
@@ -68,15 +67,15 @@ export interface ClientLibStatic {
         Region: {
             SectorUpdated: ClientLibEvent;
             ERegionCityType: typeof RegionCityType;
-            RegionNPCCamp: ClientLibClass<RegionNpcCamp>;
-            RegionNPCBase: ClientLibClass<RegionNpcBase>;
-            RegionCity: ClientLibClass<RegionCity>;
+            RegionNPCCamp: typeof RegionNpcCamp;
+            RegionNPCBase: typeof RegionNpcBase;
+            RegionCity: typeof RegionCity;
         };
         PositionChange: ClientLibEvent;
         SelectionChange: ClientLibEvent;
         ZoomFactorChange: ClientLibEvent;
         ViewModeChange: ClientLibEvent;
-        VisMain: ClientLibSingleton<ClientLibVisMain>;
+        VisMain: typeof ClientLibVisMain;
         VisObject: {
             EObjectType: typeof VisObjectType;
         };

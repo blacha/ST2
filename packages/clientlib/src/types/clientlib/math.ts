@@ -1,4 +1,4 @@
-export interface ClientLibMathUtil {
+export declare class ClientLibMathUtil {
     /**
      * Encodes a x,y into a single number
      *

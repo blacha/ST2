@@ -2,7 +2,7 @@
 import { ClientLibMap } from '../util';
 import { GameDataTechId } from '../../game/tech.id';
 
-export interface ClientLibSupportBase {
+export declare class ClientLibSupportBase {
     /** Base Location X */
     get_X(): number;
     /** Base Location Y */
@@ -16,7 +16,7 @@ export interface ClientLibSupportBase {
     get_PlayerId(): number;
 }
 
-export interface ClientLibAllianceSupport {
+export declare class ClientLibAllianceSupport {
     get_Bases(): ClientLibMap<ClientLibSupportBase>;
     GetSupportWeaponCount(): unknown;
 }

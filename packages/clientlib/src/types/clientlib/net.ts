@@ -14,7 +14,8 @@ import {
 import { CommandIgmBulkDeleteMsg } from './commands/mail.delete';
 import { CommandRankingGetCount } from './commands/ranking';
 
-export interface ClientLibCommunicationManager {
+export declare class ClientLibCommunicationManager {
+    static GetInstance(): ClientLibCommunicationManager;
     SendSimpleCommand<T extends GameWorldCommand>(
         commandName: T['command'],
         args: T['request'],

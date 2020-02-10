@@ -126,3 +126,5 @@ export class St {
         this.plugins.forEach(c => c.isStarted && c.onConfig?.());
     }
 }
+
+export const foo = St;

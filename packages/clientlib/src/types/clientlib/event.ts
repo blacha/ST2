@@ -5,7 +5,7 @@ export interface ClientLibEvent {
 }
 
 export type ClientLibEvents<T> = Record<keyof T, ClientLibEvent>;
-export interface ClientLibEventEmitter<T extends ClientLibEvents<T>> {
+export declare class ClientLibEventEmitter<T extends ClientLibEvents<T>> {
     /** used for typing of events */
     __events: T;
 }

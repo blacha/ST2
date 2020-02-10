@@ -37,7 +37,7 @@ export interface ClientLibBattleViewUnit {
     get_UnitDetails(): ClientLibCityUnit;
 }
 
-export interface ClientLibCityUnits {
+export declare class ClientLibCityUnits {
     HasUnitMdbId(id: number): boolean;
     get_TotalDefenseHeadCount(): number;
 }
@@ -81,9 +81,7 @@ export interface ClientLibCitiesEvents {
     CurrentOwnChange: ClientLibStatic['Data']['CurrentOwnCityChange'];
     GhostModeChanged: ClientLibStatic['Data']['GhostModeChanged'];
 }
-export interface ClientLibCities extends ClientLibEventEmitter<ClientLibCitiesEvents> {
-    __events: ClientLibCitiesEvents;
-
+export declare class ClientLibCities extends ClientLibEventEmitter<ClientLibCitiesEvents> {
     get_PlayerResearch(): ClientLibPlayerResearch;
     get_CurrentCity(): ClientLibCity | null;
     get_AllCities(): ClientLibMap<ClientLibCity>;

@@ -3,7 +3,7 @@ import { ClientLibList } from '../util';
 import { PlayerNameDisplay, AllianceId, PlayerId } from '../../../id';
 
 /* eslint-disable @typescript-eslint/camelcase */
-export interface ClientLibPlayerResearchResult {
+export declare class ClientLibPlayerResearchResult {
     get_CurrentLevel(): GameDataResearchLevel;
     get_GameDataUnit_Obj(): GameDataUnit;
     get_GameDataTech_Obj(): GameDataTech;
@@ -15,11 +15,11 @@ export const enum ClientLibTechType {
     TechSpecial = 5,
 }
 
-export interface ClientLibPlayerResearch {
+export declare class ClientLibPlayerResearch {
     GetResearchItemListByType(type: ClientLibTechType): ClientLibList<ClientLibPlayerResearchResult>;
 }
 
-export interface ClientLibPlayer {
+export declare class ClientLibPlayer {
     /** Player Name */
     name: PlayerNameDisplay;
     accountId: number;

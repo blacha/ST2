@@ -1,10 +1,10 @@
-import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp } from '@cncta/clientlib';
+import { ClientLibStatic, NpcCampType, Point, RegionNpcCamp } from '@cncta/clientlib';
 import { BaseLocationPacker, CityUtil, PatchWorldObjectNPCCamp } from '@cncta/util';
 import { StPlugin } from '../../st.plugin';
 import { FontBuilder } from '../../st.cli';
 declare const ClientLib: ClientLibStatic;
 
-function replaceBaseLevel(t: ClientLibClass<RegionNpcCamp | RegionNpcCamp>) {
+function replaceBaseLevel(t: typeof RegionNpcCamp | typeof RegionNpcCamp) {
     // eslint-disable-next-line @typescript-eslint/camelcase
     t.prototype.get_BaseLevel = t.prototype.get_BaseLevelFloat;
 }

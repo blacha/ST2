@@ -10,7 +10,8 @@ import { ClientLibAllianceSupport } from './alliance.support';
 import { ClientLibMail } from './mail';
 
 /* eslint-disable @typescript-eslint/camelcase */
-export interface ClientLibMainData {
+export declare class ClientLibMainData {
+    static GetInstance(): ClientLibMainData;
     get_Time(): ClientLibTime;
     get_Chat(): ClientLibChat;
     get_Server(): ClientLibServer;

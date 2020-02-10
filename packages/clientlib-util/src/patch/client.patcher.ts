@@ -1,6 +1,5 @@
 import { ClientLibPatchGetter } from './patch.getter';
 import { ClientLibPatchFunction } from './patch.replacement';
-import { ClientLibClass } from '@cncta/clientlib';
 
 export type StringFunc = (obj: any) => string;
 
@@ -14,16 +13,18 @@ export interface ClientPatch {
 export interface PatchedId {
     $Id: number;
 }
+// TODO can we work around declaring a basic class to extend from?
+declare class BaseClass {}
 /**
  * Pi Interface for the new patches
  * Po Object that is being patched
  */
-export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
+export class ClientLibPatch<Pi = {}, Po extends typeof BaseClass = typeof BaseClass> {
     patches: ClientPatch[] = [];
     currentClass: Function | null;
-    getBaseObject: () => ClientLibClass<Po>;
+    getBaseObject: () => Po;
 
-    constructor(obj: () => ClientLibClass<Po>) {
+    constructor(obj: () => Po) {
         this.getBaseObject = obj;
     }
 
@@ -47,13 +48,20 @@ export class ClientLibPatch<Pi = {}, Po extends {} = {}> {
      * @param sourceFunctionName name of function to use as the source information
      * @param re text to find inside of source function to find the correct 'KJNGHF'
      */
-    public addGetter(key: keyof Pi, sourceFunctionName: keyof Po, re: RegExp): ClientLibPatchGetter<Pi, Po> {
+    public addGetter(
+        key: keyof Pi,
+        sourceFunctionName: keyof Po['prototype'],
+        re: RegExp,
+    ): ClientLibPatchGetter<Pi, Po> {
         const getter = new ClientLibPatchGetter(key, sourceFunctionName, re);
         this.patches.push(getter);
         return getter;
     }
 
-    public replaceFunction(sourceFunctionName: keyof Po, targetFunction: Function): ClientLibPatchFunction<Po> {
+    public replaceFunction(
+        sourceFunctionName: keyof Po['prototype'],
+        targetFunction: Function,
+    ): ClientLibPatchFunction<Po> {
         const replacement = new ClientLibPatchFunction(sourceFunctionName, targetFunction);
         this.patches.push(replacement);
         return replacement;

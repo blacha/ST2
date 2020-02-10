@@ -67,7 +67,7 @@ export enum RegionCityType {
     Enemy = 2,
 }
 
-export interface VisObject {
+export declare class VisObject {
     get_Id?(): number;
 
     /** rawX offset by GridWidth */
@@ -78,7 +78,7 @@ export interface VisObject {
     get_Coordinates(): number;
 }
 
-export interface RegionObject extends VisObject {
+export declare class RegionObject extends VisObject {
     get_RawX(): number;
     get_RawY(): number;
 
@@ -86,7 +86,7 @@ export interface RegionObject extends VisObject {
     get_Coordinates(): number;
 }
 
-export interface RegionGhostCity extends RegionObject {
+export declare class RegionGhostCity extends RegionObject {
     get_VisObjectType(): number;
 }
 
@@ -99,7 +99,7 @@ export type RegionAllianceMarker = RegionObject;
 export type RegionPointOfInterest = RegionObject;
 
 /** Shared between all Base, City & Camp */
-export interface RegionObjectBase extends RegionObject {
+export declare class RegionObjectBase extends RegionObject {
     /** CityId @see ClientLibCity.CityId */
     get_Id(): number;
     /**
@@ -127,7 +127,7 @@ export interface RegionObjectBase extends RegionObject {
 }
 
 /** Player base */
-export interface RegionCity extends RegionObjectBase {
+export declare class RegionCity extends RegionObjectBase {
     get_AllianceName(): string;
     get_TargetObject(): ClientLibWorldObject;
 
@@ -135,7 +135,7 @@ export interface RegionCity extends RegionObjectBase {
     get_CommandCenterLevel(): number | 0;
 }
 /** Forgotten base */
-export interface RegionNpcBase extends RegionObjectBase {
+export declare class RegionNpcBase extends RegionObjectBase {
     CalculateBuildingAndDefenseCondition(a: unknown): unknown;
     get_IsHubBase(): boolean;
     get_BaseLevelFloat(): number;
@@ -143,7 +143,7 @@ export interface RegionNpcBase extends RegionObjectBase {
 }
 
 /** Forgotten Camp or Outpost */
-export interface RegionNpcCamp extends RegionObjectBase {
+export declare class RegionNpcCamp extends RegionObjectBase {
     get_BaseLevelFloat(): number;
     get_TargetObject(): ClientLibWorldObject;
 }
@@ -188,7 +188,9 @@ export interface ClientLibVisMainEvents {
     PositionChange: ClientLibStatic['Vis']['PositionChange'];
     ZoomFactorChange: ClientLibStatic['Vis']['ZoomFactorChange'];
 }
-export interface ClientLibVisMain extends ClientLibEventEmitter<ClientLibVisMainEvents> {
+export declare class ClientLibVisMain implements ClientLibEventEmitter<ClientLibVisMainEvents> {
+    static GetInstance(): ClientLibVisMain;
+    __events: ClientLibVisMainEvents;
     CenterGridPosition(x: number, y: number): void;
     Update(): void;
     ViewUpdate(): void;

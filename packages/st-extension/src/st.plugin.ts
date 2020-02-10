@@ -1,4 +1,4 @@
-import { ClientLibEventEmitter, ClientLibEvents, PheStatic, ClientLibClass } from '@cncta/clientlib';
+import { ClientLibEventEmitter, ClientLibEvents, PheStatic } from '@cncta/clientlib';
 import { St } from './st';
 import { ClientLibPatch } from '@cncta/util';
 import { StCliCommand, StCliCommandSub } from './st.cli';
@@ -6,6 +6,7 @@ import { Id } from '@st/shared/build/id';
 import { StAction } from './st.actions';
 import { StConfigData } from './st.config';
 
+declare class BaseClass {}
 declare const phe: PheStatic;
 
 export interface EventContext<T extends ClientLibEvents<T>, K extends keyof T> {
@@ -107,7 +108,7 @@ export abstract class StPlugin<Conf extends StPluginConfig = StPluginConfig> {
         return res as any;
     }
 
-    protected patch<T extends {}>(obj: ClientLibClass<T>): ClientLibPatch<{}, T> {
+    protected patch<T extends typeof BaseClass>(obj: T): ClientLibPatch<{}, T> {
         const patch = new ClientLibPatch(() => obj);
         this.patches.push(patch);
         return patch;
