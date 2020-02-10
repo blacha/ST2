@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/blacha/st/compare/v3.2.0...v4.0.0) (2020-02-10)
+
+
+### Features
+
+* adding typings for setting current own cityId ([6ffd4af](https://github.com/blacha/st/commit/6ffd4afe74779b7db4a3aa79825b16197625e1b4))
+* types to show and hide the main overlay ([c756e03](https://github.com/blacha/st/commit/c756e03225af6fe2ae4b362257eb8f967e25d212))
+* user actions force polls to fire faster ([a6e426d](https://github.com/blacha/st/commit/a6e426d2f840a290650a8f982ddac9989149a4a8))
+
+
+
+
+
 # [3.2.0](https://github.com/blacha/st/compare/v3.1.1...v3.2.0) (2020-02-06)
 
 

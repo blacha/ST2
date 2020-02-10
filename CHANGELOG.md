@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/blacha/st/compare/v3.2.0...v4.0.0) (2020-02-10)
+
+
+### Bug Fixes
+
+* wait for cities needs a little more time on slow connections ([2de52f8](https://github.com/blacha/st/commit/2de52f88b55b2830e01bf1e1e5b4297efd277332))
+* **camp:** only alert on the newest camp or outpost ([ed84c40](https://github.com/blacha/st/commit/ed84c40044f1e0fd23f9aa0025f8d4fe130aac11))
+* drop max fail count to make it take less time to fail when scanning ([f9de6ad](https://github.com/blacha/st/commit/f9de6ad6af842cc0540efe8ebeed46a562917a30))
+* force hide the main overlay to help reduce the memory leaks ([d9004c1](https://github.com/blacha/st/commit/d9004c1bfb9a8a178da087c45a0e90bb767a7060))
+
+
+### Features
+
+* adding typings for setting current own cityId ([6ffd4af](https://github.com/blacha/st/commit/6ffd4afe74779b7db4a3aa79825b16197625e1b4))
+* allow filtering by time in layout view ([17faec3](https://github.com/blacha/st/commit/17faec3231d02453b9b7305150a793d12971755c))
+* calculate distance between two points ([23640eb](https://github.com/blacha/st/commit/23640ebd9e45991d43e6e0e049dc9b563c9d69f1))
+* if layout is out of range switch to new city ([aafaf89](https://github.com/blacha/st/commit/aafaf894ab5225640cbab7cd36ca2be0f3d4436d))
+* improve coloring of cli messages ([b107be5](https://github.com/blacha/st/commit/b107be5ccacb1ba0fe59ce94372afb9ed5344b8c))
+* restructure /st commands ([82575c7](https://github.com/blacha/st/commit/82575c704d95c51cebc3139e13c8a0975bef4ffc))
+* types to show and hide the main overlay ([c756e03](https://github.com/blacha/st/commit/c756e03225af6fe2ae4b362257eb8f967e25d212))
+* user actions force polls to fire faster ([a6e426d](https://github.com/blacha/st/commit/a6e426d2f840a290650a8f982ddac9989149a4a8))
+
+
+### BREAKING CHANGES
+
+* new commands
+
+/st config set <key> <value>
+/st alliance scan
+/st layout scan
+/st plugin enable
+/st plugin disable
+
+
+
+
+
 # [3.2.0](https://github.com/blacha/st/compare/v3.1.1...v3.2.0) (2020-02-06)
 
 

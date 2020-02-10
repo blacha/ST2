@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/blacha/st/compare/v3.2.0...v4.0.0) (2020-02-10)
+
+
+### Features
+
+* allow filtering by time in layout view ([17faec3](https://github.com/blacha/st/commit/17faec3231d02453b9b7305150a793d12971755c))
+
+
+
+
+
 # [3.2.0](https://github.com/blacha/st/compare/v3.1.1...v3.2.0) (2020-02-06)
 
 

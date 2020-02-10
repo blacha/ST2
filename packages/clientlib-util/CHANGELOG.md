@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/blacha/st/compare/v3.2.0...v4.0.0) (2020-02-10)
+
+
+### Bug Fixes
+
+* drop max fail count to make it take less time to fail when scanning ([f9de6ad](https://github.com/blacha/st/commit/f9de6ad6af842cc0540efe8ebeed46a562917a30))
+* wait for cities needs a little more time on slow connections ([2de52f8](https://github.com/blacha/st/commit/2de52f88b55b2830e01bf1e1e5b4297efd277332))
+
+
+### Features
+
+* calculate distance between two points ([23640eb](https://github.com/blacha/st/commit/23640ebd9e45991d43e6e0e049dc9b563c9d69f1))
+
+
+
+
+
 # [3.2.0](https://github.com/blacha/st/compare/v3.1.1...v3.2.0) (2020-02-06)
 
 **Note:** Version bump only for package @cncta/util
