@@ -1,8 +1,9 @@
 import { StPlugin } from './st.plugin';
 import { Duration } from '@cncta/util/build/duration';
-import { QxStatic } from '@cncta/clientlib';
+import { QxStatic, ClientLibStatic } from '@cncta/clientlib';
 
 declare const qx: QxStatic;
+declare const ClientLib: ClientLibStatic;
 
 export enum StState {
     Idle = 'idle',
@@ -111,6 +112,7 @@ export class StActions extends StPlugin {
         this.actionState = StState.Active;
         // Hide the main overlay
         qx.core.Init.getApplication().showMainOverlay(false);
+
         // Force a async callback
         await new Promise(resolve => setTimeout(resolve, 0));
         const startTime = Date.now();
@@ -119,6 +121,9 @@ export class StActions extends StPlugin {
         try {
             let count = 0;
             while (this.actions.length > 0) {
+                // User actions make poll's faster
+                ClientLib.Net.CommunicationManager.GetInstance().UserAction();
+
                 const action = this.actions.shift();
                 if (action == null) {
                     break;
