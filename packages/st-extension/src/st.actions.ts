@@ -1,5 +1,8 @@
 import { StPlugin } from './st.plugin';
 import { Duration } from '@cncta/util/build/duration';
+import { QxStatic } from '@cncta/clientlib';
+
+declare const qx: QxStatic;
 
 export enum StState {
     Idle = 'idle',
@@ -104,7 +107,10 @@ export class StActions extends StPlugin {
         if (this.actions.length == 0) {
             return;
         }
+
         this.actionState = StState.Active;
+        // Hide the main overlay
+        qx.core.Init.getApplication().showMainOverlay(false);
         // Force a async callback
         await new Promise(resolve => setTimeout(resolve, 0));
         const startTime = Date.now();
