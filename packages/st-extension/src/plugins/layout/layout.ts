@@ -67,6 +67,7 @@ export class LayoutScanner extends StPlugin {
         current: number,
         count: number,
     ): Promise<void> {
+        const startTime = Date.now();
         const md = ClientLib.Data.MainData.GetInstance();
         const cities = md.get_Cities();
         const world = md.get_World();
@@ -95,6 +96,7 @@ export class LayoutScanner extends StPlugin {
 
         const cityObj = await CityUtil.waitForCity(cityId);
         if (cityObj == null) {
+            this.st.log.debug({ cityId, index: current, count, duration: Date.now() - startTime }, 'ScanLayout:Failed');
             return;
         }
 
@@ -103,7 +105,7 @@ export class LayoutScanner extends StPlugin {
             return;
         }
 
-        this.st.log.debug({ cityId, index: current, count }, 'ScanLayout');
+        this.st.log.debug({ cityId, index: current, count, duration: Date.now() - startTime }, 'ScanLayout');
         this.st.api.base(output).then(baseId => CityCache.setStId(cityId, baseId, output.tiles));
     }
 }
