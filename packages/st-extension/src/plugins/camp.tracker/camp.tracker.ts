@@ -1,6 +1,7 @@
 import { ClientLibClass, ClientLibStatic, NpcCampType, Point, RegionNpcCamp } from '@cncta/clientlib';
 import { BaseLocationPacker, CityUtil, PatchWorldObjectNPCCamp } from '@cncta/util';
 import { StPlugin } from '../../st.plugin';
+import { FontBuilder } from '../../st.cli';
 declare const ClientLib: ClientLibStatic;
 
 function replaceBaseLevel(t: ClientLibClass<RegionNpcCamp | RegionNpcCamp>) {
@@ -122,7 +123,7 @@ export class CampTracker extends StPlugin<typeof CampTrackerOptions> {
 
                 if (!this.firstUpdate && this.config('alert')) {
                     const campType = obj.$CampType == NpcCampType.Random ? 'Camp' : 'Outpost';
-                    const campLocation = this.st.cli.createCoOrd(location.x, location.y);
+                    const campLocation = FontBuilder.coOrd(location.x, location.y);
                     this.st.cli.sendMessage(
                         'lightblue',
                         `[ST] New ${obj.$Level} ${campType} spawned at ${campLocation}`,

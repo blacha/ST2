@@ -13,13 +13,13 @@ const StCliScanAlliance: StCliCommand = {
         st.actions.clear();
         // Abort a in progress scan
         if (!st.actions.isIdle) {
-            st.cli.sendMessage('white', 'Abort Scan');
+            st.cli.sendCommandMessage('Abort Scan');
             return;
         }
 
         const scanCount = st.plugin<AllianceScanner>('alliance')?.scanAll();
-        st.cli.sendMessage('white', 'Starting Scan (' + scanCount + ' cities)');
-        st.actions.run(true).then(() => st.cli.sendMessage('white', 'Scan done!'));
+        st.cli.sendCommandMessage('Starting Scan (' + scanCount + ' cities)');
+        st.actions.run(true).then(() => st.cli.sendCommandMessage('Scan done!'));
     },
 };
 

@@ -1,10 +1,10 @@
 import { St } from './st';
-import { StCliCommand, StCliCommandSub } from './st.cli';
+import { StCliCommand, StCliCommandSub, FontBuilder } from './st.cli';
 import { StPlugin } from './st.plugin';
 
 function getPlugin(st: St, pluginName: string): StPlugin | null {
     if (pluginName == null || pluginName.trim() == '') {
-        st.cli.sendMessage('red', 'Invalid plugin name');
+        st.cli.sendCommandError('Invalid plugin name');
         return null;
     }
 
@@ -12,10 +12,10 @@ function getPlugin(st: St, pluginName: string): StPlugin | null {
     if (plugin == null) {
         const pluginNames = st.plugins.map(c => c.name);
         if (pluginNames.length == 0) {
-            st.cli.sendMessage('red', 'No plugins found');
+            st.cli.sendCommandError('No plugins found');
             return null;
         }
-        st.cli.sendMessage('red', 'Could not find plugin, current plugins: ' + pluginNames.join(', '));
+        st.cli.sendCommandError('Could not find plugin, current plugins: ' + pluginNames.join(', '));
         return null;
     }
 
@@ -28,24 +28,24 @@ const StCliConfigSet: StCliCommand = {
     handle(st: St, args: string[]): void {
         const [key, value] = args;
         if (key == null || key.trim() == '') {
-            st.cli.sendMessage('red', 'Could not find key to set');
+            st.cli.sendCommandError('Could not find key to set');
             return;
         }
 
         if (value == null || value.trim() == '') {
-            st.cli.sendMessage('red', 'Invalid value');
+            st.cli.sendCommandError('Invalid value');
             return;
         }
         const [pluginName, optionKey] = key.toLowerCase().split('.');
         const plugin = st.plugin(pluginName);
         if (plugin == null || plugin.options == null) {
-            st.cli.sendMessage('red', `Unable to find plugin for key "${key}"`);
+            st.cli.sendCommandError(`Unable to find plugin for key "${key}"`);
             return;
         }
 
         const cfgKey = Object.keys(plugin.options).find(f => f.toLowerCase() == optionKey);
         if (cfgKey == null) {
-            st.cli.sendMessage('red', `Unable to find option "${key}"`);
+            st.cli.sendCommandError(`Unable to find option "${key}"`);
             return;
         }
         const cfg = plugin.options[cfgKey];
@@ -75,8 +75,18 @@ const StCliConfigList = {
             for (const key of Object.keys(plugin.options)) {
                 const cfg = plugin.options[key];
                 const currentValue = plugin.config(key);
-                const cfgKey = `${plugin.name}.${key}`;
-                st.cli.sendMessage('white', `${cfgKey}: ${currentValue} - ${cfg.description} (Default: ${cfg.value})`);
+                // const cfgKey = `${plugin.name}.${key}`;
+
+                const message = [
+                    FontBuilder.color('white', plugin.name + '.'),
+                    FontBuilder.color('lightblue', key),
+                    FontBuilder.color('white', ': '),
+                    FontBuilder.color('lightgreen', String(currentValue)),
+                    FontBuilder.color('white', ` - ${cfg.description} (Default: `),
+                    FontBuilder.color('lightgreen', String(cfg.value)),
+                    FontBuilder.color('white', ' )'),
+                ];
+                st.cli.sendMessageRaw(message.join(''));
             }
         }
     },
