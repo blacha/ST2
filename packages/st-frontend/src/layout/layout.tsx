@@ -15,8 +15,9 @@ import { unpackLayouts } from './layout.util';
 import Pagination from 'antd/es/pagination/Pagination';
 import { observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
-import { LayoutFilter, LayoutFilterItem } from './layout.filter';
+import { LayoutFilter, LayoutFilterItem, LayoutFilterBase } from './layout.filter';
 import { StBreadCrumb } from '../util/breacrumb';
+import Tag from 'antd/es/tag';
 
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({ padding: 4, margin: 8, borderRadius: 8 });
@@ -97,9 +98,9 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
 
     renderFilters(resource: string) {
         const output = [];
-        for (const filter of this.filters.filters) {
-            if (filter.resource == resource.toLowerCase()) {
-                output.push(this.renderFilter(filter));
+        for (const filter of this.filters.filterResource) {
+            if (filter.type == resource.toLowerCase()) {
+                output.push(this.renderFilter(filter as LayoutFilterItem));
             }
         }
         return (
@@ -116,9 +117,30 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
             className.push(ViewLayouts.FilterDisabledCss);
         }
         return (
-            <div className={className.join(' ')} onClick={f.toggle} key={`${f.resource}-${f.count}-${f.touches}`}>
-                <SiloTag resource={f.resource} count={f.count} touches={f.touches} />
+            <div className={className.join(' ')} onClick={f.toggle} key={`${f.type}-${f.count}-${f.touches}`}>
+                <SiloTag resource={f.type} count={f.count} touches={f.touches} />
                 {f.layoutCount}
+            </div>
+        );
+    }
+
+    renderUpdatedFilter() {
+        return (
+            <div className={ViewLayouts.FilterCss}>
+                <div className={ViewLayouts.FilterTitleCss}>Last Seen</div>
+                <div className={ViewLayouts.FilterListCss}>
+                    {...this.filters.updatedFilter.map(f => {
+                        const className = [ViewLayouts.FilterButtonCss];
+                        if (f.isEnabled == false && this.filters.isAllDisabled == false) {
+                            className.push(ViewLayouts.FilterDisabledCss);
+                        }
+                        return (
+                            <div className={className.join(' ')} onClick={f.toggle} key={`${f.type}-${f.duration}`}>
+                                <Tag color={'geekblue'}>{timeSince(Date.now() - f.duration)}</Tag> {f.layoutCount}
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         );
     }
@@ -144,6 +166,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
                     <div>{this.renderFilters('Crystal')}</div>
                     <div>{this.renderFilters('Mixed')}</div>
                     <div>{this.renderFilters('Power')}</div>
+                    <div>{this.renderUpdatedFilter()}</div>
                 </div>
                 <div className={ScanListCss}>
                     {layouts.map(base => {

@@ -1,24 +1,19 @@
+import { Duration } from '@cncta/util';
 import { Base, GameResource } from '@st/shared';
-import { computed, observable, action, IObservableArray } from 'mobx';
+import { action, computed, IObservableArray, observable } from 'mobx';
+export type FilterTypes = GameResource | 'mixed' | 'updatedAt';
 
-export class LayoutFilterItem {
+export abstract class LayoutFilterBase {
     @observable isEnabled = false;
-    resource: GameResource | 'mixed';
-    touches: number;
-    count: number;
+    type: FilterTypes;
     layoutFilter: LayoutFilter;
-
-    constructor(filter: LayoutFilter, resource: GameResource | 'mixed', touches: number, count: number) {
+    constructor(filter: LayoutFilter, type: FilterTypes) {
         this.layoutFilter = filter;
-        this.resource = resource;
-        this.touches = touches;
-        this.count = count;
+        this.type = type;
     }
-
     @action.bound toggle() {
         this.isEnabled = !this.isEnabled;
     }
-
     @computed get layoutCount() {
         let count = 0;
         for (const base of this.layoutFilter.filtered) {
@@ -28,9 +23,38 @@ export class LayoutFilterItem {
         }
         return count;
     }
+    abstract filter(base: Base): boolean;
+}
+
+export class LayoutFilterUpdateAt extends LayoutFilterBase {
+    duration: number;
+
+    constructor(filter: LayoutFilter, duration: number) {
+        super(filter, 'updatedAt');
+        this.duration = duration;
+    }
+
+    filter(base: Base): boolean {
+        const dateDiff = Date.now() - base.updatedAt;
+        return dateDiff < this.duration;
+    }
+}
+
+export class LayoutFilterItem extends LayoutFilterBase {
+    touches: number;
+    type: GameResource | 'mixed';
+    count: number;
+    layoutFilter: LayoutFilter;
+
+    constructor(filter: LayoutFilter, resource: GameResource | 'mixed', touches: number, count: number) {
+        super(filter, resource);
+        this.touches = touches;
+        this.count = count;
+        this.type = resource;
+    }
 
     filter(base: Base) {
-        const stats = base.info.silos[this.resource];
+        const stats = base.info.silos[this.type];
 
         if (stats == null) {
             return false;
@@ -57,6 +81,10 @@ export class LayoutFilter {
     power8x3 = new LayoutFilterItem(this, 'power', 8, 3);
     power7x3 = new LayoutFilterItem(this, 'power', 7, 3);
 
+    updatedAtHour = new LayoutFilterUpdateAt(this, Duration.OneHour);
+    updatedAtDay = new LayoutFilterUpdateAt(this, Duration.OneDay);
+    updatedAt3Days = new LayoutFilterUpdateAt(this, Duration.days(3));
+
     layouts: IObservableArray<Base> = observable.array([], { deep: false });
 
     @action setLayouts(base: Base[]) {
@@ -64,7 +92,7 @@ export class LayoutFilter {
     }
 
     // Order of this array is rendering order
-    filters = [
+    filterResource = [
         this.tib6,
         this.tib5x2,
         this.tib5x1,
@@ -83,8 +111,15 @@ export class LayoutFilter {
         this.mixed5x1,
     ];
 
+    updatedFilter = [this.updatedAtHour, this.updatedAtDay, this.updatedAt3Days];
+
+    @computed get allFilters(): LayoutFilterBase[] {
+        const x: LayoutFilterBase[] = [];
+        return x.concat(this.filterResource).concat(this.updatedFilter);
+    }
+
     @computed get isAllDisabled() {
-        for (const filter of this.filters) {
+        for (const filter of this.allFilters) {
             if (filter.isEnabled) {
                 return false;
             }
@@ -96,7 +131,7 @@ export class LayoutFilter {
         const output: Base[] = [];
         for (const base of this.layouts) {
             let keep = true;
-            for (const filter of this.filters) {
+            for (const filter of this.allFilters) {
                 if (filter.isEnabled && filter.filter(base) == false) {
                     keep = false;
                     break;
