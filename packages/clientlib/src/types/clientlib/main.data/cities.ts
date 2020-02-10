@@ -94,5 +94,6 @@ export interface ClientLibCities extends ClientLibEventEmitter<ClientLibCitiesEv
     get_HomeCityId(): number | -1;
 
     set_CurrentCityId(cityId: number): void;
+    set_CurrentOwnCityId(cityId: number): void;
     GetCity(cityId: number): ClientLibCity | null;
 }
