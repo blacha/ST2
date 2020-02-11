@@ -96,6 +96,30 @@ export class StActions extends StPlugin {
         }
     }
 
+    private nextAction(playerTriggered: boolean): StPluginAction | string {
+        const action = this.actions.shift();
+        if (action == null) {
+            return 'NoAction';
+        }
+
+        if (!this.st.isOnline) {
+            return 'Offline';
+        }
+
+        if (!this.isActive) {
+            return 'StExit';
+        }
+
+        if (action.plugin.isStopping) {
+            return 'ModuleStopping';
+        }
+
+        if (!playerTriggered && !this.isPlayerIdle) {
+            this.st.log.info('AbortScan');
+            return 'PlayerActive';
+        }
+        return action;
+    }
     /**
      * Run the queued actions, each action will be run once at a time
      *
@@ -106,6 +130,11 @@ export class StActions extends StPlugin {
             throw new Error('ST is not idle');
         }
         if (this.actions.length == 0) {
+            return;
+        }
+
+        if (!this.st.isOnline) {
+            this.clearActions();
             return;
         }
 
@@ -123,25 +152,9 @@ export class StActions extends StPlugin {
             while (this.actions.length > 0) {
                 // User actions make poll's faster
                 ClientLib.Net.CommunicationManager.GetInstance().UserAction();
-
-                const action = this.actions.shift();
-                if (action == null) {
-                    break;
-                }
-
-                if (!this.isActive) {
-                    reason = 'StExit';
-                    break;
-                }
-
-                if (action.plugin.isStopping) {
-                    reason = 'ModuleStopping';
-                    break;
-                }
-
-                if (!playerTriggered && !this.isPlayerIdle) {
-                    this.st.log.info('AbortScan');
-                    reason = 'PlayerActive';
+                const action = this.nextAction(playerTriggered);
+                if (typeof action == 'string') {
+                    reason = action;
                     break;
                 }
 

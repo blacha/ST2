@@ -42,6 +42,9 @@ export class AllianceScanner extends StPlugin {
 
     /** Scan only the current player's bases */
     playerScan(): void {
+        if (!this.st.isOnline) {
+            return;
+        }
         const cities = ClientLib.Data.MainData.GetInstance().get_Cities();
 
         for (const city of Object.values(cities.get_AllCities().d)) {

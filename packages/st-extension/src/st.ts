@@ -7,9 +7,12 @@ import { StCli } from './st.cli';
 import { StConfig } from './st.config';
 import { StPatches } from './st.patches';
 import { StPlugin } from './st.plugin';
+import { ClientLibStatic } from '@cncta/clientlib';
 
 const InstanceIdKey = 'st-instance-id';
 const ChallengeIdKey = 'st-instance-challenge-id';
+
+declare const ClientLib: ClientLibStatic;
 
 export class St {
     /** Time St was initialized */
@@ -124,6 +127,10 @@ export class St {
 
     onConfig() {
         this.plugins.forEach(c => c.isStarted && c.onConfig?.());
+    }
+
+    get isOnline() {
+        return ClientLib.Net.CommunicationManager.GetInstance().get_InstanceId() != null;
     }
 }
 
