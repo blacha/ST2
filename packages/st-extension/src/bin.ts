@@ -5,10 +5,12 @@ import { LayoutScanner } from './plugins/layout/layout';
 import { KillInfo } from './plugins/kill.info/kill.info';
 import { Button } from './plugins/button/button';
 import { PlayerStatus } from './plugins/player.status/player.status';
+import { BugFixer } from './plugins/bug/bug.fix';
 
 interface WindowStatic {
     st?: St;
 }
+
 
 if (typeof window != 'undefined') {
     async function startup() {
@@ -27,4 +29,8 @@ if (typeof window != 'undefined') {
     }
 
     startup().catch(e => console.error(e));
+
+
+    /** FixOnLoad */
+    BugFixer.fixOnUnload();
 }
