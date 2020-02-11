@@ -122,7 +122,7 @@ export class StActions extends StPlugin {
             let count = 0;
             while (this.actions.length > 0) {
                 // User actions make poll's faster
-                // ClientLib.Net.CommunicationManager.GetInstance().UserAction();
+                ClientLib.Net.CommunicationManager.GetInstance().UserAction();
 
                 const action = this.actions.shift();
                 if (action == null) {

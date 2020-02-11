@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { ClientLibEventDelegate } from '../phe';
 import {
     CommandRankingGetData,
@@ -21,6 +22,19 @@ export declare class ClientLibCommunicationManager {
         args: T['request'],
         delegate: ClientLibEventDelegate<T['response']>,
     ): void;
+
+    /** @example Presentation/Service.svc/ajaxEndpoint/ */
+    get_ServerUrl(): string;
+    get_SessionId(): string | null;
+    get_ClientVersion(): number | -1;
+    get_PlatformId(): number;
+    get_ReferenceId(): number;
+    get_InstanceId(): string | undefined;
+    /** Is polling active, generally always true even when offline */
+    get_PollActive(): boolean;
+    get_TimeoutFactor(): number;
+
+    /** Is polling active, generally always true even when offline */
 
     /**
      * Update the timestamp for the last user action
