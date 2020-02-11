@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/blacha/st/compare/v4.0.0...v4.1.0) (2020-02-11)
+
+
+### Bug Fixes
+
+* lint issues ([02a6572](https://github.com/blacha/st/commit/02a657295943a3603c23e8e045e2da1de656599c))
+
+
+### Features
+
+* do not log things when the player is offline ([3c2fb5e](https://github.com/blacha/st/commit/3c2fb5efc55e11280976719f8b2e50f2a8765184))
+* fix ta bug where unload taking too much time destroying events ([9168b1f](https://github.com/blacha/st/commit/9168b1fb0a9be1b33184623a5034e6aaa0c71620))
+* force a poll while waiting for a base to scan ([b313b82](https://github.com/blacha/st/commit/b313b82db8fae7309bc3794e4904fc30dac102b2))
+* improve typing of communication manager ([c606af2](https://github.com/blacha/st/commit/c606af2e5ef6c99f081f2a5ae6fe1050af61d256))
+
+
+
+
+
 # [4.0.0](https://github.com/blacha/st/compare/v3.2.0...v4.0.0) (2020-02-10)
 
 

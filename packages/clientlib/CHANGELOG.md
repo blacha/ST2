@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/blacha/st/compare/v4.0.0...v4.1.0) (2020-02-11)
+
+
+### Bug Fixes
+
+* lint issues ([02a6572](https://github.com/blacha/st/commit/02a657295943a3603c23e8e045e2da1de656599c))
+
+
+### Features
+
+* improve typing of communication manager ([c606af2](https://github.com/blacha/st/commit/c606af2e5ef6c99f081f2a5ae6fe1050af61d256))
+
+
+
+
+
 # [4.0.0](https://github.com/blacha/st/compare/v3.2.0...v4.0.0) (2020-02-10)
 
 
