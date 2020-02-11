@@ -1,7 +1,10 @@
 import { ClientLibPatchGetter, VarGetter } from './patch.getter';
 import { ClientLibPatchFunction } from './patch.replacement';
 
-export type StringFunc = (obj: any) => string;
+// export type StringFunc = (obj: any) => string;
+
+// TODO can we work around declaring a basic class to extend from?
+export declare class BaseClass {}
 
 export interface ClientPatch<Po extends typeof BaseClass = typeof BaseClass> {
     isPatched(k: any): boolean;
@@ -13,8 +16,7 @@ export interface ClientPatch<Po extends typeof BaseClass = typeof BaseClass> {
 export interface PatchedId {
     $Id: number;
 }
-// TODO can we work around declaring a basic class to extend from?
-export declare class BaseClass {}
+
 /**
  * Pi Interface for the new patches
  * Po Object that is being patched

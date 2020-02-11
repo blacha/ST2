@@ -3,7 +3,7 @@ import { ClientLibIter } from './iter';
 import { LocationIter } from './location';
 import { BaseLocationPacker } from './pack';
 import { PatchedId, ClientLibPatch } from '../patch/client.patcher';
-import { PatchedWorldObjectCity, PatchWorldObjectCity } from '../patch/patch.data';
+import { PatchedWorldObjectCity, PatchWorldObjectCity, PatchCommunicationManager } from '../patch/patch.data';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -165,10 +165,16 @@ export class CityUtil {
 
     /** Wait for a city to load */
     static async waitForCity(cityId: number, maxFailCount = 30): Promise<ClientLibCity | null> {
+        const comm = ClientLib.Net.CommunicationManager.GetInstance();
         for (let i = 0; i < maxFailCount; i++) {
             const city = CityUtil.isReady(cityId);
             if (city == null) {
                 await new Promise(resolve => setTimeout(resolve, 5 * i));
+                // Force a poll
+                if (i > 3 && PatchCommunicationManager.isPatched(comm)) {
+                    comm.$Poll();
+                }
+
                 continue;
             }
             return city;

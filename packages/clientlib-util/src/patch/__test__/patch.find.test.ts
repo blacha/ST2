@@ -16,7 +16,7 @@ o.spec('PatchFinder', () => {
 
     o('should find the function', () => {
         const res = ClientLibPatch.findFunctionInProto(ret, 'return 1');
-        o(res).equals(ret.prototype.foo.toString());
+        o(res).deepEquals({ key: 'foo', value: ret.prototype.foo.toString() });
     });
 
     o('should extract a value from function', () => {

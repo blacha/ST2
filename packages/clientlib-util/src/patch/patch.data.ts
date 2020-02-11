@@ -57,7 +57,7 @@ PatchWorldObjectCity.addGetter('$PlayerId', '$ctor', /&0x3ff\);this.([A-Z]{6})/)
 PatchWorldObjectCity.addGetter('$AllianceId', '$ctor', /.*d\+=f;this\.([A-Z]{6})=\(/);
 PatchWorldObjectCity.addGetter('$Id', '$ctor', /.*d\+=f;this\.([A-Z]{6})=\(.*d\+=f.*d\+=/);
 
-const PatchCommunicationManager = new ClientLibPatch<
+export const PatchCommunicationManager = new ClientLibPatch<
     PatchedCommunicationManager,
     typeof ClientLib.Net.CommunicationManager
 >('ClientLib.Net.CommunicationManager');
@@ -65,8 +65,6 @@ PatchCommunicationManager.addAlias(
     '$Poll',
     () => ClientLibPatch.findFunctionInProto(ClientLib.Net.CommunicationManager, '"Poll"')?.key,
 );
-
-(window as any).ClientLibPatch = ClientLibPatch;
 
 export const Patches: ClientLibPatch<any, any>[] = [
     PatchCityUnits,

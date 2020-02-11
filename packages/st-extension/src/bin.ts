@@ -11,7 +11,6 @@ interface WindowStatic {
     st?: St;
 }
 
-
 if (typeof window != 'undefined') {
     async function startup() {
         const windowAny = (window as any) as WindowStatic;
@@ -29,7 +28,6 @@ if (typeof window != 'undefined') {
     }
 
     startup().catch(e => console.error(e));
-
 
     /** FixOnLoad */
     BugFixer.fixOnUnload();
