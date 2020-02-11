@@ -15,7 +15,7 @@ export class PlayerStatus extends StPlugin {
         [AllianceMemberOnlineState.Hidden]: '#ffff00', // Does anyone even hide?
     };
     async onStart() {
-        const patch = this.patch(ClientLib.Data.BaseColors);
+        const patch = this.patch('ClientLib.Data.BaseColors', ClientLib.Data.BaseColors);
         // Lookup the name of the 'get_BaseColors' function to patch
         const patchKey = ClientLibPatch.extractValueFromFunction(
             ClientLib.Vis.Region.RegionCity,

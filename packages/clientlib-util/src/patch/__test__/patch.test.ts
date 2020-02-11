@@ -26,9 +26,20 @@ o.spec('PatchTest', () => {
         $ctor: TestFunctionNpcCamp,
     };
 
+    o('should lookup patched objects', () => {
+        (global as any).window = { a: { b: { c: 'd' } } };
+        const patch = new ClientLibPatch<any, any>('a.b.c');
+        o(patch.getBaseObject()).equals('d');
+
+        patch.path = 'a.b';
+        o(patch.getBaseObject()).equals('d');
+        patch.baseObject = null;
+        o(patch.getBaseObject()).deepEquals({ c: 'd' });
+    });
+
     o('should patch world object', () => {
         const oldObj = new WorldObjectCity();
-        PatchWorldObjectCity.getBaseObject = () => WorldObjectCity;
+        PatchWorldObjectCity.baseObject = WorldObjectCity;
 
         o(WorldObjectCity.prototype.$Id).equals(undefined);
         o(WorldObjectCity.prototype.$AllianceId).equals(undefined);
@@ -53,8 +64,7 @@ o.spec('PatchTest', () => {
 
     o('should patch npc camps', () => {
         const oldObj = new WorldObjectNPCCamp() as any;
-
-        PatchWorldObjectNPCCamp.getBaseObject = () => WorldObjectNPCCamp as any;
+        PatchWorldObjectNPCCamp.baseObject = WorldObjectNPCCamp;
 
         o(WorldObjectNPCCamp.prototype.$Id).equals(undefined);
         o(WorldObjectNPCCamp.prototype.$Level).equals(undefined);
@@ -84,7 +94,8 @@ o.spec('PatchTest', () => {
             }
         }
         const oldObj = new ToReplace();
-        const patcher = new ClientLibPatch(() => ToReplace);
+        const patcher = new ClientLibPatch<{}, typeof ToReplace>('path');
+        patcher.baseObject = ToReplace;
         patcher.replaceFunction('funcToReplace', () => 'B');
         o(oldObj.funcToReplace()).equals('A');
 

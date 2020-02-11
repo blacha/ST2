@@ -62,10 +62,8 @@ export abstract class StPlugin<Conf extends StPluginConfig = StPluginConfig> {
         await this.onStart?.();
 
         for (const patch of this.patches) {
+            this.st.log.info({ plugin: this.name, patch: patch.path }, 'Patch:Apply');
             patch.apply();
-        }
-        if (this.patches.length > 0) {
-            this.st.log.info({ plugin: this.name, patches: this.patches.length }, 'Patch:Apply');
         }
 
         this.onConfig?.();
@@ -108,8 +106,9 @@ export abstract class StPlugin<Conf extends StPluginConfig = StPluginConfig> {
         return res as any;
     }
 
-    protected patch<T extends typeof BaseClass>(obj: T): ClientLibPatch<{}, T> {
-        const patch = new ClientLibPatch(() => obj);
+    protected patch<T extends typeof BaseClass>(path: string, obj: T): ClientLibPatch<{}, T> {
+        const patch = new ClientLibPatch<{}, T>(path);
+        patch.baseObject = obj;
         this.patches.push(patch);
         return patch;
     }

@@ -1,20 +1,20 @@
-import { ClientLibPatchGetter } from './patch.getter';
+import { ClientLibPatchGetter, VarGetter } from './patch.getter';
 import { ClientLibPatchFunction } from './patch.replacement';
 
 export type StringFunc = (obj: any) => string;
 
-export interface ClientPatch {
+export interface ClientPatch<Po extends typeof BaseClass = typeof BaseClass> {
     isPatched(k: any): boolean;
     /** apply the patch */
-    apply(target: Function): boolean;
+    apply(target: Po): boolean;
     /** Remove the patch */
-    remove(target: Function): void;
+    remove(target: Po): void;
 }
 export interface PatchedId {
     $Id: number;
 }
 // TODO can we work around declaring a basic class to extend from?
-declare class BaseClass {}
+export declare class BaseClass {}
 /**
  * Pi Interface for the new patches
  * Po Object that is being patched
@@ -22,10 +22,34 @@ declare class BaseClass {}
 export class ClientLibPatch<Pi = {}, Po extends typeof BaseClass = typeof BaseClass> {
     patches: ClientPatch[] = [];
     currentClass: Function | null;
-    getBaseObject: () => Po;
+    baseObject?: Po;
+    path: string;
 
-    constructor(obj: () => Po) {
-        this.getBaseObject = obj;
+    constructor(path: string) {
+        this.path = path;
+    }
+
+    setObject(o: Po) {
+        this.baseObject = o;
+    }
+
+    getBaseObject(): Po {
+        if (this.baseObject == null) {
+            const parts = this.path.split('.');
+            let current: any = window;
+            while (parts.length > 0) {
+                const currentPart = parts.shift();
+                if (currentPart == null) {
+                    throw new Error('Unable find object in path: ' + this.path);
+                }
+                current = current[currentPart];
+                if (current == null) {
+                    throw new Error('Unable to find object in path: ' + this.path);
+                }
+            }
+            this.baseObject = current;
+        }
+        return this.baseObject as Po;
     }
 
     static hasPatchedId(k: any): k is PatchedId {
@@ -48,12 +72,28 @@ export class ClientLibPatch<Pi = {}, Po extends typeof BaseClass = typeof BaseCl
      * @param sourceFunctionName name of function to use as the source information
      * @param re text to find inside of source function to find the correct 'KJNGHF'
      */
-    public addGetter(
-        key: keyof Pi,
-        sourceFunctionName: keyof Po['prototype'],
-        re: RegExp,
-    ): ClientLibPatchGetter<Pi, Po> {
-        const getter = new ClientLibPatchGetter(key, sourceFunctionName, re);
+    public addGetter(key: keyof Pi, sourceFunctionName: keyof Po['prototype'], re: RegExp): ClientLibPatchGetter<Pi> {
+        const getter = new ClientLibPatchGetter(key, () => {
+            const currentData = (this.baseObject as any).prototype[sourceFunctionName];
+            if (currentData == null) {
+                throw new Error('Failed to load patch');
+            }
+
+            const matches = currentData.toString().match(re);
+            if (!matches) {
+                throw new Error('Failed to load patch, no matches');
+            }
+            return matches[1];
+        });
+        this.patches.push(getter);
+        return getter;
+    }
+
+    public addAlias(key: keyof Pi, target: VarGetter) {
+        if (target == null) {
+            throw new Error(`Failed to add patch: ${key} missing target`);
+        }
+        const getter = new ClientLibPatchGetter(key, target);
         this.patches.push(getter);
         return getter;
     }
@@ -67,7 +107,10 @@ export class ClientLibPatch<Pi = {}, Po extends typeof BaseClass = typeof BaseCl
         return replacement;
     }
 
-    public static findFunctionInProto(target: Function, toFind: string | RegExp): string | null {
+    public static findFunctionInProto(
+        target: Function,
+        toFind: string | RegExp,
+    ): { key: string; value: string } | null {
         for (const functionName of Object.keys(target.prototype)) {
             const value = target.prototype[functionName];
             if (typeof value != 'function') {
@@ -76,10 +119,10 @@ export class ClientLibPatch<Pi = {}, Po extends typeof BaseClass = typeof BaseCl
             const functionData: string = value.toString();
             if (typeof toFind == 'string') {
                 if (functionData.includes(toFind)) {
-                    return functionData;
+                    return { key: functionName, value: functionData };
                 }
             } else if (functionData.match(toFind) != null) {
-                return functionData;
+                return { key: functionName, value: functionData };
             }
         }
         return null;
@@ -96,7 +139,7 @@ export class ClientLibPatch<Pi = {}, Po extends typeof BaseClass = typeof BaseCl
         if (source == null) {
             throw new Error(`Unable to extract "${toFind}" from target:${target}`);
         }
-        const extracted = source.match(extract);
+        const extracted = source.value.match(extract);
         if (extracted == null) {
             throw new Error(`Unable to extract "${toFind}" from target:${target}`);
         }
@@ -107,17 +150,18 @@ export class ClientLibPatch<Pi = {}, Po extends typeof BaseClass = typeof BaseCl
      * Apply all patches
      */
     public apply() {
-        const currentClass = this.getBaseObject();
+        const obj = this.getBaseObject();
         for (const patch of this.patches) {
-            patch.apply(currentClass);
+            patch.apply(obj);
         }
     }
 
     /** Remove all patches */
     public remove() {
-        const currentClass = this.getBaseObject();
+        const obj = this.getBaseObject();
+
         for (const patch of this.patches) {
-            patch.remove(currentClass);
+            patch.remove(obj);
         }
     }
 }

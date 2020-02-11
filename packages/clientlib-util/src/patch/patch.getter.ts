@@ -1,17 +1,14 @@
 import { ClientPatch } from './client.patcher';
 
-export class ClientLibPatchGetter<Pi, Po> implements ClientPatch {
-    path: string;
-    sourceFunctionName: keyof Po;
+export type StringGetter = () => string | null | undefined;
+export type VarGetter = string | StringGetter | null | undefined;
+export class ClientLibPatchGetter<Pi> implements ClientPatch {
+    varName: VarGetter;
     targetFunctionName: keyof Pi;
-    re: RegExp;
 
-    matchedVar: string | null;
-
-    constructor(targetFunctionName: keyof Pi, sourceFunctionName: keyof Po, re: RegExp) {
-        this.sourceFunctionName = sourceFunctionName;
+    constructor(targetFunctionName: keyof Pi, varName: VarGetter) {
         this.targetFunctionName = targetFunctionName;
-        this.re = re;
+        this.varName = varName;
     }
 
     isPatched(k: any): boolean {
@@ -19,24 +16,19 @@ export class ClientLibPatchGetter<Pi, Po> implements ClientPatch {
     }
 
     apply(target: Function): boolean {
-        const currentData = target.prototype[this.sourceFunctionName];
-        if (currentData == null) {
-            return false;
-        }
-
-        const matches = currentData.toString().match(this.re);
-        if (!matches) {
-            return false;
-        }
         // Make sure the property does not already exist
         if (typeof target.prototype[this.targetFunctionName] !== 'undefined') {
             return true;
         }
-        this.matchedVar = matches[1];
+
+        const varName = typeof this.varName == 'function' ? this.varName() : this.varName;
+        if (varName == null) {
+            return false;
+        }
         Object.defineProperty(target.prototype, this.targetFunctionName, {
             configurable: true,
             get: function() {
-                return this[matches[1]];
+                return this[varName];
             },
         });
         return true;
