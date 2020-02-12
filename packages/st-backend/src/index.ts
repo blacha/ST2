@@ -11,11 +11,13 @@ import { ApiCall } from './api.call';
 import { ApiInstall } from './routes/install';
 import { ApiClaimPlayerStart, ApiClaimPlayerAccept } from './routes/claim';
 import { ApiWorldUpdate } from './routes/update.world';
+import { ApiVersion } from './routes/debug';
 
 const Api = express();
 Api.use(cors({ maxAge: 24 * 60 * 60 }));
 Api.use(bodyParser.json());
 
+ApiCall.bind(Api, new ApiVersion());
 ApiCall.bind(Api, new ApiScan());
 ApiCall.bind(Api, new ApiInstall());
 ApiCall.bind(Api, new ApiClaimPlayerStart());

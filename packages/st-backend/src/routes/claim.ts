@@ -103,7 +103,7 @@ export class ApiClaimPlayerAccept extends ApiCall<ApiClaimPlayerAcceptRequest> {
             if (userObj.claims.find(f => f.player == player)) {
                 return;
             }
-            userObj.claims.push({ claimId, player });
+            userObj.claims.push({ claimId, player, alliances: {} });
         });
 
         return { player, worldId };

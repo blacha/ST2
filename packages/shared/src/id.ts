@@ -1,6 +1,7 @@
 import { Base62, BaseNPacker } from '@cncta/util';
 import * as ulid from 'ulid';
 
+export const WorldIdPacker = new BaseNPacker(Base62, { worldId: 2 });
 export const WorldPlayerId = new BaseNPacker(Base62, { worldId: 2, playerId: BaseNPacker.VarLength });
 export const WorldAllianceId = new BaseNPacker(Base62, { worldId: 2, allianceId: BaseNPacker.VarLength });
 export const WorldCityId = new BaseNPacker(Base62, {

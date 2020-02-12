@@ -35,6 +35,11 @@ export class ModelWorldAlliance extends Model<ModelWorldAlliance> {
         this.alliances = data?.alliances ?? {};
     }
 
+    setWorld(worldId: WorldId) {
+        this.worldId = worldId;
+        this.id = ModelWorldAlliance.id(worldId);
+    }
+
     add(alliance: ModelWorldAllianceData) {
         this.alliances[alliance.id] = alliance;
     }
