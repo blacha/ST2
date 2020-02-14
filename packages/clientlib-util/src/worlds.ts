@@ -1,3 +1,5 @@
+import { WorldId } from '@cncta/clientlib';
+
 export interface WorldInfo {
     name: string;
 }
@@ -353,3 +355,7 @@ export const WorldNames: Record<number, WorldInfo> = {
     411: { name: 'Tiberian 43' },
     412: { name: 'Firestorm 13' },
 };
+
+export function getWorldName(worldId: WorldId) {
+    return WorldNames[worldId]?.name ?? `Unknown World`;
+}

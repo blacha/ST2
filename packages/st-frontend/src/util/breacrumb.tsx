@@ -3,7 +3,8 @@ import BreadCrumb from 'antd/es/breadcrumb';
 import { Link } from 'react-router-dom';
 import { style } from 'typestyle';
 import Icon from 'antd/es/icon';
-import { WorldNames } from '@cncta/util';
+import { WorldNames, getWorldName } from '@cncta/util';
+import { WorldId } from '@cncta/clientlib/src';
 
 export interface IdName {
     id: number | string;
@@ -82,7 +83,7 @@ export class StBreadCrumb extends React.Component<BreadCrumbProps> {
                             <Icon type="home" />
                         </Link>
                     </BreadCrumb.Item>
-                    <BreadCrumb.Item>{WorldNames[this.props.worldId].name}</BreadCrumb.Item>
+                    <BreadCrumb.Item>{getWorldName(this.props.worldId as WorldId)}</BreadCrumb.Item>
                     {this.viewAlliance()}
                     {this.viewPlayer()}
                     {this.viewPlayerBase()}

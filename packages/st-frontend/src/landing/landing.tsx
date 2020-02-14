@@ -1,5 +1,5 @@
 import { PlayerNameId } from '@cncta/clientlib';
-import { WorldNames } from '@cncta/util';
+import { WorldNames, getWorldName } from '@cncta/util';
 import { ModelPlayer, Stores, UId } from '@st/model';
 import { StLog } from '@st/shared';
 import Button from 'antd/es/button';
@@ -38,7 +38,7 @@ export const LandingColumns = [
         title: 'World',
         dataIndex: '',
         key: 'worldId',
-        render: (p: ModelPlayer) => WorldNames[p.worldId].name + ` (${p.worldId})`,
+        render: (p: ModelPlayer) => getWorldName(p.worldId) + ` (${p.worldId})`,
         sorter: (a: ModelPlayer, b: ModelPlayer) => a.worldId - b.worldId,
         width: 150,
     },

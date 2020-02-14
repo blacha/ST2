@@ -1,23 +1,23 @@
 import React = require('react');
-import { AllianceId, BaseX, CompositeId, WorldId, AllianceName } from '@cncta/clientlib';
-import { BaseLocationPacker, WorldNames } from '@cncta/util';
+import { AllianceId, AllianceName, BaseX, CompositeId, WorldId } from '@cncta/clientlib';
+import { BaseLocationPacker, getWorldName } from '@cncta/util';
 import { Stores } from '@st/model';
-import { Base, BaseExporter, SiloCounts, WorldAllianceId, GameResource, BaseOptimizer, StLog } from '@st/shared';
+import { Base, BaseExporter, BaseOptimizer, SiloCounts, StLog, WorldAllianceId } from '@st/shared';
 import Divider from 'antd/es/divider';
+import Pagination from 'antd/es/pagination/Pagination';
 import Spin from 'antd/es/spin';
+import Tag from 'antd/es/tag';
+import { action, computed, observable } from 'mobx';
+import { observer } from 'mobx-react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Cs } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
-import { SiloTags, SiloTag } from '../silo/silo.tag';
+import { SiloTag, SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
-import { unpackLayouts } from './layout.util';
-import Pagination from 'antd/es/pagination/Pagination';
-import { observer } from 'mobx-react';
-import { observable, action, computed } from 'mobx';
-import { LayoutFilter, LayoutFilterItem, LayoutFilterBase } from './layout.filter';
 import { StBreadCrumb } from '../util/breacrumb';
-import Tag from 'antd/es/tag';
+import { LayoutFilter, LayoutFilterItem } from './layout.filter';
+import { unpackLayouts } from './layout.util';
 
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({ padding: 4, margin: 8, borderRadius: 8 });
@@ -159,7 +159,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         return (
             <div style={{ width: '100%' }}>
                 <StBreadCrumb worldId={this.worldId} alliance={this.alliance} layout={true} />
-                <Divider>{WorldNames[this.worldId].name} - Layouts</Divider>
+                <Divider>{getWorldName(this.worldId as WorldId)} - Layouts</Divider>
 
                 <div className="filter">
                     <div>{this.renderFilters('Tiberium')}</div>
