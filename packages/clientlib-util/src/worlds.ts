@@ -351,4 +351,5 @@ export const WorldNames: Record<number, WorldInfo> = {
     408: { name: 'Tiberian 41' },
     410: { name: 'Tiberian 42' },
     411: { name: 'Tiberian 43' },
+    412: { name: 'Firestorm 13' },
 };
