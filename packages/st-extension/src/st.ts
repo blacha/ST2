@@ -1,4 +1,6 @@
-import { CityScannerUtil, CityUtil, ClientLibLoader, LocalCache } from '@cncta/util';
+import { ClientLibStatic } from '@cncta/clientlib';
+import * as Util from '@cncta/util';
+import { ClientLibLoader, LocalCache } from '@cncta/util';
 import { Id } from '@st/shared/build/id';
 import { StLog } from '@st/shared/build/log';
 import { StApi } from './api/st.api';
@@ -7,7 +9,6 @@ import { StCli } from './st.cli';
 import { StConfig } from './st.config';
 import { StPatches } from './st.patches';
 import { StPlugin } from './st.plugin';
-import { ClientLibStatic } from '@cncta/clientlib';
 
 const InstanceIdKey = 'st-instance-id';
 const ChallengeIdKey = 'st-instance-challenge-id';
@@ -50,10 +51,7 @@ export class St {
     actions = new StActions(this);
     patches = new StPatches(this);
 
-    util = {
-        scan: CityScannerUtil,
-        city: CityUtil,
-    };
+    util = Util;
 
     plugins: StPlugin[] = [
         // Core modules

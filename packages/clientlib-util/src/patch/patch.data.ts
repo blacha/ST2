@@ -47,7 +47,7 @@ PatchWorldObjectNPCCamp.addGetter('$Level', '$ctor', /\.*this\.([A-Z]{6})=\(\(\(
 export const PatchWorldObjectNPCBase = new ClientLibPatch<PatchedIdLevel, typeof ClientLibWorldObject>(
     'ClientLib.Data.WorldSector.WorldObjectNPCBase',
 );
-PatchWorldObjectNPCBase.addGetter('$Id', '$ctor', /\&.*=-1;\}this\.([A-Z]{6})=\(/);
+PatchWorldObjectNPCBase.addGetter('$Id', '$ctor', /.*f;this\.([A-Z]{6})=\(/);
 PatchWorldObjectNPCBase.addGetter('$Level', '$ctor', /\.*this\.([A-Z]{6})=\(\(\(g>>4/);
 
 export const PatchWorldObjectCity = new ClientLibPatch<PatchedWorldObjectCity, typeof ClientLibWorldObject>(
