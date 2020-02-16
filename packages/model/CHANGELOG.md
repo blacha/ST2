@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/blacha/st/compare/v4.1.0...v4.2.0) (2020-02-16)
+
+
+### Features
+
+* include createdAt for layouts ([0f8187a](https://github.com/blacha/st/commit/0f8187a2867863e76199c6ce5d60dbfa44590ac3))
+* initial player permissions updates ([47f35da](https://github.com/blacha/st/commit/47f35da83c4b4446721b2bf9777f985b2ce6e7e0))
+
+
+
+
+
 # [4.1.0](https://github.com/blacha/st/compare/v4.0.0...v4.1.0) (2020-02-11)
 
 **Note:** Version bump only for package @st/model

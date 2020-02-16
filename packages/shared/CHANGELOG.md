@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/blacha/st/compare/v4.1.0...v4.2.0) (2020-02-16)
+
+
+### Bug Fixes
+
+* allow worldIds that are higher than 411 ([0647295](https://github.com/blacha/st/commit/0647295a7ce9a364aa7008a0970b3ef33e0016c9))
+
+
+### Features
+
+* initial player permissions updates ([47f35da](https://github.com/blacha/st/commit/47f35da83c4b4446721b2bf9777f985b2ce6e7e0))
+
+
+
+
+
 # [4.1.0](https://github.com/blacha/st/compare/v4.0.0...v4.1.0) (2020-02-11)
 
 **Note:** Version bump only for package @st/shared

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/blacha/st/compare/v4.1.0...v4.2.0) (2020-02-16)
+
+
+### Bug Fixes
+
+* allow worldIds that are higher than 411 ([0647295](https://github.com/blacha/st/commit/0647295a7ce9a364aa7008a0970b3ef33e0016c9))
+* correct patching of NPCBase.$Id to get the actual base id ([df4b17c](https://github.com/blacha/st/commit/df4b17ccdb999cf97022fba1e3a119be7a23acc7))
+* support unkown worlds ([e0f6a5b](https://github.com/blacha/st/commit/e0f6a5b59ceff152f54784800b48e00fa37d8929))
+
+
+### Features
+
+* adding firestorm 13 ([9e9c43d](https://github.com/blacha/st/commit/9e9c43d0d1694985655f7b710a6f15d337ba5a02))
+* include createdAt for layouts ([0f8187a](https://github.com/blacha/st/commit/0f8187a2867863e76199c6ce5d60dbfa44590ac3))
+* initial player permissions updates ([47f35da](https://github.com/blacha/st/commit/47f35da83c4b4446721b2bf9777f985b2ce6e7e0))
+
+
+
+
+
 # [4.1.0](https://github.com/blacha/st/compare/v4.0.0...v4.1.0) (2020-02-11)
 
 
