@@ -1,5 +1,5 @@
-import { WorldId } from '@cncta/clientlib';
-import { Stores } from '@st/model';
+import { PlayerNameId, WorldId } from '@cncta/clientlib';
+import { V2Sdk } from '@st/api';
 import Button from 'antd/es/button';
 import Form from 'antd/es/form';
 import { FormComponentProps } from 'antd/es/form/Form';
@@ -7,15 +7,14 @@ import Icon from 'antd/es/icon';
 import Input from 'antd/es/input';
 import Select from 'antd/es/select';
 import Spin from 'antd/es/spin';
-import Text from 'antd/es/typography/Text';
 import Paragraph from 'antd/es/typography/Paragraph';
+import Text from 'antd/es/typography/Text';
 import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { Cs } from '../base/base';
-import { Api } from '../api/api';
-import { FireAnalytics } from '../firebase';
 import { Auth } from '../auth/auth.service';
+import { Cs } from '../base/base';
+import { FireAnalytics } from '../firebase';
 
 @observer
 export class ClaimPage extends React.Component<{}, {}> {
@@ -46,11 +45,11 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
     }
 
     async loadWorlds() {
-        const worlds = await Stores.BotWorld.get('worlds');
-        if (worlds == null) {
+        const worlds = await V2Sdk.call('world.list');
+        if (!worlds.ok) {
             return;
         }
-        this.setState({ state: Cs.Done, worlds: worlds.worlds });
+        this.setState({ state: Cs.Done, worlds: worlds.response.worlds });
     }
 
     handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -60,10 +59,13 @@ export class ClaimPlayerForm extends React.Component<FormComponentProps, ClaimPl
                 return;
             }
             FireAnalytics.logEvent('Claim:Send', { worldId: values.worldId, player: values.player });
+            const worldId = values.worldId as WorldId;
+            const player = values.player.toLowerCase() as PlayerNameId;
 
             this.setState({ ...this.state, claim: Cs.Loading });
-            const res = await Api.claimPlayerRequest(values.worldId, values.player);
-            if (res == true) {
+            const res = await V2Sdk.call('player.claim.request', { worldId, player });
+
+            if (res.ok) {
                 this.setState({ ...this.state, claim: Cs.Done });
             } else {
                 FireAnalytics.logEvent('Claim:Failed', {

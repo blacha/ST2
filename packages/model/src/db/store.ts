@@ -74,7 +74,7 @@ export class Store<T extends Model<T>> {
         obj.updatedAt = ModelUtil.TimeStamp();
         const updateObj = { ...obj };
         delete updateObj.id;
-        await doc.set(updateObj, { merge: true });
+        await doc.set(updateObj, { merge: false });
     }
     async save(obj: T): Promise<void> {
         return this.set(obj.id, obj);
@@ -94,7 +94,7 @@ export class Store<T extends Model<T>> {
             obj.updatedAt = ModelUtil.TimeStamp();
             const updateObj = { ...obj };
             delete updateObj.id;
-            await transaction.set(doc, updateObj, { merge: true });
+            await transaction.set(doc, updateObj, { merge: false });
             currentObj = obj;
         });
         if (currentObj == null) {

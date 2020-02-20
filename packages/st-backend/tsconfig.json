@@ -13,5 +13,7 @@
         "path": "../shared"
     }, {
         "path": "../model"
+    }, {
+        "path": "../st-api"
     }]
 }

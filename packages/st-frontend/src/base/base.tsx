@@ -1,6 +1,6 @@
-import { BaseX, CityId, PlayerId, TimeStamp, WorldId, CompositeId } from '@cncta/clientlib';
-import { Stores } from '@st/model';
-import { Base, BaseBuilder, WorldPlayerId, WorldCityId, StLog } from '@st/shared';
+import { BaseX, CityId, PlayerId, WorldId } from '@cncta/clientlib';
+import { V2Sdk } from '@st/api';
+import { Base, BaseBuilder, StLog, WorldCityId } from '@st/shared';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Icon from 'antd/es/icon';
@@ -10,6 +10,7 @@ import Tooltip from 'antd/es/tooltip';
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
+import { FireAnalytics } from '../firebase';
 import { SiloTags } from '../silo/silo.tag';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
@@ -17,8 +18,6 @@ import { ViewBaseStats } from './base.stats';
 import { ViewBaseDef } from './tiles/base.def';
 import { ViewBaseMain } from './tiles/base.main';
 import { ViewBaseOff } from './tiles/base.off';
-import { FireAnalytics } from '../firebase';
-import { Auth } from '../auth/auth.service';
 
 const TileSize = 64;
 
@@ -118,14 +117,13 @@ export class ViewBase extends React.Component<ViewBaseProps> {
         StLog.info({ playerId, cityId, worldId }, 'LoadingPlayerCity');
         FireAnalytics.logEvent('City:LoadPlayer', { worldId, playerId, cityId });
 
-        const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
-        const player = await Stores.Player.get(docId);
-        if (player == null) {
+        const player = await V2Sdk.call('player.city.get', { worldId, playerId });
+        if (!player.ok) {
             this.setState({ state: Cs.Failed });
             return;
         }
 
-        const city = player.getCity(cityId);
+        const city = player.response.cities.find(f => f.cityId == cityId);
         if (city == null) {
             this.setState({ state: Cs.Failed });
             return;
@@ -135,15 +133,16 @@ export class ViewBase extends React.Component<ViewBaseProps> {
 
     async loadBase(cityId: string) {
         StLog.info({ cityId }, 'LoadingCity');
-        const city = await Stores.City.get(cityId as CompositeId<[WorldId, TimeStamp, CityId]>);
         FireAnalytics.logEvent('City:LoadCity', { cityId });
 
-        if (city == null) {
+        const city = await V2Sdk.call('city.get', { cityId });
+
+        if (!city.ok || city.response.city == null) {
             this.setState({ base: this.state.base, state: Cs.Failed });
             return;
         }
 
-        this.setState({ base: BaseBuilder.load(city.city), state: Cs.Done });
+        this.setState({ base: BaseBuilder.load(city.response.city), state: Cs.Done });
     }
 
     render() {

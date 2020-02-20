@@ -1,19 +1,16 @@
-import { BaseLocationPacker } from '@cncta/util';
-import { ModelLayout } from '@st/model';
-import { Base, BaseLayoutPacker, NumberPacker } from '@st/shared';
+import { Base, BaseLayoutPacker } from '@st/shared';
 
-export function unpackLayouts(layoutModel?: ModelLayout): Base[] {
+export function unpackLayouts(layoutModel?: { layout: string; updatedAt: number; x: number; y: number }[]): Base[] {
     if (layoutModel == null) {
         return [];
     }
     const layouts: Base[] = [];
-    for (const [key, data] of Object.entries(layoutModel.layouts)) {
-        const xy = BaseLocationPacker.unpack(NumberPacker.unpack(key)[0]);
+    for (const layoutObj of layoutModel) {
         const base = new Base();
-        base.cityId = key as any;
-        base.x = xy.x;
-        base.y = xy.y;
-        const { layout, updatedAt } = data;
+        const { layout, updatedAt, x, y } = layoutObj;
+        base.cityId = x * 1000 + y;
+        base.x = x;
+        base.y = y;
         base.tiles = BaseLayoutPacker.unpack(layout);
         base.updatedAt = updatedAt;
         layouts.push(base);

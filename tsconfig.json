@@ -23,6 +23,9 @@
             "path": "./packages/model"
         },
         {
+            "path": "./packages/st-api"
+        },
+        {
             "path": "./packages/st-backend"
         },
         {

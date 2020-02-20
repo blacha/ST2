@@ -1,10 +1,10 @@
-import { PlayerNameId } from '@cncta/clientlib';
+import { PlayerNameId, WorldId } from '@cncta/clientlib';
 import { ApiFunc } from './api.func';
 
 export interface ApiClaimStartRequest extends ApiFunc {
     path: '/api/v1/world/:worldId/player/:player/claim';
     method: 'post';
-    params: { worldId: number; player: string };
+    params: { worldId: WorldId; player: PlayerNameId };
     body: undefined;
     response: {};
 }
@@ -14,5 +14,5 @@ export interface ApiClaimPlayerAcceptRequest extends ApiFunc {
     method: 'get';
     params: { claimId: string };
     body: undefined;
-    response: { player: PlayerNameId; worldId: number };
+    response: { worldId: WorldId; player: PlayerNameId };
 }

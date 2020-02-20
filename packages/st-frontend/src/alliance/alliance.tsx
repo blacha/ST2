@@ -1,9 +1,7 @@
 import React = require('react');
-import { AllianceId, CompositeId, WorldId } from '@cncta/clientlib';
-import { Duration } from '@cncta/util';
-import { Stores } from '@st/model';
-import { Base, BaseBuilder, BaseOptimizer, GameResources, Id, mergeBaseUpgrade, WorldAllianceId } from '@st/shared';
-import 'antd/dist/antd.css';
+import { AllianceId, WorldId } from '@cncta/clientlib';
+import { V2Sdk } from '@st/api';
+import { Base, BaseBuilder, BaseOptimizer, GameResources, Id, mergeBaseUpgrade } from '@st/shared';
 import BackTop from 'antd/es/back-top';
 import Button from 'antd/es/button';
 import Divider from 'antd/es/divider';
@@ -12,12 +10,11 @@ import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Cs } from '../base/base';
+import { FireAnalytics } from '../firebase';
 import { LayoutView } from '../layout/layout';
 import { unpackLayouts } from '../layout/layout.util';
 import { IdName, StBreadCrumb } from '../util/breacrumb';
 import { AllianceColumns, PlayerStats } from './alliance.table';
-import { Auth } from '../auth/auth.service';
-import { FireAnalytics } from '../firebase';
 
 export const AllianceCss = {
     Table: style({
@@ -70,27 +67,20 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
         FireAnalytics.logEvent('Alliance:Load', { worldId, allianceId });
 
         const loadingState = currentState == Cs.Init ? Cs.Loading : Cs.Refreshing;
-        const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
         this.setState({ ...this.state, state: loadingState });
 
         const [results, layoutData] = await Promise.all([
-            Stores.Player.getAllBy({ allianceKey: docId }, 60),
-            Stores.Layout.get(docId),
+            V2Sdk.call('alliance.get', { worldId, allianceId }),
+            V2Sdk.call('layout.get', { worldId, allianceId }),
         ]);
-        if (results == null || layoutData == null) {
+        if (results.ok == false || layoutData.ok == false) {
             this.setState({ info: [], state: Cs.Failed });
             return;
         }
 
         const alliance = { id: allianceId, name: '' };
         const playerSet = new Map<number, PlayerStats>();
-        // Grab at most the 50 most recently updated
-        const docs = results
-            .sort((a, b) => a.updatedAt - b.updatedAt)
-            .filter(f => Date.now() - f.updatedAt < Duration.days(2))
-            .slice(0, 55);
-
-        for (const doc of docs) {
+        for (const doc of results.response.players) {
             const cities = doc.cities;
             const bases = Object.values(cities).map(c => BaseBuilder.load(c));
             for (const base of bases) {
@@ -127,7 +117,7 @@ export class ViewAlliance extends React.Component<AllianceProps, AllianceState> 
             }
         }
 
-        const layouts = unpackLayouts(layoutData);
+        const layouts = unpackLayouts(layoutData.response.layouts);
         for (const layout of layouts) {
             BaseOptimizer.buildSilos(layout);
         }

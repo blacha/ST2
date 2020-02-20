@@ -21,6 +21,9 @@ export abstract class ApiCall<T extends ApiFunc> {
     abstract path: T['path'];
     abstract method: T['method'];
 
+    // TODO validate the request before handling it
+    // abstract validate(req: ApiRequest<any>): { params: T['params']; body: T['body'] };
+
     static bind<T extends ApiFunc>(app: express.Application, ApiFunc: ApiCall<T>) {
         app[ApiFunc.method](ApiFunc.path, ApiFunc.doRequest.bind(ApiFunc));
     }

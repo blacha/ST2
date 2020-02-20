@@ -1,9 +1,10 @@
 import { ClientLibStatic } from '@cncta/clientlib';
 import { StCity } from '@cncta/util/build/city';
-import { ApiUtil, ApiInstallRequest, ApiHeaders } from '@st/shared/build/api';
+import { InstallId, V2Sdk } from '@st/api';
+import { ApiHeaders } from '@st/shared/build/api';
 import { Config } from '@st/shared/build/config';
-import { BatchBaseSender } from './batcher.base';
 import { StPlugin } from '../st.plugin';
+import { BatchBaseSender } from './batcher.base';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -33,18 +34,18 @@ export class StApi extends StPlugin {
     }
 
     async onStart() {
-        const installId = this.st.instanceId;
+        V2Sdk.config({
+            fetch: fetch.bind(window),
+            baseUrl: Config.api.url,
+            headers: () => this.jsonHeaders,
+        });
+
+        const installId = this.st.instanceId as InstallId;
         const md = ClientLib.Data.MainData.GetInstance();
         const worldId = md.get_Server().get_WorldId();
         const player = md.get_Player().name;
 
-        const req = ApiUtil.request<ApiInstallRequest>(
-            'post',
-            '/api/v1/install/:installId',
-            { installId },
-            { player, worldId, version: Config.version, hash: Config.hash },
-        );
-        await fetch(req.url, { method: req.method, body: req.body, headers: this.jsonHeaders });
+        V2Sdk.call('install.track', { installId, worldId, player, version: Config.version, hash: Config.hash });
     }
 
     async onStop() {

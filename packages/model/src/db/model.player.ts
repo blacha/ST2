@@ -7,9 +7,16 @@ import {
     PlayerNameDisplay,
     PlayerNameId,
     WorldId,
+    TimeStamp,
 } from '@cncta/clientlib';
 import { StCity } from '@cncta/util';
 import { InvalidPlayerId, InvalidPlayerName, InvalidWorldId, Model, ModelUtil } from './model';
+
+export interface ModelPlayerLayoutClaim {
+    xy: string;
+    layout: string;
+    createdAt: TimeStamp;
+}
 
 export class ModelPlayer extends Model<ModelPlayer> {
     /** User Uid */
@@ -21,8 +28,10 @@ export class ModelPlayer extends Model<ModelPlayer> {
     player: PlayerNameDisplay;
     playerNameId: PlayerNameId; // Firebase does not allow case insensitive searching
     playerId: PlayerId;
-    alliance?: AllianceName;
-    allianceId?: AllianceId;
+    alliance: AllianceName | undefined;
+    allianceId: AllianceId | undefined;
+
+    layouts: ModelPlayerLayoutClaim[];
 
     constructor(data?: ModelPlayer) {
         super(data);
@@ -34,6 +43,7 @@ export class ModelPlayer extends Model<ModelPlayer> {
         this.playerNameId = ModelUtil.toPlayerNameId(this.player);
         this.alliance = data?.alliance ?? undefined;
         this.allianceId = data?.allianceId ?? undefined;
+        this.layouts = data?.layouts ?? [];
     }
 
     get isValid() {

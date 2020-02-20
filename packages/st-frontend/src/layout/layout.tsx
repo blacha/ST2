@@ -1,8 +1,8 @@
 import React = require('react');
-import { AllianceId, AllianceName, BaseX, CompositeId, WorldId } from '@cncta/clientlib';
+import { AllianceId, AllianceName, BaseX, WorldId } from '@cncta/clientlib';
 import { BaseLocationPacker, getWorldName } from '@cncta/util';
-import { Stores } from '@st/model';
-import { Base, BaseExporter, BaseOptimizer, SiloCounts, StLog, WorldAllianceId } from '@st/shared';
+import { V2Sdk } from '@st/api';
+import { Base, BaseExporter, BaseOptimizer, SiloCounts, StLog } from '@st/shared';
 import Divider from 'antd/es/divider';
 import Pagination from 'antd/es/pagination/Pagination';
 import Spin from 'antd/es/spin';
@@ -56,22 +56,21 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
     }
 
     async loadScan(worldId: WorldId, allianceId: AllianceId) {
-        const docId = WorldAllianceId.pack({ worldId, allianceId }) as CompositeId<[WorldId, AllianceId]>;
-
         const [layoutData, allianceData] = await Promise.all([
-            Stores.Layout.get(docId),
-            Stores.Player.getBy({ allianceKey: docId }),
+            V2Sdk.call('layout.get', { worldId, allianceId }),
+            V2Sdk.call('alliance.get', { worldId, allianceId }),
         ]);
-        if (layoutData == null) {
+        if (layoutData.ok == false || allianceData.ok == false) {
             this.setState({ state: Cs.Failed });
             return;
         }
-        if (allianceData && allianceData.alliance) {
-            this.alliance = { id: allianceId, name: allianceData.alliance };
+        const firstPlayer = allianceData.response.players[0];
+        if (firstPlayer && firstPlayer.alliance) {
+            this.alliance = { id: allianceId, name: firstPlayer.alliance };
         }
 
         StLog.info('UnpackLayouts');
-        const layouts = unpackLayouts(layoutData);
+        const layouts = unpackLayouts(layoutData.response.layouts);
         StLog.info('ComputeLayouts');
         console.time('ComputeLayout');
         for (const layout of layouts) {

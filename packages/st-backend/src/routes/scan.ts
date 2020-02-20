@@ -91,7 +91,19 @@ export class ApiScan extends ApiCall<ApiScanRequest> {
             }
             for (const [key, layout] of layoutsList.entries()) {
                 const existing = model.layouts[key];
-                model.layouts[key] = { layout, updatedAt, createdAt: existing?.createdAt ?? updatedAt };
+                if (existing?.layout == layout) {
+                    model.layouts[key] = {
+                        ...existing,
+                        layout,
+                        updatedAt,
+                    };
+                } else {
+                    model.layouts[key] = {
+                        layout,
+                        updatedAt,
+                        createdAt: updatedAt,
+                    };
+                }
             }
         });
     }

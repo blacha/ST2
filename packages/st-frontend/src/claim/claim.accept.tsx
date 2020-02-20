@@ -1,12 +1,11 @@
+import { V2Sdk } from '@st/api';
+import Spin from 'antd/es/spin';
+import Paragraph from 'antd/es/typography/Paragraph';
+import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
-import { Api } from '../api/api';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Cs } from '../base/base';
-import Title from 'antd/es/typography/Title';
-import Paragraph from 'antd/es/typography/Paragraph';
-import Spin from 'antd/es/spin';
-import { Auth } from '../auth/auth.service';
 import { FireAnalytics } from '../firebase';
 
 type ClaimProps = RouteComponentProps<{ claimId: string }>;
@@ -26,11 +25,11 @@ export class ClaimAcceptPage extends React.Component<ClaimProps, ClaimAcceptStat
 
     async claimPlayer(claimId: string) {
         this.setState({ state: Cs.Loading });
-        try {
-            await Api.claimPlayerAccept(claimId);
+        const res = await V2Sdk.call('player.claim.accept', { claimId });
+        if (res.ok) {
             this.setState({ state: Cs.Done });
-        } catch (e) {
-            this.setState({ state: Cs.Failed, message: e.message });
+        } else {
+            this.setState({ state: Cs.Failed, message: 'Failed to accept claim' });
         }
     }
 

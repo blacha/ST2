@@ -43,10 +43,10 @@ export class StActions extends StPlugin {
     player: PlayerState = PlayerState.Active;
 
     /** No user actions within 20 minutes, means player is idle */
-    IdleTime = Duration.minutes(20);
+    private IdleTime = Duration.minutes(20);
 
-    lastActionTime: number;
-    playerAction = () => {
+    private lastActionTime: number;
+    private playerAction = () => {
         this.lastActionTime = Date.now();
         if (this.player == PlayerState.Idle) {
             this.st.log.info('PlayerActive');
@@ -67,7 +67,7 @@ export class StActions extends StPlugin {
         }
     }
 
-    checkIdle() {
+    private checkIdle() {
         if (this.player == PlayerState.Idle) {
             return;
         }
@@ -96,14 +96,14 @@ export class StActions extends StPlugin {
         }
     }
 
-    private nextAction(playerTriggered: boolean): StPluginAction | string {
+    private nextAction(playerTriggered: boolean): string | StPluginAction {
         const action = this.actions.shift();
         if (action == null) {
             return 'NoAction';
         }
 
         if (!this.st.isOnline) {
-            return 'Offline';
+            return 'PlayerOffline';
         }
 
         if (!this.isActive) {
@@ -120,6 +120,7 @@ export class StActions extends StPlugin {
         }
         return action;
     }
+
     /**
      * Run the queued actions, each action will be run once at a time
      *
@@ -129,12 +130,7 @@ export class StActions extends StPlugin {
         if (!this.isIdle) {
             throw new Error('ST is not idle');
         }
-        if (this.actions.length == 0) {
-            return;
-        }
-
-        if (!this.st.isOnline) {
-            this.clearActions();
+        if (this.actions.length == 0 || !this.st.isOnline) {
             return;
         }
 

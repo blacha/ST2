@@ -5,9 +5,10 @@ import { AccountSessionId } from '@st/model';
 import { ApiRequest } from './api.call';
 import { BackEndStore } from './backend.store';
 import { HttpError } from './http.error';
+import { V2Request } from './v2/v2.request';
 
 export class GameSession {
-    static async getClient(req: ApiRequest<any>, worldId: WorldId) {
+    static async getClient(req: ApiRequest<any> | V2Request, worldId: WorldId) {
         const botConfig = await BackEndStore.BotConfig.get('bot');
         if (botConfig == null) {
             throw new HttpError(500, 'Unable to find bot session');

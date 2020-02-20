@@ -1,5 +1,6 @@
 export * from './request.scan';
 export * from './request.claim';
+export * from './request.claim.layout';
 export * from './request.install';
 export * from './request.world.data';
 

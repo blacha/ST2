@@ -1,6 +1,6 @@
 import { PlayerNameId } from '@cncta/clientlib';
-import { WorldNames, getWorldName } from '@cncta/util';
-import { ModelPlayer, Stores, UId } from '@st/model';
+import { getWorldName } from '@cncta/util';
+import { V2Sdk, UserId } from '@st/api';
 import { StLog } from '@st/shared';
 import Button from 'antd/es/button';
 import Divider from 'antd/es/divider';
@@ -19,6 +19,11 @@ import { getDiffIcon } from '../alliance/alliance.table';
 import { Auth } from '../auth/auth.service';
 import { Cs } from '../base/base';
 import { timeSince } from '../time.util';
+
+import { TypeOf } from 'io-ts';
+import { V2PlayerType } from '@st/api/build/v2/v2.player';
+
+export type ModelPlayer = TypeOf<typeof V2PlayerType>;
 
 export const LandingColumns = [
     {
@@ -71,7 +76,7 @@ export const LandingColumns = [
 ];
 interface LandingState {
     state: Cs;
-    data?: ModelPlayer[];
+    data?: any[];
     claims?: PlayerNameId[];
 }
 @observer
@@ -88,24 +93,29 @@ export class ViewLandingPage extends React.Component<{}, LandingState> {
             return;
         }
         this.setState({ state: Cs.Loading });
-        this.loadPlayerInfo(uid as UId);
+        this.loadPlayerInfo(uid as UserId);
     }
 
-    async loadPlayerInfo(uId: UId) {
+    async loadPlayerInfo(uId: UserId) {
         StLog.info({ uId }, 'LoadPlayer');
-        const user = await Stores.User.get(uId);
-        if (user == null) {
+        const user = await V2Sdk.call('player.list');
+        if (!user.ok) {
             this.setState({ state: Cs.Done });
             return;
         }
 
-        const playerClaims = user.claims.map(c => c.player);
+        const playerClaims = user.response.players.map(c => c.player);
         StLog.info({ uId, claims: playerClaims }, 'LoadPlayer:Done');
 
-        const playerData = await Stores.Player.getAllBy({ playerNameId: playerClaims });
-        StLog.info({ uId, count: playerData.length }, 'LoadPlayerData:Done');
+        const playerData = await V2Sdk.call('player.get', { playerNameIds: playerClaims });
+        if (!playerData.ok) {
+            this.setState({ state: Cs.Done });
+            return;
+        }
+        const players = playerData.response.players;
+        StLog.info({ uId, count: players.length }, 'LoadPlayerData:Done');
 
-        this.setState({ state: Cs.Done, claims: playerClaims, data: playerData });
+        this.setState({ state: Cs.Done, claims: playerClaims, data: players });
     }
 
     authButton = () => {

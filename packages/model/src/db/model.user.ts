@@ -6,7 +6,7 @@ export interface ModelUserClaim {
     player: PlayerNameId;
     claimId: string;
 
-    name?: PlayerNameDisplay;
+    name: PlayerNameDisplay;
     alliances: Record<number, { validatedBy: ModelWorldAlliance['id']; allianceId: AllianceId }>;
 }
 

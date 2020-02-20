@@ -1,4 +1,4 @@
-import { WorldId, PlayerNameDisplay } from '@cncta/clientlib';
+import { PlayerNameDisplay, WorldId } from '@cncta/clientlib';
 
 export interface ApiInstallRequest {
     path: '/api/v1/install/:installId';

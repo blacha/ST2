@@ -1,30 +1,20 @@
-import { PlayerId, WorldId, CompositeId } from '@cncta/clientlib';
-import { Stores } from '@st/model';
-import {
-    Base,
-    BaseBuilder,
-    formatNumber,
-    GameResources,
-    Id,
-    mergeBaseUpgrade,
-    NumberPacker,
-    WorldPlayerId,
-} from '@st/shared';
+import { PlayerId, WorldId } from '@cncta/clientlib';
+import { V2Sdk } from '@st/api';
+import { Base, BaseBuilder, formatNumber, GameResources, Id, mergeBaseUpgrade } from '@st/shared';
 import BackTop from 'antd/es/back-top';
 import Divider from 'antd/es/divider';
 import Spin from 'antd/es/spin';
 import Table from 'antd/es/table';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
+import { PlayerStats } from '../alliance/alliance.table';
 import { Cs } from '../base/base';
+import { FireAnalytics } from '../firebase';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
 import { FactionName } from '../util/faction';
 import { ViewResearch } from '../util/research';
 import React = require('react');
-import { PlayerStats } from '../alliance/alliance.table';
-import { FireAnalytics } from '../firebase';
-import { Auth } from '../auth/auth.service';
 
 type PlayerProps = RouteComponentProps<{ worldId: string; playerId: string }>;
 
@@ -150,18 +140,17 @@ export class ViewPlayer extends React.Component<PlayerProps, PlayerState> {
     }
 
     async loadPlayer(worldId: WorldId, playerId: PlayerId) {
-        const docId = WorldPlayerId.pack({ worldId, playerId }) as CompositeId<[WorldId, PlayerId]>;
         FireAnalytics.logEvent('Player:Load', { worldId: worldId, playerId });
 
         this.setState({ state: Cs.Loading });
-        const result = await Stores.Player.getOrCreate(docId);
-        if (!result.isValid) {
+        const result = await V2Sdk.call('player.city.get', { worldId, playerId });
+        if (!result.ok) {
             FireAnalytics.logEvent('Player:LoadFailed', { worldId: worldId, playerId });
             this.setState({ state: Cs.Failed });
             return;
         }
 
-        const cities = result.cities;
+        const cities = result.response.cities;
         const bases = Object.values(cities).map(c => BaseBuilder.load(c));
         const current: PlayerStats = {
             id: Id.generate(),

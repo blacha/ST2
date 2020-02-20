@@ -2,7 +2,6 @@ import React = require('react');
 import { GameDataResearchLevel, GameDataUnitId } from '@cncta/clientlib';
 import { Duration } from '@cncta/util';
 import { Base, formatNumber, GameResources } from '@st/shared';
-import 'antd/dist/antd.css';
 import Icon from 'antd/es/icon';
 import { Link } from 'react-router-dom';
 import { timeSince } from '../time.util';

@@ -16,7 +16,8 @@
         "firebase-functions": "^3.3.0"
     },
     "devDependencies": {
-        "@types/cors": "^2.8.6"
+        "@types/cors": "^2.8.6",
+        "node-fetch": "^2.6.0"
     },
     "files": [
         "/build"

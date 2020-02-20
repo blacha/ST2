@@ -1,4 +1,4 @@
-import { UId } from '@st/model';
+import { UserId } from '@st/api';
 import { StLog } from '@st/shared';
 import { User } from 'firebase';
 import { action, observable } from 'mobx';
@@ -42,12 +42,12 @@ export class AuthService {
         return this._login != null;
     }
 
-    get uid(): UId | null {
+    get uid(): UserId | null {
         const user = this.user.get();
         if (user == null) {
             return null;
         }
-        return user.uid as UId;
+        return user.uid as UserId;
     }
 
     _login: Promise<boolean> | null;

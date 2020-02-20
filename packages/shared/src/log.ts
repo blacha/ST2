@@ -1,4 +1,4 @@
-import { Log, LogMessage, LogLevel } from 'bblog';
+import { Log, LogMessage } from 'bblog';
 
 export const StLog = Log.createLogger({ name: 'st', hostname: '' });
 
@@ -39,8 +39,8 @@ function getShortId(msg: any): string {
 }
 
 export const StLogStream = {
-    level: Log.TRACE,
-    setLevel(level: LogLevel) {
+    level: Log.TRACE as number,
+    setLevel(level: number) {
         this.level = level;
     },
     formatObject(obj: Record<string, any>): string[] {
@@ -77,6 +77,9 @@ export const StLogStream = {
         return kvs;
     },
     write(msg: LogMessage) {
+        if (msg.level < StLogStream.level) {
+            return;
+        }
         // @ts-ignore
         if (typeof window == 'undefined') {
             console.log(JSON.stringify(msg));

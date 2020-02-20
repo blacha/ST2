@@ -10,7 +10,7 @@
     "references": [{
         "path": "../shared"
     }, {
-        "path": "../model"
+        "path": "../st-api"
     }, {
         "path": "../clientlib"
     }, {

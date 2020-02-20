@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { style } from 'typestyle';
 import Icon from 'antd/es/icon';
 import { WorldNames, getWorldName } from '@cncta/util';
-import { WorldId } from '@cncta/clientlib/src';
+import { WorldId } from '@cncta/clientlib';
 
 export interface IdName {
     id: number | string;

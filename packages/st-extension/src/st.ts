@@ -128,7 +128,7 @@ export class St {
     }
 
     get isOnline() {
-        return ClientLib.Net.CommunicationManager.GetInstance().get_InstanceId() != null;
+        return ClientLib.Net.CommunicationManager.GetInstance().get_SessionId() != null;
     }
 }
 

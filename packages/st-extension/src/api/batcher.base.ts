@@ -1,9 +1,9 @@
+import { ClientLibStatic } from '@cncta/clientlib';
+import { StCity } from '@cncta/util/build/city';
+import { V2Sdk } from '@st/api';
+import { St } from '../st';
 import { Batcher } from './batcher';
 import { StApi } from './st.api';
-import { StCity } from '@cncta/util/build/city';
-import { St } from '../st';
-import { ApiScanResponse, ApiUtil, ApiScanRequest } from '@st/shared/build/api';
-import { ClientLibStatic } from '@cncta/clientlib';
 
 declare const ClientLib: ClientLibStatic;
 
@@ -23,23 +23,11 @@ export class BatchBaseSender extends Batcher<'cityId', StCity, string> {
         const md = ClientLib.Data.MainData.GetInstance();
         const worldId = md.get_Server().get_WorldId();
         const player = md.get_Player().name;
-        const req = ApiUtil.request<ApiScanRequest>(
-            'post',
-            '/api/v1/world/:worldId/player/:player/scan',
-            { worldId, player },
-            data,
-        );
 
-        const res = await fetch(req.url, {
-            method: req.method,
-            body: req.body,
-            headers: this.api.jsonHeaders,
-        });
-        if (!res.ok) {
-            console.error(await res.text());
-            throw new Error('Failed to scan');
+        const res = await V2Sdk.call('city.scan', { cities: data, worldId, player });
+        if (res.ok) {
+            return res.response.cityIds;
         }
-        const body = (await res.json()) as ApiScanResponse;
-        return body.id;
+        throw new Error('Failed to scan');
     }
 }

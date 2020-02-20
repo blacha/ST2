@@ -1,0 +1,26 @@
+{
+    "name": "@st/api",
+    "version": "4.0.0",
+    "description": "Client lib utilities and types",
+    "private": true,
+    "scripts": {
+        "build": "tsc --pretty"
+    },
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "browserslist": [
+        "last 2 Chrome versions"
+    ],
+    "devDependencies": {},
+    "files": [
+        "/build"
+    ],
+    "author": "Blayne Chard <blayne@chard.com>",
+    "license": "MIT",
+    "dependencies": {
+        "@cncta/clientlib": "^4.1.0",
+        "@cncta/util": "^4.0.0",
+        "fp-ts": "^2.5.0",
+        "io-ts": "^2.1.1"
+    }
+}

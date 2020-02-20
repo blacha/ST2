@@ -1,5 +1,5 @@
-import { PlayerNameId, WorldId } from '@cncta/clientlib';
-import { ModelClaimRequest, ModelUtil, Stores } from '@st/model';
+import { PlayerNameId, WorldId, PlayerNameDisplay } from '@cncta/clientlib';
+import { ModelPlayerClaimRequest, ModelUtil, Stores } from '@st/model';
 import { ApiClaimPlayerAcceptRequest, ApiClaimStartRequest } from '@st/shared';
 import { ApiCall, ApiRequest } from '../api.call';
 import { GameSession } from '../game.session';
@@ -10,7 +10,7 @@ export class ApiClaimPlayerStart extends ApiCall<ApiClaimStartRequest> {
     path = '/api/v1/world/:worldId/player/:player/claim' as const;
     method = 'post' as const;
 
-    async sendMail(req: ApiRequest<ApiClaimStartRequest>, player: PlayerNameId, claim: ModelClaimRequest) {
+    async sendMail(req: ApiRequest<ApiClaimStartRequest>, player: PlayerNameId, claim: ModelPlayerClaimRequest) {
         const gameSession = await GameSession.getClient(req, claim.worldId);
         const playerExists = await gameSession.playerExists(player);
         if (playerExists == false) {
@@ -103,7 +103,7 @@ export class ApiClaimPlayerAccept extends ApiCall<ApiClaimPlayerAcceptRequest> {
             if (userObj.claims.find(f => f.player == player)) {
                 return;
             }
-            userObj.claims.push({ claimId, player, alliances: {} });
+            userObj.claims.push({ claimId, player, alliances: {}, name: '' as PlayerNameDisplay });
         });
 
         return { player, worldId };
