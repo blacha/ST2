@@ -63,28 +63,23 @@ export class LayoutFilterItem extends LayoutFilterBase {
         return stats[this.touches]?.length >= this.count;
     }
 }
+
+export class LayoutFilterLayout extends LayoutFilterBase {
+    touches: 5 | 6 | 7;
+    count: number;
+    layoutFilter: LayoutFilter;
+
+    constructor(filter: LayoutFilter, touches: 5 | 6 | 7) {
+        super(filter, 'tiberium');
+        this.touches = touches;
+    }
+
+    filter(base: Base) {
+        return base.info.tiles.tiberium == this.touches;
+    }
+}
+
 export class LayoutFilter {
-    tib6 = new LayoutFilterItem(this, 'tiberium', 6, 1);
-    tib5x1 = new LayoutFilterItem(this, 'tiberium', 5, 1);
-    tib5x2 = new LayoutFilterItem(this, 'tiberium', 5, 2);
-    tib4x3 = new LayoutFilterItem(this, 'tiberium', 4, 3);
-
-    crystal6 = new LayoutFilterItem(this, 'crystal', 6, 1);
-    crystal5x1 = new LayoutFilterItem(this, 'crystal', 5, 1);
-    crystal5x2 = new LayoutFilterItem(this, 'crystal', 5, 2);
-
-    mixed6 = new LayoutFilterItem(this, 'mixed', 6, 1);
-    mixed5x1 = new LayoutFilterItem(this, 'mixed', 5, 1);
-    mixed5x2 = new LayoutFilterItem(this, 'mixed', 5, 2);
-
-    power8x4 = new LayoutFilterItem(this, 'power', 8, 4);
-    power8x3 = new LayoutFilterItem(this, 'power', 8, 3);
-    power7x3 = new LayoutFilterItem(this, 'power', 7, 3);
-
-    updatedAtHour = new LayoutFilterUpdateAt(this, Duration.OneHour);
-    updatedAtDay = new LayoutFilterUpdateAt(this, Duration.OneDay);
-    updatedAt3Days = new LayoutFilterUpdateAt(this, Duration.days(3));
-
     layouts: IObservableArray<Base> = observable.array([], { deep: false });
 
     @action setLayouts(base: Base[]) {
@@ -93,29 +88,39 @@ export class LayoutFilter {
 
     // Order of this array is rendering order
     filterResource = [
-        this.tib6,
-        this.tib5x2,
-        this.tib5x1,
-        this.tib4x3,
+        new LayoutFilterItem(this, 'tiberium', 6, 1),
+        new LayoutFilterItem(this, 'tiberium', 5, 1),
+        new LayoutFilterItem(this, 'tiberium', 5, 2),
+        new LayoutFilterItem(this, 'tiberium', 4, 3),
+        new LayoutFilterItem(this, 'tiberium', 4, 2),
 
-        this.crystal6,
-        this.crystal5x2,
-        this.crystal5x1,
+        new LayoutFilterItem(this, 'crystal', 6, 1),
+        new LayoutFilterItem(this, 'crystal', 5, 2),
+        new LayoutFilterItem(this, 'crystal', 5, 1),
 
-        this.power8x4,
-        this.power8x3,
-        this.power7x3,
+        new LayoutFilterItem(this, 'mixed', 6, 1),
+        new LayoutFilterItem(this, 'mixed', 5, 2),
+        new LayoutFilterItem(this, 'mixed', 5, 1),
 
-        this.mixed6,
-        this.mixed5x2,
-        this.mixed5x1,
+        new LayoutFilterItem(this, 'power', 8, 4),
+        new LayoutFilterItem(this, 'power', 8, 3),
+        new LayoutFilterItem(this, 'power', 7, 3),
     ];
 
-    updatedFilter = [this.updatedAtHour, this.updatedAtDay, this.updatedAt3Days];
+    filterTime = [
+        new LayoutFilterUpdateAt(this, Duration.OneHour),
+        new LayoutFilterUpdateAt(this, Duration.OneDay),
+        new LayoutFilterUpdateAt(this, Duration.days(3)),
+    ];
+
+    filterLayout = [new LayoutFilterLayout(this, 7), new LayoutFilterLayout(this, 6), new LayoutFilterLayout(this, 5)];
 
     @computed get allFilters(): LayoutFilterBase[] {
         const x: LayoutFilterBase[] = [];
-        return x.concat(this.filterResource).concat(this.updatedFilter);
+        return x
+            .concat(this.filterResource)
+            .concat(this.filterTime)
+            .concat(this.filterLayout);
     }
 
     @computed get isAllDisabled() {

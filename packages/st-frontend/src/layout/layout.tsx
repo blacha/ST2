@@ -6,18 +6,21 @@ import { Base, BaseExporter, BaseOptimizer, SiloCounts, StLog } from '@st/shared
 import Divider from 'antd/es/divider';
 import Pagination from 'antd/es/pagination/Pagination';
 import Spin from 'antd/es/spin';
-import Tag from 'antd/es/tag';
 import { action, computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { style } from 'typestyle';
 import { Cs } from '../base/base';
 import { ViewBaseMain } from '../base/tiles/base.main';
-import { SiloTag, SiloTags } from '../silo/silo.tag';
+import { SiloTags } from '../silo/silo.tag';
 import { timeSince } from '../time.util';
 import { StBreadCrumb } from '../util/breacrumb';
-import { LayoutFilter, LayoutFilterItem } from './layout.filter';
-import { unpackLayouts } from './layout.util';
+import { LayoutFilter } from './layout.filter';
+import { FilterLayoutView } from './layout.filter.layout';
+import { FilterResourceView } from './layout.filter.resource';
+import { FilterTimeView } from './layout.filter.time';
+import { unpackLayouts, LayoutData } from './layout.util';
+import Button from 'antd/es/button';
 
 const ScanListCss = style({ display: 'flex', flexWrap: 'wrap' });
 const BaseCardCss = style({ padding: 4, margin: 8, borderRadius: 8 });
@@ -33,29 +36,51 @@ type ViewLayoutsProps = RouteComponentProps<{ worldId: string; allianceId: strin
 
 @observer
 export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
+    static RefreshButtonContainerCss = style({ display: 'flex', flexDirection: 'column', width: '100%' });
+    static RefreshButtonCss = style({ alignSelf: 'flex-end' });
+    static FilterLayoutCss = style({ display: 'flex' });
+    static FilterLayoutContainerCss = style({ display: 'flex', width: '50%', flexDirection: 'column' });
+
     static FilterDisabledCss = style({ opacity: 0.4 });
     static FilterButtonCss = style({ cursor: 'pointer', marginRight: 8, $nest: { span: { cursor: 'pointer' } } });
     static FilterListCss = style({ display: 'flex' });
     static FilterCss = style({ display: 'flex', padding: 4 });
-    static FilterTitleCss = style({ width: 85, fontWeight: 'bold' });
+    static FilterTitleCss = style({ width: 95, fontWeight: 'bold' });
 
     @observable currentPage = 1;
-    worldId: number;
+    worldId: WorldId;
     filters = new LayoutFilter();
 
     pageSize = 18;
     alliance?: { id: AllianceId; name: AllianceName };
     componentDidMount() {
-        console.log('Mounted');
         this.setState({ state: Cs.Loading });
         const params = this.props.match.params;
         const worldId = Number(params.worldId);
         const allianceId = Number(params.allianceId);
-        this.worldId = worldId;
         this.loadScan(worldId as WorldId, allianceId as AllianceId);
     }
 
+    async refresh() {
+        this.setState({ ...this.state, state: Cs.Refreshing });
+
+        const worldId = this.worldId;
+        const allianceId = this.alliance?.id;
+        if (worldId == null || allianceId == null) {
+            this.setState({ state: Cs.Failed });
+            return;
+        }
+        const layoutData = await V2Sdk.call('layout.get', { worldId, allianceId });
+        if (layoutData.ok == false) {
+            this.setState({ state: Cs.Failed });
+            return;
+        }
+        this.updateLayouts(layoutData.response.layouts);
+    }
+
     async loadScan(worldId: WorldId, allianceId: AllianceId) {
+        this.worldId = worldId;
+
         const [layoutData, allianceData] = await Promise.all([
             V2Sdk.call('layout.get', { worldId, allianceId }),
             V2Sdk.call('alliance.get', { worldId, allianceId }),
@@ -68,9 +93,12 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         if (firstPlayer && firstPlayer.alliance) {
             this.alliance = { id: allianceId, name: firstPlayer.alliance };
         }
+        this.updateLayouts(layoutData.response.layouts);
+    }
 
+    updateLayouts(layoutData: LayoutData[]) {
         StLog.info('UnpackLayouts');
-        const layouts = unpackLayouts(layoutData.response.layouts);
+        const layouts = unpackLayouts(layoutData);
         StLog.info('ComputeLayouts');
         console.time('ComputeLayout');
         for (const layout of layouts) {
@@ -95,55 +123,6 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         this.currentPage = currentPage;
     }
 
-    renderFilters(resource: string) {
-        const output = [];
-        for (const filter of this.filters.filterResource) {
-            if (filter.type == resource.toLowerCase()) {
-                output.push(this.renderFilter(filter as LayoutFilterItem));
-            }
-        }
-        return (
-            <div className={ViewLayouts.FilterCss}>
-                <div className={ViewLayouts.FilterTitleCss}>{resource}</div>
-                <div className={ViewLayouts.FilterListCss}>{...output}</div>
-            </div>
-        );
-    }
-
-    renderFilter(f: LayoutFilterItem) {
-        const className = [ViewLayouts.FilterButtonCss];
-        if (f.isEnabled == false && this.filters.isAllDisabled == false) {
-            className.push(ViewLayouts.FilterDisabledCss);
-        }
-        return (
-            <div className={className.join(' ')} onClick={f.toggle} key={`${f.type}-${f.count}-${f.touches}`}>
-                <SiloTag resource={f.type} count={f.count} touches={f.touches} />
-                {f.layoutCount}
-            </div>
-        );
-    }
-
-    renderUpdatedFilter() {
-        return (
-            <div className={ViewLayouts.FilterCss}>
-                <div className={ViewLayouts.FilterTitleCss}>Last Seen</div>
-                <div className={ViewLayouts.FilterListCss}>
-                    {...this.filters.updatedFilter.map(f => {
-                        const className = [ViewLayouts.FilterButtonCss];
-                        if (f.isEnabled == false && this.filters.isAllDisabled == false) {
-                            className.push(ViewLayouts.FilterDisabledCss);
-                        }
-                        return (
-                            <div className={className.join(' ')} onClick={f.toggle} key={`${f.type}-${f.duration}`}>
-                                <Tag color={'geekblue'}>{timeSince(Date.now() - f.duration)}</Tag> {f.layoutCount}
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
-
     render() {
         if (this.state == null || this.state?.state == Cs.Loading) {
             return <Spin />;
@@ -154,19 +133,37 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         const layoutCount = this.filters.filtered.length;
         const layouts = this.layouts;
         const currentPage = this.currentPage ?? 1;
-
+        console.log(currentPage, currentPage * this.pageSize, layoutCount);
+        if ((currentPage - 1) * this.pageSize > layoutCount) {
+            setTimeout(() => {
+                this.currentPage = 1;
+            });
+        }
         return (
             <div style={{ width: '100%' }}>
                 <StBreadCrumb worldId={this.worldId} alliance={this.alliance} layout={true} />
                 <Divider>{getWorldName(this.worldId as WorldId)} - Layouts</Divider>
-
-                <div className="filter">
-                    <div>{this.renderFilters('Tiberium')}</div>
-                    <div>{this.renderFilters('Crystal')}</div>
-                    <div>{this.renderFilters('Mixed')}</div>
-                    <div>{this.renderFilters('Power')}</div>
-                    <div>{this.renderUpdatedFilter()}</div>
+                <div className={ViewLayouts.FilterLayoutCss}>
+                    <div className={ViewLayouts.FilterLayoutContainerCss}>
+                        <FilterResourceView resource={'Tiberium'} filter={this.filters} />
+                        <FilterResourceView resource={'Crystal'} filter={this.filters} />
+                        <FilterResourceView resource={'Mixed'} filter={this.filters} />
+                        <FilterResourceView resource={'Power'} filter={this.filters} />
+                        <FilterTimeView filter={this.filters} />
+                        <FilterLayoutView filter={this.filters} />
+                    </div>
+                    <div className={ViewLayouts.RefreshButtonContainerCss}>
+                        <Button
+                            className={ViewLayouts.RefreshButtonCss}
+                            type="primary"
+                            loading={this.state.state == Cs.Refreshing}
+                            onClick={() => this.refresh()}
+                        >
+                            Refresh
+                        </Button>
+                    </div>
                 </div>
+
                 <div className={ScanListCss}>
                     {layouts.map(base => {
                         const baseId = BaseLocationPacker.pack(base.x, base.y);

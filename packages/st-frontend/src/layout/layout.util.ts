@@ -1,6 +1,13 @@
 import { Base, BaseLayoutPacker } from '@st/shared';
 
-export function unpackLayouts(layoutModel?: { layout: string; updatedAt: number; x: number; y: number }[]): Base[] {
+export interface LayoutData {
+    layout: string;
+    updatedAt: number;
+    x: number;
+    y: number;
+}
+
+export function unpackLayouts(layoutModel?: LayoutData[]): Base[] {
     if (layoutModel == null) {
         return [];
     }
