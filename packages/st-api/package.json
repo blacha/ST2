@@ -1,6 +1,6 @@
 {
     "name": "@st/api",
-    "version": "4.0.0",
+    "version": "4.3.0",
     "description": "Client lib utilities and types",
     "private": true,
     "scripts": {
@@ -11,7 +11,6 @@
     "browserslist": [
         "last 2 Chrome versions"
     ],
-    "devDependencies": {},
     "files": [
         "/build"
     ],
