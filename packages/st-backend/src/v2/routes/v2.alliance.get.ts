@@ -19,6 +19,6 @@ export class V2AllianceGetService extends V2ApiHandler<typeof V2AllianceGet> {
 
         const playerData = await Stores.Player.getAllBy({ allianceKey: docId }, 100);
 
-        return { players: playerData.sort((a, b) => a.updatedAt - b.updatedAt).slice(0, 50) };
+        return { players: playerData.sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 50) };
     }
 }
