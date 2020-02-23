@@ -14,7 +14,7 @@ interface WindowStatic {
 if (typeof window != 'undefined') {
     async function startup() {
         const windowAny = (window as any) as WindowStatic;
-        windowAny.st?.stop();
+        await windowAny.st?.stop();
         const st = St.getInstance();
         windowAny.st = st;
         await st.start();
