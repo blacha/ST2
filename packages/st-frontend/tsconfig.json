@@ -4,7 +4,8 @@
         "rootDir": "./src",
         "outDir": "./build",
         "jsx": "react",
-        "lib": ["DOM"]
+        "lib": ["DOM"],
+        "esModuleInterop": true,
     },
     "include": ["src/**/*"],
     "references": [{
