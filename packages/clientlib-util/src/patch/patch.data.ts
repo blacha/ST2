@@ -34,8 +34,8 @@ export interface PatchedCommunicationManager {
 export const PatchCityUnits = new ClientLibPatch<PatchedCityUnits, typeof ClientLibCityUnits>(
     'ClientLib.Data.CityUnits',
 );
-PatchCityUnits.addGetter('$OffenseUnits', 'HasUnitMdbId', /for \(var b in \{d:this\.([A-Z]{6})/);
-PatchCityUnits.addGetter('$DefenseUnits', 'HasUnitMdbId', /for \(var c in \{d:this\.([A-Z]{6})/);
+PatchCityUnits.addGetter('$OffenseUnits', 'HasUnitMdbId', /\(var b in \{d:this\.([A-Z]{6})/);
+PatchCityUnits.addGetter('$DefenseUnits', 'HasUnitMdbId', /\(var c in \{d:this\.([A-Z]{6})/);
 
 export const PatchWorldObjectNPCCamp = new ClientLibPatch<PatchedWorldObjectNPCCamp, typeof ClientLibWorldObject>(
     'ClientLib.Data.WorldSector.WorldObjectNPCCamp',
@@ -53,7 +53,7 @@ PatchWorldObjectNPCBase.addGetter('$Level', '$ctor', /\.*this\.([A-Z]{6})=\(\(\(
 export const PatchWorldObjectCity = new ClientLibPatch<PatchedWorldObjectCity, typeof ClientLibWorldObject>(
     'ClientLib.Data.WorldSector.WorldObjectCity',
 );
-PatchWorldObjectCity.addGetter('$PlayerId', '$ctor', /&0x3ff\);this.([A-Z]{6})/);
+PatchWorldObjectCity.addGetter('$PlayerId', '$ctor', /&(?:0x3ff|1023)\);this.([A-Z]{6})/);
 PatchWorldObjectCity.addGetter('$AllianceId', '$ctor', /.*d\+=f;this\.([A-Z]{6})=\(/);
 PatchWorldObjectCity.addGetter('$Id', '$ctor', /.*d\+=f;this\.([A-Z]{6})=\(.*d\+=f.*d\+=/);
 

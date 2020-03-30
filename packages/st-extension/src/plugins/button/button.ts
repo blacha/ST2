@@ -33,7 +33,7 @@ export class Button extends StPlugin {
     buttons: QxFormButton[] = [];
     composite: QxComposite | null = null;
     lastBaseId: number | null = null;
-    lastBaseLinkId: string | null = null;
+    lastBaseLinkId: Promise<string> | null = null;
 
     async onStart(): Promise<void> {
         const regionCity = webfrontend.gui.region.RegionCityMenu.prototype;
@@ -82,7 +82,7 @@ export class Button extends StPlugin {
 
         const res = CityCache.get(waitId, Duration.minutes(5));
         if (res && res.stId) {
-            this.lastBaseLinkId = res.stId;
+            this.lastBaseLinkId = Promise.resolve(res.stId);
             this.buttons.forEach(b => b.show());
             return;
         }
@@ -97,8 +97,7 @@ export class Button extends StPlugin {
             return;
         }
 
-        const stId = await this.st.api.base(cityObj, true);
-        CityCache.setStId(waitId, stId, '');
+        const stId = this.st.api.base(cityObj);
         if (waitId != this.lastBaseId) {
             return;
         }
@@ -119,14 +118,15 @@ export class Button extends StPlugin {
 
             button.getChildControl('icon').set({ width: 16, height: 16, scale: true }); // Force icon to be 16x16 px
             button.addListener('execute', async () => {
-                if (this.lastBaseId == null || this.lastBaseLinkId == null) {
+                if (this.lastBaseId == null) {
                     return;
                 }
-
+                this.st.api.flush();
+                const linkId = await this.lastBaseLinkId;
                 qx.core.Init.getApplication()
                     ?.getPlayArea()
                     ?.setView(PlayerAreaViewMode.pavmAllianceBase, this.lastBaseId, 0, 0);
-                window.open(`${Config.api.url}/base/${this.lastBaseLinkId}`, '_blank');
+                window.open(`${Config.api.url}/base/${linkId}`, '_blank');
             });
             composite.add(button);
             this.buttons.push(button);

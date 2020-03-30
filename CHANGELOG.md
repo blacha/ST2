@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/blacha/st/compare/v4.3.0...v4.4.0) (2020-03-22)
+
+
+### Bug Fixes
+
+* adding missing infected forgotten units ([078defc](https://github.com/blacha/st/commit/078defc2b7f3b38a4ea04ef04af107b31c39a6c9))
+* new server update breaks patcher ([72807c6](https://github.com/blacha/st/commit/72807c6835d571f55fadc94c5fb9c1a89fda3bf0))
+
+
+### Features
+
+* disable base scanner/alliance scanner by default unless people really want it on ([36949e9](https://github.com/blacha/st/commit/36949e9f1e163b52e064479b464f28788519022b))
+* dont send bases straight away wait for click ([10664a6](https://github.com/blacha/st/commit/10664a65c96153d6be754ff9165f4d51908804f8))
+
+
+
+
+
+# [4.3.0](https://github.com/blacha/st/compare/v4.2.0...v4.3.0) (2020-02-23)
+
+
+### Features
+
+* allow v2 urls ([69b7aeb](https://github.com/blacha/st/commit/69b7aebf53c2f6785bbe3b78e43053942b7818b9))
+* compress server responses ([92d7b52](https://github.com/blacha/st/commit/92d7b5233fc3512420d8616deb7c29bc8df89b04))
+* more options for layout filtering ([205a124](https://github.com/blacha/st/commit/205a1249e4ead8f0b95372a6efa8f90c3769f59f))
+
+
+
+
+
 # [4.2.0](https://github.com/blacha/st/compare/v4.1.0...v4.2.0) (2020-02-16)
 
 

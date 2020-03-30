@@ -55,6 +55,18 @@ export class BuildingType extends GameDataObject {
         CrystalSilo: new BuildingType(207, Faction.Forgotten, 'v'), //, 'FOR_Crystal_Booster', 'Crystal Silo', 'v')
     };
 
+    static Infected = {
+        InfectedYard: new BuildingType(251, Faction.Forgotten, '?'),
+        InfectedGdiCommandCenter: new BuildingType(282, Faction.Forgotten, '?'),
+        InfectedNodCommandCenter: new BuildingType(283, Faction.Forgotten, '?'),
+        InfectedAirfield: new BuildingType(284, Faction.Forgotten, '?'),
+        InfectedAirport: new BuildingType(285, Faction.Forgotten, '?'),
+        InfectedBarracks: new BuildingType(286, Faction.Forgotten, '?'),
+        InfectedHandofNod: new BuildingType(287, Faction.Forgotten, '?'),
+        InfectedFactory: new BuildingType(288, Faction.Forgotten, '?'),
+        InfectedWarFactory: new BuildingType(289, Faction.Forgotten, '?'),
+    };
+
     static Fortress = {
         CamouflagedFlak: new BuildingType(223, Faction.Forgotten, '?'),
         OverchargedMGNest: new BuildingType(224, Faction.Forgotten, '?'),

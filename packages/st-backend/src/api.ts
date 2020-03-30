@@ -12,9 +12,12 @@ import { ApiWorldUpdate } from './routes/update.world';
 import { ApiVersion } from './routes/debug';
 import { V2 } from './v2/v2';
 
+import * as compression from 'compression';
+
 export const Api = express();
 Api.use(cors({ maxAge: 24 * 60 * 60 }));
 Api.use(bodyParser.json());
+Api.use(compression());
 
 ApiCall.bind(Api, new ApiVersion());
 ApiCall.bind(Api, new ApiScan());

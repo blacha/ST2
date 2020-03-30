@@ -21,6 +21,7 @@ export class V2 {
         }
         const userId = authToken.uid as UserId;
         const userIdPromise = Promise.resolve(userId);
+        v2Req.track('uid', userId);
         // Do not refetch the user
         v2Req.userId = () => userIdPromise;
         return userId;
