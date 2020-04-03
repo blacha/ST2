@@ -2670,9 +2670,9 @@ ansicolors@~0.3.2:
   integrity sha1-ZlWX3oap/+Oqm/vmyuXG6kJrSXk=
 
 antd@^3.26.5:
-  version "3.26.13"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-3.26.13.tgz#fd6b618a33d5dec0f649263f30eae691425f7e47"
-  integrity sha512-7DjaXAUig51kzVw9T9Mi4slmq0eFl6qGk7t3kjA5t3Sv/Yn2llwNWT0lJDbseooesRRWeFLNByfZV37cUCRJYQ==
+  version "3.26.15"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-3.26.15.tgz#c5f4e5628502f9cdfb0c351c71320d5c0e2421be"
+  integrity sha512-OAcfz9D1Qt+4Fme4E0DfCKuWm/1RIVrJZzaTYVCGOnVAHJjoxEtKCoCrcj/8wwCS9LbXHVci/s2u/gY+QmtCSw==
   dependencies:
     "@ant-design/create-react-context" "^0.2.4"
     "@ant-design/icons" "~2.1.1"
