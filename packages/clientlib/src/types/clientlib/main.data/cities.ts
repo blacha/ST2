@@ -94,4 +94,7 @@ export declare class ClientLibCities extends ClientLibEventEmitter<ClientLibCiti
     set_CurrentCityId(cityId: number): void;
     set_CurrentOwnCityId(cityId: number): void;
     GetCity(cityId: number): ClientLibCity | null;
+
+    /** Get poll information used @see ClientLibCommunicationManager.$Poll*/
+    GetData(pollType: 'OCITY' | 'CCA'): string | null;
 }
