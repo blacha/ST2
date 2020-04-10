@@ -6,7 +6,6 @@ import { HttpError } from '../../http.error';
 import { Duration } from '@cncta/util';
 import { StLog, WorldAllianceId } from '@st/shared';
 import { GameSession } from '../../game.session';
-import { PlayerAlliancePair } from '../../routes/update.world';
 import { CustomClaims } from '../../permission/custom.claims';
 
 export class V2WorldListService extends V2ApiHandler<typeof V2WorldList> {
@@ -59,7 +58,7 @@ export class V2WorldUpdateService extends V2ApiHandler<typeof V2WorldUpdate> {
 
         const worldData = await gameSession.loadWorldData();
 
-        const playerMap = new Map<PlayerNameId, PlayerAlliancePair>();
+        const playerMap = new Map<PlayerNameId, { allianceId: AllianceId; name: PlayerNameDisplay }>();
         for (const [allianceId, allianceData] of worldData.alliances) {
             const players = allianceData.players.map(playerId => {
                 const player = worldData.players.get(playerId);
@@ -105,7 +104,7 @@ export class V2WorldUpdateService extends V2ApiHandler<typeof V2WorldUpdate> {
         req: V2Request,
         playerClaim: ModelUser,
         model: ModelWorldAlliance,
-        playerMap: Map<PlayerNameId, PlayerAlliancePair>,
+        playerMap: Map<PlayerNameId, { allianceId: AllianceId; name: PlayerNameDisplay }>,
     ): Promise<void> {
         // TODO should really only update if we need to
         const playerIds = Object.keys(playerClaim.claimed).filter(playerId => playerMap.has(playerId as PlayerNameId));
