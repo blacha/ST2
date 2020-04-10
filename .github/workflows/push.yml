@@ -30,7 +30,7 @@ jobs:
       run: yarn run package
 
     - name: Deploy
-      if: github.ref == 'refs/heads/master' && github.repository == 'blacha/st'
+      if: startsWith(github.ref, 'refs/tags/v') && github.repository == 'blacha/st'
       run: npx firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
       env:
         FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
