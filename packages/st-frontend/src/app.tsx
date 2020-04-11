@@ -62,8 +62,9 @@ export class App extends React.Component {
                 <Route exact={true} path="/" component={ViewLandingPage} />
                 <Route path="/base/:cityId" component={ViewBase} />
                 <Route path="/login" component={Login} />
-                <PrivateRoute path="/claim/:claimId" component={ClaimAcceptPage} />
+                <Route path="/b" component={ViewBase} />
 
+                <PrivateRoute path="/claim/:claimId" component={ClaimAcceptPage} />
                 <PrivateRoute path="/claim" component={ClaimPage} />
                 <PrivateRoute path="/base" component={ViewBase} />
                 <PrivateRoute path="/world/:worldId/player/:playerId/city/:cityId" component={ViewBase} />

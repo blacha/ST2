@@ -1,5 +1,7 @@
 import { Base, BaseLayoutPacker } from '@st/shared';
+import { WorldId } from '@cncta/clientlib';
 
+const InvalidWorldId = -1 as WorldId;
 export interface LayoutData {
     layout: string;
     updatedAt: number;
@@ -7,7 +9,7 @@ export interface LayoutData {
     y: number;
 }
 
-export function unpackLayouts(layoutModel?: LayoutData[]): Base[] {
+export function unpackLayouts(layoutModel?: LayoutData[], worldId?: WorldId): Base[] {
     if (layoutModel == null) {
         return [];
     }
@@ -20,6 +22,7 @@ export function unpackLayouts(layoutModel?: LayoutData[]): Base[] {
         base.y = y;
         base.tiles = BaseLayoutPacker.unpack(layout);
         base.updatedAt = updatedAt;
+        base.worldId = worldId ?? InvalidWorldId;
         layouts.push(base);
     }
 

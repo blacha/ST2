@@ -82,6 +82,9 @@ export class ViewBaseStats extends React.Component<{ base: Base }> {
         const base = this.props.base;
         const prod = base.info.production;
         const cost = base.info.cost;
+        if (cost.total.tiberium == 0) {
+            return null;
+        }
         return (
             <React.Fragment>
                 <Divider>Base Production</Divider>

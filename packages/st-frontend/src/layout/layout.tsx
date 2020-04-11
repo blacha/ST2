@@ -1,8 +1,8 @@
 import React = require('react');
 import { AllianceId, AllianceName, BaseX, WorldId } from '@cncta/clientlib';
-import { BaseLocationPacker, getWorldName } from '@cncta/util';
+import { BaseLocationPacker, getWorldName, LayoutPacker } from '@cncta/util';
 import { V2Sdk } from '@st/api';
-import { Base, BaseExporter, BaseOptimizer, SiloCounts, StLog } from '@st/shared';
+import { Base, BaseExporter, BaseOptimizer, SiloCounts, StLog, BaseLayoutPacker } from '@st/shared';
 import Divider from 'antd/es/divider';
 import Pagination from 'antd/es/pagination/Pagination';
 import Spin from 'antd/es/spin';
@@ -75,7 +75,7 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
             this.setState({ state: Cs.Failed });
             return;
         }
-        this.updateLayouts(layoutData.response.layouts);
+        this.updateLayouts(layoutData.response.layouts, worldId);
     }
 
     async loadScan(worldId: WorldId, allianceId: AllianceId) {
@@ -93,12 +93,12 @@ export class ViewLayouts extends React.Component<ViewLayoutsProps, ScanState> {
         if (firstPlayer && firstPlayer.alliance) {
             this.alliance = { id: allianceId, name: firstPlayer.alliance };
         }
-        this.updateLayouts(layoutData.response.layouts);
+        this.updateLayouts(layoutData.response.layouts, worldId);
     }
 
-    updateLayouts(layoutData: LayoutData[]) {
+    updateLayouts(layoutData: LayoutData[], worldId: WorldId) {
         StLog.info('UnpackLayouts');
-        const layouts = unpackLayouts(layoutData);
+        const layouts = unpackLayouts(layoutData, worldId);
         StLog.info('ComputeLayouts');
         console.time('ComputeLayout');
         for (const layout of layouts) {
@@ -192,7 +192,9 @@ export class LayoutView extends React.Component<{ base: Base }> {
         return (
             <div className={BaseCardCss} style={{ width: 24 * BaseX.Max + 'px' }} key={baseId}>
                 <Divider>
-                    <Link to={`/base/${BaseExporter.toCncOpt(base)}`}>
+                    <Link
+                        to={`/b?layout=${BaseLayoutPacker.pack(base)}&x=${base.x}&y=${base.y}&worldId=${base.worldId}`}
+                    >
                         {base.x}:{base.y}
                     </Link>
                 </Divider>

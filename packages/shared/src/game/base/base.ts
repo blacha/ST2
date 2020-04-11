@@ -1,4 +1,4 @@
-import { BaseX, BaseY, GameDataResearchLevel, GameDataUnitId } from '@cncta/clientlib';
+import { BaseX, BaseY, GameDataResearchLevel, GameDataUnitId, WorldId } from '@cncta/clientlib';
 import { Building } from '../building/building';
 import { BuildingType } from '../building/building.type';
 import { Faction } from '../data/faction';
@@ -51,7 +51,7 @@ export class Base {
     y = -1;
     /** Cnc CityId */
     cityId = -1;
-    worldId = -1;
+    worldId: WorldId = -1 as WorldId;
     /** Time the base was last seen */
     updatedAt: number;
 
