@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.5.0](https://github.com/blacha/st/compare/v4.4.0...v4.5.0) (2020-04-11)
+
+
+### Features
+
+* add typing for cities.GetData ([5f157a4](https://github.com/blacha/st/commit/5f157a4f044277e480b289bdb8f27d2e670fc2a3))
+
+
+
+
+
 # [4.1.0](https://github.com/blacha/st/compare/v4.0.0...v4.1.0) (2020-02-11)
 
 

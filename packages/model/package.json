@@ -1,7 +1,7 @@
 {
     "name": "@st/model",
     "private": true,
-    "version": "4.4.0",
+    "version": "4.5.0",
     "description": "Shared utils for shockrtools",
     "scripts": {
         "build": "tsc --pretty"
@@ -9,9 +9,9 @@
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "dependencies": {
-        "@cncta/clientlib": "^4.1.0",
-        "@cncta/util": "^4.4.0",
-        "@st/shared": "^4.4.0",
+        "@cncta/clientlib": "^4.5.0",
+        "@cncta/util": "^4.5.0",
+        "@st/shared": "^4.5.0",
         "bblog": "^2.0.0",
         "typesaurus": "^5.0.0",
         "ulid": "^2.3.0"
