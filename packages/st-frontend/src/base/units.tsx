@@ -3,7 +3,7 @@ import { GameDataUnitId } from '@cncta/clientlib';
 import { style } from 'typestyle';
 import * as images from '../../static/images/*.png';
 import { FlexCenter } from '../css.util';
-import * as IconStar from '../../static/icon/IconStar.png';
+import IconStar from '../../static/icon/IconStar.png';
 
 const UnitIconCss = style({ maxHeight: '90%', maxWidth: '95%' });
 
