@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/blacha/st/compare/v4.5.0...v4.6.0) (2020-04-11)
+
+
+### Bug Fixes
+
+* show upgraded icon stars ([e7e5233](https://github.com/blacha/st/commit/e7e523368860a42a10e14217c20edfdc05cc1485))
+
+
+### Features
+
+* support sharing layout links ([97cca6a](https://github.com/blacha/st/commit/97cca6ab2995220357ad53e0b3ce9bcd022290ba))
+
+
+
+
+
 # [4.5.0](https://github.com/blacha/st/compare/v4.4.0...v4.5.0) (2020-04-11)
 
 **Note:** Version bump only for package @st/frontend
