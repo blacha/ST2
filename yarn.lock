@@ -12419,9 +12419,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 typesaurus@^5.0.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/typesaurus/-/typesaurus-5.3.0.tgz#f3c8c3d0d99090ea2c2e0f0de01d7e8efc1cb603"
-  integrity sha512-LgqME6q2pCRX4xuMF1DRb9fNxtJwed3VHvmBzlduMxPijAXFksQS1heAM9iINcaeNCHkoqWwA1aW4LwcVURvMw==
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/typesaurus/-/typesaurus-5.4.0.tgz#edc67836e25d5aa58ab99e1b40114a2c6c6951a0"
+  integrity sha512-iuDVF8YDoaKNKbvJwiTj3Fj3KXVC/tFVfw5kAOt0WI8qwwJIoFxQBcPYk4JkO4U31Aejqpipm0gXq68GIx9A3A==
 
 typescript@^3.7.4:
   version "3.8.3"
