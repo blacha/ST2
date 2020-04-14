@@ -20,7 +20,7 @@
         "@types/node": "^13.1.8",
         "@types/node-fetch": "^2.5.4",
         "@types/ospec": "^4.0.2",
-        "@types/pino": "^5.15.3",
+        "@types/pino": "^6.0.0",
         "ospec": "^4.0.1"
     },
     "publishConfig": {
