@@ -14,7 +14,7 @@
         "bblog": "^2.0.0",
         "fp-ts": "^2.5.0",
         "io-ts": "^2.1.1",
-        "typesaurus": "^5.0.0",
+        "typesaurus": "^6.0.0",
         "ulid": "^2.3.0"
     },
     "files": [

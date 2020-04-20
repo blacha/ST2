@@ -13,7 +13,7 @@
         "@cncta/util": "^4.5.0",
         "@st/shared": "^4.6.0",
         "bblog": "^2.0.0",
-        "typesaurus": "^5.0.0",
+        "typesaurus": "^6.0.0",
         "ulid": "^2.3.0"
     },
     "files": [
